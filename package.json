@@ -1,0 +1,27 @@
+{
+  "name": "argo-ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Alexander Matyushentsev <Alexander_Matyushentsev@intuit.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --config ./src/app/webpack.config.js",
+    "start": "webpack-dev-server --config ./src/app/webpack.config.js"
+  },
+  "dependencies": {
+    "@types/react": "^16.0.34",
+    "@types/react-dom": "^16.0.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.4.1",
+    "html-webpack-plugin": "^2.30.1",
+    "source-map-loader": "^0.2.3",
+    "tslint": "^5.9.1",
+    "tslint-react": "^3.4.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}
