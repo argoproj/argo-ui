@@ -18,21 +18,26 @@ const config = {
 
     module: {
         rules: [
-            { test: /\.tsx?$/, loader: 'awesome-typescript-loader?configFileName=./src/app/tsconfig.json' },
-            { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
+            {
+                test: /\.tsx?$/,
+                loader: 'awesome-typescript-loader?configFileName=./src/app/tsconfig.json'
+            }, {
+                enforce: 'pre',
+                test: /\.js$/,
+                loader: 'source-map-loader'
+            }
         ]
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: 'src/app/index.html'
-        })
-    ]
+    plugins: [new HtmlWebpackPlugin({template: 'src/app/index.html'})],
+    devServer: {
+        historyApiFallback: true
+    }
 };
 
 if (process.env.NODE_ENV === 'production') {
-    config.plugins.push(
-        new webpack.optimize.UglifyJsPlugin()
-    );
+    config
+        .plugins
+        .push(new webpack.optimize.UglifyJsPlugin());
 }
 
 module.exports = config;
