@@ -5,7 +5,9 @@
     "jsRules": {},
     "rules": {
         "quotemark": [true, "single"],
-        "no-var-requires": false
+        "no-var-requires": false,
+        "interface-name": false,
+        "jsx-no-multiline-js": false
     },
     "rulesDirectory": []
 }

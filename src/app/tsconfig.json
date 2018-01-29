@@ -7,6 +7,10 @@
         "target": "es5",
         "jsx": "react",
         "noUnusedLocals": true,
+        "lib": [
+            "es2017",
+            "dom"
+        ]
     },
     "include": [
         "./**/*"

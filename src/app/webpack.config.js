@@ -30,7 +30,13 @@ const config = {
     },
     plugins: [new HtmlWebpackPlugin({template: 'src/app/index.html'})],
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        proxy: {
+            '/api': {
+                'target': process.env.ARGO_API_URL || 'http://localhost:8001',
+                'secure': false,
+            }
+        }
     }
 };
 

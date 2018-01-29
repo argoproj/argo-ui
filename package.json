@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^4.2.3",
     "@types/react-router-redux": "^5.0.11",
     "@types/redux": "^3.6.0",
+    "@types/superagent": "^3.5.7",
     "history": "^4.7.2",
     "install": "^0.10.4",
     "react": "^16.2.0",
@@ -24,7 +25,9 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
-    "redux": "3.6.0"
+    "redux": "3.6.0",
+    "superagent": "^3.8.2",
+    "superagent-promise": "^1.1.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.4.1",
