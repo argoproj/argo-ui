@@ -7,7 +7,11 @@
         "quotemark": [true, "single"],
         "no-var-requires": false,
         "interface-name": false,
-        "jsx-no-multiline-js": false
+        "jsx-no-multiline-js": false,
+        "object-literal-sort-keys": false,
+        "jsx-alignment": false,
+        "max-line-length": [true, 180],
+        "jsx-no-lambda": false
     },
     "rulesDirectory": []
 }

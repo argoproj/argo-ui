@@ -1,5 +1,6 @@
 'use strict;';
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
@@ -25,10 +26,17 @@ const config = {
                 enforce: 'pre',
                 test: /\.js$/,
                 loader: 'source-map-loader'
-            }
+            }, {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                loader: 'style-loader!raw-loader!sass-loader'
+            },
         ]
     },
-    plugins: [new HtmlWebpackPlugin({template: 'src/app/index.html'})],
+    plugins: [
+        new HtmlWebpackPlugin({ template: 'src/app/index.html' }),
+        new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets'}]),
+    ],
     devServer: {
         historyApiFallback: true,
         proxy: {

@@ -1,0 +1,32 @@
+@import './shared/styles/main';
+
+@import 'node_modules/foundation-sites/scss/foundation';
+
+@include foundation-global-styles;
+@include foundation-flex-classes;
+@include foundation-flex-grid;
+@include foundation-dropdown;
+@include foundation-typography;
+@include foundation-visibility-classes;
+
+body {
+    margin: 0;
+    font-family: $body-font-family;
+    font-weight: normal;
+    font-size: 16px;
+    font-style: normal;
+    color: $argo-color-gray-7;
+    background: $argo-color-gray-3;
+
+    button, a, span, input {
+        outline: none !important
+    }
+}
+
+a, a:hover {
+    color: $argo-color-teal-6;
+}
+
+h1, h2 {
+    color: $argo-color-teal-6;
+}

@@ -38,4 +38,4 @@ export const WorkflowsList = connect((state: AppState<State>) => {
     };
 }, (dispatch) => ({
     onLoad: () => dispatch(loadWorkflowsList()),
-}) )(Component);
+}))(Component);

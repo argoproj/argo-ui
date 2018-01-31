@@ -1,0 +1,37 @@
+@import '../../styles/config';
+
+.layout {
+    overflow: hidden;
+    &__loader {
+        background-color: rgba($argo-color-gray-7, 0.4);
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999999;
+
+        .loader-inner {
+            left: 50%;
+            position: absolute;
+            bottom: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            & > div {
+                background: #F07A51;
+            }
+        }
+    }
+
+    &__content-wrapper {
+        padding: $top-bar-height 0 0 $nav-width;
+        position: relative;
+        display: block;
+        min-height: 100vh;
+        margin: 0 auto;
+        overflow: hidden;
+        transition: transform .4s;
+        &.hidden-scrollbar {
+            height: 100%;
+        }
+    }
+}
