@@ -15,7 +15,7 @@ $nav-break-height-sm: 746px;
     visibility: hidden;
     transition: visibility .2s, opacity .2s;
 
-    @media screen and (max-width: $ax-breakpoint-md) {
+    @media screen and (max-width: $argo-breakpoint-md) {
         top: $top-bar-height - 8;
     }
 

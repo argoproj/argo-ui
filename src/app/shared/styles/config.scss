@@ -21,12 +21,33 @@ $argo-color-teal-8: #004C67;
 
 $white-color: #ffffff;
 
-$ax-breakpoint-md: 1400px;
+// Status colors
+$argo-failed-color: #E96D76;
+$argo-failed-color-dark: #c04b4f;
+$argo-failed-color-light: #ff6262;
+$argo-status-failed-color: #ef0b28;
+$argo-color-red: #F00052;
+
+$argo-success-color: #18BE94;
+$argo-success-color-dark: #3F946D;
+$argo-success-color-light: #95D58F;
+$argo-status-success-color: #0d8d38;
+$argo-color-green: #7ED321;
+
+$argo-status-warning-color: #f4c030;
+$argo-color-yellow: #FFD100;
+
+$argo-running-color-dark: #378398;
+$argo-running-color-light: #02C4D3;
+$argo-running-color: #0DADEA;
+
+$argo-breakpoint-md: 1400px;
 
 $top-bar-height: 50px;
 $toolbar-height: 48px;
 $nav-width: 60px;
 $basePageWidth: 1024px;
 $nav-z-index: 11;
+$border-radius: 5px;
 
 $argo-icon-fonts-root: '/assets/fonts/';
