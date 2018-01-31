@@ -1,4 +1,4 @@
-import { WorkflowsListState } from './components/workflows-list';
+import { WorkflowsListState } from './components/workflows-list/workflows-list';
 
 export interface State {
     workflowsList: WorkflowsListState;

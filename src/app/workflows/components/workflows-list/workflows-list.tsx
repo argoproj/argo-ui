@@ -6,7 +6,7 @@ import { AppState } from '../../../shared/redux';
 import { loadWorkflowsList } from '../../actions';
 import { State } from '../../state';
 
-import { WorkflowListItem } from '../workflow-list-item';
+import { WorkflowListItem } from '../workflow-list-item/workflow-list-item';
 
 export interface WorkflowsListState {
     workflows?: models.Workflow[];

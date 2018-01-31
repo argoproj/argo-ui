@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavBar } from '../nav-bar';
+import { NavBar } from '../nav-bar/nav-bar';
 
 require('./layout.scss');
 

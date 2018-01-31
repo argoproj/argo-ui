@@ -1,4 +1,4 @@
-import { WorkflowsListState } from '../components/workflows-list';
+import { WorkflowsListState } from '../components/workflows-list/workflows-list';
 import { ACTION_TYPES } from './action-types';
 
 export default function(state: WorkflowsListState = { workflows: null }, action: any) {

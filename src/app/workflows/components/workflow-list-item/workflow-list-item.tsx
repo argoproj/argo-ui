@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as models from '../../../../models';
 
-import { WorkflowSteps } from '../workflow-steps';
+import { WorkflowSteps } from '../workflow-steps/workflow-steps';
 
 require('./workflow-list-item.scss');
 
