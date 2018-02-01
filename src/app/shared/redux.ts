@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { match } from 'react-router';
+import { match, RouteComponentProps } from 'react-router';
 import { routerReducer, RouterState } from 'react-router-redux';
 import { Reducer } from 'redux';
 
@@ -20,7 +20,7 @@ export interface AppContext {
 
 export interface RouteImplementation {
     reducer: Reducer<any>;
-    component: React.ComponentClass | React.StatelessComponent;
+    component: React.ComponentClass<RouteComponentProps<any>> | React.StatelessComponent<RouteComponentProps<any>>;
 }
 
 export function isActiveRoute(locationPath: string, path: string) {

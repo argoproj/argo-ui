@@ -1,7 +1,7 @@
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router';
 import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
 import { applyMiddleware, createStore } from 'redux';
 
