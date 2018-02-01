@@ -1,7 +1,7 @@
-import { WorkflowsList } from './components/workflows-list/workflows-list';
+import { WorkflowsContainer } from './components/workflows-container';
 import reducer from './reducers';
 
 export default {
-    component: WorkflowsList,
+    component: WorkflowsContainer,
     reducer,
 };

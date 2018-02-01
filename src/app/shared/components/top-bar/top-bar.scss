@@ -1,0 +1,66 @@
+@import '../../styles/config';
+@import 'node_modules/foundation-sites/scss/util/util';
+
+.top-bar {
+    display: block;
+    position: fixed;
+    z-index: $top-bar-z-index;
+    top: 0;
+    right: 0;
+    left: $nav-width;
+    height: $top-bar-height;
+    line-height: $top-bar-height;
+    background: $white-color;
+    transition: right .5s;
+    border-bottom: 1px solid $argo-color-gray-2;
+
+    &__left-side {
+        padding-left: 20px;
+        white-space: nowrap;
+    }
+
+    &__right-side {
+        padding-right: 20px;
+        text-align: right;
+    }
+
+    &__title {
+        float: left;
+        font-weight: 500;
+        font-size: .925em;
+        color: $argo-color-teal-7;
+        text-transform: uppercase;
+    }
+
+    a {
+        color: $argo-color-gray-6;
+        font-size: 1em;
+    }
+
+    &__tools {
+        display: inline-block;
+        white-space: nowrap;
+
+        &::after {
+            display: inline-block;
+            vertical-align: middle;
+            content: "";
+        }
+
+        & li > a {
+            color: $argo-color-gray-6;
+        }
+    }
+
+    &__tool {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 30px;
+        font-size: 1.1em;
+
+        > * {
+            position: relative;
+        }
+    }
+}

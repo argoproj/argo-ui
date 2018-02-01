@@ -1,0 +1,50 @@
+
+.content {
+    position: relative;
+    padding-bottom: 30px;
+    transition: width .5s;
+    width: 100%;
+
+    .has-tabs &.content--internal-scroll {
+        height: calc(100vh - 156px);
+    }
+    &--with-padding-top {
+        padding-top: 36px;
+    }
+    &--without-padding-bottom {
+        padding-bottom: 0;
+    }
+}
+
+.argo-container {
+    position: relative;
+    width: $basePageWidth + 160;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 80px;
+
+    &--additional-padding {
+        padding: 0 30px;
+    }
+
+    &--full-width {
+        width: 100%;
+    }
+}
+
+.stream {
+    position: relative;
+    padding-bottom: 20px;
+
+    &::before {
+        position: absolute;
+        top: -120px;
+        bottom: 0;
+        left: 7px;
+        width: 1px;
+        min-height: 100vh;
+        background-color: $argo-color-gray-4;
+        z-index: -1;
+        content: '';
+    }
+}

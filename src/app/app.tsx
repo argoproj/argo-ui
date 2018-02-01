@@ -3,24 +3,17 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
-import { applyMiddleware, createStore, Reducer } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 
 import { Layout } from './shared/components';
-import { getRoutesReducer } from './shared/redux';
+import { asyncMiddleware, getRoutesReducer, RouteImplementation } from './shared/redux';
 
 export const history = createHistory();
 const reduxRouterMiddleware = routerMiddleware(history);
-const asyncMiddleware = ({ dispatch, getState }: any) => (next: any) => (action: any) => {
-    if (typeof action === 'function') {
-        return action(dispatch, getState);
-    }
-
-    return next(action);
-};
 
 import help from './help';
 import workflows from './workflows';
-const routes: {[path: string]: {reducer: Reducer<any>, component: React.ComponentClass | React.StatelessComponent} } = {
+const routes: {[path: string]: RouteImplementation } = {
     '/workflows': { component: workflows.component, reducer: workflows.reducer },
     '/help': { component: help.component, reducer: help.reducer },
 };

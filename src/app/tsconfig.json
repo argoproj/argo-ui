@@ -6,6 +6,7 @@
         "module": "commonjs",
         "target": "es5",
         "jsx": "react",
+        "experimentalDecorators": true,
         "noUnusedLocals": true,
         "lib": [
             "es2017",

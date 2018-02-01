@@ -1,8 +1,9 @@
+import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
 import * as models from '../../../../models';
-import { AppState } from '../../../shared/redux';
+import { AppContext, AppState } from '../../../shared/redux';
 import { loadWorkflowsList } from '../../actions';
 import { State } from '../../state';
 
@@ -12,7 +13,7 @@ export interface WorkflowsListState {
     workflows?: models.Workflow[];
 }
 
-class Component extends React.Component<{ workflows: models.Workflow[], onLoad: () => any}> {
+class Component extends React.Component<{ workflows: models.Workflow[], onLoad: () => any}, any> {
 
     public componentWillMount() {
         this.props.onLoad();
@@ -27,14 +28,24 @@ class Component extends React.Component<{ workflows: models.Workflow[], onLoad: 
                 <div className='argo-container'>
                     <div className='stream'>
                         {this.props.workflows.map((workflow) => (
-                            <WorkflowListItem key={workflow.metadata.name} workflow={workflow}/>
+                            <div key={workflow.metadata.name} onClick={() => this.appContext.router.history.push(`/workflows/${workflow.metadata.name}`)}>
+                                <WorkflowListItem workflow={workflow}/>
+                            </div>
                         ))}
                     </div>
                 </div>
             </div>
         );
     }
+
+    private get appContext(): AppContext {
+        return this.context as AppContext;
+    }
 }
+
+(Component as React.ComponentClass).contextTypes = {
+    router: PropTypes.object,
+};
 
 export const WorkflowsList = connect((state: AppState<State>) => {
     return {

@@ -1,4 +1,5 @@
 $body-font-family: 'Heebo', sans-serif !default;
+$global-width: 100%;
 
 $argo-color-gray-1: #F8FBFB;
 $argo-color-gray-2: #EFF3F5;
@@ -41,6 +42,13 @@ $argo-running-color-dark: #378398;
 $argo-running-color-light: #02C4D3;
 $argo-running-color: #0DADEA;
 
+$argo-waiting-color-dark: $argo-color-gray-6;
+$argo-waiting-color-light: $argo-color-gray-5;
+$argo-waiting-color: $argo-color-gray-5;
+$argo-cancelled-color: $argo-color-gray-5;
+$argo-init-color: $argo-color-gray-5;
+
+
 $argo-breakpoint-md: 1400px;
 
 $top-bar-height: 50px;
@@ -48,6 +56,8 @@ $toolbar-height: 48px;
 $nav-width: 60px;
 $basePageWidth: 1024px;
 $nav-z-index: 11;
+$top-bar-z-index: 9;
 $border-radius: 5px;
 
 $argo-icon-fonts-root: '/assets/fonts/';
+$fa-font-path: 'assets/fonts';

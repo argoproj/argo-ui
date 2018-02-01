@@ -9,24 +9,44 @@ export interface AppState<S> {
 }
 
 export interface AppContext {
-    history: H.History;
-    route: {
-        location: H.Location;
-        match: match<any>;
+    router: {
+        history: H.History;
+        route: {
+            location: H.Location;
+            match: match<any>;
+        };
     };
 }
 
-export function getRoutesReducer(routes: {[path: string]: {reducer: Reducer<any>, component: React.ComponentClass | React.StatelessComponent} }) {
+export interface RouteImplementation {
+    reducer: Reducer<any>;
+    component: React.ComponentClass | React.StatelessComponent;
+}
+
+export function isActiveRoute(locationPath: string, path: string) {
+    return locationPath === path || locationPath.startsWith(`${path}/`);
+}
+
+export function getRoutesReducer(routes: {[path: string]: RouteImplementation }) {
     return (state: AppState<any> = {}, action: any) => {
         const nextState = {...state};
         nextState.router = routerReducer(nextState.router, action);
-        const pageReducer = nextState.router
+        const locationPath = nextState.router
             && nextState.router.location
-            && nextState.router.location.pathname
-            && routes[nextState.router.location.pathname];
+            && nextState.router.location.pathname || '';
+        const pageReducerPath = Object.keys(routes).find((path) => isActiveRoute(locationPath, path));
+        const pageReducer = pageReducerPath && routes[pageReducerPath];
         if (pageReducer) {
             nextState.page = pageReducer.reducer(nextState.page, action);
         }
         return nextState;
     };
 }
+
+export const asyncMiddleware = ({ dispatch, getState }: any) => (next: any) => (action: any) => {
+    if (typeof action === 'function') {
+        return action(dispatch, getState);
+    }
+
+    return next(action);
+};
