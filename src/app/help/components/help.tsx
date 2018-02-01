@@ -1,9 +1,11 @@
 import * as React from 'react';
 
+import { Page } from '../../shared/components';
+
 require('./help.scss');
 
 export const Help = () => (
-    <div className='content'>
+    <Page title='Help'>
         <div className='row'>
             <div className='columns large-4 medium-12'>
                 <div className='help-box'>
@@ -39,5 +41,5 @@ export const Help = () => (
                 </div>
             </div>
         </div>
-    </div>
+    </Page>
 );

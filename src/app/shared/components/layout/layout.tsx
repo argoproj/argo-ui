@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { NavBar } from '../nav-bar/nav-bar';
-import { TopBar } from '../top-bar/top-bar';
 
 require('./layout.scss');
 
@@ -16,10 +15,7 @@ const navItems = [{
 
 export const Layout = (props: React.Props<any>) => (
     <div className='layout'>
-        <TopBar/>
         <NavBar items={navItems}/>
-        <div className='layout__content-wrapper'>
-            {props.children}
-        </div>
+        {props.children}
     </div>
 );

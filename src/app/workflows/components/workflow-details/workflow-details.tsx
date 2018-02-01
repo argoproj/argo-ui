@@ -1,9 +1,11 @@
 import * as React from 'react';
 
+import { Page } from '../../../shared/components';
+
 export const WorkflowDetails = () => (
-    <div className='content'>
+    <Page title='Workflows Details'>
         <div className='argo-container'>
             Workflow details page
         </div>
-    </div>
+    </Page>
 );

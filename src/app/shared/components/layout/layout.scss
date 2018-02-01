@@ -21,17 +21,4 @@
             }
         }
     }
-
-    &__content-wrapper {
-        padding: $top-bar-height 0 0 $nav-width;
-        position: relative;
-        display: block;
-        min-height: 100vh;
-        margin: 0 auto;
-        overflow: hidden;
-        transition: transform .4s;
-        &.hidden-scrollbar {
-            height: 100%;
-        }
-    }
 }
