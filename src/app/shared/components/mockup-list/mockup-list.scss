@@ -1,0 +1,30 @@
+@import '../../styles/config';
+
+@keyframes wavemove {
+    from {left: -100%;}
+    to {left: 100%;}
+}
+$wave-time: 2s;
+
+.mockup-list {
+
+    &__item {
+        position: relative;
+        overflow: hidden;
+        font-size: .875em;
+        color: $argo-color-gray-6;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 1px 2px 3px rgba($argo-color-gray-9, .1);
+        opacity: 0.3;
+    }
+
+    &__wave-loader {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(to right, #fff, $argo-color-teal-3, #fff);
+        width: 50%;
+        height: 100%;
+        animation: wavemove $wave-time infinite;
+    }
+}
