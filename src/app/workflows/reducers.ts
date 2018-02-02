@@ -1,7 +1,11 @@
-import { WorkflowsListState } from '../components/workflows-list/workflows-list';
-import { ACTION_TYPES } from './action-types';
+import { State } from './state';
 
-export default function(state: WorkflowsListState = { workflows: null }, action: any) {
+export const ACTION_TYPES = {
+    WORKFLOWS_LOAD_REQUEST: 'WORKFLOWS_LOAD_REQUEST',
+    WORKFLOWS_LOAD_SUCCESS: 'WORKFLOWS_LOAD_SUCCESS',
+};
+
+export default function(state: State = { workflows: null }, action: any) {
     switch (action.type) {
         case ACTION_TYPES.WORKFLOWS_LOAD_REQUEST:
             return {...state, workflows: null };

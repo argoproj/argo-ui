@@ -10,10 +10,6 @@ import { State } from '../../state';
 
 import { WorkflowListItem } from '../workflow-list-item/workflow-list-item';
 
-export interface WorkflowsListState {
-    workflows?: models.Workflow[];
-}
-
 class Component extends React.Component<{ workflows: models.Workflow[], onLoad: () => any}, any> {
 
     public componentWillMount() {
@@ -47,7 +43,7 @@ class Component extends React.Component<{ workflows: models.Workflow[], onLoad: 
 
 export const WorkflowsList = connect((state: AppState<State>) => {
     return {
-        workflows: state.page.workflowsList.workflows,
+        workflows: state.page.workflows,
     };
 }, (dispatch) => ({
     onLoad: () => dispatch(loadWorkflowsList()),

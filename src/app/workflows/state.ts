@@ -1,5 +1,5 @@
-import { WorkflowsListState } from './components/workflows-list/workflows-list';
+import * as models from '../../models';
 
 export interface State {
-    workflowsList: WorkflowsListState;
+    workflows?: models.Workflow[];
 }
