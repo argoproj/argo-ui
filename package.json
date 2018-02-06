@@ -8,7 +8,9 @@
     "build:ui": "webpack --config ./src/app/webpack.config.js",
     "dev:ui": "webpack-dev-server --config ./src/app/webpack.config.js",
     "dev:api": "TS_NODE_PROJECT=./src/api/tsconfig.json nodemon --nolazy --inspect -r ts-node/register ./src/api/main.ts",
-    "lint": "tslint -p ./src/app",
+    "lint": "yarn lint:ui && yarn lint:api",
+    "lint:ui": "tslint -p ./src/app",
+    "lint:api": "tslint -p ./src/api",
     "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js"
   },
   "dependencies": {

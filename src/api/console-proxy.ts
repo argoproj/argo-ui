@@ -17,7 +17,7 @@ function safeCallback(callback) {
     };
 }
 
-export function create(server : http.Server, core) {
+export function create(server: http.Server, core) {
     const wss = new WebSocket.Server({server});
 
     wss.on('connection', safeCallback((ws, req) => {
