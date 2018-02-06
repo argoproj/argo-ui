@@ -7,7 +7,7 @@
     &__content-wrapper {
         position: relative;
         display: block;
-        min-height: calc(100vh - $top-bar-height);
+        min-height: calc(100vh - #{$top-bar-height});
         margin: 0 auto;
         overflow: hidden;
     }
@@ -28,7 +28,7 @@
             height: 2 * $top-bar-height;
         }
         .page__content-wrapper {
-            min-height: calc(100vh - 2 * $top-bar-height);
+            min-height: calc(100vh - 2 * #{$top-bar-height});
         }
     }
 }
