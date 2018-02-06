@@ -5,7 +5,7 @@ export const ACTION_TYPES = {
     WORKFLOWS_LOAD_SUCCESS: 'WORKFLOWS_LOAD_SUCCESS',
 };
 
-export default function(state: State = { workflows: null }, action: any) {
+export default function(state: State = { workflows: null }, action: any): State {
     switch (action.type) {
         case ACTION_TYPES.WORKFLOWS_LOAD_REQUEST:
             return {...state, workflows: null };

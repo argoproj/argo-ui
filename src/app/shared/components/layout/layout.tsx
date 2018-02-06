@@ -3,19 +3,13 @@ import { NavBar } from '../nav-bar/nav-bar';
 
 require('./layout.scss');
 
-const navItems = [{
-    title: 'Timeline',
-    path: '/workflows',
-    iconClassName: 'argo-icon-timeline',
-}, {
-    title: 'Help',
-    path: '/help',
-    iconClassName: 'argo-icon-docs',
-}];
+export interface LayoutProps extends React.Props<any> {
+    navItems: Array<{ path: string; iconClassName: string; title: string; }>;
+}
 
-export const Layout = (props: React.Props<any>) => (
+export const Layout = (props: LayoutProps) => (
     <div className='layout'>
-        <NavBar items={navItems}/>
+        <NavBar items={props.navItems}/>
         {props.children}
     </div>
 );

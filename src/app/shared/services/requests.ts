@@ -6,7 +6,7 @@ const superagent: _superagent.SuperAgentStatic = superagentPromise(_superagent, 
 const API_ROOT = '/api';
 
 export default {
-    get<T>(url: string) {
-        return superagent.get(`${API_ROOT}${url}`).then((res) => res.body as T);
+    get(url: string) {
+        return superagent.get(`${API_ROOT}${url}`);
     },
 };

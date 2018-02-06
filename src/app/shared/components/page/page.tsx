@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { TopBar } from '../top-bar/top-bar';
+import { TopBar, TopBarProps } from '../top-bar/top-bar';
 
 require('./page.scss');
 
-export const Page = (props: { title: string } & React.Props<any>) => (
+type PageProps = TopBarProps;
+
+export const Page = (props: PageProps) => (
     <div className='page'>
-        <TopBar title={props.title}/>
+        <TopBar {...props}/>
         <div className='page__content-wrapper'>
-            <div className='content'>
-                {props.children}
-            </div>
+            {props.children}
         </div>
     </div>
 );

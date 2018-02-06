@@ -33,12 +33,12 @@ export function create(
   app.use(bodyParser.json({type: () => true}));
 
   app.get('/api/workflows', (req, res) => serve(res, async () => {
-    let statuses: string[] = [];
-    if (req.query.status) {
-      statuses = req.query.status instanceof Array ? req.query.status : [req.query.status];
+    let phases: string[] = [];
+    if (req.query.phase) {
+      phases = req.query.phase instanceof Array ? req.query.phase : [req.query.phase];
     }
     const workflowList = await crd.workflows.get({
-      qs: {labelSelector: statuses.length > 0 && `workflows.argoproj.io/phase in (${statuses.join(',')})` || ''}
+      qs: {labelSelector: phases.length > 0 && `workflows.argoproj.io/phase in (${phases.join(',')})` || ''},
     }) as models.WorkflowList;
     workflowList.items.sort(
       (first, second) => moment(first.metadata.creationTimestamp) < moment(second.metadata.creationTimestamp) ? 1 : -1);

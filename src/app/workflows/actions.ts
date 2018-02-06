@@ -1,16 +1,14 @@
 import { Dispatch } from 'redux';
+
 import { AppState } from '../shared/redux';
 import { services } from '../shared/services';
 import { ACTION_TYPES } from './reducers';
 import { State } from './state';
 
-export function loadWorkflowsList(): any {
+export function loadWorkflowsList(phases: string[]): any {
     return async (dispatch: Dispatch<any>, getState: () => AppState<State>) => {
-        const pageState = getState().page;
-        if (!pageState.workflows) {
-            dispatch({ type: ACTION_TYPES.WORKFLOWS_LOAD_REQUEST });
-            const workflows = (await services.workflows.all()).items;
-            dispatch({ type: ACTION_TYPES.WORKFLOWS_LOAD_SUCCESS, workflows });
-        }
+        dispatch({ type: ACTION_TYPES.WORKFLOWS_LOAD_REQUEST });
+        const workflows = (await services.workflows.list(phases)).items;
+        dispatch({ type: ACTION_TYPES.WORKFLOWS_LOAD_SUCCESS, workflows });
     };
 }

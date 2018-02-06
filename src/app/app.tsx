@@ -18,6 +18,16 @@ const routes: {[path: string]: RouteImplementation } = {
     '/help': { component: help.component, reducer: help.reducer },
 };
 
+const navItems = [{
+    title: 'Timeline',
+    path: '/workflows',
+    iconClassName: 'argo-icon-timeline',
+}, {
+    title: 'Help',
+    path: '/help',
+    iconClassName: 'argo-icon-docs',
+}];
+
 const reducer = getRoutesReducer(routes);
 export const store = createStore(reducer, applyMiddleware(asyncMiddleware, reduxRouterMiddleware));
 
@@ -27,7 +37,7 @@ export const App = () => (
         <ConnectedRouter history={history} store={store}>
             <Switch>
                 <Redirect exact={true} path='/' to='/workflows'/>
-                <Layout>
+                <Layout navItems={navItems}>
                     {Object.keys(routes).map((path) => {
                         const route = routes[path];
                         return <Route key={path} path={path} component={route.component}/>;

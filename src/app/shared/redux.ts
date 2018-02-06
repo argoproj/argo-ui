@@ -20,7 +20,7 @@ export interface AppContext {
 
 export interface RouteImplementation {
     reducer: Reducer<any>;
-    component: React.ComponentClass<RouteComponentProps<any>> | React.StatelessComponent<RouteComponentProps<any>>;
+    component: React.ComponentType<RouteComponentProps<any>>;
 }
 
 export function isActiveRoute(locationPath: string, path: string) {

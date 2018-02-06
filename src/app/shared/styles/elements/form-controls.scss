@@ -1,0 +1,309 @@
+@import '../config';
+
+.argo-form-row {
+    position: relative;
+    max-width: 100%;
+    margin: 32px 0;
+    padding: 12px 0 0;
+
+    label {
+        font-size: .9em;
+        color: $argo-color-gray-6;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &:not(.argo-label-placeholder) {
+            font-size: 13px;
+            text-transform: uppercase;
+
+            & + .argo-field,
+            & + .argo-textarea {
+                margin-top: 8px;
+            }
+        }
+    }
+
+    &__error-msg {
+        padding: 3px 0;
+        color: $argo-failed-color;
+        font-size: 14px;
+
+        i {
+            float: right;
+            margin-top: 6px;
+            font-size: 12px;
+        }
+    }
+
+    &__info {
+        padding: 3px 0;
+        font-size: 14px;
+    }
+
+    &__right {
+        float: right;
+    }
+
+    &__left {
+        float: left;
+    }
+
+    &__half {
+        vertical-align: top;
+        width: 49%;
+        padding: 0;
+        display: inline-block;
+    }
+
+    &__tightened {
+        margin: 15px 0;
+    }
+}
+
+.argo-field,
+.argo-textarea {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px 0;
+    font-size: 15px;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px solid #ccc;
+    transition: border .2s;
+
+    .error & {
+        border-color: $argo-failed-color;
+    }
+
+    &:focus {
+        outline: 0;
+        border-color: $argo-color-teal-6;
+    }
+
+    & + label.argo-label-placeholder {
+        position: absolute;
+        top: 24px;
+        left: 0;
+        line-height: 1;
+        cursor: text;
+        font-size: 15px;
+    }
+
+    &:focus + label.argo-label-placeholder,
+    &.argo-focus-out + label.argo-label-placeholder {
+        transition: top .2s, font .2s, color .2s;
+    }
+
+    &.argo-has-value + label.argo-label-placeholder,
+    &:focus + label.argo-label-placeholder {
+        top: 0;
+        font-size: 12px;
+    }
+
+    &:focus + label.argo-label-placeholder {
+        color: $argo-color-teal-6;
+    }
+}
+
+.argo-field {
+    // Hide autofill background
+    &:-webkit-autofill {
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    }
+
+    &__with-action-btn {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px 40px 10px 10px;
+        font-size: 16px;
+        background-color: white;
+        border: 1px solid #BDECF2;
+        transition: border .2s;
+
+        &:focus {
+            border-color: #1FBDD0;
+        }
+    }
+}
+
+.argo-checkbox {
+    position: relative;
+    display: inline-block;
+
+    & + label {
+        cursor: pointer;
+    }
+
+    input {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        opacity: 0;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+
+        & + span {
+            display: inline-block;
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            padding-top: 4px;
+            text-align: center;
+            border-radius: 3px;
+            border: 2px solid $argo-color-gray-6;
+            transition: background-color .2s;
+
+            i {
+                display: none;
+                font-size: 12px;
+            }
+        }
+
+        &:checked + span {
+            color: #fff;
+            background-color: $argo-color-teal-6;
+            border: 0;
+
+            i {
+                display: block;
+            }
+        }
+
+        &:disabled + span {
+            background-color: $argo-color-gray-1;
+            border: 2px solid $argo-color-gray-4;
+        }
+    }
+
+    &:not(:last-child) {
+        input + span {
+            margin-right: 6px;
+        }
+    }
+}
+
+.argo-radio {
+    position: relative;
+    display: inline-block;
+
+    & + label {
+        cursor: pointer;
+    }
+
+    input {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        opacity: 0;
+        cursor: pointer;
+
+        & + span {
+            display: inline-block;
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
+            padding-top: 4px;
+            border-radius: 50%;
+            border: 2px solid #777;
+            transition: background-color .2s, border-color .2s;
+        }
+
+        &:checked + span {
+            background-color: $argo-color-teal-5;
+            border-color: $argo-color-teal-5;
+            box-shadow: inset 0 0 0 3px $argo-color-gray-1;
+        }
+    }
+}
+
+.argo-checkbox-slide {
+    position: relative;
+    display: inline-block;
+
+    & + label {
+        cursor: pointer;
+    }
+
+    input {
+        position: absolute;
+        width: 30px;
+        height: 20px;
+        z-index: 1;
+        opacity: 0;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+
+        & + span {
+            position: relative;
+            top: 3px;
+            display: inline-block;
+            width: 30px;
+            height: 14px;
+            margin-right: 6px;
+            background-color: #e3e3e3;
+            border-radius: 7px;
+            box-shadow: inset 1px 1px 2px #aaa;
+
+            &::before {
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                display: inline-block;
+                vertical-align: middle;
+                width: 18px;
+                height: 18px;
+                background-color: #fff;
+                border-radius: 50%;
+                box-shadow: 0 1px 2px #999;
+                transition: left .2s;
+                content: '';
+            }
+        }
+
+        &:checked + span {
+            background-color: lighten($argo-color-teal-5, 30);
+
+            &::before {
+                left: 16px;
+                background-color: $argo-color-teal-5;
+                box-shadow: 0 1px 2px #fff;
+            }
+        }
+    }
+}
+
+.argo-select {
+    height: 40px;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px 0;
+    font-size: 16px;
+    margin-top: 8px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    box-shadow: none !important;
+    background-color: inherit;
+    -webkit-appearance: none;
+
+    &:focus {
+        border: none;
+        box-shadow: none;
+    }
+
+    & > option {
+        border-radius: 0;
+    }
+
+
+}

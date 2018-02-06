@@ -1,14 +1,9 @@
 @import '../../styles/config';
 @import 'node_modules/foundation-sites/scss/util/util';
 
+$top-bar-height: 50px;
+
 .top-bar {
-    display: block;
-    position: fixed;
-    z-index: $top-bar-z-index;
-    top: 0;
-    right: 0;
-    left: $nav-width;
-    height: $top-bar-height;
     line-height: $top-bar-height;
     background: $white-color;
     transition: right .5s;
@@ -61,6 +56,22 @@
 
         > * {
             position: relative;
+        }
+    }
+
+    &__filter {
+        position: relative;
+        &--selected {
+            &::before {
+                position: absolute;
+                top: 15px;
+                right: 10px;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: #009BFF;
+                content: '';
+            }
         }
     }
 }

@@ -133,7 +133,7 @@ export interface Arguments {
     artifacts: Artifact[];
 }
 
-export const NODE_PHASE = {
+export const NODE_PHASE: { [name: string]: string } = {
   RUNNING: 'Running',
   SUCCEEDED: 'Succeeded',
   SKIPPED: 'Skipped',

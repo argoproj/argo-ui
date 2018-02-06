@@ -1,20 +1,3 @@
-.content {
-    position: relative;
-    padding-bottom: 30px;
-    transition: width .5s;
-    width: 100%;
-
-    .has-tabs &.content--internal-scroll {
-        height: calc(100vh - 156px);
-    }
-    &--with-padding-top {
-        padding-top: 36px;
-    }
-    &--without-padding-bottom {
-        padding-bottom: 0;
-    }
-}
-
 .argo-container {
     position: relative;
     width: $basePageWidth + 160;
