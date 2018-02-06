@@ -2,12 +2,33 @@
 
 .page {
     padding-left: $nav-width;
+    padding-top: $top-bar-height;
 
     &__content-wrapper {
         position: relative;
         display: block;
-        min-height: 100vh;
+        min-height: calc(100vh - $top-bar-height);
         margin: 0 auto;
         overflow: hidden;
+    }
+
+    &__top-bar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: $nav-width;
+        height: $top-bar-height;
+        z-index: $top-bar-z-index;
+    }
+
+    &--has-toolbar {
+        padding-top: 2 * $top-bar-height;
+
+        .page__top-bar {
+            height: 2 * $top-bar-height;
+        }
+        .page__content-wrapper {
+            min-height: calc(100vh - 2 * $top-bar-height);
+        }
     }
 }
