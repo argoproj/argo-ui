@@ -7,6 +7,7 @@ import { Page, Tabs } from '../../../shared/components';
 import { AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
 import { State } from '../../state';
+import { WorkflowArtifacts } from '../workflow-artifacts/workflow-artifacts';
 
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
     workflow: models.Workflow;
@@ -28,7 +29,7 @@ class Component extends React.Component<Props, any> {
     public render() {
         const tabProps = { isOnlyContentScrollable: true, extraHorizontalScrollPadding: 65, extraVerticalScrollPadding: 108 };
         return (
-            <Page title='Workflows Details'>
+            <Page title={`${this.props.match.params.namespace}/${this.props.match.params.name}`}>
                 <Tabs fixed={true} tabs={[
                     {...tabProps, key: 'summary', title: 'SUMMARY', content: this.renderSummaryTab.bind(this) },
                     {...tabProps, key: 'workflow', title: 'WORKFLOW', content: this.renderWorkflowTab.bind(this) },
@@ -43,7 +44,6 @@ class Component extends React.Component<Props, any> {
             return <div>Loading...</div>;
         }
         return (
-
             <div className='argo-container'>
                 <div className='white-box'>
                     <div className='row'>
@@ -99,11 +99,10 @@ class Component extends React.Component<Props, any> {
     }
 
     private renderArtifactsTab() {
-        return (
-            <div>
-                Artifacts tab
-            </div>
-        );
+        if (!this.props.workflow) {
+            return <div>Loading...</div>;
+        }
+        return <WorkflowArtifacts workflow={this.props.workflow}/>;
     }
 }
 

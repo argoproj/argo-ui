@@ -1,0 +1,58 @@
+@import '../config';
+
+.argo-table-list {
+    &__head {
+        margin: 8px 0;
+        font-size: 12px;
+        font-weight: 500;
+        color: $argo-color-gray-6;
+        text-transform: uppercase;
+    }
+
+    &__row {
+        position: relative;
+        margin: 8px 0;
+        line-height: 60px;
+        font-size: .8125em;
+        color: $argo-color-gray-6;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+
+        .columns {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .title-text {
+            font-weight: 500;
+            color: $argo-color-gray-7;
+
+            i {
+                position: relative;
+                top: -1px;
+                margin-right: 6px;
+            }
+        }
+
+        .argo-table-list--clickable & {
+            cursor: pointer;
+
+            &:hover {
+                box-shadow: 1px 2px 3px rgba($argo-color-gray-9, .1), 0 0 0 1px rgba($argo-color-teal-5, .5);
+            }
+        }
+
+        &--lg {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            line-height: inherit;
+        }
+    }
+
+    &__loader {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+}
