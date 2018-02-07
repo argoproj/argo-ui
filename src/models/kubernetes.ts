@@ -1,4 +1,5 @@
 export type Time = any;
+export type VolumeDevice = any;
 export type Volume = any;
 export type EnvFromSource = any;
 export type EnvVarSource = any;
@@ -10,6 +11,13 @@ export type TerminationMessagePolicy = any;
 export type PullPolicy = any;
 export type SecurityContext = any;
 export type PersistentVolumeClaim = any;
+export type Affinity = any;
+
+export interface ListMeta {
+    _continue?: string;
+    resourceVersion?: string;
+    selfLink?: string;
+}
 
 export interface ObjectMeta {
     name?: string;
