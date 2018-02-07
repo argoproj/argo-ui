@@ -54,7 +54,8 @@ class Component extends React.Component<Props, any> {
                 <div className='argo-container'>
                     <div className='stream'>
                         {this.props.workflows ? this.props.workflows.map((workflow) => (
-                            <div key={workflow.metadata.name} onClick={() => this.appContext.router.history.push(`/workflows/${workflow.metadata.name}`)}>
+                            <div key={workflow.metadata.name}
+                                 onClick={() => this.appContext.router.history.push(`/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`)}>
                                 <WorkflowListItem workflow={workflow}/>
                             </div>
                         )) :

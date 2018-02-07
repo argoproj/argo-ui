@@ -23,3 +23,11 @@ export function loadWorkflowsList(phases: string[]): any {
         dispatch({ type: ACTION_TYPES.WORKFLOWS_LOAD_SUCCESS, workflows, changesSubscription });
     };
 }
+
+export function loadWorkflow(namespace: string, name: string): any {
+    return async (dispatch: Dispatch<any>, getState: () => AppState<State>) => {
+        dispatch({ type: ACTION_TYPES.WORKFLOW_LOAD_REQUEST });
+        const workflow = await services.workflows.get(namespace, name);
+        dispatch({ type: ACTION_TYPES.WORKFLOW_LOAD_SUCCESS, workflow });
+    };
+}

@@ -1,14 +1,16 @@
+import { WatchEvent, Workflow } from '../../models';
 import { State } from './state';
 
-import { WatchEvent, Workflow } from '../../models';
-
 export const ACTION_TYPES = {
+    WORKFLOW_LOAD_REQUEST: 'WORKFLOW_LOAD_REQUEST',
+    WORKFLOW_LOAD_SUCCESS: 'WORKFLOW_LOAD_SUCCESS',
+
     WORKFLOWS_LOAD_REQUEST: 'WORKFLOWS_LOAD_REQUEST',
     WORKFLOWS_LOAD_SUCCESS: 'WORKFLOWS_LOAD_SUCCESS',
     WORKFLOWS_CHANGED: 'WORKFLOWS_CHANGED',
 };
 
-export default function(state: State = { }, action: any): State {
+function workflowListReducer(state: State = { }, action: any): State {
     switch (action.type) {
         case ACTION_TYPES.WORKFLOWS_LOAD_REQUEST:
             return {...state, workflows: null };
@@ -31,4 +33,18 @@ export default function(state: State = { }, action: any): State {
             break;
     }
     return state;
+}
+
+function workflowReducer(state: State = { }, action: any): State {
+    switch (action.type) {
+        case ACTION_TYPES.WORKFLOW_LOAD_REQUEST:
+            return {...state, workflow: null };
+        case ACTION_TYPES.WORKFLOW_LOAD_SUCCESS:
+            return {...state, workflow: action.workflow };
+    }
+    return state;
+}
+
+export default function(state: State = { }, action: any): State {
+    return workflowReducer(workflowListReducer(state, action), action);
 }

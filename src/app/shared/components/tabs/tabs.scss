@@ -1,0 +1,99 @@
+@import '../../styles/config';
+
+.tabs {
+    .fixed-width {
+        width: $basePageWidth;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    &__nav {
+        position: relative;
+        z-index: 1;
+        padding: 15px 20px 0;
+        background-color: $white-color;
+        overflow: hidden;
+        list-style: none;
+        box-shadow: 0 1px 3px rgba(143,164,177,.3);
+
+        a {
+            display: inline-block;
+            margin: 0 16px;
+            padding: 12px 36px;
+            color: $argo-color-gray-6;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: color .2s;
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &.active {
+                color: $argo-color-teal-5;
+            }
+
+            i {
+                vertical-align: middle;
+                margin-right: 4px;
+                font-size: 18px;
+                color: #aaa;
+            }
+        }
+
+        &.transparent {
+            background-color: transparent;
+            box-shadow: none;
+            border-bottom: 1px solid $argo-color-gray-4;
+
+            a {
+                color: $argo-color-teal-5;
+
+                &.active {
+                    color: $argo-color-gray-8;
+                }
+            }
+        }
+    }
+
+    &__nav-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    &__indicator {
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        background: $argo-color-teal-5;
+
+        &.to-left {
+            transition: left .4s, right .4s .1s;
+        }
+
+        &.to-right {
+            transition: left .4s .1s, right .4s;
+        }
+    }
+
+    &__actions {
+        float: right;
+        line-height: 43px;
+    }
+
+    &__content {
+        position: relative;
+        padding: 16px;
+        transition: width .5s;
+
+        &--scrollable {
+            position: absolute;
+            overflow: auto;
+        }
+
+        &--no-padding {
+            padding: 0;
+        }
+    }
+}
