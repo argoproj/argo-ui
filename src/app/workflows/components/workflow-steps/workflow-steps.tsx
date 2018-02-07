@@ -2,11 +2,12 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import * as models from '../../../../models';
+
 require('./workflow-steps.scss');
 
 export const WorkflowSteps = (props: { workflow: models.Workflow }) => {
     const entryPointTemplate = props.workflow.spec.templates.find((template) => template.name === props.workflow.spec.entrypoint);
-    const phase = props.workflow.status.nodes[props.workflow.metadata.name].phase;
+    const phase = props.workflow.status.phase;
     let isSucceeded = false;
     let isFailed = false;
     let isRunning = false;

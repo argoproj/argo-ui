@@ -2,11 +2,12 @@ import deepEqual = require('deep-equal');
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { MockupList, Page, TopBarFilter } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
-import { loadWorkflowsList } from '../../actions';
+import * as actions from '../../actions';
 import { State } from '../../state';
 
 import { WorkflowListItem } from '../workflow-list-item/workflow-list-item';
@@ -15,6 +16,7 @@ interface Props {
     workflows: models.Workflow[];
     phases: string[];
     onPhasesChanged: (phases: string[]) => any;
+    changesSubscription: Subscription;
 }
 
 class Component extends React.Component<Props, any> {
@@ -26,6 +28,12 @@ class Component extends React.Component<Props, any> {
     public componentWillReceiveProps(nextProps: Props) {
         if (!deepEqual(this.props.phases, nextProps.phases)) {
             this.props.onPhasesChanged(nextProps.phases);
+        }
+    }
+
+    public componentWillUnmount() {
+        if (this.props.changesSubscription) {
+            this.props.changesSubscription.unsubscribe();
         }
     }
 
@@ -70,7 +78,8 @@ export const WorkflowsList = connect((state: AppState<State>) => {
     return {
         workflows: state.page.workflows,
         phases: new URLSearchParams(state.router.location.search).getAll('phase'),
+        changesSubscription: state.page.changesSubscription,
     };
 }, (dispatch) => ({
-    onPhasesChanged: (phases: string[]) => dispatch(loadWorkflowsList(phases)),
+    onPhasesChanged: (phases: string[]) => dispatch(actions.loadWorkflowsList(phases)),
 }))(Component);

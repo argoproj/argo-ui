@@ -80,3 +80,8 @@ export interface Container {
     stdinOnce: boolean;
     tty: boolean;
 }
+
+export interface WatchEvent<T> {
+    object: T;
+    type: 'ADDED' | 'MODIFIED' | 'DELETED' | 'ERROR';
+}
