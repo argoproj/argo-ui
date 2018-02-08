@@ -6,14 +6,14 @@ export interface Tab {
     title: string;
     icon?: string;
     key: string;
-    content: React.ComponentType;
+    content: React.ReactNode;
     isOnlyContentScrollable?: boolean;
     noPadding?: boolean;
     extraVerticalScrollPadding?: number;
     extraHorizontalScrollPadding?: number;
 }
 
-interface Props {
+interface Props extends React.Props<any> {
     navCenter?: boolean;
     fixed?: boolean;
     transparent?: boolean;
@@ -58,7 +58,7 @@ export class Tabs extends React.Component<Props, State> {
                             height: selectedTab.isOnlyContentScrollable ? `calc(100vh - ${selectedTab.extraVerticalScrollPadding || 0}px)` : 'inherit',
                             width: `calc(100% - ${selectedTab.extraHorizontalScrollPadding || 0}px)`,
                         }}>
-                        <selectedTab.content/>
+                        {selectedTab.content}
                     </div>
                 )}
             </div>

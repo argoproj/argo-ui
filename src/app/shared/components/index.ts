@@ -6,3 +6,4 @@ export { DropDown } from './dropdown/dropdown';
 export { Checkbox } from './checkbox';
 export { TopBarProps, TopBarFilter } from './top-bar/top-bar';
 export { Tab, Tabs } from './tabs/tabs';
+export { Duration } from './duration';

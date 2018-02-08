@@ -40,8 +40,8 @@ class Component extends React.Component<Props, any> {
     public render() {
         const statusFilter: TopBarFilter<string> = {
             items: Object.keys(models.NODE_PHASE).map((phase) => ({
-                value: models.NODE_PHASE[phase],
-                label: models.NODE_PHASE[phase],
+                value: (models.NODE_PHASE as any)[phase],
+                label: (models.NODE_PHASE as any)[phase],
             })),
             selectedValues: this.props.phases,
             selectionChanged: (phases) => {

@@ -765,7 +765,7 @@ export interface WorkflowStep {
 
 export type NodePhase = 'Running' | 'Succeeded' | 'Skipped' | 'Failed' | 'Error';
 
-export const NODE_PHASE: { [name: string]: string } = {
+export const NODE_PHASE = {
   RUNNING: 'Running',
   SUCCEEDED: 'Succeeded',
   SKIPPED: 'Skipped',

@@ -9,7 +9,9 @@ import { Page, Tabs } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
 import { State } from '../../state';
+
 import { WorkflowArtifacts } from '../workflow-artifacts/workflow-artifacts';
+import { WorkflowDag } from '../workflow-dag/workflow-dag';
 
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
     workflow: models.Workflow;
@@ -38,14 +40,14 @@ class Component extends React.Component<Props, any> {
     }
 
     public render() {
-        const tabProps = { isOnlyContentScrollable: true, extraHorizontalScrollPadding: 65, extraVerticalScrollPadding: 108 };
+        const tabProps = { isOnlyContentScrollable: true, extraVerticalScrollPadding: 108 };
         return (
             <Page title={`${this.props.match.params.namespace}/${this.props.match.params.name}`}>
                 <Tabs onTabSelected={(tab) => this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}`)}
                         selectedTabKey={this.props.selectedTabKey} fixed={true} tabs={[
-                    {...tabProps, key: 'summary', title: 'SUMMARY', content: this.renderSummaryTab.bind(this) },
-                    {...tabProps, key: 'workflow', title: 'WORKFLOW', content: this.renderWorkflowTab.bind(this) },
-                    {...tabProps, key: 'artifacts', title: 'ARTIFACTS', content: this.renderArtifactsTab.bind(this) },
+                    {...tabProps, key: 'summary', title: 'SUMMARY', content: this.renderSummaryTab() },
+                    {...tabProps, key: 'workflow', title: 'WORKFLOW', content: this.renderWorkflowTab() },
+                    {...tabProps, key: 'artifacts', title: 'ARTIFACTS', content: this.renderArtifactsTab() },
                 ]}/>
             </Page>
         );
@@ -103,10 +105,11 @@ class Component extends React.Component<Props, any> {
     }
 
     private renderWorkflowTab() {
+        if (!this.props.workflow) {
+            return <div>Loading...</div>;
+        }
         return (
-            <div>
-                Workflow tab
-            </div>
+            <WorkflowDag workflow={this.props.workflow} height='100%'/>
         );
     }
 

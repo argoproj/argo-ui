@@ -17,6 +17,7 @@
   "dependencies": {
     "@types/aws-sdk": "^2.7.0",
     "@types/classnames": "^2.2.3",
+    "@types/dagre": "^0.7.39",
     "@types/deep-equal": "^1.0.1",
     "@types/history": "^4.6.2",
     "@types/prop-types": "^15.5.2",
@@ -30,6 +31,7 @@
     "@types/ws": "^4.0.0",
     "aws-sdk": "^2.188.0",
     "classnames": "^2.2.5",
+    "dagre": "^0.8.2",
     "deep-equal": "^1.0.1",
     "express-history-api-fallback": "^2.2.1",
     "font-awesome": "^4.7.0",
