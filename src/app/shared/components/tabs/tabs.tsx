@@ -18,6 +18,8 @@ interface Props {
     fixed?: boolean;
     transparent?: boolean;
     tabs: Tab[];
+    selectedTabKey?: string;
+    onTabSelected?: (tabKey: string) => any;
 }
 
 interface State {
@@ -29,7 +31,7 @@ require('./tabs.scss');
 export class Tabs extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = { selectedTabKey: '' };
+        this.state = { selectedTabKey: props.selectedTabKey };
     }
 
     public render() {
@@ -65,6 +67,9 @@ export class Tabs extends React.Component<Props, State> {
 
     private selectTab(tab: Tab) {
         this.setState({ selectedTabKey: tab.key });
+        if (this.props.onTabSelected) {
+            this.props.onTabSelected(tab.key);
+        }
     }
 
     private isTabSelected(tab: Tab) {

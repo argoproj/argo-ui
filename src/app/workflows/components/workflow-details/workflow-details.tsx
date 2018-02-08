@@ -1,3 +1,4 @@
+import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
@@ -5,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { Page, Tabs } from '../../../shared/components';
-import { AppState } from '../../../shared/redux';
+import { AppContext, AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
 import { State } from '../../state';
 import { WorkflowArtifacts } from '../workflow-artifacts/workflow-artifacts';
@@ -14,6 +15,7 @@ interface Props extends RouteComponentProps<{ name: string; namespace: string; }
     workflow: models.Workflow;
     onLoad: (namespace: string, name: string) => any;
     changesSubscription: Subscription;
+    selectedTabKey: string;
 }
 
 class Component extends React.Component<Props, any> {
@@ -24,7 +26,8 @@ class Component extends React.Component<Props, any> {
 
     public componentWillReceiveProps(nextProps: Props) {
         if (this.props.match.params.name !== nextProps.match.params.name || this.props.match.params.namespace !== nextProps.match.params.namespace) {
-            this.props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
+            this.
+            props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
         }
     }
 
@@ -38,7 +41,8 @@ class Component extends React.Component<Props, any> {
         const tabProps = { isOnlyContentScrollable: true, extraHorizontalScrollPadding: 65, extraVerticalScrollPadding: 108 };
         return (
             <Page title={`${this.props.match.params.namespace}/${this.props.match.params.name}`}>
-                <Tabs fixed={true} tabs={[
+                <Tabs onTabSelected={(tab) => this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}`)}
+                        selectedTabKey={this.props.selectedTabKey} fixed={true} tabs={[
                     {...tabProps, key: 'summary', title: 'SUMMARY', content: this.renderSummaryTab.bind(this) },
                     {...tabProps, key: 'workflow', title: 'WORKFLOW', content: this.renderWorkflowTab.bind(this) },
                     {...tabProps, key: 'artifacts', title: 'ARTIFACTS', content: this.renderArtifactsTab.bind(this) },
@@ -112,11 +116,20 @@ class Component extends React.Component<Props, any> {
         }
         return <WorkflowArtifacts workflow={this.props.workflow}/>;
     }
+
+    private get appContext(): AppContext {
+        return this.context as AppContext;
+    }
 }
+
+(Component as React.ComponentClass).contextTypes = {
+    router: PropTypes.object,
+};
 
 export const WorkflowDetails = connect((state: AppState<State>) => ({
     workflow: state.page.workflow,
     changesSubscription: state.page.changesSubscription,
+    selectedTabKey: new URLSearchParams(state.router.location.search).get('tab'),
 }), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
 }))(Component);
