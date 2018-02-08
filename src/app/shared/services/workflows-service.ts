@@ -13,7 +13,11 @@ export class WorkflowsService {
         return requests.get('/workflows').query({ phase: phases }).then((res) => res.body as models.WorkflowList);
     }
 
-    public watch(): Observable<models.WatchEvent<models.Workflow>> {
-        return requests.loadEventSource('/workflows/live').repeat().retry().map((data) => JSON.parse(data));
+    public watch(workflow?: {namespace: string; name: string}): Observable<models.WatchEvent<models.Workflow>> {
+        let url = '/workflows/live';
+        if (workflow) {
+            url = `${url}?namespace=${workflow.namespace}&name=${workflow.name}`;
+        }
+        return requests.loadEventSource(url).repeat().retry().map((data) => JSON.parse(data));
     }
 }

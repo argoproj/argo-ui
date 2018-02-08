@@ -38,9 +38,9 @@ function workflowListReducer(state: State = { }, action: any): State {
 function workflowReducer(state: State = { }, action: any): State {
     switch (action.type) {
         case ACTION_TYPES.WORKFLOW_LOAD_REQUEST:
-            return {...state, workflow: null };
+            return {...state, workflow: null, changesSubscription: action.changesSubscription };
         case ACTION_TYPES.WORKFLOW_LOAD_SUCCESS:
-            return {...state, workflow: action.workflow };
+            return {...state, workflow: action.workflow, changesSubscription: action.changesSubscription };
     }
     return state;
 }

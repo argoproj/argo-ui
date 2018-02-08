@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
+import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { Page, Tabs } from '../../../shared/components';
@@ -12,6 +13,7 @@ import { WorkflowArtifacts } from '../workflow-artifacts/workflow-artifacts';
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
     workflow: models.Workflow;
     onLoad: (namespace: string, name: string) => any;
+    changesSubscription: Subscription;
 }
 
 class Component extends React.Component<Props, any> {
@@ -23,6 +25,12 @@ class Component extends React.Component<Props, any> {
     public componentWillReceiveProps(nextProps: Props) {
         if (this.props.match.params.name !== nextProps.match.params.name || this.props.match.params.namespace !== nextProps.match.params.namespace) {
             this.props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
+        }
+    }
+
+    public componentWillUnmount() {
+        if (this.props.changesSubscription) {
+            this.props.changesSubscription.unsubscribe();
         }
     }
 
@@ -106,10 +114,9 @@ class Component extends React.Component<Props, any> {
     }
 }
 
-export const WorkflowDetails = connect((state: AppState<State>) => {
-    return {
-        workflow: state.page.workflow,
-    };
-}, (dispatch) => ({
+export const WorkflowDetails = connect((state: AppState<State>) => ({
+    workflow: state.page.workflow,
+    changesSubscription: state.page.changesSubscription,
+}), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
 }))(Component);
