@@ -1,8 +1,8 @@
 @import '../../../shared/styles/config';
 
-
 .workflow-dag {
     position: relative;
+    overflow: auto;
 
     &__line {
         position: absolute;

@@ -12,12 +12,6 @@ $argo-icon-fonts-root: '/' !default;
     -moz-osx-font-smoothing: grayscale;
 }
 
-[class^="{{fontName}}"]:before,
-[class*=" {{fontName}}"]:before {
-    line-height: inherit !important;
-    font-size: inherit !important;
-}
-
 @font-face {
     font-family: "{{ fontName }}";
     src: {{{ src }}};

@@ -30,33 +30,6 @@
         font-size: 1em;
     }
 
-    &__tools {
-        display: inline-block;
-        white-space: nowrap;
-
-        &::after {
-            display: inline-block;
-            vertical-align: middle;
-            content: "";
-        }
-
-        & li > a {
-            color: $argo-color-gray-6;
-        }
-    }
-
-    &__tool {
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 30px;
-        font-size: 1.1em;
-
-        > * {
-            position: relative;
-        }
-    }
-
     &__filter {
         position: relative;
         &--selected {
@@ -71,5 +44,42 @@
                 content: '';
             }
         }
+    }
+
+    &__breadcrumbs {
+        float: left;
+        margin-left: -4px;
+        height: $top-bar-height;
+        font-weight: 500;
+        font-size: .8em;
+        color: $argo-color-gray-8;
+
+        a {
+            display: inline-block;
+            padding: 4px;
+            line-height: 1.23;
+            font-weight: 400;
+            color: $argo-color-teal-6;
+            border-radius: 3px;
+
+            &:hover {
+                background-color: $argo-color-gray-2;
+            }
+        }
+
+        &-last-item {
+            display: inline-block;
+            padding: 0 4px;
+        }
+    }
+
+    &__sep {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 8px;
+        width: 0;
+        height: 24px;
+        border-left: 1px solid $argo-color-gray-4;
+        transform: rotate(24deg);
     }
 }

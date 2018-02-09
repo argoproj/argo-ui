@@ -12,12 +12,6 @@ $argo-icon-fonts-root: '/' !default;
     -moz-osx-font-smoothing: grayscale;
 }
 
-[class^="argo-icon"]:before,
-[class*=" argo-icon"]:before {
-    line-height: inherit !important;
-    font-size: inherit !important;
-}
-
 @font-face {
     font-family: "argo-icon";
     src: url($argo-icon-fonts-root + "argo-icon.eot?51d43a1be01e193a568d7d6a26b14f4c?#iefix") format("embedded-opentype"),

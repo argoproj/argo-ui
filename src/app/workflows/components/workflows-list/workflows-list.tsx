@@ -38,7 +38,7 @@ class Component extends React.Component<Props, any> {
     }
 
     public render() {
-        const statusFilter: TopBarFilter<string> = {
+        const filter: TopBarFilter<string> = {
             items: Object.keys(models.NODE_PHASE).map((phase) => ({
                 value: (models.NODE_PHASE as any)[phase],
                 label: (models.NODE_PHASE as any)[phase],
@@ -50,7 +50,7 @@ class Component extends React.Component<Props, any> {
             },
         };
         return (
-            <Page title='Workflows' filter={statusFilter}>
+            <Page title='Workflows' toolbar={{filter, breadcrumbs: [{ title: 'Workflows', path: '/workflows' }]}}>
                 <div className='argo-container'>
                     <div className='stream'>
                         {this.props.workflows ? this.props.workflows.map((workflow) => (

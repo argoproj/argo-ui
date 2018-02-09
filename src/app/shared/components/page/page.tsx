@@ -7,7 +7,7 @@ require('./page.scss');
 type PageProps = TopBarProps;
 
 export const Page = (props: PageProps) => (
-    <div className={classNames('page', { 'page--has-toolbar': !!props.filter })}>
+    <div className={classNames('page', { 'page--has-toolbar': !!props.toolbar })}>
         <div className='page__top-bar'>
             <TopBar {...props}/>
         </div>

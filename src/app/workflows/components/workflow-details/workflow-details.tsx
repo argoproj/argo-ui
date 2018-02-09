@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -5,13 +6,14 @@ import { RouteComponentProps } from 'react-router';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
-import { Page, Tabs } from '../../../shared/components';
+import { Page } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
 import { State } from '../../state';
 
 import { WorkflowArtifacts } from '../workflow-artifacts/workflow-artifacts';
 import { WorkflowDag } from '../workflow-dag/workflow-dag';
+import { WorkflowSummaryPanel } from '../workflow-summary-panel';
 
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
     workflow: models.Workflow;
@@ -19,6 +21,8 @@ interface Props extends RouteComponentProps<{ name: string; namespace: string; }
     changesSubscription: Subscription;
     selectedTabKey: string;
 }
+
+require('./workflow-details.scss');
 
 class Component extends React.Component<Props, any> {
 
@@ -40,17 +44,33 @@ class Component extends React.Component<Props, any> {
     }
 
     public render() {
-        const tabProps = { isOnlyContentScrollable: true, extraVerticalScrollPadding: 108 };
         return (
-            <Page title={`${this.props.match.params.namespace}/${this.props.match.params.name}`}>
-                <Tabs onTabSelected={(tab) => this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}`)}
-                        selectedTabKey={this.props.selectedTabKey} fixed={true} tabs={[
-                    {...tabProps, key: 'summary', title: 'SUMMARY', content: this.renderSummaryTab() },
-                    {...tabProps, key: 'workflow', title: 'WORKFLOW', content: this.renderWorkflowTab() },
-                    {...tabProps, key: 'artifacts', title: 'ARTIFACTS', content: this.renderArtifactsTab() },
-                ]}/>
+            <Page title={'Workflow Details'} toolbar={{
+                    breadcrumbs: [{title: 'Workflows', path: '/workflows' }, { title: this.props.match.params.name }],
+                    tools: (
+                        <div className='workflow-details__topbar-buttons'>
+                            <a className={classNames({ active: this.props.selectedTabKey === 'summary' })} onClick={() => this.selectTab('summary')}>
+                                <i className='fa fa-columns'/>
+                            </a>
+                            <a className={classNames({ active: this.props.selectedTabKey === 'timeline' })} onClick={() => this.selectTab('timeline')}>
+                                <i className='fa argo-icon-timeline'/>
+                            </a>
+                            <a className={classNames({ active: this.props.selectedTabKey === 'workflow' })} onClick={() => this.selectTab('workflow')}>
+                                <i className='fa argo-icon-workflow'/>
+                            </a>
+                        </div>
+                    ),
+                }}>
+                <div className='workflow-details'>
+                    {this.props.selectedTabKey === 'summary' && this.renderSummaryTab()}
+                    {this.props.selectedTabKey === 'workflow' && this.renderWorkflowTab()}
+                </div>
             </Page>
         );
+    }
+
+    private selectTab(tab: string) {
+        this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}`);
     }
 
     private renderSummaryTab() {
@@ -59,47 +79,9 @@ class Component extends React.Component<Props, any> {
         }
         return (
             <div className='argo-container'>
-                <div className='white-box'>
-                    <div className='row'>
-                        <div className='columns large-6'>
-                            <h6>Workflow Details</h6>
-                        </div>
-                    </div>
-                    <div className='white-box__details'>
-                        <div className='row white-box__details-row'>
-                            <div className='large-3 columns white-box__details-label'>
-                                Status:
-                            </div>
-                            <div className='large-9 columns'>
-                                {this.props.workflow.status.phase}
-                            </div>
-                        </div>
-                        <div className='row white-box__details-row'>
-                            <div className='large-3 columns white-box__details-label'>
-                                Name:
-                            </div>
-                            <div className='large-9 columns columns--narrower-height'>
-                                {this.props.workflow.metadata.name}
-                            </div>
-                        </div>
-                        <div className='row white-box__details-row'>
-                        <div className='large-3 columns white-box__details-label'>
-                            Namespace:
-                        </div>
-                        <div className='large-9 columns columns--narrower-height'>
-                            {this.props.workflow.metadata.namespace}
-                        </div>
-                    </div>
-                        <div className='row white-box__details-row'>
-                            <div className='large-3 columns white-box__details-label'>
-                                Time:
-                            </div>
-                            <div className='large-9 columns'>
-                                <span>Started</span> on {this.props.workflow.metadata.creationTimestamp}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <WorkflowSummaryPanel workflow={this.props.workflow}/>
+                <h6>Artifacts</h6>
+                <WorkflowArtifacts workflow={this.props.workflow}/>
             </div>
         );
     }
@@ -109,15 +91,8 @@ class Component extends React.Component<Props, any> {
             return <div>Loading...</div>;
         }
         return (
-            <WorkflowDag workflow={this.props.workflow} height='100%'/>
+            <WorkflowDag workflow={this.props.workflow} height='calc(100vh - 2 * 50px)'/>
         );
-    }
-
-    private renderArtifactsTab() {
-        if (!this.props.workflow) {
-            return <div>Loading...</div>;
-        }
-        return <WorkflowArtifacts workflow={this.props.workflow}/>;
     }
 
     private get appContext(): AppContext {
@@ -132,7 +107,7 @@ class Component extends React.Component<Props, any> {
 export const WorkflowDetails = connect((state: AppState<State>) => ({
     workflow: state.page.workflow,
     changesSubscription: state.page.changesSubscription,
-    selectedTabKey: new URLSearchParams(state.router.location.search).get('tab'),
+    selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'summary',
 }), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
 }))(Component);
