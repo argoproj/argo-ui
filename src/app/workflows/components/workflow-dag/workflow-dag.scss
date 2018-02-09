@@ -4,7 +4,7 @@
 
 .workflow-dag {
     position: relative;
-    overflow: auto;
+    overflow: hidden;
 
     &__line {
         position: absolute;

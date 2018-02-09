@@ -6,11 +6,8 @@ import { Observable, Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 
-
 interface Props {
     workflow: models.Workflow;
-    width?: React.CSSWideKeyword | any;
-    height?: React.CSSWideKeyword | any;
     selectedNodeId?: string;
     nodeClicked?: (node: models.NodeStatus) => any;
 }
@@ -65,9 +62,9 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
             }
             edges.push({ from: edgeInfo.v, to: edgeInfo.w, lines });
         });
-
+        const size = this.getGraphSize(graph.nodes().map((id) => graph.node(id)));
         return (
-            <div className='workflow-dag' style={{width: this.props.width || '100%', height: this.props.height}}>
+            <div className='workflow-dag' style={{width: size.width, height: size.height + 10}}>
                 {graph.nodes().map((id) => {
                     const node = graph.node(id) as models.NodeStatus & dagre.Node;
                     const nameParts = node.name.split('.');
@@ -97,6 +94,16 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
                 ))}
             </div>
         );
+    }
+
+    private getGraphSize(nodes: dagre.Node[]): { width: number, height: number} {
+        let width = 0;
+        let height = 0;
+        nodes.forEach((node) => {
+            width = Math.max(node.x + node.width, width);
+            height = Math.max(node.y + node.height, height);
+        });
+        return {width, height};
     }
 
     private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {

@@ -1,7 +1,19 @@
 @import '../../../shared/styles/config';
 
 .workflow-details {
-    padding: 1em;
+
+    &, & > .row {
+        height: calc(100vh - 2 * #{$top-bar-height});
+    }
+
+    &__content {
+        padding: 1em;
+    }
+
+    &__step-info.columns {
+        border-left: 1px solid $argo-color-gray-4;
+        padding: 0;
+    }
 
     &__topbar-buttons {
         display: inline-block;
@@ -25,6 +37,16 @@
                 border-radius: 5px;
                 cursor: default;
             }
+        }
+    }
+
+    &__graph-container {
+        overflow: auto;
+        padding: 1em;
+        height: calc(100vh - 2 * #{$top-bar-height});
+
+        .workflow-dag {
+            margin: 0 auto;
         }
     }
 }

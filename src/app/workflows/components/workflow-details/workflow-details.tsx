@@ -6,7 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
-import { Page } from '../../../shared/components';
+import { Page, Tabs } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
 import { State } from '../../state';
@@ -64,7 +64,22 @@ class Component extends React.Component<Props, any> {
                 }}>
                 <div className='workflow-details'>
                     {this.props.selectedTabKey === 'summary' && this.renderSummaryTab()}
-                    {this.props.selectedTabKey === 'workflow' && this.renderWorkflowTab()}
+                    {this.props.selectedTabKey !== 'summary' && (
+                        <div className='row'>
+                            <div className='columns small-9'>
+                                {this.props.selectedTabKey === 'workflow' && this.renderWorkflowTab()}
+                            </div>
+                            <div className='columns small-3 workflow-details__step-info'>
+                                <Tabs tabs={[{
+                                    title: 'SUMMARY', key: 'summary', content: (<div>Summary here</div>),
+                                }, {
+                                    title: 'CONTAINERS', key: 'containers', content: (<div>Containers here</div>),
+                                }, {
+                                    title: 'ARTIFACTS', key: 'artifacts', content: (<div>Artifacts here</div>),
+                                }]} />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </Page>
         );
@@ -84,9 +99,11 @@ class Component extends React.Component<Props, any> {
         }
         return (
             <div className='argo-container'>
-                <WorkflowSummaryPanel workflow={this.props.workflow}/>
-                <h6>Artifacts</h6>
-                <WorkflowArtifacts workflow={this.props.workflow}/>
+                <div className='workflow-details__content'>
+                    <WorkflowSummaryPanel workflow={this.props.workflow}/>
+                    <h6>Artifacts</h6>
+                    <WorkflowArtifacts workflow={this.props.workflow}/>
+                </div>
             </div>
         );
     }
@@ -96,11 +113,12 @@ class Component extends React.Component<Props, any> {
             return <div>Loading...</div>;
         }
         return (
-            <WorkflowDag
-                workflow={this.props.workflow}
-                selectedNodeId={this.props.selectedNodeId}
-                nodeClicked={(node) => this.selectNode(node.name)}
-                height='calc(100vh - 2 * 50px)'/>
+            <div className='workflow-details__graph-container'>
+                <WorkflowDag
+                    workflow={this.props.workflow}
+                    selectedNodeId={this.props.selectedNodeId}
+                    nodeClicked={(node) => this.selectNode(node.name)}/>
+            </div>
         );
     }
 
