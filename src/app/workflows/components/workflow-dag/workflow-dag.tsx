@@ -4,15 +4,15 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { Observable, Subscription } from 'rxjs';
 
-import { Duration } from '../../../shared/components';
-
 import * as models from '../../../../models';
+
 
 interface Props {
     workflow: models.Workflow;
-    nodeClickable?: boolean;
     width?: React.CSSWideKeyword | any;
     height?: React.CSSWideKeyword | any;
+    selectedNodeId?: string;
+    nodeClicked?: (node: models.NodeStatus) => any;
 }
 
 interface Line { x1: number; y1: number; x2: number; y2: number; }
@@ -20,11 +20,7 @@ interface Line { x1: number; y1: number; x2: number; y2: number; }
 require('./workflow-dag.scss');
 
 const NODE_WIDTH = 182;
-const NODE_HEIGHT = 252;
-
-function time(dateTime: string) {
-    return moment(dateTime).format('H:mm:ss');
-}
+const NODE_HEIGHT = 52;
 
 export class WorkflowDag extends React.Component<Props, { renderTime: moment.Moment, refreshSubscription: Subscription }> {
 
@@ -74,29 +70,15 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
             <div className='workflow-dag' style={{width: this.props.width || '100%', height: this.props.height}}>
                 {graph.nodes().map((id) => {
                     const node = graph.node(id) as models.NodeStatus & dagre.Node;
+                    const nameParts = node.name.split('.');
+                    const shortName = nameParts[nameParts.length - 1];
                     return (
-                        <div className='workflow-dag__node' key={id} style={{left: node.x, top: node.y, width: node.width, height: node.height}}>
-                            <div className={classNames('workflow-dag__node-info', { clickable: this.props.nodeClickable })}>
-                                <div className='workflow-dag__node-status'>{node.phase}</div>
-                                <div className='workflow-dag__node-progress'>
-                                    <div className='workflow-dag__node-info-duration'>
-                                        <Duration durationMs={this.nodeDuration(node)} allowNewLines={true} />
-                                    </div>
-                                </div>
-                                <div className='workflow-dag__node-info-footer'>
-                                    {node.finishedAt && (
-                                        <span>
-                                            {node.phase === models.NODE_PHASE.SUCCEEDED ? 'Completed' : 'Failed'} at {time(node.finishedAt)}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                            <div className='workflow-dag__node-footer'>
-                                <div className='workflow-dag__node-title'>
-                                    <span title={node.name}>{node.name}</span>
-                                </div>
-                                <div className='workflow-dag__node-actions'/>
-                            </div>
+                        <div key={id}
+                                className={classNames('workflow-dag__node', {active: node.name === this.props.selectedNodeId})}
+                                style={{left: node.x, top: node.y, width: node.width, height: node.height}}
+                                onClick={() => this.props.nodeClicked && this.props.nodeClicked(node)}>
+                            <div className={`workflow-dag__node-status workflow-dag__node-status--${this.props.workflow.status.phase.toLocaleLowerCase()}`}/>
+                            <div className='workflow-dag__node-title'>{shortName}</div>
                         </div>
                     );
                 })}
@@ -109,17 +91,12 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
                         const angle = Math.atan2(line.y1 - line.y2, line.x1 - line.x2) * 180 / Math.PI;
                         return (
                             <div className='workflow-dag__line' key={i}
-                                style={{ width: distance, left: xMid - (distance / 2), top: yMid, transform: `translate(100px, 135px) rotate(${angle}deg)`}} />
+                                style={{ width: distance, left: xMid - (distance / 2), top: yMid, transform: `translate(100px, 35px) rotate(${angle}deg)`}} />
                         );
                     })}</div>
                 ))}
             </div>
         );
-    }
-
-    private nodeDuration(node: models.NodeStatus) {
-        const endTime = node.finishedAt ? moment(node.finishedAt) : this.state.renderTime;
-        return endTime.diff(moment(node.startedAt)) / 1000;
     }
 
     private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {

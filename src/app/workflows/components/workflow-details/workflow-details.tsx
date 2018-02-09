@@ -20,6 +20,7 @@ interface Props extends RouteComponentProps<{ name: string; namespace: string; }
     onLoad: (namespace: string, name: string) => any;
     changesSubscription: Subscription;
     selectedTabKey: string;
+    selectedNodeId: string;
 }
 
 require('./workflow-details.scss');
@@ -70,7 +71,11 @@ class Component extends React.Component<Props, any> {
     }
 
     private selectTab(tab: string) {
-        this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}`);
+        this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}&nodeId=${this.props.selectedNodeId}`);
+    }
+
+    private selectNode(nodeId: string) {
+        this.appContext.router.history.push(`${this.props.match.url}?tab=${this.props.selectedTabKey}&nodeId=${nodeId}`);
     }
 
     private renderSummaryTab() {
@@ -91,7 +96,11 @@ class Component extends React.Component<Props, any> {
             return <div>Loading...</div>;
         }
         return (
-            <WorkflowDag workflow={this.props.workflow} height='calc(100vh - 2 * 50px)'/>
+            <WorkflowDag
+                workflow={this.props.workflow}
+                selectedNodeId={this.props.selectedNodeId}
+                nodeClicked={(node) => this.selectNode(node.name)}
+                height='calc(100vh - 2 * 50px)'/>
         );
     }
 
@@ -108,6 +117,7 @@ export const WorkflowDetails = connect((state: AppState<State>) => ({
     workflow: state.page.workflow,
     changesSubscription: state.page.changesSubscription,
     selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'summary',
+    selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId'),
 }), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
 }))(Component);

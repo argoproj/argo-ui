@@ -1,4 +1,6 @@
 @import '../../../shared/styles/config';
+@import 'node_modules/font-awesome/scss/variables';
+@import 'node_modules/font-awesome/scss/mixins';
 
 .workflow-dag {
     position: relative;
@@ -24,95 +26,81 @@
 
     &__node {
         position: absolute;
+        padding-left: 3.5em;
         margin: 10px;
         box-shadow: 1px 1px 1px $argo-color-gray-4;
+        background-color: white;
         border-radius: 4px;
         border: 1px solid transparent;
+        cursor: pointer;
 
         &.active {
             border-color: $argo-color-teal-6;
         }
     }
 
-    &__line, &__node {
-        transition: left 0.2s, top 0.2s, width 0.2s, height 0.2s;
-    }
-
-    &__node-info {
-        position: relative;
-        border-bottom: none;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        background-color: #FFFFFF;
-        height: 200px;
-        text-align: center;
-        color: #B5B5B5;
-    }
-
-    &__node-footer {
-        border-top: none;
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-        background-color: #F6F6F7;
-        font-weight: bold;
-        height: 50px;
-    }
-
-    &__node-title {
-        font-size: 13px;
-        line-height: 30px;
-        overflow: hidden;
-        margin-right: 17px;
-        color: $argo-color-teal-6;
-        font-weight: lighter;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        text-transform: uppercase;
-        cursor: pointer;
-
-        .active & {
-            font-weight: 500;
-        }
-    }
-
-    &__node-footer, &__node-info {
-        padding: 10px;
-        font-size: 13px;
+    &__node.active &__node-status {
+        border: 1px solid $argo-color-teal-6;
+        border-right: none;
     }
 
     &__node-status {
-        width: 100%;
-        height: 26px;
-        padding-top: 3px;
-        overflow: hidden;
-        color: $argo-color-gray-5;
-        font-size: 13px;
+        position: absolute;
+        left: -1px;
+        bottom: -1px;
+        top: -1px;
+        width: 3em;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        line-height: 52px;
         text-align: center;
-        margin-top: 24px;
-    }
+        color: white;
 
-    $backColor: #EFEFEF;
-    $outer-diameter: 106px;
-    $inner-diameter: 90px;
-
-    &__node-progress {
-        position: relative;
-        width: $outer-diameter;
-        height: $outer-diameter;
-        border-radius: 50%;
-        border: 2px solid $backColor;
-        margin: 0 auto;
-    }
-
-    &__node-info-duration {
-        position: relative;
-        top: 50%;
-        font-size: 13px;
-        transform: translateY(-50%);
-        span {
-            display: block;
-            font-size: 14px;
-            white-space: pre-wrap;
+        &--error, &--failed {
+            background-color: $argo-failed-color;
+            &::after {
+                @include fa-icon;
+                content: $fa-var-times-circle;
+            }
         }
+
+        &--running {
+            background-color: $argo-running-color;
+            &::after {
+                @include fa-icon;
+                content: $fa-var-circle-o-notch;
+                animation-name: spin;
+                animation-duration: 4000ms;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+        }
+
+        @keyframes spin {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+        }
+    
+        &--succeeded {
+            background-color: $argo-success-color;
+            &::after {
+                @include fa-icon;
+                content: $fa-var-check;
+            }
+        }
+        &--skipped {
+            background-color: $argo-color-gray-4;
+        }
+    }
+
+    &__node-title {
+        line-height: 3em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__line, &__node {
+        transition: left 0.2s, top 0.2s, width 0.2s, height 0.2s;
     }
 }
