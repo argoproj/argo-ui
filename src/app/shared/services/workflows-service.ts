@@ -20,4 +20,8 @@ export class WorkflowsService {
         }
         return requests.loadEventSource(url).repeat().retry().map((data) => JSON.parse(data));
     }
+
+    public getArtifactDownloadUrl(workflow: models.Workflow, nodeName: string, artifactName: string) {
+        return `/api/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}/artifacts/${nodeName}/${artifactName}`;
+    }
 }

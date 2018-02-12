@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Observable, Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
+import { Utils } from '../../../shared/components';
 
 interface Props {
     workflow: models.Workflow;
@@ -64,17 +65,16 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
         });
         const size = this.getGraphSize(graph.nodes().map((id) => graph.node(id)));
         return (
-            <div className='workflow-dag' style={{width: size.width, height: size.height + 10}}>
+            <div className='workflow-dag' style={{width: size.width + 10, height: size.height + 10}}>
                 {graph.nodes().map((id) => {
                     const node = graph.node(id) as models.NodeStatus & dagre.Node;
-                    const nameParts = node.name.split('.');
-                    const shortName = nameParts[nameParts.length - 1];
+                    const shortName = Utils.shortNodeName(node.name);
                     return (
                         <div key={id}
-                                className={classNames('workflow-dag__node', {active: node.name === this.props.selectedNodeId})}
+                                className={classNames('workflow-dag__node', {active: node.id === this.props.selectedNodeId})}
                                 style={{left: node.x, top: node.y, width: node.width, height: node.height}}
                                 onClick={() => this.props.nodeClicked && this.props.nodeClicked(node)}>
-                            <div className={`workflow-dag__node-status workflow-dag__node-status--${this.props.workflow.status.phase.toLocaleLowerCase()}`}/>
+                            <div className={`workflow-dag__node-status workflow-dag__node-status--${node.phase.toLocaleLowerCase()}`}/>
                             <div className='workflow-dag__node-title'>{shortName}</div>
                         </div>
                     );
@@ -114,7 +114,6 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
             });
         } else if (this.state.refreshSubscription && isCompleted) {
             this.state.refreshSubscription.unsubscribe();
-            this.setState({ refreshSubscription: null });
         }
     }
 }

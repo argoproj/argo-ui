@@ -1,0 +1,21 @@
+@import '../../../shared/styles/config';
+
+.workflow-node-info {
+    &__artifact-details span {
+        padding-right: 0.5em;
+        padding-left: 0.5em;
+        border-left: 1px solid $argo-color-gray-5;
+
+        display: inline-block;
+        width: 33%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 1em;
+
+        &:first-child {
+            padding-left: 0;
+            border-left: none;
+        }
+    }
+}

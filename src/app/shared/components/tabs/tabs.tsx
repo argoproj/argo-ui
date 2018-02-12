@@ -16,7 +16,7 @@ export interface Tab {
 interface Props extends React.Props<any> {
     navCenter?: boolean;
     fixed?: boolean;
-    transparent?: boolean;
+    navTransparent?: boolean;
     tabs: Tab[];
     selectedTabKey?: string;
     onTabSelected?: (tabKey: string) => any;
@@ -38,9 +38,9 @@ export class Tabs extends React.Component<Props, State> {
         const selectedTab = this.props.tabs.find((tab) => this.isTabSelected(tab));
         return (
             <div className='tabs'>
-                <div className={classNames('tabs__nav', { navCenter: this.props.navCenter, transparent: this.props.transparent })}>
+                <div className={classNames('tabs__nav', { center: this.props.navCenter, transparent: this.props.navTransparent })}>
                     <div className={classNames({'fixed-width': this.props.fixed})}>
-                        <div className={classNames('tabs__nav-wrapper', {'text-center': this.props.navCenter})}>
+                        <div className={classNames('tabs__nav-wrapper')}>
                             {this.props.tabs.map((tab) => (
                                 <a key={tab.key} onClick={() => this.selectTab(tab)} className={classNames({active: this.isTabSelected(tab)})}>
                                     {tab.icon && <i className={`fa ${tab.icon}`}/>} {tab.title}

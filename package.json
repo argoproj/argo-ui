@@ -12,7 +12,8 @@
     "lint": "yarn lint:ui && yarn lint:api",
     "lint:ui": "tslint -p ./src/app",
     "lint:api": "tslint -p ./src/api",
-    "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js"
+    "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
+    "test": "mocha --require ts-node/register ./src/app/**/*.spec.ts"
   },
   "dependencies": {
     "@types/aws-sdk": "^2.7.0",
@@ -54,14 +55,19 @@
     "ws": "^4.0.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
     "awesome-typescript-loader": "^3.4.1",
+    "chai": "^4.1.2",
     "copy-webpack-plugin": "^4.3.1",
     "glob": "^7.1.2",
     "html-webpack-plugin": "^2.30.1",
     "jscs": "^3.0.7",
+    "mocha": "^5.0.0",
     "node-sass": "^4.7.2",
     "nodemon": "^1.14.11",
     "raw-loader": "^0.5.1",
+    "react-hot-loader": "^3.1.3",
     "sass-loader": "^6.0.6",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.20.1",

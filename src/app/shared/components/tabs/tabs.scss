@@ -16,6 +16,10 @@
         list-style: none;
         box-shadow: 0 1px 3px rgba(143,164,177,.3);
 
+        &.center {
+            text-align: center;
+        }
+
         a {
             display: inline-block;
             margin: 0 16px;

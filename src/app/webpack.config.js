@@ -4,6 +4,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const config = {
     entry: './src/app/index.tsx',
     output: {
@@ -21,7 +23,7 @@ const config = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: 'awesome-typescript-loader?configFileName=./src/app/tsconfig.json'
+                loaders: [ ...( isProd ? [] : ['react-hot-loader/webpack']), 'awesome-typescript-loader?configFileName=./src/app/tsconfig.json']
             }, {
                 enforce: 'pre',
                 test: /\.js$/,
@@ -52,7 +54,7 @@ const config = {
     }
 };
 
-if (process.env.NODE_ENV === 'production') {
+if (isProd) {
     config
         .plugins
         .push(new webpack.optimize.UglifyJsPlugin());

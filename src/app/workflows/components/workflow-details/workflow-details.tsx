@@ -6,13 +6,14 @@ import { RouteComponentProps } from 'react-router';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
-import { Page, Tabs } from '../../../shared/components';
+import { Page } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
 import { State } from '../../state';
 
-import { WorkflowArtifacts } from '../workflow-artifacts/workflow-artifacts';
+import { WorkflowArtifacts } from '../workflow-artifacts';
 import { WorkflowDag } from '../workflow-dag/workflow-dag';
+import { WorkflowNodeInfo } from '../workflow-node-info/workflow-node-info';
 import { WorkflowSummaryPanel } from '../workflow-summary-panel';
 
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
@@ -45,6 +46,7 @@ class Component extends React.Component<Props, any> {
     }
 
     public render() {
+        const selectedNode = this.props.workflow && this.props.workflow.status && this.props.workflow.status.nodes[this.props.selectedNodeId];
         return (
             <Page title={'Workflow Details'} toolbar={{
                     breadcrumbs: [{title: 'Workflows', path: '/workflows' }, { title: this.props.match.params.name }],
@@ -63,20 +65,17 @@ class Component extends React.Component<Props, any> {
                     ),
                 }}>
                 <div className='workflow-details'>
-                    {this.props.selectedTabKey === 'summary' && this.renderSummaryTab()}
-                    {this.props.selectedTabKey !== 'summary' && (
+                    {this.props.selectedTabKey === 'summary' && this.renderSummaryTab() || (
                         <div className='row'>
                             <div className='columns small-9'>
                                 {this.props.selectedTabKey === 'workflow' && this.renderWorkflowTab()}
                             </div>
                             <div className='columns small-3 workflow-details__step-info'>
-                                <Tabs tabs={[{
-                                    title: 'SUMMARY', key: 'summary', content: (<div>Summary here</div>),
-                                }, {
-                                    title: 'CONTAINERS', key: 'containers', content: (<div>Containers here</div>),
-                                }, {
-                                    title: 'ARTIFACTS', key: 'artifacts', content: (<div>Artifacts here</div>),
-                                }]} />
+                                {selectedNode && (
+                                    <WorkflowNodeInfo node={selectedNode} workflow={this.props.workflow} />
+                                ) || (
+                                    <p>Please select workflow node</p>
+                                )}
                             </div>
                         </div>
                     )}
@@ -117,7 +116,7 @@ class Component extends React.Component<Props, any> {
                 <WorkflowDag
                     workflow={this.props.workflow}
                     selectedNodeId={this.props.selectedNodeId}
-                    nodeClicked={(node) => this.selectNode(node.name)}/>
+                    nodeClicked={(node) => this.selectNode(node.id)}/>
             </div>
         );
     }
@@ -131,11 +130,18 @@ class Component extends React.Component<Props, any> {
     router: PropTypes.object,
 };
 
+function defaultSelectedNode(workflow: models.Workflow): string {
+    if (workflow.status && workflow.status.nodes) {
+        return Object.keys(workflow.status.nodes)[0];
+    }
+    return null;
+}
+
 export const WorkflowDetails = connect((state: AppState<State>) => ({
     workflow: state.page.workflow,
     changesSubscription: state.page.changesSubscription,
-    selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'summary',
-    selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId'),
+    selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'workflow',
+    selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId') || (state.page.workflow && defaultSelectedNode(state.page.workflow)),
 }), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
 }))(Component);

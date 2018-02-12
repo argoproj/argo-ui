@@ -642,6 +642,14 @@ export interface NodeStatus {
      * a template, will be a superset of the outbound nodes of its last children.
      */
     outboundNodes: string[];
+    /**
+     * TemplateName is the template name which this node corresponds to. Not applicable to virtual nodes (e.g. Retry, StepGroup)
+     */
+    templateName: string;
+    /**
+     * Inputs captures input parameter values and artifact locations supplied to this template invocation
+     */
+    inputs: Inputs;
 }
 
 export interface WorkflowStatus {
