@@ -7,6 +7,7 @@
   "scripts": {
     "build:ui": "webpack --config ./src/app/webpack.config.js",
     "dev:ui": "webpack-dev-server --config ./src/app/webpack.config.js",
+    "dev:ui:hot": "yarn dev:ui -- --hot",
     "dev:api": "TS_NODE_PROJECT=./src/api/tsconfig.json nodemon --nolazy --inspect -r ts-node/register ./src/api/main.ts",
     "lint": "yarn lint:ui && yarn lint:api",
     "lint:ui": "tslint -p ./src/app",

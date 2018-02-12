@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router';
 import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, Store } from 'redux';
 
 import { Layout } from './shared/components';
 import { asyncMiddleware, getRoutesReducer, RouteImplementation } from './shared/redux';
@@ -32,9 +32,9 @@ const reducer = getRoutesReducer(routes);
 export const store = createStore(reducer, applyMiddleware(asyncMiddleware, reduxRouterMiddleware));
 
 require('./app.scss');
-export const App = () => (
-    <Provider store={store}>
-        <ConnectedRouter history={history} store={store}>
+export const App = (props: {store: Store<any>}) => (
+    <Provider store={props.store}>
+        <ConnectedRouter history={history} store={props.store}>
             <Switch>
                 <Redirect exact={true} path='/' to='/workflows'/>
                 <Layout navItems={navItems}>
