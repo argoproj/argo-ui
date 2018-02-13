@@ -21,6 +21,12 @@ export class WorkflowsService {
         return requests.loadEventSource(url).repeat().retry().map((data) => JSON.parse(data));
     }
 
+    public getContainerLogs(nodeId: string, container: string): Observable<string> {
+        return requests.loadEventSource(`/logs/${nodeId}/${container}`).map((line) => {
+            return line ? line + '\n' : line;
+        });
+    }
+
     public getArtifactDownloadUrl(workflow: models.Workflow, nodeName: string, artifactName: string) {
         return `/api/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}/artifacts/${nodeName}/${artifactName}`;
     }

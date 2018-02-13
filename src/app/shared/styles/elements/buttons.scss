@@ -1,0 +1,256 @@
+.argo-button {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    border-radius: 24px;
+    color: $argo-color-teal-6;
+    user-select: none;
+    transition: background-color .2s, border .2s, color .2s;
+    text-transform: uppercase;
+
+    &.disabled,
+    &[disabled] {
+        color: $argo-color-gray-6;
+        cursor: not-allowed;
+
+        &:hover {
+            color: $argo-color-gray-6;
+        }
+    }
+
+    &:not(.disabled):not([disabled]) {
+        &:hover {
+            background-color: #d1d5d9;
+        }
+    }
+
+    &--base {
+        color: $argo-color-gray-1;
+        background-color: $argo-color-teal-6;
+
+        &:not(.disabled):not([disabled]) {
+            &:hover {
+                color: $argo-color-gray-1;
+                background-color: $argo-color-teal-5;
+            }
+        }
+
+        &.disabled,
+        &[disabled] {
+            color: $argo-color-gray-6;
+            background-color: $argo-color-gray-4;
+
+            &:hover {
+                color: $argo-color-gray-7;
+            }
+        }
+    }
+
+    &--link {
+        color: $argo-color-teal-6;
+
+        &:not(.disabled):not([disabled]) {
+            &:hover {
+                background-color: $argo-color-gray-3;
+            }
+        }
+
+        &.disabled,
+        &[disabled] {
+            color: $argo-color-gray-6;
+
+            &:hover {
+                background-color: transparent;
+            }
+        }
+    }
+
+    &--base-o {
+        color: $argo-color-teal-6;
+        box-shadow: inset 0 0 0 1px $argo-color-teal-5;
+
+        &:not(.disabled):not([disabled]) {
+            &:hover {
+                color: $argo-color-gray-1;
+                background-color:$argo-color-teal-6;
+            }
+        }
+
+        &.disabled,
+        &[disabled] {
+            color: $argo-color-gray-6;
+            box-shadow: inset 0 0 0 1px $argo-color-gray-4;
+
+            &:hover {
+                color: $argo-color-gray-7;
+            }
+        }
+    }
+
+    &--full-width {
+        width: 100%;
+    }
+
+    &--center {
+        margin: 10px auto;
+        display: block;
+    }
+
+    &--rectangle {
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+        min-width: 40px;
+        font-weight: lighter;
+        color: $argo-color-teal-6;
+        background-color: transparent;
+        box-shadow: inset 0 0 0 1px rgba($argo-color-teal-6, .4);
+
+        & > i {
+            line-height: 40px;
+        }
+    }
+
+    &--right {
+        float: right;
+    }
+
+    &--has-icon {
+        padding-top: 18px;
+    }
+
+    &--short {
+        padding: 5px 10px;
+        min-width: 10px;
+    }
+
+    &--lg {
+        font-size: 20px;
+    }
+
+    &--xlg {
+        font-size: 14px;
+        line-height: 42px;
+    }
+
+    &--sm {
+        min-width: 60px;
+        padding: 0 14px;
+        font-size: 12px;
+        line-height: 28px;
+        border-radius: 18px;
+    }
+
+    &--radius {
+        width: 56px;
+        height: 56px;
+        min-width: 0;
+        padding: 0;
+        color: #fff;
+        line-height: 56px;
+        margin: 0 0 4px;
+        font-size: 20px;
+        box-shadow: 0 2px 3px rgba(0,0,0,.3);
+        background-color: $argo-color-teal-5;
+        border-radius: 50%;
+
+        &:hover {
+            background: lighten($argo-color-teal-5, 10) !important;
+        }
+
+        &:not(.disabled) {
+            &:hover {
+                color: #fff;
+            }
+        }
+
+        .fa {
+            vertical-align: middle;
+        }
+    }
+
+    &--radius-2 {
+        min-width: 40px!important;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid rgba($argo-color-teal-6, .5);
+        padding: 0;
+        font-size: 20px;
+
+        i {
+            padding-bottom: 3px;
+        }
+
+        &::before,
+        &::after {
+            background: $argo-color-teal-6;
+        }
+
+    }
+
+    &--special {
+        color: #fff;
+        background: linear-gradient(-58deg, #49505c 0%, #3f51b5 36%, #00c7d6 100%);
+
+        &:not(.disabled):hover {
+            color: #fff;
+        }
+    }
+
+    &[axButtonWave] {
+        overflow: hidden;
+
+        .wave {
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            position: absolute;
+            opacity: 1;
+            animation: rippleDrop .6s linear;
+        }
+    }
+}
+
+@keyframes rippleDrop {
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.argo-button-close {
+    display: block;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    outline: 0;
+    cursor: pointer;
+
+    &::before,
+    &::after {
+        position: absolute;
+        top: 50%;
+        left: 0.475em;
+        width: 1em;
+        height: 1px;
+        background: #999;
+        content: '';
+    }
+
+    &::before {
+        transform: rotate(45deg);
+    }
+
+    &::after {
+        transform: rotate(-45deg);
+    }
+}

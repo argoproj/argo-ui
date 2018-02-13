@@ -93,9 +93,9 @@ export function create(
             });
         }
     });
-    app.get('/api/steps/:namespace/:name/logs', (req, res) => {
+    app.get('/api/logs/:nodeId/:container', async (req: express.Request, res: express.Response) => {
         const logsSource = reactifyStringStream(
-            core.ns(req.params.namespace).po(req.params.name).log.getStream({ qs: { container: 'main', follow: true } }));
+            core.ns(req.params.namespace).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
         streamServerEvents(req, res, logsSource, (item) => item.toString());
     });
     app.use(express.static(uiDist));

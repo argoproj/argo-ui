@@ -32,6 +32,9 @@ const config = {
                 test: /\.scss$/,
                 exclude: /node_modules/,
                 loader: 'style-loader!raw-loader!sass-loader'
+            }, {
+                test: /\.css$/,
+                loader: 'style-loader!raw-loader'
             },
         ]
     },

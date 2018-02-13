@@ -1,0 +1,153 @@
+@import 'node_modules/foundation-sites/scss/util/util';
+
+@import '../../styles/config';
+
+$sliding-panel-header-height: 50px;
+$sliding-panel-footer-height: 64px;
+$sliding-panel-narrow-width: 400px;
+$sliding-panel-middle-width: 600px;
+
+.sliding-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $sliding-panel-z-index;
+    background-color: rgba(0,0,0,.3);
+    transition: background-color .5s;
+
+    &:not(.sliding-panel--opened) {
+        visibility: hidden;
+        background-color: transparent;
+        transition: background-color .5s, visibility 0s .5s;
+    }
+
+    &__close {
+        display: block;
+        position: absolute;
+        cursor: pointer;
+        top: 10px;
+        right: 40px;
+        z-index: 1;
+        border-radius: 50%;
+        color: $argo-color-gray-5;
+        font-size: 20px;
+        padding: 5px;
+
+        @media screen and (max-width: $argo-breakpoint-md) {
+            top: 8px;
+        }
+
+        &:hover {
+            background-color: $argo-color-gray-3;
+        }
+    }
+
+    &__wrapper {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 80%;
+        background-color: #fff;
+        transition: right .5s;
+
+        @include breakpoint(medium down) {
+            width: 90%;
+        }
+
+        .sliding-panel--is-narrow & {
+            width: $sliding-panel-narrow-width;
+        }
+
+        .sliding-panel--is-middle & {
+            width: $sliding-panel-middle-width;
+        }
+
+        .sliding-panel:not(.sliding-panel--opened) & {
+            right: -80%;
+        }
+
+        .sliding-panel:not(.sliding-panel--opened).sliding-panel--is-narrow & {
+            right: -$sliding-panel-narrow-width;
+        }
+
+        .sliding-panel:not(.sliding-panel--opened).sliding-panel--is-middle & {
+            right: -$sliding-panel-middle-width;
+        }
+    }
+
+    &__outside {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+
+        .sliding-panel--is-narrow & {
+            width: calc(100% - #{$sliding-panel-narrow-width});
+        }
+    }
+
+    &__header {
+        position: relative;
+        height: $sliding-panel-header-height;
+        padding: 0 30px;
+        line-height: $sliding-panel-header-height;
+        color: $argo-color-gray-5;
+        background-color: $argo-color-gray-2;
+        border-bottom: 1px solid #c6cfd1;
+        font-weight: 500;
+        font-size: .925em;
+
+        .sliding-panel--off-canvas & {
+            background-color: $argo-color-gray-2;
+        }
+
+        strong {
+            color: $argo-color-gray-7;
+            text-transform: uppercase;
+        }
+
+        &--close-btn-right-padding {
+            padding-right: 80px;
+        }
+    }
+
+    &__body {
+        position: relative;
+        height: 100%;
+        overflow: auto;
+        background-color: $argo-color-gray-2;
+
+        .sliding-panel:not(.sliding-panel--no-padding) & {
+            padding: 30px;
+        }
+
+        .sliding-panel--has-header & {
+            height: calc(100% - #{$sliding-panel-header-height});
+        }
+
+        .sliding-panel--has-footer & {
+            height: calc(100% - #{$sliding-panel-footer-height});
+        }
+
+        .sliding-panel--has-header.sliding-panel--has-footer & {
+            height: calc(100% - #{$sliding-panel-header-height + $sliding-panel-footer-height});
+        }
+
+        &--close-btn-top-padding {
+            padding-top: 56px !important;
+        }
+    }
+
+    &__footer {
+        position: relative;
+        height: $sliding-panel-footer-height;
+        padding: 0 30px;
+        line-height: $sliding-panel-footer-height;
+        border-top: 1px solid #c6cfd1;
+    }
+}

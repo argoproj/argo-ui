@@ -5,6 +5,7 @@ import { Observable, Observer } from 'rxjs';
 type Callback = (data: any) => void;
 
 declare class EventSource {
+    public onopen: Callback;
     public onmessage: Callback;
     public onerror: Callback;
     public readyState: number;
@@ -28,9 +29,18 @@ export default {
         return superagent.get(`${API_ROOT}${url}`);
     },
 
-    loadEventSource(url: string): Observable<string> {
+    loadEventSource(url: string, allowAutoRetry = false): Observable<string> {
         return Observable.create((observer: Observer<any>) => {
             const eventSource = new EventSource(`${API_ROOT}${url}`);
+            let opened = false;
+            eventSource.onopen = (msg) => {
+                if (!opened) {
+                    opened = true;
+                } else if (!allowAutoRetry) {
+                    eventSource.close();
+                    observer.complete();
+                }
+            };
             eventSource.onmessage = (msg) => observer.next(msg.data);
             eventSource.onerror = (e) => () => {
                 if (e.eventPhase === ReadyState.CLOSED || eventSource.readyState === ReadyState.CONNECTING) {

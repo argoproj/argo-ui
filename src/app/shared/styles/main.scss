@@ -33,6 +33,7 @@ h1, h2 {
     color: $argo-color-teal-6;
 }
 
+@import './elements/buttons';
 @import './elements/containers';
 @import './elements/table-list';
 @import './elements/form-controls';

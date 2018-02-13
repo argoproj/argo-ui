@@ -6,8 +6,9 @@ import { RouteComponentProps } from 'react-router';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
-import { Page } from '../../../shared/components';
+import { LogsViewer, Page, SlidingPanel } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
+import { services } from '../../../shared/services';
 import * as actions from '../../actions';
 import { State } from '../../state';
 
@@ -23,6 +24,7 @@ interface Props extends RouteComponentProps<{ name: string; namespace: string; }
     changesSubscription: Subscription;
     selectedTabKey: string;
     selectedNodeId: string;
+    sidePanel: { type: 'yaml' | 'logs'; nodeId: string; container: string; };
 }
 
 require('./workflow-details.scss');
@@ -85,7 +87,10 @@ class Component extends React.Component<Props, any> {
                             </div>
                             <div className='columns small-3 workflow-details__step-info'>
                                 {selectedNode && (
-                                    <WorkflowNodeInfo node={selectedNode} workflow={this.props.workflow} />
+                                    <WorkflowNodeInfo
+                                        node={selectedNode}
+                                        workflow={this.props.workflow}
+                                        onShowContainerLogs={(pod, container) => this.openContainerLogsPanel(pod, container)}/>
                                 ) || (
                                     <p>Please select workflow node</p>
                                 )}
@@ -93,8 +98,29 @@ class Component extends React.Component<Props, any> {
                         </div>
                     )}
                 </div>
+                {this.props.workflow && (
+                    <SlidingPanel isShown={this.props.selectedNodeId && !!this.props.sidePanel} onClose={() => this.closeSidePanel()}>
+                        {this.props.sidePanel && this.props.sidePanel.type === 'logs' && <LogsViewer source={{
+                            key: this.props.sidePanel.nodeId,
+                            loadLogs: () => services.workflows.getContainerLogs(this.props.sidePanel.nodeId, this.props.sidePanel.container || 'main'),
+                            shouldRepeat: () => this.props.workflow.status.nodes[this.props.sidePanel.nodeId].phase === 'Running',
+                        }} />}
+                    </SlidingPanel>
+                )}
             </Page>
         );
+    }
+
+    private openContainerLogsPanel(nodeId: string, container: string) {
+        const params = new URLSearchParams(this.appContext.router.route.location.search);
+        params.set('sidePanel', `logs:${nodeId}:${container}`);
+        this.appContext.router.history.push(`${this.props.match.url}?${params.toString()}`);
+    }
+
+    private closeSidePanel() {
+        const params = new URLSearchParams(this.appContext.router.route.location.search);
+        params.delete('sidePanel');
+        this.appContext.router.history.push(`${this.props.match.url}?${params.toString()}`);
     }
 
     private selectTab(tab: string) {
@@ -136,11 +162,20 @@ function defaultSelectedNode(workflow: models.Workflow): string {
     return null;
 }
 
+function parseSidePanelParam(param: string) {
+    const [type, nodeId, container] = (param || '').split(':');
+    if (type === 'logs' || type === 'yaml') {
+        return { type, nodeId, container };
+    }
+    return null;
+}
+
 export const WorkflowDetails = connect((state: AppState<State>) => ({
     workflow: state.page.workflow,
     changesSubscription: state.page.changesSubscription,
     selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'workflow',
     selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId') || (state.page.workflow && defaultSelectedNode(state.page.workflow)),
+    sidePanel: parseSidePanelParam(new URLSearchParams(state.router.location.search).get('sidePanel')),
 }), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
 }))(Component);

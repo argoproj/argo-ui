@@ -20,11 +20,13 @@ require('./workflow-dag.scss');
 const NODE_WIDTH = 182;
 const NODE_HEIGHT = 52;
 
-export class WorkflowDag extends React.Component<Props, { renderTime: moment.Moment, refreshSubscription: Subscription }> {
+export class WorkflowDag extends React.Component<Props, { renderTime: moment.Moment; }> {
+
+    private refreshSubscription: Subscription;
 
     constructor(props: Props) {
         super(props);
-        this.state = { renderTime: moment(), refreshSubscription: null };
+        this.state = { renderTime: moment() };
         this.ensureRunningWorkflowRefreshing(this.props.workflow);
     }
 
@@ -33,9 +35,9 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
     }
 
     public componentWillUnmount() {
-        if (this.state.refreshSubscription) {
-            this.state.refreshSubscription.unsubscribe();
-            this.setState({ refreshSubscription: null });
+        if (this.refreshSubscription) {
+            this.refreshSubscription.unsubscribe();
+            this.refreshSubscription = null;
         }
     }
 
@@ -108,12 +110,11 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
 
     private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {
         const isCompleted = workflow.status && ([models.NODE_PHASE.ERROR, models.NODE_PHASE.SUCCEEDED, models.NODE_PHASE.SKIPPED].indexOf(workflow.status.phase) > -1);
-        if (!this.state.refreshSubscription && !isCompleted) {
-            this.setState({
-                refreshSubscription: Observable.interval(1000).subscribe(() => this.setState({renderTime: moment()})),
-            });
-        } else if (this.state.refreshSubscription && isCompleted) {
-            this.state.refreshSubscription.unsubscribe();
+        if (!this.refreshSubscription && !isCompleted) {
+            this.refreshSubscription = Observable.interval(1000).subscribe(() => this.setState({renderTime: moment()}));
+        } else if (this.refreshSubscription && isCompleted) {
+            this.refreshSubscription.unsubscribe();
+            this.refreshSubscription = null;
         }
     }
 }

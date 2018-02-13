@@ -50,13 +50,14 @@ $argo-init-color: $argo-color-gray-5;
 
 
 $argo-breakpoint-md: 1400px;
-
+$border-radius: 5px;
 $top-bar-height: 50px;
 $nav-width: 60px;
 $basePageWidth: 1024px;
+
 $nav-z-index: 11;
 $top-bar-z-index: 9;
-$border-radius: 5px;
+$sliding-panel-z-index: 20;
 
 $argo-icon-fonts-root: '/assets/fonts/';
 $fa-font-path: 'assets/fonts';

@@ -12,7 +12,11 @@ function nodeDuration(node: models.NodeStatus) {
     return endTime.diff(moment(node.startedAt)) / 1000;
 }
 
-interface Props { node: models.NodeStatus; workflow: models.Workflow; }
+interface Props {
+    node: models.NodeStatus;
+    workflow: models.Workflow;
+    onShowContainerLogs?: (nodeId: string, container: string) => any;
+}
 
 const AttributeRow = (attr: { title: string, value: any }) => (
     <div className='row white-box__details-row' key={attr.title}>
@@ -73,7 +77,7 @@ export const WorkflowNodeInputs = (props: { inputs: models.Inputs }) => {
     );
 };
 
-export const WorkflowNodeContainer = (props: { container: models.Container }) => {
+export const WorkflowNodeContainer = (props: { nodeId: string, container: models.Container, onShowContainerLogs: (pod: string, container: string) => any; }) => {
     const attributes = [
         {title: 'NAME', value: props.container.name || 'main'},
         {title: 'IMAGE', value: props.container.image},
@@ -84,6 +88,11 @@ export const WorkflowNodeContainer = (props: { container: models.Container }) =>
         <div className='white-box'>
             <div className='white-box__details'>
                 {<AttributeRows attributes={attributes}/>}
+            </div>
+            <div>
+                <button className='argo-button argo-button--base-o' onClick={() => props.onShowContainerLogs && props.onShowContainerLogs(props.nodeId, props.container.name)}>
+                    LOGS
+                </button>
             </div>
         </div>
     );
@@ -96,7 +105,7 @@ export const WorkflowNodeContainers = (props: Props) => {
     }
     return (
         <div>
-            <WorkflowNodeContainer container={template.container} />
+            <WorkflowNodeContainer nodeId={props.node.id} container={template.container} onShowContainerLogs={props.onShowContainerLogs}/>
             {template.sidecars && template.sidecars.length > 0 && (
                 <div>
                     <h6>SIDECARS:</h6>
