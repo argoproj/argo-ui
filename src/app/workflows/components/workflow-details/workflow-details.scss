@@ -41,12 +41,16 @@
     }
 
     &__graph-container {
+        margin: 0 -15px;
+        position: relative;
         overflow: auto;
-        padding: 1em;
         height: calc(100vh - 2 * #{$top-bar-height});
 
         .workflow-dag {
-            margin: 0 auto;
+            margin: 1em auto;
+        }
+        .workflow-timeline {
+            min-height: calc(100vh - 2 * #{$top-bar-height});
         }
     }
 }

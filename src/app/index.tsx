@@ -4,7 +4,10 @@ import { App, store } from './app';
 
 ReactDOM.render(<App store={store}/>, document.getElementById('app'));
 
-(module as any).hot.accept('./app.tsx', () => {
-    const UpdatedApp = require('./app.tsx').App;
-    ReactDOM.render(<UpdatedApp store={store}/>, document.getElementById('app'));
-});
+const mdl = module as any;
+if (mdl.hot) {
+    mdl.hot.accept('./app.tsx', () => {
+        const UpdatedApp = require('./app.tsx').App;
+        ReactDOM.render(<UpdatedApp store={store}/>, document.getElementById('app'));
+    });
+}

@@ -1,4 +1,4 @@
-export type Time = any;
+export type Time = string;
 export type VolumeDevice = any;
 export type Volume = any;
 export type EnvFromSource = any;

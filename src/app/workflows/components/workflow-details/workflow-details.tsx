@@ -15,6 +15,7 @@ import { WorkflowArtifacts } from '../workflow-artifacts';
 import { WorkflowDag } from '../workflow-dag/workflow-dag';
 import { WorkflowNodeInfo } from '../workflow-node-info/workflow-node-info';
 import { WorkflowSummaryPanel } from '../workflow-summary-panel';
+import { WorkflowTimeline } from '../workflow-timeline/workflow-timeline';
 
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
     workflow: models.Workflow;
@@ -68,7 +69,19 @@ class Component extends React.Component<Props, any> {
                     {this.props.selectedTabKey === 'summary' && this.renderSummaryTab() || (
                         <div className='row'>
                             <div className='columns small-9'>
-                                {this.props.selectedTabKey === 'workflow' && this.renderWorkflowTab()}
+                                {this.props.workflow && (
+                                    <div className='workflow-details__graph-container'>
+                                        { this.props.selectedTabKey === 'workflow' && (
+                                            <WorkflowDag
+                                                workflow={this.props.workflow}
+                                                selectedNodeId={this.props.selectedNodeId}
+                                                nodeClicked={(node) => this.selectNode(node.id)}/>
+                                        ) || (<WorkflowTimeline
+                                                workflow={this.props.workflow}
+                                                selectedNodeId={this.props.selectedNodeId}
+                                                nodeClicked={(node) => this.selectNode(node.id)} />)}
+                                    </div>
+                                )}
                             </div>
                             <div className='columns small-3 workflow-details__step-info'>
                                 {selectedNode && (
@@ -103,20 +116,6 @@ class Component extends React.Component<Props, any> {
                     <h6>Artifacts</h6>
                     <WorkflowArtifacts workflow={this.props.workflow}/>
                 </div>
-            </div>
-        );
-    }
-
-    private renderWorkflowTab() {
-        if (!this.props.workflow) {
-            return <div>Loading...</div>;
-        }
-        return (
-            <div className='workflow-details__graph-container'>
-                <WorkflowDag
-                    workflow={this.props.workflow}
-                    selectedNodeId={this.props.selectedNodeId}
-                    nodeClicked={(node) => this.selectNode(node.id)}/>
             </div>
         );
     }

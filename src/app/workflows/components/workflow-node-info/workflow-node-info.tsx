@@ -14,7 +14,7 @@ function nodeDuration(node: models.NodeStatus) {
 
 interface Props { node: models.NodeStatus; workflow: models.Workflow; }
 
-const AttributeRow = (attr: { title: string, value: string }) => (
+const AttributeRow = (attr: { title: string, value: any }) => (
     <div className='row white-box__details-row' key={attr.title}>
         <div className='columns small-3'>
             {attr.title}
@@ -22,7 +22,7 @@ const AttributeRow = (attr: { title: string, value: string }) => (
         <div className='columns small-9'>{attr.value}</div>
     </div>
 );
-const AttributeRows = (props: { attributes: { title: string, value: string }[] }) => (
+const AttributeRows = (props: { attributes: { title: string, value: any }[] }) => (
     <div>
         {props.attributes.map((attr) => <AttributeRow key={attr.title} {...attr}/>)}
     </div>
@@ -137,7 +137,7 @@ export const WorkflowNodeArtifacts = (props: Props) => {
                         <div className='workflow-node-info__artifact-details'>
                             <span title={artifact.nodeName} className='muted'>{artifact.nodeName}</span>
                             <span title={artifact.path} className='muted'>{artifact.path}</span>
-                            <span title={artifact.dateCreated} className='muted'>{artifact.dateCreated}</span>
+                            <span title={artifact.dateCreated.toString()} className='muted'>{artifact.dateCreated}</span>
                         </div>
                     </div>
                 </div>

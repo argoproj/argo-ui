@@ -1,13 +1,20 @@
+import * as moment from 'moment';
 import * as React from 'react';
 
 import { Workflow } from '../../../models';
+import { Duration } from '../../shared/components';
 
 export const WorkflowSummaryPanel = (props: { workflow: Workflow }) => {
+    const endTime = props.workflow.status.finishedAt ? moment(props.workflow.status.finishedAt) : moment();
+    const duration = endTime.diff(moment(props.workflow.status.startedAt)) / 1000;
+
     const attributes = [
         {title: 'Status', value: props.workflow.status.phase},
         {title: 'Name', value: props.workflow.metadata.name},
         {title: 'Namespace', value: props.workflow.metadata.namespace},
-        {title: 'Time', value: props.workflow.metadata.creationTimestamp},
+        {title: 'Started At', value: props.workflow.status.startedAt},
+        {title: 'Finished At', value: props.workflow.status.finishedAt || '-'},
+        {title: 'Duration', value: <Duration durationMs={duration}/>},
     ];
     return (
         <div className='white-box'>
