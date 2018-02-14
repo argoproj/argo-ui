@@ -62,13 +62,13 @@ export const WorkflowNodeInputs = (props: { inputs: models.Inputs }) => {
             <div className='white-box__details'>
                 {parameters.length > 0 && [
                     <div className='row white-box__details-row' key='title'>
-                        <h6>Parameters</h6>
+                        <p>Parameters</p>
                     </div>,
                     <AttributeRows key='attrs' attributes={parameters}/>,
                 ]}
                 {artifacts.length > 0 && [
                     <div className='row white-box__details-row' key='title'>
-                        <h6>Artifacts</h6>
+                        <p>Artifacts</p>
                     </div>,
                     <AttributeRows key='attrs' attributes={artifacts}/>,
                 ]}
@@ -77,7 +77,7 @@ export const WorkflowNodeInputs = (props: { inputs: models.Inputs }) => {
     );
 };
 
-export const WorkflowNodeContainer = (props: { nodeId: string, container: models.Container, onShowContainerLogs: (pod: string, container: string) => any; }) => {
+export const WorkflowNodeContainer = (props: { nodeId: string, container: models.Container | models.Sidecar, onShowContainerLogs: (pod: string, container: string) => any; }) => {
     const attributes = [
         {title: 'NAME', value: props.container.name || 'main'},
         {title: 'IMAGE', value: props.container.image},
@@ -98,29 +98,36 @@ export const WorkflowNodeContainer = (props: { nodeId: string, container: models
     );
 };
 
-export const WorkflowNodeContainers = (props: Props) => {
-    const template = props.workflow.spec.templates.find((item) => item.name === props.node.templateName);
-    if (!template || !template.container) {
-        return <p>Step does not have containers</p>;
+export class WorkflowNodeContainers extends React.Component<Props, { selectedSidecar: string }> {
+    constructor(props: Props) {
+        super(props);
+        this.state = { selectedSidecar: null };
     }
-    return (
-        <div>
-            <WorkflowNodeContainer nodeId={props.node.id} container={template.container} onShowContainerLogs={props.onShowContainerLogs}/>
-            {template.sidecars && template.sidecars.length > 0 && (
-                <div>
-                    <h6>SIDECARS:</h6>
-                    {template.sidecars.map((sidecar) => (
-                        <div className='row' key={sidecar.name}>
-                            <div className='columns small-3'>
-                                {sidecar.name}
+
+    public render() {
+        const template = this.props.workflow.spec.templates.find((item) => item.name === this.props.node.templateName);
+        if (!template || !template.container) {
+            return <p>Step does not have containers</p>;
+        }
+        const container = this.state.selectedSidecar && template.sidecars.find((item) => item.name === this.state.selectedSidecar) || template.container;
+        return (
+            <div className='workflow-node-info__containers'>
+                {this.state.selectedSidecar && <i className='fa fa-angle-left workflow-node-info__sidecar-back' onClick={() => this.setState({ selectedSidecar: null })}/>}
+                <WorkflowNodeContainer nodeId={this.props.node.id} container={container} onShowContainerLogs={this.props.onShowContainerLogs}/>
+                {!this.state.selectedSidecar && template.sidecars && template.sidecars.length > 0 && (
+                    <div>
+                        <p>SIDECARS:</p>
+                        {template.sidecars.map((sidecar) => (
+                            <div className='workflow-node-info__sidecar' key={sidecar.name} onClick={() => this.setState({ selectedSidecar: sidecar.name })}>
+                                <span>{sidecar.name}</span> <i className='fa fa-angle-right'/>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-};
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    }
+}
 
 export const WorkflowNodeArtifacts = (props: Props) => {
     const artifacts = props.node.outputs && props.node.outputs.artifacts && props.node.outputs.artifacts.map((artifact) => Object.assign({}, artifact, {

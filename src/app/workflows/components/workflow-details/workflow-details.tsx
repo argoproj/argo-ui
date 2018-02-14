@@ -70,7 +70,7 @@ class Component extends React.Component<Props, any> {
                 <div className='workflow-details'>
                     {this.props.selectedTabKey === 'summary' && this.renderSummaryTab() || (
                         <div className='row'>
-                            <div className='columns small-9'>
+                            <div className='columns xlarge-6 xxlarge-9'>
                                 {this.props.workflow && (
                                     <div className='workflow-details__graph-container'>
                                         { this.props.selectedTabKey === 'workflow' && (
@@ -85,7 +85,7 @@ class Component extends React.Component<Props, any> {
                                     </div>
                                 )}
                             </div>
-                            <div className='columns small-3 workflow-details__step-info'>
+                            <div className='columns xlarge-6 xxlarge-3 workflow-details__step-info'>
                                 {selectedNode && (
                                     <WorkflowNodeInfo
                                         node={selectedNode}
