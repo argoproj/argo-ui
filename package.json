@@ -4,7 +4,7 @@
     "main": "./dist/api/api/main.js",
     "license": "MIT",
     "scripts": {
-        "docker": "docker build -t ${IMAGE_PREFIX:-`whoami`}/argoui:${IMAGE_TAG:-'latest'} . && [[ $DOCKER_PUSH == true ]] && echo docker push ${IMAGE_PREFIX:-`whoami`}/argoui:${IMAGE_TAG:-'latest'}",
+        "docker": "docker build -t ${IMAGE_NAMESPACE:-`whoami`}/argoui:${IMAGE_TAG:-'latest'} . && [[ $DOCKER_PUSH == true ]] && echo docker push ${IMAGE_NAMESPACE:-`whoami`}/argoui:${IMAGE_TAG:-'latest'}",
         "build": "yarn build:ui && yarn build:api",
         "build:ui": "webpack --config ./src/app/webpack.config.js",
         "build:api": "tsc -p ./src/api/tsconfig.json",
