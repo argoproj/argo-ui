@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "../api-dist",
+    "outDir": "../../dist/api",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
