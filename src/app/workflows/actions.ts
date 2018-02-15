@@ -16,7 +16,7 @@ function ensureUnsubscribed(getState: () => AppState<State>) {
 export function loadWorkflowsList(phases: string[]): any {
     return async (dispatch: Dispatch<any>, getState: () => AppState<State>) => {
         dispatch({ type: ACTION_TYPES.WORKFLOWS_LOAD_REQUEST });
-        const workflows = (await services.workflows.list(phases)).items;
+        const workflows = (await services.workflows.list(phases));
         let events = services.workflows.watch();
         if (phases.length > 0) {
             events = events.filter((event) => phases.indexOf(event.object.status.phase) > -1);

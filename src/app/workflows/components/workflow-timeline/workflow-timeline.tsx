@@ -23,6 +23,9 @@ export class WorkflowTimeline extends React.Component<Props> {
                 .map((id) => this.props.workflow.status.nodes[id])
                 .filter((node) => node.startedAt && node.type === 'Pod')
                 .sort((first, second) => moment(first.startedAt).diff(second.startedAt));
+        if (nodes.length === 0) {
+            return <div/>;
+        }
         const timelineStart = nodes[0].startedAt;
         const timeToLeft = (time: moment.Moment) => time.diff(timelineStart, 'seconds') * 10 + NODE_NAME_WIDTH;
         const groups = nodes.map((node) => ({
