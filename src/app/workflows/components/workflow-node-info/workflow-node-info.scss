@@ -1,6 +1,13 @@
 @import '../../../shared/styles/config';
 
 .workflow-node-info {
+
+    &__multi-line {
+        line-height: 24px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
     &__artifact-details span {
         padding-right: 0.5em;
         padding-left: 0.5em;

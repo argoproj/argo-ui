@@ -13,7 +13,7 @@ interface Props {
     nodeClicked?: (node: models.NodeStatus) => any;
 }
 
-interface Line { x1: number; y1: number; x2: number; y2: number; }
+interface Line { x1: number; y1: number; x2: number; y2: number; noArrow: boolean; }
 
 require('./workflow-dag.scss');
 
@@ -47,7 +47,12 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
         graph.setDefaultEdgeLabel(() => ({}));
         const nodes = this.props.workflow.status && this.props.workflow.status.nodes || {};
         Object.keys(nodes).forEach((nodeId) => {
-            graph.setNode(nodeId, {width: NODE_WIDTH, height: NODE_HEIGHT, ...nodes[nodeId]});
+            const node = nodes[nodeId];
+            if (this.isVirtual(node)) {
+                graph.setNode(nodeId, {width: 1, height: 1, ...nodes[nodeId]});
+            } else {
+                graph.setNode(nodeId, {width: NODE_WIDTH, height: NODE_HEIGHT, ...nodes[nodeId]});
+            }
         });
         Object.keys(nodes).forEach((nodeId) => {
             const node = nodes[nodeId];
@@ -60,7 +65,8 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
             const lines: Line[] = [];
             if (edge.points.length > 1) {
                 for (let i = 1; i < edge.points.length; i++) {
-                    lines.push({ x1: edge.points[i - 1].x, y1: edge.points[i - 1].y, x2: edge.points[i].x, y2: edge.points[i].y });
+                    const toNode = nodes[edgeInfo.w];
+                    lines.push({ x1: edge.points[i - 1].x, y1: edge.points[i - 1].y, x2: edge.points[i].x, y2: edge.points[i].y, noArrow: this.isVirtual(toNode) });
                 }
             }
             edges.push({ from: edgeInfo.v, to: edgeInfo.w, lines });
@@ -73,7 +79,7 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
                     const shortName = Utils.shortNodeName(node.name);
                     return (
                         <div key={id}
-                                className={classNames('workflow-dag__node', {active: node.id === this.props.selectedNodeId})}
+                                className={classNames('workflow-dag__node', {active: node.id === this.props.selectedNodeId, virtual: this.isVirtual(node)})}
                                 style={{left: node.x, top: node.y, width: node.width, height: node.height}}
                                 onClick={() => this.props.nodeClicked && this.props.nodeClicked(node)}>
                             <div className={`workflow-dag__node-status workflow-dag__node-status--${node.phase.toLocaleLowerCase()}`}/>
@@ -89,13 +95,17 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
                         const yMid = (line.y1 + line.y2) / 2;
                         const angle = Math.atan2(line.y1 - line.y2, line.x1 - line.x2) * 180 / Math.PI;
                         return (
-                            <div className='workflow-dag__line' key={i}
+                            <div className={classNames('workflow-dag__line', {'workflow-dag__line--no-arrow': line.noArrow })} key={i}
                                 style={{ width: distance, left: xMid - (distance / 2), top: yMid, transform: `translate(100px, 35px) rotate(${angle}deg)`}} />
                         );
                     })}</div>
                 ))}
             </div>
         );
+    }
+
+    private isVirtual(node: models.NodeStatus) {
+        return (node.type === 'StepGroup' || node.type === 'DAG') && !!node.boundaryID;
     }
 
     private getGraphSize(nodes: dagre.Node[]): { width: number, height: number} {

@@ -1,8 +1,9 @@
+import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 
 import * as models from '../../../../models';
-import { Duration, Tabs } from '../../../shared/components';
+import { Duration, Tabs, Utils } from '../../../shared/components';
 import { services } from '../../../shared/services';
 
 require('./workflow-node-info.scss');
@@ -35,6 +36,9 @@ const AttributeRows = (props: { attributes: { title: string, value: any }[] }) =
 export const WorkflowNodeSummary = (props: Props) => {
     const attributes = [
         {title: 'NAME', value: props.node.name},
+        {title: 'TYPE', value: props.node.type},
+        {title: 'PHASE', value: <span><i className={classNames('fa', Utils.statusIconClasses(props.node.phase))}  aria-hidden='true'/> {props.node.phase}</span>},
+        ...(props.node.message ? [{title: 'MESSAGE', value: <span className='workflow-node-info__multi-line'>{props.node.message}</span>}] : []),
         {title: 'START TIME', value: props.node.startedAt},
         {title: 'END TIME', value: props.node.finishedAt || '-'},
         {title: 'DURATION', value: <Duration durationMs={nodeDuration(props.node)}/> },
@@ -109,7 +113,7 @@ export class WorkflowNodeContainers extends React.Component<Props, { selectedSid
         if (!template || !template.container) {
             return <p>Step does not have containers</p>;
         }
-        const container = this.state.selectedSidecar && template.sidecars.find((item) => item.name === this.state.selectedSidecar) || template.container;
+        const container = this.state.selectedSidecar && template.sidecars && template.sidecars.find((item) => item.name === this.state.selectedSidecar) || template.container;
         return (
             <div className='workflow-node-info__containers'>
                 {this.state.selectedSidecar && <i className='fa fa-angle-left workflow-node-info__sidecar-back' onClick={() => this.setState({ selectedSidecar: null })}/>}
