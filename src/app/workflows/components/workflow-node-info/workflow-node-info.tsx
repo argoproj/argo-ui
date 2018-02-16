@@ -85,8 +85,8 @@ export const WorkflowNodeContainer = (props: { nodeId: string, container: models
     const attributes = [
         {title: 'NAME', value: props.container.name || 'main'},
         {title: 'IMAGE', value: props.container.image},
-        {title: 'COMMAND', value: (props.container.command || []).join(' ')},
-        {title: 'ARGS', value: (props.container.args || []).join(' ')},
+        {title: 'COMMAND', value: <span className='workflow-node-info__multi-line'>{(props.container.command || []).join(' ')}</span>},
+        {title: 'ARGS', value: <span className='workflow-node-info__multi-line'>{(props.container.args || []).join(' ')}</span>},
     ];
     return (
         <div className='white-box'>
