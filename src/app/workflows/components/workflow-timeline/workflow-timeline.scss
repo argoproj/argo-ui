@@ -4,6 +4,14 @@
     position: relative;
     background: white;
 
+    &__node-name {
+        width: 250px;
+        padding: 0 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     &__row {
         position: relative;
         line-height: 3em;
