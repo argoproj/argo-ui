@@ -81,12 +81,19 @@ export const WorkflowNodeInputs = (props: { inputs: models.Inputs }) => {
     );
 };
 
-export const WorkflowNodeContainer = (props: { nodeId: string, container: models.Container | models.Sidecar, onShowContainerLogs: (pod: string, container: string) => any; }) => {
+export const WorkflowNodeContainer = (props: {
+        nodeId: string,
+        container: models.Container | models.Sidecar | models.Script,
+        onShowContainerLogs: (pod: string, container: string) => any; }) => {
+    const container = { name: 'main', args: Array<string>(), source: '', ...props.container};
     const attributes = [
-        {title: 'NAME', value: props.container.name || 'main'},
-        {title: 'IMAGE', value: props.container.image},
-        {title: 'COMMAND', value: <span className='workflow-node-info__multi-line'>{(props.container.command || []).join(' ')}</span>},
-        {title: 'ARGS', value: <span className='workflow-node-info__multi-line'>{(props.container.args || []).join(' ')}</span>},
+        {title: 'NAME', value: container.name || 'main'},
+        {title: 'IMAGE', value: container.image},
+        {title: 'COMMAND', value: <span className='workflow-node-info__multi-line'>{(container.command || []).join(' ')}</span>},
+        (container.source ?
+            {title: 'SOURCE', value: <span className='workflow-node-info__multi-line'>{container.source}</span>} :
+            {title: 'ARGS', value: <span className='workflow-node-info__multi-line'>{(container.args || []).join(' ')}</span>}
+        ),
     ];
     return (
         <div className='white-box'>
@@ -94,7 +101,7 @@ export const WorkflowNodeContainer = (props: { nodeId: string, container: models
                 {<AttributeRows attributes={attributes}/>}
             </div>
             <div>
-                <button className='argo-button argo-button--base-o' onClick={() => props.onShowContainerLogs && props.onShowContainerLogs(props.nodeId, props.container.name)}>
+                <button className='argo-button argo-button--base-o' onClick={() => props.onShowContainerLogs && props.onShowContainerLogs(props.nodeId, container.name)}>
                     LOGS
                 </button>
             </div>
@@ -110,10 +117,12 @@ export class WorkflowNodeContainers extends React.Component<Props, { selectedSid
 
     public render() {
         const template = this.props.workflow.spec.templates.find((item) => item.name === this.props.node.templateName);
-        if (!template || !template.container) {
+        if (!template || (!template.container && !template.script)) {
             return <p>Step does not have containers</p>;
         }
-        const container = this.state.selectedSidecar && template.sidecars && template.sidecars.find((item) => item.name === this.state.selectedSidecar) || template.container;
+        const container = this.state.selectedSidecar && template.sidecars && template.sidecars.find((item) => item.name === this.state.selectedSidecar)
+            || template.container
+            || template.script;
         return (
             <div className='workflow-node-info__containers'>
                 {this.state.selectedSidecar && <i className='fa fa-angle-left workflow-node-info__sidecar-back' onClick={() => this.setState({ selectedSidecar: null })}/>}
