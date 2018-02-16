@@ -569,8 +569,12 @@ export interface NodeStatus {
     id: string;
 
     /**
-     * Name is a human readable representation of the node in the node tree
-     * It can represent a container, step group, or the entire workflow
+     * Display name is a human readable representation of the node. Unique within a template boundary
+     */
+    displayName: string;
+
+    /**
+     * Name is unique name in the node tree used to generate the node ID
      */
     name: string;
 

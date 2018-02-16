@@ -76,7 +76,7 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
             <div className='workflow-dag' style={{width: size.width + 10, height: size.height + 10}}>
                 {graph.nodes().map((id) => {
                     const node = graph.node(id) as models.NodeStatus & dagre.Node;
-                    const shortName = Utils.shortNodeName(node.name);
+                    const shortName = Utils.shortNodeName(node);
                     return (
                         <div key={id}
                                 className={classNames('workflow-dag__node', {active: node.id === this.props.selectedNodeId, virtual: this.isVirtual(node)})}

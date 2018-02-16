@@ -59,7 +59,7 @@ export class WorkflowTimeline extends React.Component<Props> {
                         <div key={node.id}
                                 className={classNames('workflow-timeline__row', { 'workflow-timeline__row--selected': node.id === this.props.selectedNodeId })}
                                 onClick={() => this.props.nodeClicked && this.props.nodeClicked(node)}>
-                            {Utils.shortNodeName(node.name)}
+                            {Utils.shortNodeName(node)}
                             <div style={{left: node.left, width: node.width}} className={`workflow-timeline__node workflow-timeline__node--${node.phase.toLocaleLowerCase()}`}/>
                         </div>
                     )),

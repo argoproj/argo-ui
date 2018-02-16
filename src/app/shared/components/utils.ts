@@ -21,21 +21,7 @@ export const Utils = {
         return classes.join(' ');
     },
 
-    shortNodeName(name: string): string {
-        let nameStart = name.length;
-        let escaped = 0;
-        while (nameStart-- > 0) {
-            const next = name[nameStart];
-            if (next === ')') {
-                escaped++;
-            } else if (next === '(') {
-                escaped--;
-            }
-            if (!escaped && next === '.') {
-                nameStart++;
-                break;
-            }
-        }
-        return name.substring(nameStart);
+    shortNodeName(node: { name: string, displayName: string }): string {
+        return node.displayName || node.name;
     },
 };
