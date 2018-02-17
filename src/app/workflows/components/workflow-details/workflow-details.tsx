@@ -37,8 +37,7 @@ class Component extends React.Component<Props, any> {
 
     public componentWillReceiveProps(nextProps: Props) {
         if (this.props.match.params.name !== nextProps.match.params.name || this.props.match.params.namespace !== nextProps.match.params.namespace) {
-            this.
-            props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
+            this.props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
         }
     }
 

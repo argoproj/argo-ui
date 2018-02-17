@@ -1,8 +1,6 @@
 import * as classNames from 'classnames';
 import * as dagre from 'dagre';
-import * as moment from 'moment';
 import * as React from 'react';
-import { Observable, Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { Utils } from '../../../shared/components';
@@ -20,26 +18,7 @@ require('./workflow-dag.scss');
 const NODE_WIDTH = 182;
 const NODE_HEIGHT = 52;
 
-export class WorkflowDag extends React.Component<Props, { renderTime: moment.Moment; }> {
-
-    private refreshSubscription: Subscription;
-
-    constructor(props: Props) {
-        super(props);
-        this.state = { renderTime: moment() };
-        this.ensureRunningWorkflowRefreshing(this.props.workflow);
-    }
-
-    public componentWillReceiveProps(nextProps: Props) {
-        this.ensureRunningWorkflowRefreshing(nextProps.workflow);
-    }
-
-    public componentWillUnmount() {
-        if (this.refreshSubscription) {
-            this.refreshSubscription.unsubscribe();
-            this.refreshSubscription = null;
-        }
-    }
+export class WorkflowDag extends React.Component<Props> {
 
     public render() {
         const graph = new dagre.graphlib.Graph();
@@ -116,15 +95,5 @@ export class WorkflowDag extends React.Component<Props, { renderTime: moment.Mom
             height = Math.max(node.y + node.height, height);
         });
         return {width, height};
-    }
-
-    private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {
-        const isCompleted = workflow.status && ([models.NODE_PHASE.ERROR, models.NODE_PHASE.SUCCEEDED, models.NODE_PHASE.SKIPPED].indexOf(workflow.status.phase) > -1);
-        if (!this.refreshSubscription && !isCompleted) {
-            this.refreshSubscription = Observable.interval(1000).subscribe(() => this.setState({renderTime: moment()}));
-        } else if (this.refreshSubscription && isCompleted) {
-            this.refreshSubscription.unsubscribe();
-            this.refreshSubscription = null;
-        }
     }
 }

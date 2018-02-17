@@ -18,25 +18,35 @@ interface Props {
     nodeClicked?: (node: models.NodeStatus) => any;
 }
 
-export class WorkflowTimeline extends React.Component<Props, { parentWidth: number }> {
+export class WorkflowTimeline extends React.Component<Props, { parentWidth: number, now: moment.Moment }> {
 
     private container: HTMLElement;
-    private subscription: Subscription;
+    private resizeSubscription: Subscription;
+    private refreshSubscription: Subscription;
 
     constructor(props: Props) {
         super(props);
-        this.state = { parentWidth: 0 };
+        this.state = { parentWidth: 0, now: moment() };
+        this.ensureRunningWorkflowRefreshing(props.workflow);
     }
 
     public componentDidMount() {
-        this.subscription = Observable.fromEvent(window, 'resize').subscribe(() => this.updateWidth());
+        this.resizeSubscription = Observable.fromEvent(window, 'resize').subscribe(() => this.updateWidth());
         this.updateWidth();
     }
 
+    public componentWillReceiveProps(nextProps: Props) {
+        this.ensureRunningWorkflowRefreshing(nextProps.workflow);
+    }
+
     public componentWillUnmount() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-            this.subscription = null;
+        if (this.resizeSubscription) {
+            this.resizeSubscription.unsubscribe();
+            this.resizeSubscription = null;
+        }
+        if (this.refreshSubscription) {
+            this.refreshSubscription.unsubscribe();
+            this.refreshSubscription = null;
         }
     }
 
@@ -44,9 +54,8 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
         const nodes = Object.keys(this.props.workflow.status.nodes)
                 .map((id) => {
                     const node = this.props.workflow.status.nodes[id];
-                    if (!node.finishedAt) {
-                        node.finishedAt = moment().format();
-                    }
+                    node.finishedAt = node.finishedAt || this.state.now.format();
+                    node.startedAt = node.startedAt || this.state.now.format();
                     return node;
                 })
                 .filter((node) => node.startedAt && node.type === 'Pod')
@@ -109,5 +118,17 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
 
     private updateWidth() {
         this.setState({ parentWidth: (this.container.offsetParent || window.document.body).clientWidth - NODE_NAME_WIDTH });
+    }
+
+    private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {
+        const isCompleted = workflow && workflow.status && ([models.NODE_PHASE.ERROR, models.NODE_PHASE.SUCCEEDED, models.NODE_PHASE.SKIPPED].indexOf(workflow.status.phase) > -1);
+        if (!this.refreshSubscription && !isCompleted) {
+            this.refreshSubscription = Observable.interval(1000).subscribe(() => {
+                this.setState({ now: moment() });
+            });
+        } else if (this.refreshSubscription && isCompleted) {
+            this.refreshSubscription.unsubscribe();
+            this.refreshSubscription = null;
+        }
     }
 }
