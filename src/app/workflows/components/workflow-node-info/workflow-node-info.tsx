@@ -118,7 +118,13 @@ export class WorkflowNodeContainers extends React.Component<Props, { selectedSid
     public render() {
         const template = this.props.workflow.spec.templates.find((item) => item.name === this.props.node.templateName);
         if (!template || (!template.container && !template.script)) {
-            return <p>Step does not have containers</p>;
+            return (
+                <div className='white-box'>
+                    <div className='row'>
+                        <div className='columns small-12 text-center'>No data to display</div>
+                    </div>
+                </div>
+            );
         }
         const container = this.state.selectedSidecar && template.sidecars && template.sidecars.find((item) => item.name === this.state.selectedSidecar)
             || template.container

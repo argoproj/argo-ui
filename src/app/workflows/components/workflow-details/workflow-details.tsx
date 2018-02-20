@@ -66,32 +66,29 @@ class Component extends React.Component<Props, any> {
                         </div>
                     ),
                 }}>
-                <div className='workflow-details'>
-                    {this.props.selectedTabKey === 'summary' && this.renderSummaryTab() || (
-                        <div className='row'>
-                            <div className='columns xlarge-6 xxlarge-9'>
-                                {this.props.workflow && (
-                                    <div className='workflow-details__graph-container'>
-                                        { this.props.selectedTabKey === 'workflow' && (
-                                            <WorkflowDag
-                                                workflow={this.props.workflow}
-                                                selectedNodeId={this.props.selectedNodeId}
-                                                nodeClicked={(node) => this.selectNode(node.id)}/>
-                                        ) || (<WorkflowTimeline
-                                                workflow={this.props.workflow}
-                                                selectedNodeId={this.props.selectedNodeId}
-                                                nodeClicked={(node) => this.selectNode(node.id)} />)}
-                                    </div>
-                                )}
+                <div className={classNames('workflow-details', { 'workflow-details--step-node-expanded': !!selectedNode })}>
+                    {this.props.selectedTabKey === 'summary' && this.renderSummaryTab() || this.props.workflow && (
+                        <div>
+                            <div className='workflow-details__graph-container'>
+                                { this.props.selectedTabKey === 'workflow' && (
+                                    <WorkflowDag
+                                        workflow={this.props.workflow}
+                                        selectedNodeId={this.props.selectedNodeId}
+                                        nodeClicked={(node) => this.selectNode(node.id)}/>
+                                ) || (<WorkflowTimeline
+                                        workflow={this.props.workflow}
+                                        selectedNodeId={this.props.selectedNodeId}
+                                        nodeClicked={(node) => this.selectNode(node.id)} />)}
                             </div>
-                            <div className='columns xlarge-6 xxlarge-3 workflow-details__step-info'>
+                            <div className='workflow-details__step-info'>
+                                <button className='workflow-details__step-info-close' onClick={() => this.removeNodeSelection()}>
+                                    <i className='argo-icon-close'/>
+                                </button>
                                 {selectedNode && (
                                     <WorkflowNodeInfo
                                         node={selectedNode}
                                         workflow={this.props.workflow}
                                         onShowContainerLogs={(pod, container) => this.openContainerLogsPanel(pod, container)}/>
-                                ) || (
-                                    <p>Please select workflow node</p>
                                 )}
                             </div>
                         </div>
@@ -130,6 +127,12 @@ class Component extends React.Component<Props, any> {
         this.appContext.router.history.push(`${this.props.match.url}?tab=${this.props.selectedTabKey}&nodeId=${nodeId}`);
     }
 
+    private removeNodeSelection() {
+        const params = new URLSearchParams(this.appContext.router.route.location.search);
+        params.delete('nodeId');
+        this.appContext.router.history.push(`${this.props.match.url}?${params.toString()}`);
+    }
+
     private renderSummaryTab() {
         if (!this.props.workflow) {
             return <div>Loading...</div>;
@@ -154,13 +157,6 @@ class Component extends React.Component<Props, any> {
     router: PropTypes.object,
 };
 
-function defaultSelectedNode(workflow: models.Workflow): string {
-    if (workflow.status && workflow.status.nodes) {
-        return Object.keys(workflow.status.nodes)[0];
-    }
-    return null;
-}
-
 function parseSidePanelParam(param: string) {
     const [type, nodeId, container] = (param || '').split(':');
     if (type === 'logs' || type === 'yaml') {
@@ -173,7 +169,7 @@ export const WorkflowDetails = connect((state: AppState<State>) => ({
     workflow: state.page.workflow,
     changesSubscription: state.page.changesSubscription,
     selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'workflow',
-    selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId') || (state.page.workflow && defaultSelectedNode(state.page.workflow)),
+    selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId'),
     sidePanel: parseSidePanelParam(new URLSearchParams(state.router.location.search).get('sidePanel')),
 }), (dispatch) => ({
     onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),

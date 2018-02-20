@@ -94,7 +94,7 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
             }
         }
         return (
-            <div className='workflow-timeline' ref={(container) => this.container = container}>
+            <div className='workflow-timeline' ref={(container) => this.container = container} style={{width: Math.max(this.state.parentWidth, MIN_WIDTH) + NODE_NAME_WIDTH}}>
                 <div style={{left: NODE_NAME_WIDTH}} className='workflow-timeline__start-line'/>
                 <div className='workflow-timeline__row workflow-timeline__row--header'/>
                 {groups.map((group) => [
@@ -116,7 +116,7 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
         );
     }
 
-    private updateWidth() {
+    public updateWidth() {
         this.setState({ parentWidth: (this.container.offsetParent || window.document.body).clientWidth - NODE_NAME_WIDTH });
     }
 

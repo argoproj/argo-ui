@@ -10,11 +10,6 @@
         padding: 1em;
     }
 
-    &__step-info.columns {
-        border-left: 1px solid $argo-color-gray-4;
-        padding: 0;
-    }
-
     &__topbar-buttons {
         display: inline-block;
         white-space: nowrap;
@@ -41,10 +36,12 @@
     }
 
     &__graph-container {
-        margin: 0 -15px;
         position: relative;
         overflow: auto;
         height: calc(100vh - 2 * #{$top-bar-height});
+        width: 100%;
+        transition: width 0.2s;
+        float: left;
 
         .workflow-dag {
             margin: 1em auto;
@@ -53,4 +50,46 @@
             min-height: calc(100vh - 2 * #{$top-bar-height});
         }
     }
+
+    &__step-info {
+        min-height: calc(100vh - 2 * #{$top-bar-height});
+        border-left: 1px solid $argo-color-gray-4;
+        width: 0;
+        transition: width 0.2s;
+        float: right
+    }
+
+    &__step-info-close {
+        display: block;
+        position: absolute;
+        cursor: pointer;
+        top: 1em;
+        right: -1em;
+        z-index: 11;
+        border-radius: 50%;
+        color: $argo-color-gray-5;
+        font-size: 20px;
+        padding: 5px;
+
+        @media screen and (max-width: $argo-breakpoint-md) {
+            top: 8px;
+        }
+
+        &:hover {
+            background-color: $argo-color-gray-4;
+        }
+    }
+
+    &--step-node-expanded &__graph-container {
+        width: calc(100% - 570px);
+    }
+
+    &--step-node-expanded &__step-info {
+        width: 570px;
+    }
+
+    &--step-node-expanded &__step-info-close {
+        right: 1em;
+    }
+
 }
