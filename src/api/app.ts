@@ -1,7 +1,7 @@
 import * as aws from 'aws-sdk';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-import * as fallback from 'express-history-api-fallback';
+import * as fs from 'fs';
 import * as http from 'http';
 import * as JSONStream from 'json-stream';
 import * as Api from 'kubernetes-client';
@@ -19,8 +19,21 @@ function serve<T>(res: express.Response, action: () => Promise<T>) {
     action().then((val) => res.send(val)).catch((err) => res.status(500).send(err));
 }
 
+function fileToString(filePath: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        fs.readFile(filePath, 'utf-8', (err, content) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(content);
+            }
+        });
+    });
+}
+
 export function create(
         uiDist: string,
+        uiBaseHref: string,
         inCluster: boolean,
         namespace: string,
         version,
@@ -98,8 +111,24 @@ export function create(
             core.ns(req.params.namespace).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
         streamServerEvents(req, res, logsSource, (item) => item.toString());
     });
+
+    const serveIndex = (req: express.Request, res: express.Response) => {
+        fileToString(`${uiDist}/index.html`).then((content) => {
+            return content.replace(`<base href="/">`, `<base href="${uiBaseHref}">`);
+        })
+        .then((indexContent) => res.send(indexContent))
+        .catch((err) => res.send(err));
+    };
+
+    app.get('/index.html', serveIndex);
     app.use(express.static(uiDist));
-    app.use(fallback('index.html', { root: uiDist }));
+    app.use(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        if ((req.method === 'GET' || req.method === 'HEAD') && req.accepts('html')) {
+            serveIndex(req, res);
+        } else {
+            next();
+        }
+    });
 
     const server = http.createServer(app);
     consoleProxy.create(server, core);

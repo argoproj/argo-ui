@@ -1,6 +1,5 @@
 import * as express from 'express';
 import {Observable, Observer} from 'rxjs';
-import * as WebSocket from 'ws';
 
 export function reactifyStream(stream, converter = (item) => item) {
     return new Observable((observer: Observer < any >) => {

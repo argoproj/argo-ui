@@ -7,7 +7,8 @@ import * as app from './app';
 const argv = yargs.argv;
 
 app.create(
-  argv.uiDist || path.join(__dirname, '..', '..', 'app'),
+  argv.uiDist || path.join(__dirname, '..', '..', 'dist', 'app'),
+  argv.uiBaseHref || '/',
   argv.inCluster === 'true',
   argv.namespace || 'default',
   argv.crdVersion || 'v1alpha1',

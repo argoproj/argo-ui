@@ -16,4 +16,4 @@ COPY  --from=build ./src/node_modules /app/node_modules
 WORKDIR /app
 
 EXPOSE 8001
-CMD ["sh", "-c", "node api/api/main.js --uiDist /app/app --inCluster ${IN_CLUSTER} --namespace ${ARGO_NAMESPACE} --enableWebConsole ${ENABLE_WEB_CONSOLE} --uiBaseHref ${BASE_HREF}"]
+CMD ["sh", "-c", "node api/api/main.js --uiDist /app/app --inCluster ${IN_CLUSTER} --namespace ${ARGO_NAMESPACE} --enableWebConsole ${ENABLE_WEB_CONSOLE:-'false'} --uiBaseHref ${BASE_HREF:-'/'}"]

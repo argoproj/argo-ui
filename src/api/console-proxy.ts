@@ -27,9 +27,7 @@ export function create(server: http.Server, core) {
             .match(/\/api\/steps\/([^/]*)\/([^/]*)\/exec/);
         if (match) {
             const cmd = [location.query.cmd];
-            const [_,
-                ns,
-                pod] = match;
+            const [, ns, pod] = match;
             const apiUri = url
                 .parse(core.url)
                 .host;
