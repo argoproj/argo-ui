@@ -42,6 +42,11 @@ const config = {
         fs: 'empty',
     },
     plugins: [
+        new webpack.DefinePlugin({
+            SYSTEM_INFO: JSON.stringify({
+                version: process.env.ARGO_VERSION || 'latest',
+            }),
+        }),
         new HtmlWebpackPlugin({ template: 'src/app/index.html' }),
         new CopyWebpackPlugin([{
             from: 'src/assets', to: 'assets'

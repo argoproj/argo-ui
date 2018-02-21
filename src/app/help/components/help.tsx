@@ -28,12 +28,12 @@ export const Help = () => (
                     <h3>Argo CLI</h3>
                     <div className='row text-left help-box__download'>
                         <div className='columns small-6'>
-                            <a href='https://github.com/argoproj/argo/releases/download/v2.0.0-beta1/argo-linux-amd64'><i
+                            <a href={`https://github.com/argoproj/argo/releases/download/${SYSTEM_INFO.version}/argo-linux-amd64`}><i
                                     className='fa fa-linux' aria-hidden='true'/> Linux
                             </a>
                         </div>
                         <div className='columns small-6'>
-                            <a href='https://github.com/argoproj/argo/releases/download/v2.0.0-beta1/argo-darwin-amd64'><i
+                            <a href={`https://github.com/argoproj/argo/releases/download/${SYSTEM_INFO.version}/argo-darwin-amd64`}><i
                                     className='fa fa-apple' aria-hidden='true'/> macOS
                             </a><br/>
                         </div>

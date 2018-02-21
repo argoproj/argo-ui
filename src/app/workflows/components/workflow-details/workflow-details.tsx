@@ -46,7 +46,7 @@ class Component extends React.Component<Props, any> {
 
     public componentDidUpdate(prevProps: Props) {
         // Redraw timeline component after node details panel collapsed/expanded.
-        if (!!this.props.selectedNodeId !== !!prevProps.selectedNodeId) {
+        if (this.timelineComponent && !!this.props.selectedNodeId !== !!prevProps.selectedNodeId) {
             setTimeout(() => {
                 this.timelineComponent.updateWidth();
             }, 300);
