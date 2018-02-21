@@ -82,7 +82,7 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
                 width: timeToLeft(moment(node.finishedAt).valueOf()) - timeToLeft(moment(node.startedAt).valueOf()),
             })],
         }));
-        for (let i = groups.length - 1; i > 1; i--) {
+        for (let i = groups.length - 1; i >= 1; i--) {
             const cur = groups[i];
             const next = groups[i - 1];
             if (moment(cur.startedAt).diff(next.finishedAt, 'milliseconds') < 0 && moment(next.startedAt).diff(cur.startedAt, 'milliseconds') < ROUND_START_DIFF_MS) {
@@ -99,7 +99,7 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
                 <div className='workflow-timeline__row workflow-timeline__row--header'/>
                 {groups.map((group) => [
                     (<div style={{left: timeToLeft(group.startedAt)}} key={`group-${group.startedAt}`} className={classNames('workflow-timeline__start-line')}>
-                        <span className='workflow-timeline__start-line__time'>{moment(group.finishedAt).format('hh:ss')}</span>
+                        <span className='workflow-timeline__start-line__time'>{moment(group.startedAt).format('hh:mm')}</span>
                     </div>),
                     ...group.nodes.map((node) => (
                         <div key={node.id}
@@ -121,7 +121,8 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
     }
 
     private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {
-        const isCompleted = workflow && workflow.status && ([models.NODE_PHASE.ERROR, models.NODE_PHASE.SUCCEEDED, models.NODE_PHASE.SKIPPED].indexOf(workflow.status.phase) > -1);
+        const completedPhases = [models.NODE_PHASE.ERROR, models.NODE_PHASE.SUCCEEDED, models.NODE_PHASE.SKIPPED, models.NODE_PHASE.FAILED];
+        const isCompleted = workflow && workflow.status && (completedPhases.indexOf(workflow.status.phase) > -1);
         if (!this.refreshSubscription && !isCompleted) {
             this.refreshSubscription = Observable.interval(1000).subscribe(() => {
                 this.setState({ now: moment() });

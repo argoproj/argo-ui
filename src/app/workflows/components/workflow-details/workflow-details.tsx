@@ -32,6 +32,8 @@ require('./workflow-details.scss');
 
 class Component extends React.Component<Props, any> {
 
+    private timelineComponent: WorkflowTimeline;
+
     public componentWillMount() {
         this.props.onLoad(this.props.match.params.namespace, this.props.match.params.name);
     }
@@ -39,6 +41,15 @@ class Component extends React.Component<Props, any> {
     public componentWillReceiveProps(nextProps: Props) {
         if (this.props.match.params.name !== nextProps.match.params.name || this.props.match.params.namespace !== nextProps.match.params.namespace) {
             this.props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
+        }
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        // Redraw timeline component after node details panel collapsed/expanded.
+        if (!!this.props.selectedNodeId !== !!prevProps.selectedNodeId) {
+            setTimeout(() => {
+                this.timelineComponent.updateWidth();
+            }, 300);
         }
     }
 
@@ -79,7 +90,9 @@ class Component extends React.Component<Props, any> {
                                 ) || (<WorkflowTimeline
                                         workflow={this.props.workflow}
                                         selectedNodeId={this.props.selectedNodeId}
-                                        nodeClicked={(node) => this.selectNode(node.id)} />)}
+                                        nodeClicked={(node) => this.selectNode(node.id)}
+                                        ref={(timeline) => this.timelineComponent = timeline}
+                                />)}
                             </div>
                             <div className='workflow-details__step-info'>
                                 <button className='workflow-details__step-info-close' onClick={() => this.removeNodeSelection()}>

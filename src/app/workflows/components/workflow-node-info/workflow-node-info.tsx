@@ -44,6 +44,7 @@ export const WorkflowNodeSummary = (props: Props) => {
         {title: 'END TIME', value: props.node.finishedAt || '-'},
         {title: 'DURATION', value: <Duration durationMs={nodeDuration(props.node)}/> },
     ];
+    const template = props.workflow.spec.templates.find((item) => item.name === props.node.templateName);
     return (
         <div className='white-box'>
             <div className='white-box__details'>
@@ -52,7 +53,11 @@ export const WorkflowNodeSummary = (props: Props) => {
             <div>
                 <button className='argo-button argo-button--base-o' onClick={() => props.onShowYaml && props.onShowYaml(props.node.id)}>
                     YAML
-                </button>
+                </button> {template && (template.container || template.script) && (
+                    <button className='argo-button argo-button--base-o' onClick={() => props.onShowContainerLogs && props.onShowContainerLogs(props.node.id, 'main')}>
+                        LOGS
+                    </button>
+                )}
             </div>
         </div>
     );
