@@ -517,6 +517,11 @@ export interface Template {
      * Steps define a series of sequential/parallel workflow steps
      */
     steps?: WorkflowStep[][];
+
+    /**
+     * DAG template
+     */
+    dag: DAGTemplate;
 }
 /**
  * ValueFrom describes a location in which to obtain the value to a parameter
@@ -749,6 +754,38 @@ export interface WorkflowSpec {
      */
     volumes?: kubernetes.Volume[];
 }
+
+export interface DAGTemplate {
+    /**
+     * Target are one or more names of targets to execute in a DAG
+     */
+    targets: string;
+
+    /**
+     * Tasks are a list of DAG tasks
+     */
+    tasks: DAGTask[];
+}
+
+export interface DAGTask {
+    name: string;
+
+    /**
+     * Name of template to execute
+     */
+    template: string;
+
+    /**
+     * Arguments are the parameter and artifact arguments to the template
+     */
+    arguments: Arguments;
+
+    /**
+     * Dependencies are name of other targets which this depends on
+     */
+    dependencies: string[];
+}
+
 /**
  * WorkflowStep is a reference to a template to execute in a series of step
  */

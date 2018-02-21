@@ -17,6 +17,7 @@ import { WorkflowDag } from '../workflow-dag/workflow-dag';
 import { WorkflowNodeInfo } from '../workflow-node-info/workflow-node-info';
 import { WorkflowSummaryPanel } from '../workflow-summary-panel';
 import { WorkflowTimeline } from '../workflow-timeline/workflow-timeline';
+import { WorkflowYamlViewer } from '../workflow-yaml-viewer/workflow-yaml-viewer';
 
 interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
     workflow: models.Workflow;
@@ -88,7 +89,8 @@ class Component extends React.Component<Props, any> {
                                     <WorkflowNodeInfo
                                         node={selectedNode}
                                         workflow={this.props.workflow}
-                                        onShowContainerLogs={(pod, container) => this.openContainerLogsPanel(pod, container)}/>
+                                        onShowContainerLogs={(nodeId, container) => this.openContainerLogsPanel(nodeId, container)}
+                                        onShowYaml={(nodeId) => this.openNodeYaml(nodeId)}/>
                                 )}
                             </div>
                         </div>
@@ -101,10 +103,20 @@ class Component extends React.Component<Props, any> {
                             loadLogs: () => services.workflows.getContainerLogs(this.props.sidePanel.nodeId, this.props.sidePanel.container || 'main'),
                             shouldRepeat: () => this.props.workflow.status.nodes[this.props.sidePanel.nodeId].phase === 'Running',
                         }} />}
+                        {this.props.sidePanel && this.props.sidePanel.type === 'yaml' && <WorkflowYamlViewer
+                            workflow={this.props.workflow}
+                            selectedNode={selectedNode}
+                        />}
                     </SlidingPanel>
                 )}
             </Page>
         );
+    }
+
+    private openNodeYaml(nodeId: string) {
+        const params = new URLSearchParams(this.appContext.router.route.location.search);
+        params.set('sidePanel', `yaml:${nodeId}`);
+        this.appContext.router.history.push(`${this.props.match.url}?${params.toString()}`);
     }
 
     private openContainerLogsPanel(nodeId: string, container: string) {

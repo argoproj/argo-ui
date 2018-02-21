@@ -17,6 +17,7 @@ interface Props {
     node: models.NodeStatus;
     workflow: models.Workflow;
     onShowContainerLogs?: (nodeId: string, container: string) => any;
+    onShowYaml?: (nodeId: string) => any;
 }
 
 const AttributeRow = (attr: { title: string, value: any }) => (
@@ -47,6 +48,11 @@ export const WorkflowNodeSummary = (props: Props) => {
         <div className='white-box'>
             <div className='white-box__details'>
                 {<AttributeRows attributes={attributes}/>}
+            </div>
+            <div>
+                <button className='argo-button argo-button--base-o' onClick={() => props.onShowYaml && props.onShowYaml(props.node.id)}>
+                    YAML
+                </button>
             </div>
         </div>
     );
@@ -84,7 +90,8 @@ export const WorkflowNodeInputs = (props: { inputs: models.Inputs }) => {
 export const WorkflowNodeContainer = (props: {
         nodeId: string,
         container: models.Container | models.Sidecar | models.Script,
-        onShowContainerLogs: (pod: string, container: string) => any; }) => {
+        onShowContainerLogs: (nodeId: string, container: string) => any;
+    }) => {
     const container = { name: 'main', args: Array<string>(), source: '', ...props.container};
     const attributes = [
         {title: 'NAME', value: container.name || 'main'},

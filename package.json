@@ -46,6 +46,7 @@
         "@types/redux": "^3.6.0",
         "@types/superagent": "^3.5.7",
         "@types/ws": "^4.0.0",
+        "@types/yamljs": "^0.2.30",
         "awesome-typescript-loader": "^3.4.1",
         "chai": "^4.1.2",
         "classnames": "^2.2.5",
@@ -83,6 +84,7 @@
         "webfonts-generator": "^0.4.0",
         "webpack": "^3.10.0",
         "webpack-dev-server": "^2.11.1",
-        "xterm": "2.4.0"
+        "xterm": "2.4.0",
+        "yamljs": "^0.3.0"
     }
 }

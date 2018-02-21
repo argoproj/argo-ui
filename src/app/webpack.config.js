@@ -38,6 +38,9 @@ const config = {
             },
         ]
     },
+    node: {
+        fs: 'empty',
+    },
     plugins: [
         new HtmlWebpackPlugin({ template: 'src/app/index.html' }),
         new CopyWebpackPlugin([{
