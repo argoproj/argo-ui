@@ -12,19 +12,19 @@ export interface LogsSource {
     shouldRepeat(): boolean;
 }
 
-interface Props {
+export interface LogsViewerProps {
     source: LogsSource;
 }
 
-export class LogsViewer extends React.Component<Props> {
+export class LogsViewer extends React.Component<LogsViewerProps> {
     private terminal: any;
     private subscription: Subscription;
 
-    constructor(props: Props) {
+    constructor(props: LogsViewerProps) {
         super(props);
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
+    public componentWillReceiveProps(nextProps: LogsViewerProps) {
         if (this.props.source.key !== nextProps.source.key) {
             this.refresh();
         }
@@ -56,7 +56,7 @@ export class LogsViewer extends React.Component<Props> {
         );
     }
 
-    public shouldComponentUpdate(prevProps: Props) {
+    public shouldComponentUpdate(prevProps: LogsViewerProps) {
         return false;
     }
 

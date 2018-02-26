@@ -8,7 +8,9 @@ import { WorkflowSteps } from '../workflow-steps/workflow-steps';
 
 require('./workflow-list-item.scss');
 
-export const WorkflowListItem = (props: { workflow: models.Workflow }) => (
+export interface WorkflowListItemProps { workflow: models.Workflow; }
+
+export const WorkflowListItem = (props: WorkflowListItemProps) => (
     <div className='workflow-list-item'>
         <div className='workflow-list-item__top'>
             <div className='workflow-list-item__status'>

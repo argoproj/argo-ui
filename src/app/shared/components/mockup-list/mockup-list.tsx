@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-interface Props { height?: number; marginTop?: number; }
+export interface MockupListProps { height?: number; marginTop?: number; }
 
 require('./mockup-list.scss');
 
-export class MockupList extends React.Component<Props, { count: number; }> {
+export class MockupList extends React.Component<MockupListProps, { count: number; }> {
 
-    constructor(props: Props) {
+    constructor(props: MockupListProps) {
         super(props);
         this.state = { count: 0 };
     }

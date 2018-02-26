@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as models from '../../../../models';
 import { Utils } from '../../../shared/components';
 
-interface Props {
+export interface WorkflowDagProps {
     workflow: models.Workflow;
     selectedNodeId?: string;
     nodeClicked?: (node: models.NodeStatus) => any;
@@ -18,7 +18,7 @@ require('./workflow-dag.scss');
 const NODE_WIDTH = 182;
 const NODE_HEIGHT = 52;
 
-export class WorkflowDag extends React.Component<Props> {
+export class WorkflowDag extends React.Component<WorkflowDagProps> {
 
     public render() {
         const graph = new dagre.graphlib.Graph();

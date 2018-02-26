@@ -1,8 +1,13 @@
 {
     "name": "argo-ui",
-    "version": "2.1.0",
-    "main": "./dist/api/api/main.js",
+    "version": "2.1.0-alpha4",
+    "main": "./bundle/index.js",
+    "types": "./bundle/lib/index.d.ts",
     "license": "MIT",
+    "files": [
+        "src/assets",
+        "bundle"
+    ],
     "scripts": {
         "docker": "./scripts/build_docker.sh",
         "build": "yarn build:ui && yarn build:api",
@@ -15,7 +20,8 @@
         "lint:ui": "tslint -p ./src/app",
         "lint:api": "tslint -p ./src/api",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
-        "test": "mocha --require ts-node/register ./src/app/**/*.spec.ts"
+        "test": "mocha --require ts-node/register ./src/app/**/*.spec.ts",
+        "prepublishOnly": "tsc -p ./src/lib/tsconfig.json && webpack --config ./src/lib/webpack.config.js"
     },
     "dependencies": {
         "aws-sdk": "^2.188.0",

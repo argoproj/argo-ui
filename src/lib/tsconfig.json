@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./../../dist/app",
+        "outDir": "./../../bundle",
         "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
@@ -8,7 +8,7 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "noUnusedLocals": true,
-        "declaration": false,
+        "declaration": true,
         "lib": [
             "es2017",
             "dom"

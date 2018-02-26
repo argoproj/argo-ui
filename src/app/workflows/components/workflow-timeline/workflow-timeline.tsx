@@ -12,19 +12,21 @@ const ROUND_START_DIFF_MS = 1000;
 const NODE_NAME_WIDTH = 250;
 const MIN_WIDTH = 800;
 
-interface Props {
+export interface WorkflowTimelineProps {
     workflow: models.Workflow;
     selectedNodeId: string;
     nodeClicked?: (node: models.NodeStatus) => any;
 }
 
-export class WorkflowTimeline extends React.Component<Props, { parentWidth: number, now: moment.Moment }> {
+export interface WorkflowTimelineState { parentWidth: number; now: moment.Moment; }
+
+export class WorkflowTimeline extends React.Component<WorkflowTimelineProps, WorkflowTimelineState> {
 
     private container: HTMLElement;
     private resizeSubscription: Subscription;
     private refreshSubscription: Subscription;
 
-    constructor(props: Props) {
+    constructor(props: WorkflowTimelineProps) {
         super(props);
         this.state = { parentWidth: 0, now: moment() };
         this.ensureRunningWorkflowRefreshing(props.workflow);
@@ -35,7 +37,7 @@ export class WorkflowTimeline extends React.Component<Props, { parentWidth: numb
         this.updateWidth();
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
+    public componentWillReceiveProps(nextProps: WorkflowTimelineProps) {
         this.ensureRunningWorkflowRefreshing(nextProps.workflow);
     }
 

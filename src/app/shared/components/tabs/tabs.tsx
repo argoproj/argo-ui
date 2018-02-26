@@ -13,7 +13,7 @@ export interface Tab {
     extraHorizontalScrollPadding?: number;
 }
 
-interface Props extends React.Props<any> {
+export interface TabsProps extends React.Props<any> {
     navCenter?: boolean;
     fixed?: boolean;
     navTransparent?: boolean;
@@ -22,14 +22,14 @@ interface Props extends React.Props<any> {
     onTabSelected?: (tabKey: string) => any;
 }
 
-interface State {
+export interface TabsState {
     selectedTabKey: string;
 }
 
 require('./tabs.scss');
 
-export class Tabs extends React.Component<Props, State> {
-    constructor(props: Props) {
+export class Tabs extends React.Component<TabsProps, TabsState> {
+    constructor(props: TabsProps) {
         super(props);
         this.state = { selectedTabKey: props.selectedTabKey };
     }
