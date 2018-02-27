@@ -9,7 +9,7 @@ ADD [".", "."]
 
 ARG ARGO_VERSION=latest
 ENV ARGO_VERSION=$ARGO_VERSION
-RUN yarn build && yarn cache clean && yarn install --production
+RUN NODE_ENV='production' yarn build && yarn cache clean && yarn install --production
 
 FROM node:6.9.5-alpine
 
