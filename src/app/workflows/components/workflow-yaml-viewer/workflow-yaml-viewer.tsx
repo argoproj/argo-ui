@@ -6,11 +6,11 @@ import { Utils } from '../../../shared/components';
 
 require('./workflow-yaml-viewer.scss');
 
-interface Props {
+export interface WorkflowYamlViewerProps {
     workflow: models.Workflow; selectedNode: models.NodeStatus;
 }
 
-export class WorkflowYamlViewer extends React.Component<Props> {
+export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps> {
 
     private container: HTMLElement;
 

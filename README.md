@@ -1,8 +1,10 @@
 # Argo UI
 
-![Argo Image](argo.png)
+![Argo Image](https://github.com/argoproj/argo/blob/master/argo.png?raw=true)
 
 Web-based UI for Argo workflow engine. Web UI allows to view Argo workflows running in the cluster, view container logs etc.
+
+Some Argo UI components ( such as Workflow DAG viewer, Workflow timeline etc ) are available via [argo-ui](https://www.npmjs.com/package/argo-ui) NPM package.
 
 ## Build, run, release
 

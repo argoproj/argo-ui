@@ -2,12 +2,12 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-interface Props extends React.Props<any> {
+export interface DropDownProps extends React.Props<any> {
     isMenu?: boolean;
     anchor: React.ComponentType;
 }
 
-interface State {
+export interface DropDownState {
     opened: boolean;
     left: number;
     top: number;
@@ -17,11 +17,11 @@ require('./dropdown.scss');
 
 const dropDownOpened = new BehaviorSubject<DropDown>(null);
 
-export class DropDown extends React.Component<Props, State> {
+export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private el: HTMLDivElement;
     private subscription: Subscription;
 
-    constructor(props: Props) {
+    constructor(props: DropDownProps) {
         super(props);
         this.state = { opened: false, left: 0, top: 0};
     }

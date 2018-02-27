@@ -1,3 +1,5 @@
+require('../styles/main.scss');
+
 export { Utils  } from './utils';
 export { Layout } from './layout/layout';
 export { Page } from './page/page';

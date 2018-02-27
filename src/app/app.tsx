@@ -31,7 +31,6 @@ const navItems = [{
 const reducer = getRoutesReducer(routes);
 export const store = createStore(reducer, applyMiddleware(asyncMiddleware, reduxRouterMiddleware));
 
-require('./app.scss');
 export const App = (props: {store: Store<any>}) => (
     <Provider store={props.store}>
         <ConnectedRouter history={history} store={props.store}>

@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-interface Props extends React.Props<any> {
+export interface SlidingPanelProps extends React.Props<any> {
     isShown?: boolean;
     isNarrow?: boolean;
     isMiddle?: boolean;
@@ -15,7 +15,7 @@ interface Props extends React.Props<any> {
 
 require('./sliding-panel.scss');
 
-export const SlidingPanel = (props: Props) => (
+export const SlidingPanel = (props: SlidingPanelProps) => (
     <div className={classNames('sliding-panel', {
         'sliding-panel--has-header': !!props.header,
         'sliding-panel--has-footer': !!props.footer,
