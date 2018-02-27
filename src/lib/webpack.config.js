@@ -6,7 +6,7 @@ const webpack = require('webpack');
 module.exports = Object.assign({}, config, {
     entry: './src/lib/index.ts',
     output: {
-        filename: 'index.js',
+        filename: 'bundle.js',
         path: __dirname + '/../../bundle',
         library: 'argo-ui',
         libraryTarget: 'umd',
