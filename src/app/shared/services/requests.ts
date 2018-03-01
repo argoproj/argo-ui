@@ -29,6 +29,18 @@ export default {
         return superagent.get(`${API_ROOT}${url}`);
     },
 
+    post(url: string) {
+        return superagent.post(`${API_ROOT}${url}`);
+    },
+
+    put(url: string) {
+        return superagent.put(`${API_ROOT}${url}`);
+    },
+
+    patch(url: string) {
+        return superagent.patch(`${API_ROOT}${url}`);
+    },
+
     loadEventSource(url: string, allowAutoRetry = false): Observable<string> {
         return Observable.create((observer: Observer<any>) => {
             const eventSource = new EventSource(`${API_ROOT}${url}`);
