@@ -14,10 +14,20 @@ export interface TopBarFilter<T> {
     selectionChanged: (selectedValues: T[]) => any;
 }
 
+export interface ActionMenu {
+    className?: string;
+    items: {
+        action: () => any;
+        title: string;
+        className?: string;
+    }[];
+}
+
 export interface Toolbar {
     filter?: TopBarFilter<any>;
     breadcrumbs?: { title: string, path?: string; }[];
     tools?: React.ReactNode;
+    actionMenu?: ActionMenu;
 }
 
 export interface TopBarProps extends React.Props<any> {
@@ -69,14 +79,34 @@ const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => 
     </div>
 );
 
+const renderActionMenu = (actionMenu: ActionMenu) => (
+    <div className='top-bar__action-menu'>
+        <DropDown isMenu={true} anchor={() => (
+            <a className='argo-button argo-button--radius argo-button--has-icon'>
+                <i aria-hidden='true' className={actionMenu.className || 'fa fa-ellipsis-v'}/>
+            </a>)}>
+            <ul>
+                {actionMenu.items.map((item, i) => (
+                    <li key={i} onClick={() => item.action()}>
+                        {item.className && <i className={item.className}/>} {item.title}
+                    </li>
+                ))}
+            </ul>
+        </DropDown>
+    </div>
+);
+
 const renderToolbar = (toolbar: Toolbar) => (
     <div className='top-bar row' key='tool-bar'>
         <div className='top-bar__left-side columns small-9'>
             {toolbar.breadcrumbs && renderBreadcrumbs(toolbar.breadcrumbs)}
         </div>
-        <div className='top-bar__right-side columns small-3'>
-            {toolbar.tools}
-            {toolbar.filter && renderFilter(toolbar.filter)}
+        <div className='columns small-3'>
+            {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
+            <div className='top-bar__right-side '>
+                {toolbar.tools}
+                {toolbar.filter && renderFilter(toolbar.filter)}
+            </div>
         </div>
     </div>
 );
