@@ -37,6 +37,11 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
             const node = nodes[nodeId];
             (node.children || []).forEach((childId) => graph.setEdge(nodeId, childId));
         });
+        const onExitHandlerNodeId = Object.keys(nodes).find((id) => nodes[id].name === `${this.props.workflow.metadata.name}.onExit`);
+        if (onExitHandlerNodeId) {
+            this.getOutboundNodes(this.props.workflow.metadata.name).forEach((nodeId) => graph.setEdge(nodeId, onExitHandlerNodeId));
+        }
+
         dagre.layout(graph);
         const edges: {from: string, to: string, lines: Line[]}[] = [];
         graph.edges().forEach((edgeInfo) => {
@@ -81,6 +86,23 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
                 ))}
             </div>
         );
+    }
+
+    private getOutboundNodes(nodeID: string): string[] {
+        const node = this.props.workflow.status.nodes[nodeID];
+        if (node.type === 'Pod') {
+            return [node.id];
+        }
+        let outbound = Array<string>();
+        for (const outboundNodeID of node.outboundNodes) {
+            const outNode = this.props.workflow.status.nodes[outboundNodeID];
+            if (outNode.type === 'Pod') {
+                outbound.push(outboundNodeID);
+            } else {
+                outbound = outbound.concat(this.getOutboundNodes(outboundNodeID));
+            }
+        }
+        return outbound;
     }
 
     private isVirtual(node: models.NodeStatus) {
