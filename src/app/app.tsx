@@ -1,4 +1,5 @@
 import createHistory from 'history/createBrowserHistory';
+import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router';
@@ -6,7 +7,7 @@ import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
 
 import { Layout } from './shared/components';
-import { asyncMiddleware, getRoutesReducer, RouteImplementation } from './shared/redux';
+import { AppContext, asyncMiddleware, getRoutesReducer, RouteImplementation } from './shared/redux';
 
 export const history = createHistory();
 const reduxRouterMiddleware = routerMiddleware(history);
@@ -36,6 +37,15 @@ export const App = (props: {store: Store<any>}) => (
         <ConnectedRouter history={history} store={props.store}>
             <Switch>
                 <Redirect exact={true} path='/' to='/workflows'/>
+                <Route path='/timeline' component={ class ToWorflow extends React.Component {
+                    public static contextTypes = { router: PropTypes.object };
+                    public render() {return <div/>; }
+
+                    public componentWillMount() {
+                        const router = (this.context as AppContext).router;
+                        router.history.push(router.route.location.pathname.replace('/timeline', '/workflows'));
+                    }
+                } }/>
                 <Layout navItems={navItems}>
                     {Object.keys(routes).map((path) => {
                         const route = routes[path];
