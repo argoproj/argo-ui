@@ -18,8 +18,8 @@ export const Help = () => (
                 <div className='help-box'>
                     <div className='help-box__ico help-box__ico--email'/>
                     <h3>Contact</h3>
-                    <a className='help-box__link' href='https://groups.google.com/forum/#!forum/argo-project'>Argo Community</a>
-                    <a className='help-box__link' href='mailto:support@applatix.com'>support@applatix.com</a>
+                    <a className='help-box__link' target='_blank' href='https://groups.google.com/forum/#!forum/argoproj'>Argo Community</a>
+                    <a className='help-box__link' target='_blank' href='https://argoproj.slack.com'>Slack Channel</a>
                 </div>
             </div>
             <div className='columns large-4 medium-12'>
