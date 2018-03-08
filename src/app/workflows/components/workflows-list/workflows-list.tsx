@@ -20,6 +20,9 @@ interface Props {
 }
 
 class Component extends React.Component<Props, any> {
+    public static contextTypes = {
+        router: PropTypes.object,
+    };
 
     public componentWillMount() {
         this.props.onPhasesChanged(this.props.phases);
@@ -70,10 +73,6 @@ class Component extends React.Component<Props, any> {
         return this.context as AppContext;
     }
 }
-
-(Component as React.ComponentClass).contextTypes = {
-    router: PropTypes.object,
-};
 
 export const WorkflowsList = connect((state: AppState<State>) => {
     return {

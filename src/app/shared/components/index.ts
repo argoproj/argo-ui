@@ -11,3 +11,4 @@ export { Tab, Tabs } from './tabs/tabs';
 export { Duration } from './duration';
 export { SlidingPanel } from './sliding-panel/sliding-panel';
 export { LogsViewer } from './logs-viewer/logs-viewer';
+export * from './notifications/notifications';

@@ -7,7 +7,7 @@ import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
 
 import { Layout } from './shared/components';
-import { AppContext, asyncMiddleware, getRoutesReducer, RouteImplementation } from './shared/redux';
+import { AppContext, asyncMiddleware, getReducer, NotificationsContainer, RouteImplementation } from './shared/redux';
 
 export const history = createHistory();
 const reduxRouterMiddleware = routerMiddleware(history);
@@ -29,7 +29,7 @@ const navItems = [{
     iconClassName: 'argo-icon-docs',
 }];
 
-const reducer = getRoutesReducer(routes);
+const reducer = getReducer(routes);
 export const store = createStore(reducer, applyMiddleware(asyncMiddleware, reduxRouterMiddleware));
 
 export const App = (props: {store: Store<any>}) => (
@@ -47,6 +47,7 @@ export const App = (props: {store: Store<any>}) => (
                     }
                 } }/>
                 <Layout navItems={navItems}>
+                    <NotificationsContainer />
                     {Object.keys(routes).map((path) => {
                         const route = routes[path];
                         return <Route key={path} path={path} component={route.component}/>;
