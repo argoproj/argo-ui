@@ -24,20 +24,33 @@ export interface TabsProps extends React.Props<any> {
 
 export interface TabsState {
     selectedTabKey: string;
+    indicatorPosition: { left: number; right: number; directionToLeft: boolean };
 }
 
 require('./tabs.scss');
 
 export class Tabs extends React.Component<TabsProps, TabsState> {
+    private container: HTMLElement;
+
     constructor(props: TabsProps) {
         super(props);
-        this.state = { selectedTabKey: props.selectedTabKey };
+        this.state = { selectedTabKey: props.selectedTabKey, indicatorPosition: { left: 0, right: 0, directionToLeft: false } };
+    }
+
+    public componentDidUpdate() {
+        setTimeout(() => {
+            const parentEl = this.container.querySelector('.tabs__nav-wrapper') as HTMLElement;
+            const el = parentEl.querySelector('.active') as HTMLElement;
+            if (el) {
+                this.setState({ indicatorPosition: this.getIndicatorPosition(parentEl, el) });
+            }
+        }, 0);
     }
 
     public render() {
         const selectedTab = this.props.tabs.find((tab) => this.isTabSelected(tab));
         return (
-            <div className='tabs'>
+            <div className='tabs' ref={(container) => this.container = container}>
                 <div className={classNames('tabs__nav', { center: this.props.navCenter, transparent: this.props.navTransparent })}>
                     <div className={classNames({'fixed-width': this.props.fixed})}>
                         <div className={classNames('tabs__nav-wrapper')}>
@@ -46,6 +59,10 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
                                     {tab.icon && <i className={`fa ${tab.icon}`}/>} {tab.title}
                                 </a>
                             ))}
+                            <div className={classNames('tabs__indicator', {
+                                'to-right': !this.state.indicatorPosition.directionToLeft,
+                                'to-left': this.state.indicatorPosition.directionToLeft,
+                            })} style={{left: this.state.indicatorPosition.left, right: this.state.indicatorPosition.right}}/>
                         </div>
                     </div>
                 </div>
@@ -78,5 +95,13 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
             selectedTabKey = this.props.tabs[0].key;
         }
         return selectedTabKey === tab.key;
+    }
+
+    private getIndicatorPosition(parentEl: HTMLElement, el: HTMLElement) {
+        return {
+            left: el.offsetLeft,
+            right: parentEl.offsetWidth - el.offsetWidth - el.offsetLeft,
+            directionToLeft: this.state.indicatorPosition.left > el.offsetLeft,
+        };
     }
 }
