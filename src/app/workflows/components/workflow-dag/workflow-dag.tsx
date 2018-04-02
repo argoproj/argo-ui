@@ -94,7 +94,7 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
             return [node.id];
         }
         let outbound = Array<string>();
-        for (const outboundNodeID of node.outboundNodes) {
+        for (const outboundNodeID of node.outboundNodes || []) {
             const outNode = this.props.workflow.status.nodes[outboundNodeID];
             if (outNode.type === 'Pod') {
                 outbound.push(outboundNodeID);
