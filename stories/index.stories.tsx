@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-import { DropDown } from '../src/app/shared/components';
+import { DropDown, DropDownMenu } from '../src/app/shared/components';
 
 storiesOf('Dropdown', module)
     .add('default', () => <DropDown anchor={() => <a>Click me</a>}><p>Dropdown content here</p></DropDown>)
@@ -13,4 +13,9 @@ storiesOf('Dropdown', module)
                 <li><a>menu item 2</a></li>
             </ul>
         </DropDown>
+    )).add('menu wrapper', () => (
+        <DropDownMenu anchor={() => <a>Click me</a>} items={[{
+            title: 'menu item 1',
+            action: () => window.alert('Clicked!'),
+        }]} />
     ));

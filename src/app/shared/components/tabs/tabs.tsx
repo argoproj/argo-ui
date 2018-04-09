@@ -38,13 +38,11 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
     }
 
     public componentDidUpdate() {
-        setTimeout(() => {
-            const parentEl = this.container.querySelector('.tabs__nav-wrapper') as HTMLElement;
-            const el = parentEl.querySelector('.active') as HTMLElement;
-            if (el) {
-                this.setState({ indicatorPosition: this.getIndicatorPosition(parentEl, el) });
-            }
-        }, 0);
+        this.refreshIndicatorPosition();
+    }
+
+    public componentDidMount() {
+        this.refreshIndicatorPosition();
     }
 
     public render() {
@@ -103,5 +101,17 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
             right: parentEl.offsetWidth - el.offsetWidth - el.offsetLeft,
             directionToLeft: this.state.indicatorPosition.left > el.offsetLeft,
         };
+    }
+
+    private refreshIndicatorPosition() {
+        setTimeout(() => {
+            if (this.container) {
+                const parentEl = this.container.querySelector('.tabs__nav-wrapper') as HTMLElement;
+                const el = parentEl.querySelector('.active') as HTMLElement;
+                if (el) {
+                    this.setState({ indicatorPosition: this.getIndicatorPosition(parentEl, el) });
+                }
+            }
+        }, 0);
     }
 }
