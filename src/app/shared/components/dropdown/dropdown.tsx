@@ -29,7 +29,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     public render() {
         return (
             <div className='argo-dropdown' ref={(el) => this.el = el}>
-                <div className='argo-dropdown__anchor' onClick={() => this.open()}>
+                <div className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
                     <this.props.anchor/>
                 </div>
                 <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
@@ -54,7 +54,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         }
     }
 
-    private close() {
+    public close() {
         this.setState({ opened: false });
     }
 
