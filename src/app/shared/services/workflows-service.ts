@@ -24,8 +24,8 @@ export class WorkflowsService {
         });
     }
 
-    public getContainerLogs(nodeId: string, container: string): Observable<string> {
-        return requests.loadEventSource(`/logs/${nodeId}/${container}`).map((line) => {
+    public getContainerLogs(workflow: models.Workflow, nodeId: string, container: string): Observable<string> {
+        return requests.loadEventSource(`/logs/${workflow.metadata.namespace}/${nodeId}/${container}`).map((line) => {
             return line ? line + '\n' : line;
         });
     }

@@ -113,7 +113,7 @@ class Component extends React.Component<Props, any> {
                     <SlidingPanel isShown={this.props.selectedNodeId && !!this.props.sidePanel} onClose={() => this.closeSidePanel()}>
                         {this.props.sidePanel && this.props.sidePanel.type === 'logs' && <LogsViewer source={{
                             key: this.props.sidePanel.nodeId,
-                            loadLogs: () => services.workflows.getContainerLogs(this.props.sidePanel.nodeId, this.props.sidePanel.container || 'main'),
+                            loadLogs: () => services.workflows.getContainerLogs(this.props.workflow, this.props.sidePanel.nodeId, this.props.sidePanel.container || 'main'),
                             shouldRepeat: () => this.props.workflow.status.nodes[this.props.sidePanel.nodeId].phase === 'Running',
                         }} />}
                         {this.props.sidePanel && this.props.sidePanel.type === 'yaml' && <WorkflowYamlViewer
