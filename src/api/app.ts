@@ -106,7 +106,7 @@ export function create(
             });
         }
     });
-    app.get('/api/logs/:nodeId/:container', async (req: express.Request, res: express.Response) => {
+    app.get('/api/logs/:namespace/:nodeId/:container', async (req: express.Request, res: express.Response) => {
         const logsSource = reactifyStringStream(
             core.ns(req.params.namespace).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
         streamServerEvents(req, res, logsSource, (item) => item.toString());
