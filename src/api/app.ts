@@ -33,7 +33,7 @@ function fileToString(filePath: string): Promise<string> {
 
 export function create(
         uiDist: string,
-        uiBaseHref: string,
+        configuredUiBaseHref: string,
         inCluster: boolean,
         namespace: string,
         version,
@@ -112,9 +112,23 @@ export function create(
         streamServerEvents(req, res, logsSource, (item) => item.toString());
     });
 
+    const uiBaseHref = (req: express.Request) => {
+        // Support `kubectl proxy` paths for convenience.
+        const forwardedUri = req.get('x-forwarded-uri');
+        if (forwardedUri) {
+            const name = '[a-z]([-a-z0-9]*[a-z0-9])?';
+            const proxyPathPattern = new RegExp(`^/api/v1/namespaces/${name}/services/${name}/proxy/`);
+            const match = forwardedUri.match(proxyPathPattern);
+            if (match) {
+                return match[0];
+            }
+        }
+        return configuredUiBaseHref;
+    };
+
     const serveIndex = (req: express.Request, res: express.Response) => {
         fileToString(`${uiDist}/index.html`).then((content) => {
-            return content.replace(`<base href="/">`, `<base href="${uiBaseHref}">`);
+            return content.replace(`<base href="/">`, `<base href="${uiBaseHref(req)}">`);
         })
         .then((indexContent) => res.send(indexContent))
         .catch((err) => res.send(err));

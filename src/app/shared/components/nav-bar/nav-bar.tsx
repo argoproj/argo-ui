@@ -15,7 +15,7 @@ export const NavBar: React.StatelessComponent<NavBarProps> = (props: NavBarProps
     return (
         <div className='nav-bar'>
         <div className='nav-bar__logo'>
-            <img src='/assets/images/logo.png' alt='Argo'/>
+            <img src='assets/images/logo.png' alt='Argo'/>
             {(props.items || []).map((item) => (
                 <div className={classNames('nav-bar__item', { active: isActiveRoute(locationPath, item.path) })}
                      key={item.path + item.title}
