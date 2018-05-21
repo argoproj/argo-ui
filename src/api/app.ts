@@ -36,6 +36,7 @@ export function create(
         uiBaseHref: string,
         inCluster: boolean,
         namespace: string,
+        instanceId: string,
         version,
         group = 'argoproj.io') {
     const config = Object.assign(
@@ -47,12 +48,18 @@ export function create(
     app.use(bodyParser.json({type: () => true}));
 
     app.get('/api/workflows', (req, res) => serve(res, async () => {
-        let phases: string[] = [];
+        let labelSelector: string[] = [];
+        if (instanceId) {
+            labelSelector.push(`workflows.argoproj.io/controller-instanceid = ${instanceId}`);
+        }
         if (req.query.phase) {
-            phases = req.query.phase instanceof Array ? req.query.phase : [req.query.phase];
+            let phases = req.query.phase instanceof Array ? req.query.phase : [req.query.phase];
+            if (phases.length > 0) {
+                labelSelector.push(`workflows.argoproj.io/phase in (${phases.join(',')})`);
+            }
         }
         const workflowList = await crd.workflows.get({
-            qs: {labelSelector: phases.length > 0 && `workflows.argoproj.io/phase in (${phases.join(',')})` || ''},
+            qs: { labelSelector: labelSelector.join(',') },
         }) as models.WorkflowList;
         workflowList.items.sort(
             (first, second) => moment(first.metadata.creationTimestamp) < moment(second.metadata.creationTimestamp) ? 1 : -1);
