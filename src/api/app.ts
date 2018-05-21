@@ -50,12 +50,12 @@ export function create(
     app.get('/api/workflows', (req, res) => serve(res, async () => {
         let labelSelector: string[] = [];
         if (instanceId) {
-            labelSelector.push(`workflows.argoproj.io/controller-instanceid = ${instanceId}`)
+            labelSelector.push(`workflows.argoproj.io/controller-instanceid = ${instanceId}`);
         }
         if (req.query.phase) {
             let phases = req.query.phase instanceof Array ? req.query.phase : [req.query.phase];
             if (phases.length > 0) {
-                labelSelector.push(`workflows.argoproj.io/phase in (${phases.join(',')})`)
+                labelSelector.push(`workflows.argoproj.io/phase in (${phases.join(',')})`);
             }
         }
         const workflowList = await crd.workflows.get({
