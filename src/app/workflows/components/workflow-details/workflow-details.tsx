@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
+import { uiUrl } from '../../../shared/base';
 import { LogsViewer, Page, SlidingPanel } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
 import { services } from '../../../shared/services';
@@ -63,7 +64,7 @@ class Component extends React.Component<Props, any> {
         const selectedNode = this.props.workflow && this.props.workflow.status && this.props.workflow.status.nodes[this.props.selectedNodeId];
         return (
             <Page title={'Workflow Details'} toolbar={{
-                    breadcrumbs: [{title: 'Workflows', path: '/workflows' }, { title: this.props.match.params.name }],
+                    breadcrumbs: [{ title: 'Workflows', path: uiUrl('workflows') }, { title: this.props.match.params.name }],
                     tools: (
                         <div className='workflow-details__topbar-buttons'>
                             <a className={classNames({ active: this.props.selectedTabKey === 'summary' })} onClick={() => this.selectTab('summary')}>

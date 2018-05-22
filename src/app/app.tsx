@@ -6,6 +6,7 @@ import { Redirect, Route, Switch } from 'react-router';
 import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
 
+import { uiUrl } from './shared/base';
 import { Layout } from './shared/components';
 import { AppContext, asyncMiddleware, getReducer, NotificationsContainer, RouteImplementation } from './shared/redux';
 
@@ -14,18 +15,22 @@ const reduxRouterMiddleware = routerMiddleware(history);
 
 import help from './help';
 import workflows from './workflows';
+
+const workflowsUrl = uiUrl('workflows');
+const helpUrl = uiUrl('help');
+const timelineUrl = uiUrl('timeline');
 const routes: {[path: string]: RouteImplementation } = {
-    '/workflows': { component: workflows.component, reducer: workflows.reducer },
-    '/help': { component: help.component, reducer: help.reducer },
+    [workflowsUrl]: { component: workflows.component, reducer: workflows.reducer },
+    [helpUrl]: { component: help.component, reducer: help.reducer },
 };
 
 const navItems = [{
     title: 'Timeline',
-    path: '/workflows',
+    path: workflowsUrl,
     iconClassName: 'argo-icon-timeline',
 }, {
     title: 'Help',
-    path: '/help',
+    path: helpUrl,
     iconClassName: 'argo-icon-docs',
 }];
 
@@ -36,14 +41,14 @@ export const App = (props: {store: Store<any>}) => (
     <Provider store={props.store}>
         <ConnectedRouter history={history} store={props.store}>
             <Switch>
-                <Redirect exact={true} path='/' to='/workflows'/>
-                <Route path='/timeline' component={ class ToWorflow extends React.Component {
+                <Redirect exact={true} path={uiUrl('')} to={workflowsUrl}/>
+                <Route path={timelineUrl} component={ class ToWorkflows extends React.Component {
                     public static contextTypes = { router: PropTypes.object };
                     public render() {return <div/>; }
 
                     public componentWillMount() {
                         const router = (this.context as AppContext).router;
-                        router.history.push(router.route.location.pathname.replace('/timeline', '/workflows'));
+                        router.history.push(router.route.location.pathname.replace(timelineUrl, workflowsUrl));
                     }
                 } }/>
                 <Layout navItems={navItems}>

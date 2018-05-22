@@ -2,6 +2,8 @@ import * as _superagent from 'superagent';
 const superagentPromise = require('superagent-promise');
 import { Observable, Observer } from 'rxjs';
 
+import { apiUrl } from '../base';
+
 type Callback = (data: any) => void;
 
 declare class EventSource {
@@ -22,28 +24,26 @@ enum ReadyState {
 
 const superagent: _superagent.SuperAgentStatic = superagentPromise(_superagent, global.Promise);
 
-const API_ROOT = '/api';
-
 export default {
     get(url: string) {
-        return superagent.get(`${API_ROOT}${url}`);
+        return superagent.get(apiUrl(url));
     },
 
     post(url: string) {
-        return superagent.post(`${API_ROOT}${url}`);
+        return superagent.post(apiUrl(url));
     },
 
     put(url: string) {
-        return superagent.put(`${API_ROOT}${url}`);
+        return superagent.put(apiUrl(url));
     },
 
     patch(url: string) {
-        return superagent.patch(`${API_ROOT}${url}`);
+        return superagent.patch(apiUrl(url));
     },
 
     loadEventSource(url: string, allowAutoRetry = false): Observable<string> {
         return Observable.create((observer: Observer<any>) => {
-            const eventSource = new EventSource(`${API_ROOT}${url}`);
+            const eventSource = new EventSource(apiUrl(url));
             let opened = false;
             eventSource.onopen = (msg) => {
                 if (!opened) {

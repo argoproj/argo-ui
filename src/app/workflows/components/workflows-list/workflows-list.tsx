@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
+import { uiUrl } from '../../../shared/base';
 import { MockupList, Page, TopBarFilter } from '../../../shared/components';
 import { AppContext, AppState } from '../../../shared/redux';
 import * as actions from '../../actions';
@@ -49,16 +50,16 @@ class Component extends React.Component<Props, any> {
             selectedValues: this.props.phases,
             selectionChanged: (phases) => {
                 const query = phases.length > 0 ? '?' + phases.map((phase) => `phase=${phase}`).join('&') : '';
-                this.appContext.router.history.push(`/workflows${query}`);
+                this.appContext.router.history.push(uiUrl(`workflows${query}`));
             },
         };
         return (
-            <Page title='Workflows' toolbar={{filter, breadcrumbs: [{ title: 'Workflows', path: '/workflows' }]}}>
+            <Page title='Workflows' toolbar={{filter, breadcrumbs: [{ title: 'Workflows', path: uiUrl('workflows') }]}}>
                 <div className='argo-container'>
                     <div className='stream'>
                         {this.props.workflows ? this.props.workflows.map((workflow) => (
                             <div key={workflow.metadata.name}
-                                 onClick={() => this.appContext.router.history.push(`/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`)}>
+                                 onClick={() => this.appContext.router.history.push(uiUrl(`workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`))}>
                                 <WorkflowListItem workflow={workflow}/>
                             </div>
                         )) :

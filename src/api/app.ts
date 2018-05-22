@@ -128,7 +128,7 @@ export function create(
     };
 
     app.get('/index.html', serveIndex);
-    app.use(express.static(uiDist));
+    app.use(express.static(uiDist, {index: false}));
     app.use(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if ((req.method === 'GET' || req.method === 'HEAD') && req.accepts('html')) {
             serveIndex(req, res);
