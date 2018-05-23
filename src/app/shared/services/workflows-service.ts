@@ -30,8 +30,8 @@ export class WorkflowsService {
         });
     }
 
-    public getArtifactDownloadUrl(workflow: models.Workflow, nodeName: string, artifactName: string) {
-        return `/api/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}/artifacts/${nodeName}/${artifactName}`;
+    public getArtifactDownloadUrl(workflow: models.Workflow, nodeId: string, artifactName: string) {
+        return `/api/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}/artifacts/${nodeId}/${artifactName}`;
     }
 
     private populateDefaultFields(workflow: models.Workflow): models.Workflow {

@@ -162,7 +162,7 @@ export class WorkflowNodeContainers extends React.Component<Props, { selectedSid
 
 export const WorkflowNodeArtifacts = (props: Props) => {
     const artifacts = props.node.outputs && props.node.outputs.artifacts && props.node.outputs.artifacts.map((artifact) => Object.assign({}, artifact, {
-        downloadUrl: services.workflows.getArtifactDownloadUrl(props.workflow, props.node.name, artifact.name),
+        downloadUrl: services.workflows.getArtifactDownloadUrl(props.workflow, props.node.id, artifact.name),
         stepName: props.node.name,
         dateCreated: props.node.finishedAt,
         nodeName: props.node.name,

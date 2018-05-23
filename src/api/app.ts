@@ -48,12 +48,12 @@ export function create(
     app.use(bodyParser.json({type: () => true}));
 
     app.get('/api/workflows', (req, res) => serve(res, async () => {
-        let labelSelector: string[] = [];
+        const labelSelector: string[] = [];
         if (instanceId) {
             labelSelector.push(`workflows.argoproj.io/controller-instanceid = ${instanceId}`);
         }
         if (req.query.phase) {
-            let phases = req.query.phase instanceof Array ? req.query.phase : [req.query.phase];
+            const phases = req.query.phase instanceof Array ? req.query.phase : [req.query.phase];
             if (phases.length > 0) {
                 labelSelector.push(`workflows.argoproj.io/phase in (${phases.join(',')})`);
             }
@@ -88,9 +88,9 @@ export function create(
         }
         streamServerEvents(req, res, updatesSource, (item) => JSON.stringify(item));
     });
-    app.get('/api/workflows/:namespace/:name/artifacts/:nodeName/:artifactName', async (req, res) => {
+    app.get('/api/workflows/:namespace/:name/artifacts/:nodeId/:artifactName', async (req, res) => {
         const workflow: models.Workflow = await crd.ns(req.params.namespace).workflows.get(req.params.name);
-        const node = workflow.status.nodes[req.params.nodeName];
+        const node = workflow.status.nodes[req.params.nodeId];
         const artifact = node.outputs.artifacts.find((item) => item.name === req.params.artifactName);
         if (artifact.s3) {
             const secretAccessKey = decodeBase64((await core.ns(

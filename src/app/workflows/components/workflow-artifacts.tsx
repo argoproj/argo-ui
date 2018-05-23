@@ -15,7 +15,7 @@ export const WorkflowArtifacts = (props: Props) => {
             const nodeOutputs = (node.outputs || { artifacts: [] as models.Artifact[] });
             const items = nodeOutputs.artifacts || [];
             return items.map((item) => Object.assign({}, item, {
-                downloadUrl: services.workflows.getArtifactDownloadUrl(props.workflow, nodeName, item.name),
+                downloadUrl: services.workflows.getArtifactDownloadUrl(props.workflow, node.id, item.name),
                 stepName: node.name,
                 dateCreated: node.finishedAt,
                 nodeName,
