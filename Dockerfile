@@ -18,4 +18,4 @@ COPY  --from=build ./src/node_modules /app/node_modules
 WORKDIR /app
 
 EXPOSE 8001
-CMD node api/api/main.js --uiDist /app/app --inCluster ${IN_CLUSTER} --namespace ${ARGO_NAMESPACE} --instanceId ${INSTANCE_ID} --enableWebConsole ${ENABLE_WEB_CONSOLE:-'false'} --uiBaseHref ${BASE_HREF:-'/'}
+CMD node api/api/main.js --uiDist /app/app --inCluster ${IN_CLUSTER} --namespace ${ARGO_NAMESPACE} --instanceId ${INSTANCE_ID:-''} --enableWebConsole ${ENABLE_WEB_CONSOLE:-'false'} --uiBaseHref ${BASE_HREF:-'/'}

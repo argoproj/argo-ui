@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as JSONStream from 'json-stream';
 import * as Api from 'kubernetes-client';
-import * as moment from 'moment';
 import * as path from 'path';
 import { Observable, Observer } from 'rxjs';
 import * as nodeStream from 'stream';
@@ -47,7 +46,7 @@ export function create(
     const app = express();
     app.use(bodyParser.json({type: () => true}));
 
-    app.get('/api/workflows', (req, res) => serve(res, async () => {
+    function getWorkflowLabelSelector(req) {
         const labelSelector: string[] = [];
         if (instanceId) {
             labelSelector.push(`workflows.argoproj.io/controller-instanceid = ${instanceId}`);
@@ -58,11 +57,15 @@ export function create(
                 labelSelector.push(`workflows.argoproj.io/phase in (${phases.join(',')})`);
             }
         }
+        return labelSelector;
+    }
+
+    app.get('/api/workflows', (req, res) => serve(res, async () => {
+        const labelSelector = getWorkflowLabelSelector(req);
         const workflowList = await crd.workflows.get({
             qs: { labelSelector: labelSelector.join(',') },
         }) as models.WorkflowList;
-        workflowList.items.sort(
-            (first, second) => moment(first.metadata.creationTimestamp) < moment(second.metadata.creationTimestamp) ? 1 : -1);
+        workflowList.items.sort(models.compareWorkflows);
         return workflowList;
     }));
 
@@ -71,7 +74,8 @@ export function create(
 
     app.get('/api/workflows/live', async (req, res) => {
         let updatesSource = new Observable((observer: Observer<any>) => {
-            let stream = crd.ns(req.params.namespace).workflows.getStream({ qs: { watch: true } });
+            const labelSelector = getWorkflowLabelSelector(req);
+            let stream = crd.ns(req.params.namespace).workflows.getStream({ qs: { watch: true, labelSelector: labelSelector.join(',') } });
             stream.on('end', () => observer.complete());
             stream.on('error', (e) => observer.error(e));
             stream.on('close', () => observer.complete());

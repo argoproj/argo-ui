@@ -1,4 +1,4 @@
-import { WatchEvent, Workflow } from '../../models';
+import { compareWorkflows, WatchEvent, Workflow } from '../../models';
 import { State } from './state';
 
 export const ACTION_TYPES = {
@@ -25,7 +25,7 @@ function workflowListReducer(state: State = { }, action: any): State {
                     if (index > -1) {
                         return {...state, workflows: [...state.workflows.slice(0, index), workflowChange.object, ...state.workflows.slice(index + 1)]};
                     } else {
-                        return {...state, workflows: [workflowChange.object, ...state.workflows] };
+                        return {...state, workflows: [workflowChange.object, ...state.workflows].sort(compareWorkflows) };
                     }
                 case 'DELETED':
                     return {...state, workflows: state.workflows.filter((item) => item.metadata.name !== workflowChange.object.metadata.name) };

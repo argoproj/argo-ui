@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import * as kubernetes from './kubernetes';
 
 /**
@@ -562,6 +563,25 @@ export interface Workflow {
     metadata: kubernetes.ObjectMeta;
     spec: WorkflowSpec;
     status: WorkflowStatus;
+}
+
+export function compareWorkflows(first: Workflow, second: Workflow) {
+    const iStart = first.metadata.creationTimestamp;
+    const iFinish = first.status.finishedAt;
+    const jStart = second.metadata.creationTimestamp;
+    const jFinish = second.status.finishedAt;
+
+    if (!iFinish && !jFinish) {
+        return moment(jStart).diff(iStart);
+    }
+
+    if (!iFinish && jFinish) {
+        return -1;
+    }
+    if (iFinish && !jFinish) {
+        return 1;
+    }
+    return moment(jStart).diff(iStart);
 }
 
 export type NodeType = 'Pod' | 'Steps' | 'StepGroup' | 'DAG' | 'Retry' | 'Skipped';
