@@ -35,7 +35,12 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
         });
         Object.keys(nodes).forEach((nodeId) => {
             const node = nodes[nodeId];
-            (node.children || []).forEach((childId) => graph.setEdge(nodeId, childId));
+            (node.children || []).forEach((childId) => {
+                // make sure workflow is in consistent state and child node exist
+                if (nodes[childId]) {
+                    graph.setEdge(nodeId, childId);
+                }
+            });
         });
         const onExitHandlerNodeId = Object.keys(nodes).find((id) => nodes[id].name === `${this.props.workflow.metadata.name}.onExit`);
         if (onExitHandlerNodeId) {
