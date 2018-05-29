@@ -567,9 +567,9 @@ export interface Workflow {
 
 export function compareWorkflows(first: Workflow, second: Workflow) {
     const iStart = first.metadata.creationTimestamp;
-    const iFinish = first.status.finishedAt;
+    const iFinish = (first.status || {finishedAt: null}).finishedAt;
     const jStart = second.metadata.creationTimestamp;
-    const jFinish = second.status.finishedAt;
+    const jFinish = (second.status || {finishedAt: null}).finishedAt;
 
     if (!iFinish && !jFinish) {
         return moment(jStart).diff(iStart);

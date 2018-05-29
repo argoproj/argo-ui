@@ -8,7 +8,7 @@ require('./workflow-steps.scss');
 export interface WorkflowStepsProps { workflow: models.Workflow; }
 
 export const WorkflowSteps = (props: WorkflowStepsProps) => {
-    const entryPointTemplate = props.workflow.spec.templates.find((template) => template.name === props.workflow.spec.entrypoint);
+    const entryPointTemplate = props.workflow.spec.templates.find((template) => template.name === props.workflow.spec.entrypoint) || { steps: [] as models.WorkflowStep[][] };
     const phase = props.workflow.status.phase;
     let isSucceeded = false;
     let isFailed = false;
