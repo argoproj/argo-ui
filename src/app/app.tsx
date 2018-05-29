@@ -1,17 +1,13 @@
 import createHistory from 'history/createBrowserHistory';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router';
-import { ConnectedRouter, routerMiddleware} from 'react-router-redux';
-import { applyMiddleware, createStore, Store } from 'redux';
+import { Redirect, Route, RouteComponentProps, Router, Switch } from 'react-router';
 
 import { uiUrl } from './shared/base';
 import { Layout } from './shared/components';
-import { AppContext, asyncMiddleware, getReducer, NotificationsContainer, RouteImplementation } from './shared/redux';
+import { AppContext } from './shared/redux';
 
 export const history = createHistory();
-const reduxRouterMiddleware = routerMiddleware(history);
 
 import help from './help';
 import workflows from './workflows';
@@ -19,9 +15,9 @@ import workflows from './workflows';
 const workflowsUrl = uiUrl('workflows');
 const helpUrl = uiUrl('help');
 const timelineUrl = uiUrl('timeline');
-const routes: {[path: string]: RouteImplementation } = {
-    [workflowsUrl]: { component: workflows.component, reducer: workflows.reducer },
-    [helpUrl]: { component: help.component, reducer: help.reducer },
+const routes: {[path: string]: { component: React.ComponentType<RouteComponentProps<any>> } } = {
+    [workflowsUrl]: { component: workflows.component },
+    [helpUrl]: { component: help.component },
 };
 
 const navItems = [{
@@ -34,12 +30,9 @@ const navItems = [{
     iconClassName: 'argo-icon-docs',
 }];
 
-const reducer = getReducer(routes);
-export const store = createStore(reducer, applyMiddleware(asyncMiddleware, reduxRouterMiddleware));
-
-export const App = (props: {store: Store<any>}) => (
-    <Provider store={props.store}>
-        <ConnectedRouter history={history} store={props.store}>
+export const App = () => (
+    <div>
+        <Router history={history}>
             <Switch>
                 <Redirect exact={true} path={uiUrl('')} to={workflowsUrl}/>
                 <Route path={timelineUrl} component={ class ToWorkflows extends React.Component {
@@ -52,13 +45,13 @@ export const App = (props: {store: Store<any>}) => (
                     }
                 } }/>
                 <Layout navItems={navItems}>
-                    <NotificationsContainer />
+                    {/* <NotificationsContainer /> */}
                     {Object.keys(routes).map((path) => {
                         const route = routes[path];
                         return <Route key={path} path={path} component={route.component}/>;
                     })}
                 </Layout>
             </Switch>
-        </ConnectedRouter>
-    </Provider>
+        </Router>
+    </div>
 );

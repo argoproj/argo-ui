@@ -1,17 +1,14 @@
 import * as classNames from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
 import { LogsViewer, Page, SlidingPanel } from '../../../shared/components';
-import { AppContext, AppState } from '../../../shared/redux';
+import { AppContext } from '../../../shared/redux';
 import { services } from '../../../shared/services';
-import * as actions from '../../actions';
-import { State } from '../../state';
 
 import { WorkflowArtifacts } from '../workflow-artifacts';
 import { WorkflowDag } from '../workflow-dag/workflow-dag';
@@ -20,34 +17,56 @@ import { WorkflowSummaryPanel } from '../workflow-summary-panel';
 import { WorkflowTimeline } from '../workflow-timeline/workflow-timeline';
 import { WorkflowYamlViewer } from '../workflow-yaml-viewer/workflow-yaml-viewer';
 
-interface Props extends RouteComponentProps<{ name: string; namespace: string; }> {
-    workflow: models.Workflow;
-    onLoad: (namespace: string, name: string) => any;
-    changesSubscription: Subscription;
-    selectedTabKey: string;
-    selectedNodeId: string;
-    sidePanel: { type: 'yaml' | 'logs'; nodeId: string; container: string; };
-}
-
 require('./workflow-details.scss');
 
-class Component extends React.Component<Props, any> {
+function parseSidePanelParam(param: string) {
+    const [type, nodeId, container] = (param || '').split(':');
+    if (type === 'logs' || type === 'yaml') {
+        return { type, nodeId, container };
+    }
+    return null;
+}
 
+export class WorkflowDetails extends React.Component<RouteComponentProps<any>, { workflow: models.Workflow }> {
+
+    public static contextTypes = {
+        router: PropTypes.object,
+    };
+
+    private changesSubscription: Subscription;
     private timelineComponent: WorkflowTimeline;
 
-    public componentWillMount() {
-        this.props.onLoad(this.props.match.params.namespace, this.props.match.params.name);
+    private get selectedTabKey() {
+        return new URLSearchParams(this.props.location.search).get('tab') || 'workflow';
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
+    private get selectedNodeId() {
+        return new URLSearchParams(this.props.location.search).get('nodeId');
+    }
+
+    private get sidePanel() {
+        return parseSidePanelParam(new URLSearchParams(this.props.location.search).get('sidePanel'));
+    }
+
+    constructor(props: RouteComponentProps<any>) {
+        super(props);
+        this.state = { workflow: null };
+    }
+
+    public componentWillMount() {
+        this.loadWorkflow(this.props.match.params.namespace, this.props.match.params.name);
+    }
+
+    public componentWillReceiveProps(nextProps: RouteComponentProps<any>) {
         if (this.props.match.params.name !== nextProps.match.params.name || this.props.match.params.namespace !== nextProps.match.params.namespace) {
-            this.props.onLoad(nextProps.match.params.namespace, nextProps.match.params.name);
+            this.loadWorkflow(nextProps.match.params.namespace, nextProps.match.params.name);
         }
     }
 
-    public componentDidUpdate(prevProps: Props) {
+    public componentDidUpdate(prevProps: RouteComponentProps<any>) {
         // Redraw timeline component after node details panel collapsed/expanded.
-        if (this.timelineComponent && !!this.props.selectedNodeId !== !!prevProps.selectedNodeId) {
+        const prevSelectedNodeId = new URLSearchParams(this.props.location.search).get('nodeId');
+        if (this.timelineComponent && !!this.selectedNodeId !== !!prevSelectedNodeId) {
             setTimeout(() => {
                 this.timelineComponent.updateWidth();
             }, 300);
@@ -55,42 +74,40 @@ class Component extends React.Component<Props, any> {
     }
 
     public componentWillUnmount() {
-        if (this.props.changesSubscription) {
-            this.props.changesSubscription.unsubscribe();
-        }
+        this.ensureUnsubscribed();
     }
 
     public render() {
-        const selectedNode = this.props.workflow && this.props.workflow.status && this.props.workflow.status.nodes[this.props.selectedNodeId];
+        const selectedNode = this.state.workflow && this.state.workflow.status && this.state.workflow.status.nodes[this.selectedNodeId];
         return (
             <Page title={'Workflow Details'} toolbar={{
                     breadcrumbs: [{ title: 'Workflows', path: uiUrl('workflows') }, { title: this.props.match.params.name }],
                     tools: (
                         <div className='workflow-details__topbar-buttons'>
-                            <a className={classNames({ active: this.props.selectedTabKey === 'summary' })} onClick={() => this.selectTab('summary')}>
+                            <a className={classNames({ active: this.selectedTabKey === 'summary' })} onClick={() => this.selectTab('summary')}>
                                 <i className='fa fa-columns'/>
                             </a>
-                            <a className={classNames({ active: this.props.selectedTabKey === 'timeline' })} onClick={() => this.selectTab('timeline')}>
+                            <a className={classNames({ active: this.selectedTabKey === 'timeline' })} onClick={() => this.selectTab('timeline')}>
                                 <i className='fa argo-icon-timeline'/>
                             </a>
-                            <a className={classNames({ active: this.props.selectedTabKey === 'workflow' })} onClick={() => this.selectTab('workflow')}>
+                            <a className={classNames({ active: this.selectedTabKey === 'workflow' })} onClick={() => this.selectTab('workflow')}>
                                 <i className='fa argo-icon-workflow'/>
                             </a>
                         </div>
                     ),
                 }}>
                 <div className={classNames('workflow-details', { 'workflow-details--step-node-expanded': !!selectedNode })}>
-                    {this.props.selectedTabKey === 'summary' && this.renderSummaryTab() || this.props.workflow && (
+                    {this.selectedTabKey === 'summary' && this.renderSummaryTab() || this.state.workflow && (
                         <div>
                             <div className='workflow-details__graph-container'>
-                                { this.props.selectedTabKey === 'workflow' && (
+                                { this.selectedTabKey === 'workflow' && (
                                     <WorkflowDag
-                                        workflow={this.props.workflow}
-                                        selectedNodeId={this.props.selectedNodeId}
+                                        workflow={this.state.workflow}
+                                        selectedNodeId={this.selectedNodeId}
                                         nodeClicked={(node) => this.selectNode(node.id)}/>
                                 ) || (<WorkflowTimeline
-                                        workflow={this.props.workflow}
-                                        selectedNodeId={this.props.selectedNodeId}
+                                        workflow={this.state.workflow}
+                                        selectedNodeId={this.selectedNodeId}
                                         nodeClicked={(node) => this.selectNode(node.id)}
                                         ref={(timeline) => this.timelineComponent = timeline}
                                 />)}
@@ -102,7 +119,7 @@ class Component extends React.Component<Props, any> {
                                 {selectedNode && (
                                     <WorkflowNodeInfo
                                         node={selectedNode}
-                                        workflow={this.props.workflow}
+                                        workflow={this.state.workflow}
                                         onShowContainerLogs={(nodeId, container) => this.openContainerLogsPanel(nodeId, container)}
                                         onShowYaml={(nodeId) => this.openNodeYaml(nodeId)}/>
                                 )}
@@ -110,15 +127,15 @@ class Component extends React.Component<Props, any> {
                         </div>
                     )}
                 </div>
-                {this.props.workflow && (
-                    <SlidingPanel isShown={this.props.selectedNodeId && !!this.props.sidePanel} onClose={() => this.closeSidePanel()}>
-                        {this.props.sidePanel && this.props.sidePanel.type === 'logs' && <LogsViewer source={{
-                            key: this.props.sidePanel.nodeId,
-                            loadLogs: () => services.workflows.getContainerLogs(this.props.workflow, this.props.sidePanel.nodeId, this.props.sidePanel.container || 'main'),
-                            shouldRepeat: () => this.props.workflow.status.nodes[this.props.sidePanel.nodeId].phase === 'Running',
+                {this.state.workflow && (
+                    <SlidingPanel isShown={this.selectedNodeId && !!this.sidePanel} onClose={() => this.closeSidePanel()}>
+                        {this.sidePanel && this.sidePanel.type === 'logs' && <LogsViewer source={{
+                            key: this.sidePanel.nodeId,
+                            loadLogs: () => services.workflows.getContainerLogs(this.state.workflow, this.sidePanel.nodeId, this.sidePanel.container || 'main'),
+                            shouldRepeat: () => this.state.workflow.status.nodes[this.sidePanel.nodeId].phase === 'Running',
                         }} />}
-                        {this.props.sidePanel && this.props.sidePanel.type === 'yaml' && <WorkflowYamlViewer
-                            workflow={this.props.workflow}
+                        {this.sidePanel && this.sidePanel.type === 'yaml' && <WorkflowYamlViewer
+                            workflow={this.state.workflow}
                             selectedNode={selectedNode}
                         />}
                     </SlidingPanel>
@@ -146,11 +163,11 @@ class Component extends React.Component<Props, any> {
     }
 
     private selectTab(tab: string) {
-        this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}&nodeId=${this.props.selectedNodeId}`);
+        this.appContext.router.history.push(`${this.props.match.url}?tab=${tab}&nodeId=${this.selectedNodeId}`);
     }
 
     private selectNode(nodeId: string) {
-        this.appContext.router.history.push(`${this.props.match.url}?tab=${this.props.selectedTabKey}&nodeId=${nodeId}`);
+        this.appContext.router.history.push(`${this.props.match.url}?tab=${this.selectedTabKey}&nodeId=${nodeId}`);
     }
 
     private removeNodeSelection() {
@@ -160,43 +177,45 @@ class Component extends React.Component<Props, any> {
     }
 
     private renderSummaryTab() {
-        if (!this.props.workflow) {
+        if (!this.state.workflow) {
             return <div>Loading...</div>;
         }
         return (
             <div className='argo-container'>
                 <div className='workflow-details__content'>
-                    <WorkflowSummaryPanel workflow={this.props.workflow}/>
+                    <WorkflowSummaryPanel workflow={this.state.workflow}/>
                     <h6>Artifacts</h6>
-                    <WorkflowArtifacts workflow={this.props.workflow}/>
+                    <WorkflowArtifacts workflow={this.state.workflow}/>
                 </div>
             </div>
         );
+    }
+
+    private ensureUnsubscribed() {
+        if (this.changesSubscription) {
+            this.changesSubscription.unsubscribe();
+        }
+        this.changesSubscription = null;
+    }
+
+    private async loadWorkflow(namespace: string, name: string) {
+        try {
+            this.ensureUnsubscribed();
+            const workflowUpdates = Observable
+                .from([await services.workflows.get(namespace, name)])
+                .merge(services.workflows.watch({name, namespace}).map((changeEvent) => changeEvent.object));
+            this.changesSubscription = workflowUpdates.subscribe((workflow) => {
+                this.setState({ workflow });
+            });
+        } catch (e) {
+            // dispatch(commonActions.showNotification({
+            //     content: 'Unable to load workflow',
+            //     type: NotificationType.Error,
+            // }));
+        }
     }
 
     private get appContext(): AppContext {
         return this.context as AppContext;
     }
 }
-
-(Component as React.ComponentClass).contextTypes = {
-    router: PropTypes.object,
-};
-
-function parseSidePanelParam(param: string) {
-    const [type, nodeId, container] = (param || '').split(':');
-    if (type === 'logs' || type === 'yaml') {
-        return { type, nodeId, container };
-    }
-    return null;
-}
-
-export const WorkflowDetails = connect((state: AppState<State>) => ({
-    workflow: state.page.workflow,
-    changesSubscription: state.page.changesSubscription,
-    selectedTabKey: new URLSearchParams(state.router.location.search).get('tab') || 'workflow',
-    selectedNodeId: new URLSearchParams(state.router.location.search).get('nodeId'),
-    sidePanel: parseSidePanelParam(new URLSearchParams(state.router.location.search).get('sidePanel')),
-}), (dispatch) => ({
-    onLoad: (namespace: string, name: string) => dispatch(actions.loadWorkflow(namespace, name)),
-}))(Component);
