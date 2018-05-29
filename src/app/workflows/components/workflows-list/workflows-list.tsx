@@ -1,44 +1,47 @@
 import deepEqual = require('deep-equal');
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
 import { MockupList, Page, TopBarFilter } from '../../../shared/components';
-import { AppContext, AppState } from '../../../shared/redux';
-import * as actions from '../../actions';
-import { State } from '../../state';
+import { AppContext } from '../../../shared/redux';
+import { services } from '../../../shared/services';
 
 import { WorkflowListItem } from '../workflow-list-item/workflow-list-item';
 
-interface Props {
-    workflows: models.Workflow[];
-    phases: string[];
-    onPhasesChanged: (phases: string[]) => any;
-    changesSubscription: Subscription;
-}
+export class WorkflowsList extends React.Component<RouteComponentProps<any>, { workflows: models.Workflow[] }> {
 
-class Component extends React.Component<Props, any> {
     public static contextTypes = {
         router: PropTypes.object,
     };
 
-    public componentWillMount() {
-        this.props.onPhasesChanged(this.props.phases);
+    private changesSubscription: Subscription;
+
+    private get phases() {
+        return new URLSearchParams(this.props.location.search).getAll('phase');
     }
 
-    public componentWillReceiveProps(nextProps: Props) {
-        if (!deepEqual(this.props.phases, nextProps.phases)) {
-            this.props.onPhasesChanged(nextProps.phases);
+    constructor(props: RouteComponentProps<any>) {
+        super(props);
+        this.state = { workflows: null };
+    }
+
+    public componentWillMount() {
+        this.loadWorkflowsList(this.phases);
+    }
+
+    public componentWillReceiveProps(nextProps: RouteComponentProps<any>) {
+        const nextPhases = new URLSearchParams(nextProps.location.search).getAll('phase');
+        if (!deepEqual(this.phases, nextPhases)) {
+            this.loadWorkflowsList(nextPhases);
         }
     }
 
     public componentWillUnmount() {
-        if (this.props.changesSubscription) {
-            this.props.changesSubscription.unsubscribe();
-        }
+        this.ensureUnsubscribed();
     }
 
     public render() {
@@ -47,7 +50,7 @@ class Component extends React.Component<Props, any> {
                 value: (models.NODE_PHASE as any)[phase],
                 label: (models.NODE_PHASE as any)[phase],
             })),
-            selectedValues: this.props.phases,
+            selectedValues: this.phases,
             selectionChanged: (phases) => {
                 const query = phases.length > 0 ? '?' + phases.map((phase) => `phase=${phase}`).join('&') : '';
                 this.appContext.router.history.push(uiUrl(`workflows${query}`));
@@ -57,7 +60,7 @@ class Component extends React.Component<Props, any> {
             <Page title='Workflows' toolbar={{filter, breadcrumbs: [{ title: 'Workflows', path: uiUrl('workflows') }]}}>
                 <div className='argo-container'>
                     <div className='stream'>
-                        {this.props.workflows ? this.props.workflows.map((workflow) => (
+                        {this.state.workflows ? this.state.workflows.map((workflow) => (
                             <div key={workflow.metadata.name}
                                  onClick={() => this.appContext.router.history.push(uiUrl(`workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`))}>
                                 <WorkflowListItem workflow={workflow}/>
@@ -73,14 +76,45 @@ class Component extends React.Component<Props, any> {
     private get appContext(): AppContext {
         return this.context as AppContext;
     }
-}
 
-export const WorkflowsList = connect((state: AppState<State>) => {
-    return {
-        workflows: state.page.workflows,
-        phases: new URLSearchParams(state.router.location.search).getAll('phase'),
-        changesSubscription: state.page.changesSubscription,
-    };
-}, (dispatch) => ({
-    onPhasesChanged: (phases: string[]) => dispatch(actions.loadWorkflowsList(phases)),
-}))(Component);
+    private async loadWorkflowsList(phases: string[]) {
+        try {
+            this.setState({ workflows: (await services.workflows.list(phases)) });
+            let events = services.workflows.watch();
+            if (phases.length > 0) {
+                events = events.filter((event) => phases.indexOf(event.object.status.phase) > -1);
+            }
+            this.ensureUnsubscribed();
+            this.changesSubscription = events.subscribe((workflowChange) => {
+                const workflows = this.state.workflows.slice();
+                switch (workflowChange.type) {
+                    case 'ADDED':
+                    case 'MODIFIED':
+                        const index = this.state.workflows.findIndex((item) => item.metadata.name === workflowChange.object.metadata.name);
+                        if (index > -1) {
+                            workflows[index] = workflowChange.object;
+                            this.setState({ workflows });
+                        } else {
+                            workflows.unshift(workflowChange.object);
+                            this.setState({ workflows: workflows.sort(models.compareWorkflows) });
+                        }
+                        break;
+                    case 'DELETED':
+                        this.setState({ workflows: this.state.workflows.filter((item) => item.metadata.name !== workflowChange.object.metadata.name) });
+                }
+            });
+        } catch (e) {
+            // dispatch(commonActions.showNotification({
+            //     content: 'Unable to load workflows',
+            //     type: NotificationType.Error,
+            // }));
+        }
+    }
+
+    private ensureUnsubscribed() {
+        if (this.changesSubscription) {
+            this.changesSubscription.unsubscribe();
+        }
+        this.changesSubscription = null;
+    }
+}
