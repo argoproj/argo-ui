@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
 import { LogsViewer, Page, SlidingPanel } from '../../../shared/components';
-import { AppContext } from '../../../shared/redux';
+import { AppContext } from '../../../shared/context';
 import { services } from '../../../shared/services';
 
 import { WorkflowArtifacts } from '../workflow-artifacts';

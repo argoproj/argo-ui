@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
 import { MockupList, Page, TopBarFilter } from '../../../shared/components';
-import { AppContext } from '../../../shared/redux';
+import { AppContext } from '../../../shared/context';
 import { services } from '../../../shared/services';
 
 import { WorkflowListItem } from '../workflow-list-item/workflow-list-item';

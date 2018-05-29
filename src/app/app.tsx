@@ -5,7 +5,7 @@ import { Redirect, Route, RouteComponentProps, Router, Switch } from 'react-rout
 
 import { uiUrl } from './shared/base';
 import { Layout } from './shared/components';
-import { AppContext } from './shared/redux';
+import { AppContext } from './shared/context';
 
 export const history = createHistory();
 

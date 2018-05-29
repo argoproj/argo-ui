@@ -2,12 +2,16 @@ import * as classNames from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { AppContext, isActiveRoute } from '../../redux';
+import { AppContext } from '../../context';
 
 require('./nav-bar.scss');
 
 export interface NavBarProps extends React.Props<any> {
     items: Array<{ path: string; iconClassName: string; title: string; }>;
+}
+
+export function isActiveRoute(locationPath: string, path: string) {
+    return locationPath === path || locationPath.startsWith(`${path}/`);
 }
 
 export const NavBar: React.StatelessComponent<NavBarProps> = (props: NavBarProps, context: AppContext) => {

@@ -10,7 +10,3 @@ export interface AppContext {
         };
     };
 }
-
-export function isActiveRoute(locationPath: string, path: string) {
-    return locationPath === path || locationPath.startsWith(`${path}/`);
-}
