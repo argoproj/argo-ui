@@ -24,9 +24,9 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
         super(props);
     }
 
-    public componentWillReceiveProps(nextProps: LogsViewerProps) {
+    public componentDidReceiveProps(nextProps: LogsViewerProps) {
         if (this.props.source.key !== nextProps.source.key) {
-            this.refresh();
+            this.refresh(this.props.source);
         }
     }
 
@@ -41,7 +41,7 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
     }
 
     public componentDidMount() {
-        this.refresh();
+        this.refresh(this.props.source);
     }
 
     public componentWillUnmount() {
@@ -60,15 +60,15 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
         return false;
     }
 
-    private refresh() {
+    private refresh(source: LogsSource) {
         this.terminal.reset();
         this.ensureUnsubscribed();
         const onLoadComplete = () => {
-            if (this.props.source.shouldRepeat()) {
-                this.refresh();
+            if (source.shouldRepeat()) {
+                this.refresh(source);
             }
         };
-        this.subscription = this.props.source.loadLogs().subscribe((log) => {
+        this.subscription = source.loadLogs().subscribe((log) => {
             this.terminal.write(log.replace('\n', '\r\n'));
         }, onLoadComplete, onLoadComplete);
     }
