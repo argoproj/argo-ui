@@ -26,7 +26,7 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
 
     public componentWillReceiveProps(nextProps: LogsViewerProps) {
         if (this.props.source.key !== nextProps.source.key) {
-            this.refresh(this.props.source);
+            this.refresh(nextProps.source);
         }
     }
 
