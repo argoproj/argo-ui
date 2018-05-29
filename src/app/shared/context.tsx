@@ -1,5 +1,6 @@
 import * as H from 'history';
 import { match} from 'react-router';
+import { NotificationsApi, PopupApi } from './components';
 
 export interface AppContext {
     router: {
@@ -9,4 +10,9 @@ export interface AppContext {
             match: match<any>;
         };
     };
+    apis: {
+        popup: PopupApi;
+        notifications: NotificationsApi;
+    };
+    history: H.History;
 }

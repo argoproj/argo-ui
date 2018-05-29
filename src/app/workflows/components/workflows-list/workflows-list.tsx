@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
-import { MockupList, Page, TopBarFilter } from '../../../shared/components';
+import { MockupList, NotificationType, Page, TopBarFilter } from '../../../shared/components';
 import { AppContext } from '../../../shared/context';
 import { services } from '../../../shared/services';
 
@@ -16,6 +16,7 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>, { w
 
     public static contextTypes = {
         router: PropTypes.object,
+        apis: PropTypes.object,
     };
 
     private changesSubscription: Subscription;
@@ -104,10 +105,10 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>, { w
                 }
             });
         } catch (e) {
-            // dispatch(commonActions.showNotification({
-            //     content: 'Unable to load workflows',
-            //     type: NotificationType.Error,
-            // }));
+            this.appContext.apis.notifications.show({
+                content: 'Unable to load workflows',
+                type: NotificationType.Error,
+            });
         }
     }
 

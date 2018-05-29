@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
-import { LogsViewer, Page, SlidingPanel } from '../../../shared/components';
+import { LogsViewer,  NotificationType, Page, SlidingPanel } from '../../../shared/components';
 import { AppContext } from '../../../shared/context';
 import { services } from '../../../shared/services';
 
@@ -31,6 +31,7 @@ export class WorkflowDetails extends React.Component<RouteComponentProps<any>, {
 
     public static contextTypes = {
         router: PropTypes.object,
+        apis: PropTypes.object,
     };
 
     private changesSubscription: Subscription;
@@ -208,10 +209,10 @@ export class WorkflowDetails extends React.Component<RouteComponentProps<any>, {
                 this.setState({ workflow });
             });
         } catch (e) {
-            // dispatch(commonActions.showNotification({
-            //     content: 'Unable to load workflow',
-            //     type: NotificationType.Error,
-            // }));
+            this.appContext.apis.notifications.show({
+                content: 'Unable to load workflow',
+                type: NotificationType.Error,
+            });
         }
     }
 

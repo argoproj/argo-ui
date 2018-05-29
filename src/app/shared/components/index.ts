@@ -13,3 +13,6 @@ export { Duration } from './duration';
 export { SlidingPanel } from './sliding-panel/sliding-panel';
 export { LogsViewer } from './logs-viewer/logs-viewer';
 export * from './notifications/notifications';
+export * from './notifications/notification-manager';
+export * from './popup/popup';
+export * from './popup/popup-manager';
