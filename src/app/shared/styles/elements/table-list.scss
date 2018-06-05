@@ -36,6 +36,10 @@
             }
         }
 
+        &.selected {
+            background-color: $argo-color-teal-2;
+        }
+
         .argo-table-list--clickable & {
             cursor: pointer;
 

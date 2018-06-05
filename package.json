@@ -1,6 +1,6 @@
 {
     "name": "argo-ui",
-    "version": "2.1.1-alpha4",
+    "version": "2.1.1-alpha5",
     "main": "./bundle/lib/index.js",
     "types": "./bundle/lib/index.d.ts",
     "license": "MIT",
@@ -13,6 +13,7 @@
         "build": "yarn build:ui && yarn build:api",
         "build:ui": "webpack --config ./src/app/webpack.config.js",
         "build:api": "tsc -p ./src/api/tsconfig.json",
+        "build:storybook": "build-storybook -o ./dist/storybook",
         "dev": "nf start",
         "dev:ui": "webpack-dev-server --config ./src/app/webpack.config.js",
         "dev:api": "TS_NODE_PROJECT=./src/api/tsconfig.json nodemon --nolazy --inspect -r ts-node/register ./src/api/main.ts",

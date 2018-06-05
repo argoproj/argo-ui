@@ -1,8 +1,15 @@
 import { storiesOf } from '@storybook/react';
+import * as classNames from 'classnames';
 import * as React from 'react';
 
-storiesOf('Table', module)
-    .add('default', () => {
+class TableExample extends React.Component<{}, {selectedIndex: number}> {
+
+    constructor(props: any) {
+        super(props);
+        this.state = { selectedIndex: 0 };
+    }
+
+    public render() {
         const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         return (
             <div className='argo-table-list argo-table-list--clickable'>
@@ -14,7 +21,7 @@ storiesOf('Table', module)
                     </div>
                 </div>
                 {items.map((item, i) => (
-                    <div className='argo-table-list__row' key={i}>
+                    <div className={classNames('argo-table-list__row', { selected: i === this.state.selectedIndex })} key={i} onClick={() => this.setState({ selectedIndex: i })}>
                         <div className='row'>
                             <div className='columns small-2'> Cell 1 {item} </div>
                             <div className='columns small-5'> Cell 2 {item}</div>
@@ -24,4 +31,8 @@ storiesOf('Table', module)
                 ))}
             </div>
         );
-    });
+    }
+}
+
+storiesOf('Table', module)
+    .add('default', () => <TableExample/>);
