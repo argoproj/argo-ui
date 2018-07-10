@@ -1,6 +1,6 @@
 {
     "name": "argo-ui",
-    "version": "2.1.1-alpha6",
+    "version": "2.1.1-alpha7",
     "main": "./bundle/lib/index.js",
     "types": "./bundle/lib/index.d.ts",
     "license": "MIT",
@@ -52,6 +52,7 @@
         "yargs": "^11.0.0"
     },
     "devDependencies": {
+        "@dump247/storybook-state": "^1.5.0",
         "@storybook/addon-actions": "^3.3.14",
         "@storybook/addon-links": "^3.3.14",
         "@storybook/addons": "^3.3.14",

@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { PopupProps  } from './popup';
 
 export interface PopupApi {
-    confirm(title: string, message: string | React.ReactNode): Promise<boolean>;
+    confirm(title: string, message: string | React.ComponentType): Promise<boolean>;
 }
 
 export class PopupManager implements PopupApi {
@@ -13,7 +13,9 @@ export class PopupManager implements PopupApi {
         return this.popupPropsSubject.asObservable();
     }
 
-    public confirm(title: string, message: string): Promise<boolean> {
+    public confirm(title: string, message: string | React.ComponentType): Promise<boolean> {
+        const content = typeof message === 'string' && (() => (<p>{message}</p>)) || message as React.ComponentType;
+
         return new Promise((resolve) => {
             const closeAndResolve = (result: boolean) => {
                 this.popupPropsSubject.next(null);
@@ -24,11 +26,7 @@ export class PopupManager implements PopupApi {
                 title: (
                     <span>{title} <i className='argo-icon-close' onClick={() => closeAndResolve(false)}/></span>
                 ),
-                content: (
-                    <div>
-                        <p>{message}</p>
-                    </div>
-                ),
+                content,
                 footer: (
                     <div>
                         <button className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>Yes</button> <button

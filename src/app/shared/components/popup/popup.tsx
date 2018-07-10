@@ -4,7 +4,7 @@ import * as React from 'react';
 export interface PopupProps extends React.Props<any> {
     icon?: { name: string; color: string; };
     title: string | React.ReactNode;
-    content?: React.ReactNode;
+    content?: React.ComponentType;
     footer?: React.ReactNode;
 }
 
@@ -23,7 +23,7 @@ export const Popup = (props: PopupProps) => (
                     </div>
                 }
                 <div className={classNames('columns', {'large-10': !!props.icon, 'large-12': !props.icon})}>
-                    {props.content}
+                    <props.content/>
                 </div>
             </div>
 
