@@ -6,8 +6,8 @@ export const Checkbox = (props: {
         onChange?: (val: boolean) => any,
         id?: string,
     }) => (
-    <div className='argo-checkbox'>
+    <span className='argo-checkbox'>
         <input id={props.id} type='checkbox' disabled={props.disabled} checked={props.checked} onChange={() => props.onChange && props.onChange(!props.checked)}/>
         <span><i className='fa fa-check'/></span>
-    </div>
+    </span>
 );
