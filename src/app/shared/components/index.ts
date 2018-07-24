@@ -16,3 +16,4 @@ export * from './notifications/notifications';
 export * from './notifications/notification-manager';
 export * from './popup/popup';
 export * from './popup/popup-manager';
+export { Select, SelectOption, SelectProps } from './select/select';

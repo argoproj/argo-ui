@@ -1,2 +1,2 @@
-ui: yarn dev:ui
-api: yarn dev:api
+ui: yarn start:ui
+api: yarn start:api

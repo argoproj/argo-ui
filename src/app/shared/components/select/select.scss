@@ -1,0 +1,84 @@
+@import '../../styles/config';
+
+.select {
+    position: relative;
+
+    &__value {
+        position: relative;
+        padding: 8px 20px 8px 0;
+        font-size: 15px;
+        border-bottom: 2px solid #ccc;
+        transition: border .2s;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    &__value-arrow {
+        position: absolute;
+        top: 8px;
+        right: 0;
+    }
+    
+    &__options {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 10;
+        overflow: auto;
+        max-height: 320px;
+        background-color: $white-color;
+        box-shadow: 0 0 4px rgba(#000, .2);
+        transition: opacity .2s, transform .2s, visibility .2s;
+    
+        &.to-top {
+            top: auto;
+            bottom: 0;
+        }
+    
+        &:not(.opened) {
+            transform: translateY(-30%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .2s, transform .2s .2s, visibility .2s;
+        }
+    }
+    
+    &__search {
+        width: 100%;
+        padding: 10px 12px;
+        color: $argo-color-gray-5;
+        border: 0;
+        background: transparent;
+    
+        &::placeholder {
+            color: $argo-color-gray-4;
+        }
+    }
+    
+    &__option {
+        padding: 10px 12px;
+        color: $argo-color-gray-6;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    
+        &:hover {
+            background-color: $argo-color-gray-1;
+        }
+    
+        &.selected {
+            background-color: $argo-color-gray-2;
+        }
+    }
+    
+    &__empty {
+        padding: 10px 12px;
+        color: $argo-color-gray-4;
+    }
+    
+}
+
