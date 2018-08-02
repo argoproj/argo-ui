@@ -3,7 +3,7 @@ import { DropDown } from './dropdown/dropdown';
 
 export interface MenuItem {
     title: string;
-    className?: string;
+    iconClassName?: string;
     action: () => any;
 }
 
@@ -21,8 +21,9 @@ export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
             <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown}>
                 <ul>
                     {this.props.items.map((item) => <li
-                        className={item.className}
-                        onClick={(event) => this.onItemClick(item, event)} key={item.title}>{item.title}</li>)}
+                        onClick={(event) => this.onItemClick(item, event)} key={item.title}>
+                        {item.iconClassName && <i className={item.iconClassName}/>} {item.title}
+                        </li>)}
                 </ul>
             </DropDown>
         );

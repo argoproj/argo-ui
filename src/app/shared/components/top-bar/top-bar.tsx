@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Checkbox } from '../checkbox';
+import { DropDownMenu } from '../dropdown-menu';
 import { DropDown } from '../dropdown/dropdown';
 
 require('./top-bar.scss');
@@ -19,7 +20,7 @@ export interface ActionMenu {
     items: {
         action: () => any;
         title: string;
-        className?: string;
+        iconClassName?: string;
     }[];
 }
 
@@ -81,18 +82,11 @@ const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => 
 
 const renderActionMenu = (actionMenu: ActionMenu) => (
     <div className='top-bar__action-menu'>
-        <DropDown isMenu={true} anchor={() => (
+        <DropDownMenu items={actionMenu.items} anchor={() => (
             <a className='argo-button argo-button--radius argo-button--has-icon'>
                 <i aria-hidden='true' className={actionMenu.className || 'fa fa-ellipsis-v'}/>
-            </a>)}>
-            <ul>
-                {actionMenu.items.map((item, i) => (
-                    <li key={i} onClick={() => item.action()}>
-                        {item.className && <i className={item.className}/>} {item.title}
-                    </li>
-                ))}
-            </ul>
-        </DropDown>
+            </a>)}
+        />
     </div>
 );
 

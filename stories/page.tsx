@@ -16,7 +16,14 @@ const breadcrumbs = [{
 const actionMenu = {
     className: 'fa fa-plus',
     items: [{
-        title: 'New Item',
+        title: 'New Item1',
+        iconClassName: 'fa fa-history',
+        action: () => {
+            // do nothing
+        },
+    }, {
+        title: 'New Item2',
+        iconClassName: 'fa fa-history',
         action: () => {
             // do nothing
         },
