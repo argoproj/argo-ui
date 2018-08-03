@@ -109,7 +109,7 @@ export class Select extends React.Component<SelectProps, State> {
                 opened: true,
             });
 
-            setTimeout(() => this.searchEl.focus(), 1000);
+            setTimeout(() => this.searchEl && this.searchEl.focus(), 1000);
         }
     }
 
