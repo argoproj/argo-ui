@@ -3,13 +3,13 @@ import * as moment from 'moment';
 import * as React from 'react';
 
 import * as models from '../../../../models';
-import { Duration, Tabs, Utils } from '../../../shared/components';
+import { Duration, Tabs, Ticker, Utils } from '../../../shared/components';
 import { services } from '../../../shared/services';
 
 require('./workflow-node-info.scss');
 
-function nodeDuration(node: models.NodeStatus) {
-    const endTime = node.finishedAt ? moment(node.finishedAt) : moment();
+function nodeDuration(node: models.NodeStatus, now: moment.Moment) {
+    const endTime = node.finishedAt ? moment(node.finishedAt) : now;
     return endTime.diff(moment(node.startedAt)) / 1000;
 }
 
@@ -42,7 +42,11 @@ export const WorkflowNodeSummary = (props: Props) => {
         ...(props.node.message ? [{title: 'MESSAGE', value: <span className='workflow-node-info__multi-line'>{props.node.message}</span>}] : []),
         {title: 'START TIME', value: props.node.startedAt},
         {title: 'END TIME', value: props.node.finishedAt || '-'},
-        {title: 'DURATION', value: <Duration durationMs={nodeDuration(props.node)}/> },
+        {title: 'DURATION', value: (
+            <Ticker disabled={props.workflow.status && props.workflow.status.phase !== models.NODE_PHASE.RUNNING}>
+                {(now) => <Duration durationMs={nodeDuration(props.node, now)}/>}
+            </Ticker>
+        ) },
     ];
     const template = props.workflow.spec.templates.find((item) => item.name === props.node.templateName);
     return (
