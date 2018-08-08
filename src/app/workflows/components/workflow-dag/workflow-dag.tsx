@@ -62,7 +62,7 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
         });
         const size = this.getGraphSize(graph.nodes().map((id) => graph.node(id)));
         return (
-            <div className='workflow-dag' style={{width: size.width + 10, height: size.height + 10}}>
+            <div className='workflow-dag' style={{width: size.width + 10, height: size.height + 100}}>
                 {graph.nodes().map((id) => {
                     const node = graph.node(id) as models.NodeStatus & dagre.Node;
                     const shortName = Utils.shortNodeName(node);
@@ -111,7 +111,7 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
     }
 
     private isVirtual(node: models.NodeStatus) {
-        return (node.type === 'StepGroup' || node.type === 'DAG') && !!node.boundaryID;
+        return (node.type === 'StepGroup' || node.type === 'DAG' || node.type === 'TaskGroup') && !!node.boundaryID;
     }
 
     private getGraphSize(nodes: dagre.Node[]): { width: number, height: number} {

@@ -584,7 +584,7 @@ export function compareWorkflows(first: Workflow, second: Workflow) {
     return moment(jStart).diff(iStart);
 }
 
-export type NodeType = 'Pod' | 'Steps' | 'StepGroup' | 'DAG' | 'Retry' | 'Skipped';
+export type NodeType = 'Pod' | 'Steps' | 'StepGroup' | 'DAG' | 'Retry' | 'Skipped' | 'TaskGroup';
 
 export interface NodeStatus {
     /**

@@ -119,7 +119,9 @@ export class WorkflowTimeline extends React.Component<WorkflowTimelineProps, Wor
     }
 
     public updateWidth() {
-        this.setState({ parentWidth: (this.container.offsetParent || window.document.body).clientWidth - NODE_NAME_WIDTH });
+        if (this.container) {
+            this.setState({ parentWidth: (this.container.offsetParent || window.document.body).clientWidth - NODE_NAME_WIDTH });
+        }
     }
 
     private ensureRunningWorkflowRefreshing(workflow: models.Workflow) {

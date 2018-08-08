@@ -52,7 +52,7 @@
                 width: 20px;
                 height: 20px;
                 border: 1px dashed $argo-color-gray-5;
-                transform: translate(24px);
+                transform: translateX(24px) translateY(15px);
             }
 
             .workflow-dag__node-status, .workflow-dag__node-title {

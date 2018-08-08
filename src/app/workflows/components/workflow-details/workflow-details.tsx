@@ -13,6 +13,7 @@ import { services } from '../../../shared/services';
 import { WorkflowArtifacts } from '../workflow-artifacts';
 import { WorkflowDag } from '../workflow-dag/workflow-dag';
 import { WorkflowNodeInfo } from '../workflow-node-info/workflow-node-info';
+import { WorkflowParametersPanel } from '../workflow-parameters-panel';
 import { WorkflowSummaryPanel } from '../workflow-summary-panel';
 import { WorkflowTimeline } from '../workflow-timeline/workflow-timeline';
 import { WorkflowYamlViewer } from '../workflow-yaml-viewer/workflow-yaml-viewer';
@@ -185,6 +186,12 @@ export class WorkflowDetails extends React.Component<RouteComponentProps<any>, {
             <div className='argo-container'>
                 <div className='workflow-details__content'>
                     <WorkflowSummaryPanel workflow={this.state.workflow}/>
+                    {this.state.workflow.spec.arguments && this.state.workflow.spec.arguments.parameters && (
+                        <React.Fragment>
+                            <h6>Parameters</h6>
+                            <WorkflowParametersPanel parameters={this.state.workflow.spec.arguments.parameters}/>
+                        </React.Fragment>
+                    )}
                     <h6>Artifacts</h6>
                     <WorkflowArtifacts workflow={this.state.workflow}/>
                 </div>
