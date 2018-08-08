@@ -8,7 +8,7 @@ export const WorkflowParametersPanel = (props: { parameters: Parameter[] }) => (
             {props.parameters.map((param) => (
                 <div className='row white-box__details-row' key={param.name}>
                     <div className='columns small-3'>
-                        {param.value}
+                        {param.name}
                     </div>
                     <div className='columns small-9'>{param.value}</div>
                 </div>
