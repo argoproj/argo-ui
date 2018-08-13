@@ -15,7 +15,9 @@ import * as consoleProxy from './console-proxy';
 import { decodeBase64, reactifyStringStream, streamServerEvents } from './utils';
 
 function serve<T>(res: express.Response, action: () => Promise<T>) {
-    action().then((val) => res.send(val)).catch((err) => res.status(500).send(err));
+    action().then((val) => res.send(val)).catch((err) => {
+        res.status(500).send(err);
+    });
 }
 
 function fileToString(filePath: string): Promise<string> {
@@ -97,24 +99,32 @@ export function create(
         const node = workflow.status.nodes[req.params.nodeId];
         const artifact = node.outputs.artifacts.find((item) => item.name === req.params.artifactName);
         if (artifact.s3) {
-            const secretAccessKey = decodeBase64((await core.ns(
-                workflow.metadata.namespace).secrets.get(artifact.s3.secretKeySecret.name)).data[artifact.s3.secretKeySecret.key]);
-            const accessKeyId = decodeBase64((await core.ns(
-                workflow.metadata.namespace).secrets.get(artifact.s3.accessKeySecret.name)).data[artifact.s3.accessKeySecret.key]);
-            const s3 = new aws.S3({
-                secretAccessKey, accessKeyId, endpoint: `http://${artifact.s3.endpoint}`, s3ForcePathStyle: true, signatureVersion: 'v4' });
-            s3.getObject({ Bucket: artifact.s3.bucket, Key: artifact.s3.key }, (err, data) => {
-                if (err) {
-                    // tslint:disable-next-line:no-console
-                    console.error(err);
-                    res.send({ code: 'INTERNAL_ERROR', message: `Unable to download artifact` });
-                } else {
-                    const readStream = new nodeStream.PassThrough();
-                    readStream.end(data.Body);
-                    res.set('Content-disposition', 'attachment; filename=' + path.basename(artifact.s3.key));
-                    readStream.pipe(res);
-                }
-            });
+            try {
+                const secretAccessKey = decodeBase64((await core.ns(
+                    workflow.metadata.namespace).secrets.get(artifact.s3.secretKeySecret.name)).data[artifact.s3.secretKeySecret.key]).trim();
+                const accessKeyId = decodeBase64((await core.ns(
+                    workflow.metadata.namespace).secrets.get(artifact.s3.accessKeySecret.name)).data[artifact.s3.accessKeySecret.key]).trim();
+                const s3 = new aws.S3({
+                    region: artifact.s3.region, secretAccessKey, accessKeyId, endpoint: `http://${artifact.s3.endpoint}`, s3ForcePathStyle: true, signatureVersion: 'v4' });
+                s3.getObject({ Bucket: artifact.s3.bucket, Key: artifact.s3.key }, (err, data) => {
+                    if (err) {
+                        // tslint:disable-next-line:no-console
+                        console.error(err);
+                        res.send({ code: 'INTERNAL_ERROR', message: 'Unable to download artifact' });
+                    } else {
+                        const readStream = new nodeStream.PassThrough();
+                        readStream.end(data.Body);
+                        res.set('Content-disposition', 'attachment; filename=' + path.basename(artifact.s3.key));
+                        readStream.pipe(res);
+                    }
+                });
+            } catch (e) {
+                // tslint:disable-next-line:no-console
+                console.error(e);
+                res.send({ code: 'INTERNAL_ERROR', message: 'Unable to download artifact' });
+            }
+        } else {
+            res.send({ code: 'INTERNAL_ERROR', message: 'Artifact source is not supported' });
         }
     });
     app.get('/api/logs/:namespace/:nodeId/:container', async (req: express.Request, res: express.Response) => {
