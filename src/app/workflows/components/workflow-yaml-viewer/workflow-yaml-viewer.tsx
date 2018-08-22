@@ -35,7 +35,7 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
             return this.addCounterToDisplayedFiles(itemStr);
         }).join('\n\n');
         return (
-            <div className='workflow-yaml-viewer' dangerouslySetInnerHTML={{ __html: html }} ref={(container) => this.container = container}/>
+            <div className='workflow-yaml-viewer' dangerouslySetInnerHTML={{ __html: html }} ref={(container) => this.container = container} />
         );
     }
 
@@ -46,8 +46,15 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
             .forEach((item) => {
                 if (item !== '') {
                     if (item.indexOf('<span>') !== -1) {
+                        item = item.match(/^<span>\s*/)[0] + item.substr(6)
                         item = `<li class="highlight">${item}</li>`;
                     } else {
+                        item = item.match(/^\s*/)[0] + item;
+                        //special treatment to beutify resource templates
+                        if (item.replace(/\s+/g, '').substr(0, 8) == 'manifest') {
+                            this.formatManifest(item, newMultilineStringWithCounters);
+                            return;
+                        }
                         item = `<li>${item}</li>`;
                     }
                 }
@@ -111,5 +118,17 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
                 }
             });
         }
+    }
+
+    private formatManifest(item: string, newMultilineStringWithCounters: string[]) {
+        const index = item.indexOf("manifest:")
+        item = item.substr(0, index + 10) + "\\n" + item.substr(index + 10)
+        item = item.replace(/"/, "")
+        item = item.replace(/\\"/g, '"')
+        console.log(item)
+        newMultilineStringWithCounters.push(`<li>${item.substr(0, index)}manifest: |`)
+        item.split("\\n").slice(1).slice(0, -1).forEach((line) => {
+            newMultilineStringWithCounters.push(`<li>${item.substr(0, index)}  ${line}</li>`);
+        });
     }
 }
