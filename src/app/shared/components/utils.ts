@@ -14,6 +14,9 @@ export const Utils = {
             case NODE_PHASE.RUNNING:
                 classes = ['fa-circle-o-notch', 'status-icon--running', 'status-icon--spin'];
                 break;
+            case NODE_PHASE.PENDING:
+                classes = ['fa-clock-o', 'status-icon--pending', 'status-icon--slow-spin'];
+                break;
             default:
                 classes = ['fa-clock-o', 'status-icon--init'];
                 break;

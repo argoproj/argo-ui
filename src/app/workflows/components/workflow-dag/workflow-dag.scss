@@ -91,6 +91,19 @@
             }
         }
 
+        &--pending {
+            background-color: $argo-status-warning-color;
+            &::after {
+                @include fa-icon;
+                content: $fa-var-clock-o;
+                font-size: 1em;
+                animation-name: spin;
+                animation-duration: 10000ms;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+        }
+
         &--running {
             background-color: $argo-running-color;
             &::after {
