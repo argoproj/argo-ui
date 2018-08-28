@@ -832,9 +832,10 @@ export interface WorkflowStep {
     withParam?: string;
 }
 
-export type NodePhase = 'Running' | 'Succeeded' | 'Skipped' | 'Failed' | 'Error';
+export type NodePhase = 'Pending' | 'Running' | 'Succeeded' | 'Skipped' | 'Failed' | 'Error';
 
 export const NODE_PHASE = {
+  PENDING: 'Pending',
   RUNNING: 'Running',
   SUCCEEDED: 'Succeeded',
   SKIPPED: 'Skipped',

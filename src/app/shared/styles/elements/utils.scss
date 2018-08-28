@@ -21,6 +21,10 @@
         color: $argo-running-color;
     }
 
+    &--pending {
+        color: $argo-status-warning-color;
+    }
+
     &--init {
         color: $argo-init-color;
     }
@@ -28,6 +32,13 @@
     &--spin {
         animation-name: spin;
         animation-duration: 4000ms;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    &--slow-spin {
+        animation-name: spin;
+        animation-duration: 10000ms;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
     }
