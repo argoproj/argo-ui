@@ -1,7 +1,7 @@
 import deepEqual = require('deep-equal');
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
@@ -62,9 +62,10 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>, { w
                 <div className='argo-container'>
                     <div className='stream'>
                         {this.state.workflows ? this.state.workflows.map((workflow) => (
-                            <div key={workflow.metadata.name}
-                                 onClick={() => this.appContext.router.history.push(uiUrl(`workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`))}>
+                            <div key={workflow.metadata.name}>
+                                <Link to={uiUrl(`workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`)}>
                                 <WorkflowListItem workflow={workflow}/>
+                                </Link>
                             </div>
                         )) :
                         <MockupList height={150} marginTop={30}/>}
