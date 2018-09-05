@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { Observable, Subscription } from 'rxjs';
+import { Checkbox } from '../checkbox';
 
 export interface SelectOption {
     value: string;
@@ -8,7 +9,7 @@ export interface SelectOption {
 }
 
 interface State {
-    selected: SelectOption;
+    selected: string[];
     toTop: boolean;
     opened: boolean;
     search: string;
@@ -16,9 +17,11 @@ interface State {
 
 export interface SelectProps {
     placeholder?: string;
-    value?: string;
+    value?: string | string[];
     options: Array<SelectOption | string>;
     onChange?: (option: SelectOption) => any;
+    onMultiChange?: (options: SelectOption[]) => any;
+    multiSelect?: boolean;
 }
 
 require('./select.scss');
@@ -30,13 +33,17 @@ function normalizeOptions(options: Array<SelectOption | string>) {
 export class Select extends React.Component<SelectProps, State> {
 
     public static getDerivedStateFromProps(nextProps: SelectProps, prevState: State): Partial<State> {
-        const prevSelected = prevState.selected && prevState.selected.value || null;
-        const nextSelected = nextProps.value === null || nextProps.value === undefined ? null : nextProps.value;
-        if (prevSelected !== nextProps.value) {
-            return {
-                selected: nextSelected != null ? normalizeOptions(nextProps.options).find((option) => option.value === nextProps.value) : null,
-            };
+        let selected: Array<string> = [];
+        if (nextProps.value) {
+            selected = nextProps.value instanceof Array ? nextProps.value as Array<string> : [nextProps.value];
         }
+        const a = new Set(selected);
+        const b = new Set(prevState.selected);
+        const isEqual = a.size === b.size && Array.from(a).every((value) => b.has(value));
+        if (!isEqual) {
+            return { selected };
+        }
+
         return null;
     }
 
@@ -46,8 +53,7 @@ export class Select extends React.Component<SelectProps, State> {
 
     public constructor(props: SelectProps) {
         super(props);
-        const selected = props.value ? normalizeOptions(props.options).find((option) => option.value === props.value) : null;
-        this.state = { opened: false, search: '', selected, toTop: false };
+        this.state = { opened: false, search: '', selected: [], toTop: false };
     }
 
     public componentDidMount() {
@@ -65,13 +71,14 @@ export class Select extends React.Component<SelectProps, State> {
 
     public render() {
         let options = normalizeOptions(this.props.options);
+        const selectedOptions = options.filter((item) => this.state.selected.includes(item.value));
         if (this.state.search) {
             options = options.filter((item) => item.title.toLocaleLowerCase().includes(this.state.search.toLocaleLowerCase()));
         }
         return (
             <div className='select' ref={(el) => this.el = el}>
                 <div className='select__value' onClick={() => this.openDropdown()}>
-                    {this.state.selected ? this.state.selected.title : this.props.placeholder || ''}
+                    {selectedOptions.length > 0 ? selectedOptions.map((item) => item.title).join(', ') : this.props.placeholder || ''}
                     <div className='select__value-arrow'><i className='argo-icon-expand-arrow'/></div>
                 </div>
                 <div className={classNames('select__options', { 'opened': this.state.opened, 'to-top': this.state.toTop })}>
@@ -79,15 +86,21 @@ export class Select extends React.Component<SelectProps, State> {
                         onChange={(event) => this.onSearchChange(event)} ref={(el) => this.searchEl = el} />
                     {options.map((option) => (
                         <div key={option.value}
-                                className={classNames('select__option', { selected: this.state.selected && option.value === this.state.selected.value })}
+                                className={classNames('select__option', { selected: this.isSelected(option) })}
                                 onClick={() => this.select(option)}>
-                            {option.title}
+                            {this.props.multiSelect && <Checkbox checked={this.isSelected(option)}/>} <span>
+                                {option.title}
+                            </span>
                         </div>
                     ))}
                     {options.length === 0 && <div className='select__empty'>No results</div>}
                 </div>
             </div>
         );
+    }
+
+    private isSelected(option: SelectOption) {
+        return !!this.state.selected.includes(option.value);
     }
 
     private onSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -114,9 +127,24 @@ export class Select extends React.Component<SelectProps, State> {
     }
 
     private select(option: SelectOption) {
-        this.setState({ selected: option, opened: false, search: '' });
-        if (this.props.onChange) {
-            this.props.onChange(option);
+        if (this.props.multiSelect) {
+            const index = this.state.selected.indexOf(option.value);
+            const nextSelected = this.state.selected.slice();
+            if (index > -1) {
+                nextSelected.splice(index, 1);
+            } else {
+                nextSelected.push(option.value);
+            }
+            this.setState({ selected: nextSelected, opened: true });
+            if (this.props.onMultiChange) {
+                const selectedOptions = normalizeOptions(this.props.options).filter((item) => nextSelected.includes(item.value));
+                this.props.onMultiChange(selectedOptions);
+            }
+        } else {
+            this.setState({ selected: [option.value], opened: false, search: '' });
+            if (this.props.onChange) {
+                this.props.onChange(option);
+            }
         }
     }
 }

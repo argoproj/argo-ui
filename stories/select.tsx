@@ -20,4 +20,16 @@ storiesOf('Select', module)
                     />
             </div>
         ))),
+    ).add('multi-select', withState({ selected: 'option1' })(({store}: { store: Store<any> }) => (
+        () => (
+            <div>
+                <Select
+                    value={store.state.selected}
+                    multiSelect={true}
+                    placeholder='Select something'
+                    options={['option1', { value: 'option2', title: 'Option 2' }]}
+                    onMultiChange={(options) => store.set({ selected: options.map((item) => item.value) })}
+                    />
+            </div>
+        ))),
     );
