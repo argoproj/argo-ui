@@ -11,6 +11,7 @@ app.create(
   argv.uiBaseHref || '/',
   argv.inCluster === 'true',
   argv.namespace || 'default',
+  argv.forceNamespaceIsolation === 'true',
   argv.instanceId || undefined,
   argv.crdVersion || 'v1alpha1',
 ).listen(8001);

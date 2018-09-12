@@ -37,6 +37,7 @@ export function create(
         uiBaseHref: string,
         inCluster: boolean,
         namespace: string,
+        forceNamespaceIsolation: boolean,
         instanceId: string,
         version,
         group = 'argoproj.io') {
@@ -64,15 +65,17 @@ export function create(
 
     app.get('/api/workflows', (req, res) => serve(res, async () => {
         const labelSelector = getWorkflowLabelSelector(req);
-        const workflowList = await crd.workflows.get({
+
+        const workflowList = await (forceNamespaceIsolation ? crd.ns(namespace) : crd).workflows.get({
             qs: { labelSelector: labelSelector.join(',') },
         }) as models.WorkflowList;
+
         workflowList.items.sort(models.compareWorkflows);
         return workflowList;
     }));
 
     app.get('/api/workflows/:namespace/:name',
-        async (req, res) => serve(res, () => crd.ns(req.params.namespace).workflows.get(req.params.name)));
+        async (req, res) => serve(res, () => (forceNamespaceIsolation ? crd.ns(namespace) : crd.ns(req.params.namespace)).workflows.get(req.params.name)));
 
     app.get('/api/workflows/live', async (req, res) => {
         let updatesSource = new Observable((observer: Observer<any>) => {
@@ -84,9 +87,9 @@ export function create(
             stream = stream.pipe(new JSONStream());
             stream.on('data', (data) => data && observer.next(data));
         });
-        if (req.query.namespace) {
+        if (forceNamespaceIsolation || req.query.namespace) {
             updatesSource = updatesSource.filter((change) => {
-                return change.object.metadata.namespace === req.query.namespace;
+                return change.object.metadata.namespace === forceNamespaceIsolation ? namespace : req.query.namespace;
             });
         }
         if (req.query.name) {
@@ -94,8 +97,13 @@ export function create(
         }
         streamServerEvents(req, res, updatesSource, (item) => JSON.stringify(item));
     });
+
+    function getNamespaceCrd(req) {
+        return (forceNamespaceIsolation ? crd.ns(namespace) : crd.ns(req.params.namespace));
+    }
+
     app.get('/api/workflows/:namespace/:name/artifacts/:nodeId/:artifactName', async (req, res) => {
-        const workflow: models.Workflow = await crd.ns(req.params.namespace).workflows.get(req.params.name);
+        const workflow: models.Workflow = await getNamespaceCrd(req).workflows.get(req.params.name);
         const node = workflow.status.nodes[req.params.nodeId];
         const artifact = node.outputs.artifacts.find((item) => item.name === req.params.artifactName);
         if (artifact.s3) {
@@ -127,9 +135,14 @@ export function create(
             res.send({ code: 'INTERNAL_ERROR', message: 'Artifact source is not supported' });
         }
     });
+
+    function getNamespace(req: express.Request) {
+        return forceNamespaceIsolation ? namespace : req.query.namespace;
+    }
+
     app.get('/api/logs/:namespace/:nodeId/:container', async (req: express.Request, res: express.Response) => {
         const logsSource = reactifyStringStream(
-            core.ns(req.params.namespace).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
+            core.ns(getNamespace(req)).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
         streamServerEvents(req, res, logsSource, (item) => item.toString());
     });
 
