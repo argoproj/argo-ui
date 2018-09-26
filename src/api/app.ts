@@ -8,15 +8,27 @@ import * as Api from 'kubernetes-client';
 import * as path from 'path';
 import { Observable, Observer } from 'rxjs';
 import * as nodeStream from 'stream';
+import * as winston from 'winston';
 
 import * as models from '../models';
 import * as consoleProxy from './console-proxy';
 
 import { decodeBase64, reactifyStringStream, streamServerEvents } from './utils';
 
+const logger = winston.createLogger({
+    transports: [new winston.transports.Console({ format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.simple(),
+    ) })],
+});
+
 function serve<T>(res: express.Response, action: () => Promise<T>) {
     action().then((val) => res.send(val)).catch((err) => {
+        if (err instanceof Error) {
+            err = {...err, message: err.message};
+        }
         res.status(500).send(err);
+        logger.error(err);
     });
 }
 
@@ -98,52 +110,77 @@ export function create(
         streamServerEvents(req, res, updatesSource, (item) => JSON.stringify(item));
     });
 
-    function getNamespaceCrd(req) {
-        return (forceNamespaceIsolation ? crd.ns(namespace) : crd.ns(req.params.namespace));
-    }
-
-    app.get('/api/workflows/:namespace/:name/artifacts/:nodeId/:artifactName', async (req, res) => {
-        const workflow: models.Workflow = await getNamespaceCrd(req).workflows.get(req.params.name);
-        const node = workflow.status.nodes[req.params.nodeId];
-        const artifact = node.outputs.artifacts.find((item) => item.name === req.params.artifactName);
-        if (artifact.s3) {
-            try {
-                const secretAccessKey = decodeBase64((await core.ns(
-                    workflow.metadata.namespace).secrets.get(artifact.s3.secretKeySecret.name)).data[artifact.s3.secretKeySecret.key]).trim();
-                const accessKeyId = decodeBase64((await core.ns(
-                    workflow.metadata.namespace).secrets.get(artifact.s3.accessKeySecret.name)).data[artifact.s3.accessKeySecret.key]).trim();
-                const s3 = new aws.S3({
-                    region: artifact.s3.region, secretAccessKey, accessKeyId, endpoint: `http://${artifact.s3.endpoint}`, s3ForcePathStyle: true, signatureVersion: 'v4' });
-                s3.getObject({ Bucket: artifact.s3.bucket, Key: artifact.s3.key }, (err, data) => {
-                    if (err) {
-                        // tslint:disable-next-line:no-console
-                        console.error(err);
-                        res.send({ code: 'INTERNAL_ERROR', message: 'Unable to download artifact' });
-                    } else {
-                        const readStream = new nodeStream.PassThrough();
-                        readStream.end(data.Body);
-                        res.set('Content-disposition', 'attachment; filename=' + path.basename(artifact.s3.key));
-                        readStream.pipe(res);
-                    }
-                });
-            } catch (e) {
-                // tslint:disable-next-line:no-console
-                console.error(e);
-                res.send({ code: 'INTERNAL_ERROR', message: 'Unable to download artifact' });
-            }
-        } else {
-            res.send({ code: 'INTERNAL_ERROR', message: 'Artifact source is not supported' });
-        }
-    });
-
     function getNamespace(req: express.Request) {
         return forceNamespaceIsolation ? namespace : req.query.namespace;
     }
 
-    app.get('/api/logs/:namespace/:nodeId/:container', async (req: express.Request, res: express.Response) => {
-        const logsSource = reactifyStringStream(
-            core.ns(getNamespace(req)).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
-        streamServerEvents(req, res, logsSource, (item) => item.toString());
+    function getWorkflow(ns: string, name: string): Promise<models.Workflow> {
+        return crd.ns(ns).workflows.get(name);
+    }
+
+    function loadNodeArtifact(wf: models.Workflow, nodeId: string, artifactName: string): Promise<{ data: Buffer, fileName: string }> {
+        return new Promise(async (resolve, reject) => {
+            const node = wf.status.nodes[nodeId];
+            const artifact = node.outputs.artifacts.find((item) => item.name === artifactName);
+            if (artifact.s3) {
+                try {
+                    const secretAccessKey = decodeBase64((await core.ns(
+                        wf.metadata.namespace).secrets.get(artifact.s3.secretKeySecret.name)).data[artifact.s3.secretKeySecret.key]).trim();
+                    const accessKeyId = decodeBase64((await core.ns(
+                        wf.metadata.namespace).secrets.get(artifact.s3.accessKeySecret.name)).data[artifact.s3.accessKeySecret.key]).trim();
+                    const s3 = new aws.S3({
+                        region: artifact.s3.region, secretAccessKey, accessKeyId, endpoint: `http://${artifact.s3.endpoint}`, s3ForcePathStyle: true, signatureVersion: 'v4' });
+                    s3.getObject({ Bucket: artifact.s3.bucket, Key: artifact.s3.key }, (err, data) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve({ data: data.Body as Buffer, fileName: path.basename(artifact.s3.key) });
+                        }
+                    });
+                } catch (e) {
+                    reject(e);
+                }
+            } else {
+                reject({ code: 'INTERNAL_ERROR', message: 'Artifact source is not supported' });
+            }
+        });
+    }
+
+    app.get('/api/workflows/:namespace/:name/artifacts/:nodeId/:artifactName', async (req, res) => {
+        try {
+            const wf = await getWorkflow(getNamespace(req), req.params.name);
+            const artifact = await loadNodeArtifact(wf, req.params.nodeId, req.params.artifactName);
+            const readStream = new nodeStream.PassThrough();
+            readStream.end(artifact.data);
+            res.set('Content-disposition', 'attachment; filename=' + artifact.fileName);
+            readStream.pipe(res);
+        } catch (err) {
+            res.status(500).send(err);
+            logger.error(err);
+        }
+    });
+
+    app.get('/api/logs/:namespace/:name/:nodeId/:container', async (req: express.Request, res: express.Response) => {
+        try {
+            const wf = await getWorkflow(getNamespace(req), req.params.name);
+            try {
+                await core.ns(wf.metadata.namespace).pods.get(req.params.nodeId);
+                const logsSource = reactifyStringStream(
+                    core.ns(wf.metadata.namespace).po(req.params.nodeId).log.getStream({ qs: { container: req.params.container, follow: true } }));
+                streamServerEvents(req, res, logsSource, (item) => item.toString());
+            } catch (e) {
+                if (e.code === 404) {
+                    // Try load logs from S3 if pod already deleted
+                    const artifact = await loadNodeArtifact(wf, req.params.nodeId, 'main-logs');
+                    streamServerEvents(req, res, Observable.from(artifact.data.toString('utf8').split('\n')), (line) => line);
+                } else {
+                    throw e;
+                }
+            }
+        } catch (e) {
+            logger.error(e);
+            res.send(e);
+        }
     });
 
     const serveIndex = (req: express.Request, res: express.Response) => {
