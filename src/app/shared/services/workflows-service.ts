@@ -25,13 +25,13 @@ export class WorkflowsService {
     }
 
     public getContainerLogs(workflow: models.Workflow, nodeId: string, container: string): Observable<string> {
-        return requests.loadEventSource(`/logs/${workflow.metadata.namespace}/${nodeId}/${container}`).map((line) => {
+        return requests.loadEventSource(`/logs/${workflow.metadata.namespace}/${workflow.metadata.name}/${nodeId}/${container}`).map((line) => {
             return line ? line + '\n' : line;
         });
     }
 
     public getArtifactDownloadUrl(workflow: models.Workflow, nodeId: string, artifactName: string) {
-        return `/api/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}/artifacts/${nodeId}/${artifactName}`;
+        return `/api/workflows/${workflow.metadata.namespace}/${workflow.metadata.name}/artifacts/${nodeId}/${encodeURIComponent(artifactName)}`;
     }
 
     private populateDefaultFields(workflow: models.Workflow): models.Workflow {

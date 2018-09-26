@@ -46,6 +46,7 @@
         "superagent": "^3.8.2",
         "superagent-promise": "^1.1.0",
         "typescript": "^2.8.3",
+        "winston": "^3.1.0",
         "ws": "^4.0.0",
         "xterm": "2.4.0",
         "yamljs": "^0.3.0",
