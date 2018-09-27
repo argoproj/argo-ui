@@ -1,3 +1,4 @@
+import './data-loader';
 import './dropdown';
 import './notifications';
 import './page';

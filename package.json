@@ -1,6 +1,6 @@
 {
     "name": "argo-ui",
-    "version": "2.1.1-alpha15",
+    "version": "2.2.0-alpha1",
     "main": "./bundle/lib/index.js",
     "types": "./bundle/lib/index.d.ts",
     "license": "MIT",

@@ -1,48 +1,48 @@
-import deepEqual = require('deep-equal');
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Subscription } from 'rxjs';
 
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
-import { MockupList, NotificationType, Page, TopBarFilter } from '../../../shared/components';
+import { DataLoader, MockupList, Page, TopBarFilter } from '../../../shared/components';
 import { AppContext } from '../../../shared/context';
 import { services } from '../../../shared/services';
 
 import { WorkflowListItem } from '../workflow-list-item/workflow-list-item';
 
-export class WorkflowsList extends React.Component<RouteComponentProps<any>, { workflows: models.Workflow[] }> {
+export class WorkflowsList extends React.Component<RouteComponentProps<any>> {
 
     public static contextTypes = {
         router: PropTypes.object,
         apis: PropTypes.object,
     };
 
-    private changesSubscription: Subscription;
+    private workflowsChanges = services.workflows.watch().filter(() => this.loader !== null && !!this.loader.getData()).map((workflowChange) => {
+        let workflows = this.loader.getData().slice();
+        const phasesFilter = this.phases;
+        if (phasesFilter.length === 0 || phasesFilter.includes(workflowChange.object.status.phase)) {
+            switch (workflowChange.type) {
+                case 'ADDED':
+                case 'MODIFIED':
+                    const index = workflows.findIndex((item) => item.metadata.name === workflowChange.object.metadata.name);
+                    if (index > -1) {
+                        workflows[index] = workflowChange.object;
+                    } else {
+                        workflows.unshift(workflowChange.object);
+                    }
+                    break;
+                case 'DELETED':
+                    workflows = workflows.filter((item) => item.metadata.name !== workflowChange.object.metadata.name);
+                    break;
+            }
+        }
+        return workflows;
+    });
+
+    private loader: DataLoader<models.Workflow[]>;
 
     private get phases() {
         return new URLSearchParams(this.props.location.search).getAll('phase');
-    }
-
-    constructor(props: RouteComponentProps<any>) {
-        super(props);
-        this.state = { workflows: null };
-    }
-
-    public componentWillMount() {
-        this.loadWorkflowsList(this.phases);
-    }
-
-    public componentWillReceiveProps(nextProps: RouteComponentProps<any>) {
-        const nextPhases = new URLSearchParams(nextProps.location.search).getAll('phase');
-        if (!deepEqual(this.phases, nextPhases)) {
-            this.loadWorkflowsList(nextPhases);
-        }
-    }
-
-    public componentWillUnmount() {
-        this.ensureUnsubscribed();
     }
 
     public render() {
@@ -61,14 +61,20 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>, { w
             <Page title='Workflows' toolbar={{filter, breadcrumbs: [{ title: 'Workflows', path: uiUrl('workflows') }]}}>
                 <div className='argo-container'>
                     <div className='stream'>
-                        {this.state.workflows ? this.state.workflows.map((workflow) => (
-                            <div key={workflow.metadata.name}>
-                                <Link to={uiUrl(`workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`)}>
-                                <WorkflowListItem workflow={workflow}/>
-                                </Link>
-                            </div>
-                        )) :
-                        <MockupList height={150} marginTop={30}/>}
+                        <DataLoader
+                                ref={(loader) => this.loader = loader}
+                                input={this.phases}
+                                load={(phases) => services.workflows.list(phases)}
+                                dataChanges={this.workflowsChanges}
+                                loadingRenderer={() => <MockupList height={150} marginTop={30}/>}>
+                            {(workflows: models.Workflow[]) => workflows.map((workflow) => (
+                                <div key={workflow.metadata.name}>
+                                    <Link to={uiUrl(`workflows/${workflow.metadata.namespace}/${workflow.metadata.name}`)}>
+                                    <WorkflowListItem workflow={workflow}/>
+                                    </Link>
+                                </div>
+                            ))}
+                        </DataLoader>
                     </div>
                 </div>
             </Page>
@@ -77,46 +83,5 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>, { w
 
     private get appContext(): AppContext {
         return this.context as AppContext;
-    }
-
-    private async loadWorkflowsList(phases: string[]) {
-        try {
-            this.setState({ workflows: (await services.workflows.list(phases)) });
-            let events = services.workflows.watch();
-            if (phases.length > 0) {
-                events = events.filter((event) => phases.indexOf(event.object.status.phase) > -1);
-            }
-            this.ensureUnsubscribed();
-            this.changesSubscription = events.subscribe((workflowChange) => {
-                const workflows = this.state.workflows.slice();
-                switch (workflowChange.type) {
-                    case 'ADDED':
-                    case 'MODIFIED':
-                        const index = this.state.workflows.findIndex((item) => item.metadata.name === workflowChange.object.metadata.name);
-                        if (index > -1) {
-                            workflows[index] = workflowChange.object;
-                            this.setState({ workflows });
-                        } else {
-                            workflows.unshift(workflowChange.object);
-                            this.setState({ workflows: workflows.sort(models.compareWorkflows) });
-                        }
-                        break;
-                    case 'DELETED':
-                        this.setState({ workflows: this.state.workflows.filter((item) => item.metadata.name !== workflowChange.object.metadata.name) });
-                }
-            });
-        } catch (e) {
-            this.appContext.apis.notifications.show({
-                content: 'Unable to load workflows',
-                type: NotificationType.Error,
-            });
-        }
-    }
-
-    private ensureUnsubscribed() {
-        if (this.changesSubscription) {
-            this.changesSubscription.unsubscribe();
-        }
-        this.changesSubscription = null;
     }
 }
