@@ -9,17 +9,22 @@ import * as path from 'path';
 import { Observable, Observer } from 'rxjs';
 import * as nodeStream from 'stream';
 import * as winston from 'winston';
+import * as expressWinston from 'express-winston';
 
 import * as models from '../models';
 import * as consoleProxy from './console-proxy';
 
 import { decodeBase64, reactifyStringStream, streamServerEvents } from './utils';
 
-const logger = winston.createLogger({
-    transports: [new winston.transports.Console({ format: winston.format.combine(
+const winstonTransport = new winston.transports.Console({
+    format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.simple(),
-    ) })],
+    ),
+});
+
+const logger = winston.createLogger({
+    transports: [winstonTransport],
 });
 
 function serve<T>(res: express.Response, action: () => Promise<T>) {
@@ -60,6 +65,12 @@ export function create(
     crd.addResource('workflows');
     const app = express();
     app.use(bodyParser.json({type: () => true}));
+
+    app.use(expressWinston.logger({
+        transports: [winstonTransport],
+        meta: false,
+        msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+    }));
 
     function getWorkflowLabelSelector(req) {
         const labelSelector: string[] = [];
