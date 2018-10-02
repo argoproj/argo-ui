@@ -8,10 +8,10 @@ import { App } from './utils';
 storiesOf('Notifications', module)
     .add('default', () => (
         <App>
-            {(notificationsApi) => (
+            {(apis) => (
                 <button style={{marginTop: '5em'}}
                         className='argo-button argo-button--base'
-                        onClick={() => notificationsApi.show({type: NotificationType.Error, content: 'Error message!'})}>
+                        onClick={() => apis.notifications.show({type: NotificationType.Error, content: 'Error message!'})}>
                     Click me
                 </button>
             )}

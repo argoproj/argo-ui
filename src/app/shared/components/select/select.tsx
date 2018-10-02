@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as ReactAutocomplete from 'react-autocomplete';
 import { Observable, Subscription } from 'rxjs';
+
 import { Checkbox } from '../checkbox';
 
 export interface SelectOption {
@@ -24,11 +26,36 @@ export interface SelectProps {
     multiSelect?: boolean;
 }
 
+export interface AutocompleteProps {
+    options: Array<SelectOption | string>;
+    value: string;
+    onChange?: (value: string) => any;
+    inputProps?: React.HTMLProps<HTMLInputElement>;
+    wrapperProps?: React.HTMLProps<HTMLDivElement>;
+}
+
 require('./select.scss');
 
 function normalizeOptions(options: Array<SelectOption | string>) {
     return options.map((item) => typeof item === 'string' ? ({ value: item, title: item }) : item);
 }
+
+export const Autocomplete = (props: AutocompleteProps) => {
+    const options = normalizeOptions(props.options);
+    return (
+        <ReactAutocomplete
+            inputProps={props.inputProps}
+            wrapperProps={props.wrapperProps}
+            renderItem={(option: SelectOption, selected: boolean) => (
+            <div className={classNames('select__option', { selected })} key={option.value}>
+                {option.title}
+            </div>
+        )}
+        onSelect={(val) => props.onChange && props.onChange(val)}
+        onChange={(_, val) => props.onChange && props.onChange(val)}
+        value={props.value} items={options} getItemValue={(opt: SelectOption) => opt.value}/>
+    );
+};
 
 export class Select extends React.Component<SelectProps, State> {
 

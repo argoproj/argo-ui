@@ -1,8 +1,5 @@
-import * as concat from 'concat-stream';
 import * as express from 'express';
 import {Observable, Observer} from 'rxjs';
-import * as tar from 'tar-stream';
-import * as zlib from 'zlib';
 
 export function reactifyStream(stream, converter = (item) => item) {
     return new Observable((observer: Observer < any >) => {

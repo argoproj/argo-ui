@@ -1,6 +1,7 @@
 import * as aws from 'aws-sdk';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as expressWinston from 'express-winston';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as JSONStream from 'json-stream';
@@ -9,7 +10,6 @@ import * as path from 'path';
 import { Observable, Observer } from 'rxjs';
 import * as nodeStream from 'stream';
 import * as winston from 'winston';
-import * as expressWinston from 'express-winston';
 
 import * as models from '../models';
 import * as consoleProxy from './console-proxy';
@@ -69,7 +69,7 @@ export function create(
     app.use(expressWinston.logger({
         transports: [winstonTransport],
         meta: false,
-        msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+        msg: '{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}',
     }));
 
     function getWorkflowLabelSelector(req) {
