@@ -63,4 +63,4 @@ export const FormAutocomplete = ReactForm.FormField((props: AutocompleteProps & 
             inputProps={{className: props.className, style: { borderBottom: 'none' }}}
             wrapperProps={{className: props.className}} {...rest} value={value} onChange={(val) => setValue(val)}/>
     );
-}) as React.ComponentType<ReactForm.FieldProps & { options: (SelectOption | string)[], multiSelect?: boolean, className?: string }>;
+}) as React.ComponentType<ReactForm.FieldProps & { options: (SelectOption | string)[], className?: string }>;

@@ -15,10 +15,10 @@ storiesOf('Forms', module)
                         <FormField label='Password' formApi={api} field='passwordField' component={Text} componentProps={{type: 'password'}} />
                     </div>
                     <div className='argo-form-row'>
-                        <FormField label='Select' formApi={api}  field='selectField' component={FormSelect} componentProps={{options: ['option1', 'option2']}} />
+                        <FormField label='Autocomplete' formApi={api}  field='autocompleteField' component={FormAutocomplete} componentProps={{options: ['option1', 'option2']}} />
                     </div>
                     <div className='argo-form-row'>
-                        <FormField label='Autocomplete' formApi={api}  field='autocompleteField' component={FormAutocomplete} componentProps={{options: ['option1', 'option2']}} />
+                        <FormField label='Select' formApi={api}  field='selectField' component={FormSelect} componentProps={{options: ['option1', 'option2']}} />
                     </div>
                 </form>
             )}

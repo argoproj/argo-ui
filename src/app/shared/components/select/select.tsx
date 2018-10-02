@@ -42,10 +42,16 @@ function normalizeOptions(options: Array<SelectOption | string>) {
 
 export const Autocomplete = (props: AutocompleteProps) => {
     const options = normalizeOptions(props.options);
+    const wrapperProps = props.wrapperProps || {};
+    wrapperProps.className = classNames(wrapperProps.className || '', { autocomplete: true, empty: (props.options || []).length === 0 });
     return (
         <ReactAutocomplete
-            inputProps={props.inputProps}
-            wrapperProps={props.wrapperProps}
+            inputProps={{
+                ...props.inputProps || {},
+                // workaround for 'autofill for forms not deactivatable' https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
+                autoComplete: 'new-password',
+            }}
+            wrapperProps={wrapperProps}
             renderItem={(option: SelectOption, selected: boolean) => (
             <div className={classNames('select__option', { selected })} key={option.value}>
                 {option.title}
