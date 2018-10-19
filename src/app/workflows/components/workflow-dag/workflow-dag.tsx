@@ -62,17 +62,21 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
         });
         const size = this.getGraphSize(graph.nodes().map((id) => graph.node(id)));
         return (
-            <div className='workflow-dag' style={{width: size.width + 10, height: size.height + 100}}>
+            <div className='workflow-dag' style={{width: size.width, height: size.height}}>
                 {graph.nodes().map((id) => {
                     const node = graph.node(id) as models.NodeStatus & dagre.Node;
                     const shortName = Utils.shortNodeName(node);
                     return (
                         <div key={id}
                                 className={classNames('workflow-dag__node', {active: node.id === this.props.selectedNodeId, virtual: this.isVirtual(node)})}
-                                style={{left: node.x, top: node.y, width: node.width, height: node.height}}
+                                style={{left: (node.x - (node.width / 2)), top: (node.y - (node.height / 2)), width: node.width, height: node.height}}
                                 onClick={() => this.props.nodeClicked && this.props.nodeClicked(node)}>
-                            <div className={`workflow-dag__node-status workflow-dag__node-status--${node.phase.toLocaleLowerCase()}`}/>
-                            <div className='workflow-dag__node-title'>{shortName}</div>
+                            <div
+                                className={`workflow-dag__node-status workflow-dag__node-status--${node.phase.toLocaleLowerCase()}`}
+                                style={{lineHeight: NODE_HEIGHT + 'px'}}/>
+                            <div
+                                className='workflow-dag__node-title'
+                                style={{lineHeight: NODE_HEIGHT + 'px'}}>{shortName}</div>
                         </div>
                     );
                 })}
@@ -85,7 +89,7 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
                         const angle = Math.atan2(line.y1 - line.y2, line.x1 - line.x2) * 180 / Math.PI;
                         return (
                             <div className={classNames('workflow-dag__line', {'workflow-dag__line--no-arrow': line.noArrow })} key={i}
-                                style={{ width: distance, left: xMid - (distance / 2), top: yMid, transform: `translate(100px, 35px) rotate(${angle}deg)`}} />
+                                style={{ width: distance, left: xMid - (distance / 2), top: yMid, transform: ` rotate(${angle}deg)`}} />
                         );
                     })}</div>
                 ))}
@@ -118,8 +122,8 @@ export class WorkflowDag extends React.Component<WorkflowDagProps> {
         let width = 0;
         let height = 0;
         nodes.forEach((node) => {
-            width = Math.max(node.x + node.width, width);
-            height = Math.max(node.y + node.height, height);
+            width = Math.max(node.x + (node.width / 2), width);
+            height = Math.max(node.y + (node.height / 2), height);
         });
         return {width, height};
     }
