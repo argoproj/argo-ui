@@ -122,7 +122,7 @@ export function create(
     });
 
     function getNamespace(req: express.Request) {
-        return forceNamespaceIsolation ? namespace : req.query.namespace;
+        return forceNamespaceIsolation ? namespace : (req.query.namespace || req.params.namespace);
     }
 
     function getWorkflow(ns: string, name: string): Promise<models.Workflow> {
