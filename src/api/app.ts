@@ -101,18 +101,20 @@ export function create(
         async (req, res) => serve(res, () => (forceNamespaceIsolation ? crd.ns(namespace) : crd.ns(req.params.namespace)).workflows.get(req.params.name)));
 
     app.get('/api/workflows/live', async (req, res) => {
+        const ns = getNamespace(req);
+
         let updatesSource = new Observable((observer: Observer<any>) => {
             const labelSelector = getWorkflowLabelSelector(req);
-            let stream = crd.ns(req.params.namespace).workflows.getStream({ qs: { watch: true, labelSelector: labelSelector.join(',') } });
+            let stream = (ns ? crd.ns(ns) : crd).workflows.getStream({ qs: { watch: true, labelSelector: labelSelector.join(',') } });
             stream.on('end', () => observer.complete());
             stream.on('error', (e) => observer.error(e));
             stream.on('close', () => observer.complete());
             stream = stream.pipe(new JSONStream());
             stream.on('data', (data) => data && observer.next(data));
         });
-        if (forceNamespaceIsolation || req.query.namespace) {
+        if (ns) {
             updatesSource = updatesSource.filter((change) => {
-                return change.object.metadata.namespace === forceNamespaceIsolation ? namespace : req.query.namespace;
+                return change.object.metadata.namespace === ns;
             });
         }
         if (req.query.name) {
