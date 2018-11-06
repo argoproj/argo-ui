@@ -9,6 +9,7 @@ export enum NotificationType {
 
 export interface NotificationInfo {
     type: NotificationType;
+    style?: React.CSSProperties;
     content: React.ReactNode;
 }
 
@@ -23,7 +24,7 @@ require('./notifications.scss');
 export const Notifications = (props: NotificationsProps) => (
     <div className='argo-notifications-list' style={{left: props.leftOffset}}>
         {props.notifications.map((notification, i) => (
-            <div key={i} className={classNames('argo-notification', {
+            <div key={i} style={notification.style} className={classNames('argo-notification', {
                 success: notification.type === NotificationType.Success,
                 warning: notification.type === NotificationType.Warning,
                 error: notification.type === NotificationType.Error,
