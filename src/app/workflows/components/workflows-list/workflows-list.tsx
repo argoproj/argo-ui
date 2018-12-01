@@ -1,6 +1,7 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { Observable } from 'rxjs';
 
 import * as models from '../../../../models';
 import { uiUrl } from '../../../shared/base';
@@ -16,30 +17,6 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>> {
         router: PropTypes.object,
         apis: PropTypes.object,
     };
-
-    private workflowsChanges = services.workflows.watch().filter(() => this.loader !== null && !!this.loader.getData()).map((workflowChange) => {
-        let workflows = this.loader.getData().slice();
-        const phasesFilter = this.phases;
-        if (phasesFilter.length === 0 || phasesFilter.includes(workflowChange.object.status.phase)) {
-            switch (workflowChange.type) {
-                case 'ADDED':
-                case 'MODIFIED':
-                    const index = workflows.findIndex((item) => item.metadata.name === workflowChange.object.metadata.name);
-                    if (index > -1) {
-                        workflows[index] = workflowChange.object;
-                    } else {
-                        workflows.unshift(workflowChange.object);
-                    }
-                    break;
-                case 'DELETED':
-                    workflows = workflows.filter((item) => item.metadata.name !== workflowChange.object.metadata.name);
-                    break;
-            }
-        }
-        return workflows;
-    });
-
-    private loader: DataLoader<models.Workflow[]>;
 
     private get phases() {
         return new URLSearchParams(this.props.location.search).getAll('phase');
@@ -62,10 +39,34 @@ export class WorkflowsList extends React.Component<RouteComponentProps<any>> {
                 <div className='argo-container'>
                     <div className='stream'>
                         <DataLoader
-                                ref={(loader) => this.loader = loader}
                                 input={this.phases}
-                                load={(phases) => services.workflows.list(phases)}
-                                dataChanges={this.workflowsChanges}
+                                load={(phases) => {
+                                    return Observable.fromPromise(services.workflows.list(phases)).flatMap((workflows) =>
+                                        Observable.merge(
+                                            Observable.from([workflows]),
+                                            services.workflows.watch(phases).map((workflowChange) => {
+                                                const index = workflows.findIndex((item) => item.metadata.name === workflowChange.object.metadata.name);
+                                                if (index > -1 && workflowChange.object.metadata.resourceVersion === workflows[index].metadata.resourceVersion) {
+                                                    return {workflows, updated: false};
+                                                }
+                                                switch (workflowChange.type) {
+                                                    case 'DELETED':
+                                                        if (index > -1) {
+                                                            workflows.splice(index, 1);
+                                                        }
+                                                        break;
+                                                    default:
+                                                        if (index > -1) {
+                                                            workflows[index] = workflowChange.object;
+                                                        } else {
+                                                            workflows.unshift(workflowChange.object);
+                                                        }
+                                                        break;
+                                                }
+                                                return {workflows, updated: true};
+                                            }).filter((item) => item.updated).map((item) => item.workflows)),
+                                    );
+                                }}
                                 loadingRenderer={() => <MockupList height={150} marginTop={30}/>}>
                             {(workflows: models.Workflow[]) => workflows.map((workflow) => (
                                 <div key={workflow.metadata.name}>

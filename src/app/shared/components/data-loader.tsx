@@ -6,12 +6,11 @@ import { ErrorNotification } from './error-notification';
 import { NotificationType } from './notifications/notifications';
 
 interface LoaderProps<I, D> {
-    load: (input: I) => Promise<D>;
+    load: (input: I) => Promise<D> | Observable<D>;
     input?: I;
     loadingRenderer?: React.ComponentType;
     errorRenderer?: (children: React.ReactNode) => React.ReactNode;
     children: (data: D) => React.ReactNode;
-    dataChanges?: Observable<D>;
 }
 
 export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D>, { loading: boolean; data: D; error: boolean; input: I; }> {
@@ -45,14 +44,10 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
 
     public componentDidMount() {
         this.loadData();
-        this.subscribe();
     }
 
-    public componentDidUpdate(prevProps: LoaderProps<I, D>) {
+    public componentDidUpdate() {
         this.loadData();
-        if (this.props.dataChanges !== prevProps.dataChanges) {
-            this.subscribe();
-        }
     }
 
     public componentWillUnmount() {
@@ -83,9 +78,15 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
         if (!this.state.error && !this.state.loading && this.state.data == null) {
             this.setState({ error: false, loading: true });
             try {
-                const data = await this.props.load(this.props.input);
-                if (!this.unmounted) {
-                    this.setState({ data, loading: false });
+                const res = this.props.load(this.props.input);
+                if ((res as Promise<D>).then) {
+                    const data = await (res as Promise<D>);
+                    if (!this.unmounted) {
+                        this.setState({ data, loading: false });
+                    }
+                } else {
+                    this.ensureUnsubscribed();
+                    this.subscription = (res as Observable<D>).subscribe((data: D) => this.setState({ loading: false, data }));
                 }
             } catch (e) {
                 if (!this.unmounted) {
@@ -98,13 +99,6 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
                     }
                 }
             }
-        }
-    }
-
-    private subscribe() {
-        this.ensureUnsubscribed();
-        if (this.props.dataChanges) {
-            this.subscription = this.props.dataChanges.subscribe((data: D) => this.setState({ data }));
         }
     }
 
