@@ -86,18 +86,22 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
                     }
                 } else {
                     this.ensureUnsubscribed();
-                    this.subscription = (res as Observable<D>).subscribe((data: D) => this.setState({ loading: false, data }));
+                    this.subscription = (res as Observable<D>).subscribe((data: D) => this.setState({ loading: false, data }), (e) => this.handleError(e));
                 }
             } catch (e) {
-                if (!this.unmounted) {
-                    this.setState({ error: true, loading: false });
-                    if (e.status !== 401) {
-                        this.appContext.apis.notifications.show({
-                            content: <ErrorNotification title='Unable to load data' e={e}/>,
-                            type: NotificationType.Error,
-                        });
-                    }
-                }
+                this.handleError(e);
+            }
+        }
+    }
+
+    private handleError(e: any) {
+        if (!this.unmounted) {
+            this.setState({ error: true, loading: false });
+            if (e.status !== 401) {
+                this.appContext.apis.notifications.show({
+                    content: <ErrorNotification title='Unable to load data' e={e}/>,
+                    type: NotificationType.Error,
+                });
             }
         }
     }
