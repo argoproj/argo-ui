@@ -3,6 +3,14 @@
 .select {
     position: relative;
 
+    &__focus-receiver {
+        width: 0;
+        height: 0;
+        display: block;
+        border: none;
+        background: transparent;
+    }
+
     &__value {
         position: relative;
         padding: 8px 20px 8px 0;

@@ -45,12 +45,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const wrapperProps = props.wrapperProps || {};
     wrapperProps.className = classNames(wrapperProps.className || '', { autocomplete: true, empty: (props.options || []).length === 0 });
     return (
-        <ReactAutocomplete
-            inputProps={{
-                ...props.inputProps || {},
+        <ReactAutocomplete ref={(el) => {
+            if (el) {
                 // workaround for 'autofill for forms not deactivatable' https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
-                autoComplete: 'new-password',
-            }}
+                (el.refs.input as HTMLInputElement).autocomplete = 'new-password';
+            }
+        }}
+            inputProps={{...props.inputProps || {}}}
             wrapperProps={wrapperProps}
             renderItem={(option: SelectOption, selected: boolean) => (
             <div className={classNames('select__option', { selected })} key={option.value}>
@@ -110,6 +111,7 @@ export class Select extends React.Component<SelectProps, State> {
         }
         return (
             <div className='select' ref={(el) => this.el = el}>
+                {!this.state.opened && <input className='select__focus-receiver' type='text' onFocus={() => this.openDropdown()}/>}
                 <div className='select__value' onClick={() => this.openDropdown()}>
                     {selectedOptions.length > 0 ? selectedOptions.map((item) => item.title).join(', ') : this.props.placeholder || ''}
                     <div className='select__value-arrow'><i className='argo-icon-expand-arrow'/></div>
