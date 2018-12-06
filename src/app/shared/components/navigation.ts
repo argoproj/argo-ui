@@ -1,7 +1,8 @@
 import { History } from 'history';
+import * as React from 'react';
 
 export interface NavigationApi {
-    goto(path: string, query?: {[name: string]: any}): void;
+    goto(path: string, query?: {[name: string]: any}, event?: React.MouseEvent): void;
 }
 
 export class NavigationManager implements NavigationApi {
@@ -12,7 +13,7 @@ export class NavigationManager implements NavigationApi {
         this.history = history;
     }
 
-    public goto(path: string, query: {[name: string]: any} = {}): void {
+    public goto(path: string, query: {[name: string]: any} = {}, event: React.MouseEvent): void {
         if (path.startsWith('.')) {
             path = this.history.location.pathname + path.slice(1);
         }
@@ -34,6 +35,10 @@ export class NavigationManager implements NavigationApi {
         if (urlQuery !== '') {
             path = `${path}?${urlQuery}`;
         }
-        this.history.push(path);
+        if (event && event.metaKey) {
+            window.open(path, '__target');
+        } else {
+            this.history.push(path);
+        }
     }
 }
