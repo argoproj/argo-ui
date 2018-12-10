@@ -10,7 +10,7 @@ import { DropDown } from '../dropdown/dropdown';
 require('./top-bar.scss');
 
 export interface TopBarFilter<T> {
-    items: Array<{ label: string; value: T; }>;
+    items: Array<{ label?: string; value?: T; content?: ( changeSelection: (selectedValues: T[]) => any ) => React.ReactNode }>;
     selectedValues: T[];
     selectionChanged: (selectedValues: T[]) => any;
 }
@@ -44,19 +44,23 @@ const renderFilter = (filter: TopBarFilter<any>) => (
                     <i className='fa fa-angle-down' aria-hidden='true'/>
                 </div>)}>
         <ul>
-        {filter.items.map((item) => (
-            <li key={item.value}>
-                <Checkbox id={`filter__${item.value}`} checked={filter.selectedValues.includes(item.value)} onChange={(checked) => {
-                    const selectedValues = filter.selectedValues.slice();
-                    const index = selectedValues.indexOf(item.value);
-                    if (index > -1 && !checked) {
-                        selectedValues.splice(index, 1);
-                    } else {
-                        selectedValues.push(item.value);
-                    }
-                    filter.selectionChanged(selectedValues);
-                }} />
-                <label htmlFor={`filter__${item.value}`}>{item.label}</label>
+        {filter.items.map((item, i) => (
+            <li key={i} className={classNames({'top-bar__filter-item': !item.content})}>
+                {item.content && item.content((vals) => filter.selectionChanged(vals)) || (
+                    <React.Fragment>
+                        <Checkbox id={`filter__${item.value}`} checked={filter.selectedValues.includes(item.value)} onChange={(checked) => {
+                            const selectedValues = filter.selectedValues.slice();
+                            const index = selectedValues.indexOf(item.value);
+                            if (index > -1 && !checked) {
+                                selectedValues.splice(index, 1);
+                            } else {
+                                selectedValues.push(item.value);
+                            }
+                            filter.selectionChanged(selectedValues);
+                        }} />
+                        <label htmlFor={`filter__${item.value}`}>{item.label}</label>
+                    </React.Fragment>
+                )}
             </li>
         ))}
         </ul>
