@@ -1,6 +1,7 @@
 @import '../../../shared/styles/config';
 
 .workflow-details {
+    overflow: hidden;
 
     &, & > .row {
         height: calc(100vh - 2 * #{$top-bar-height});
