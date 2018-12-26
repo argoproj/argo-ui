@@ -29,7 +29,7 @@ export interface SelectProps {
 export interface AutocompleteProps {
     options: Array<SelectOption | string>;
     value: string;
-    onChange?: (value: string) => any;
+    onChange?: (value: string, event: { selected: boolean }) => any;
     inputProps?: React.HTMLProps<HTMLInputElement>;
     wrapperProps?: React.HTMLProps<HTMLDivElement>;
 }
@@ -58,8 +58,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 {option.title}
             </div>
         )}
-        onSelect={(val) => props.onChange && props.onChange(val)}
-        onChange={(_, val) => props.onChange && props.onChange(val)}
+        onSelect={(val) => props.onChange && props.onChange(val, { selected: true })}
+        onChange={(_, val) => props.onChange && props.onChange(val, { selected: false })}
         value={props.value} items={options} getItemValue={(opt: SelectOption) => opt.value}/>
     );
 };

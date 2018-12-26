@@ -14,18 +14,21 @@ export function getNestedField(src: any, path: string): any {
     return src;
 }
 
-export const FormField: <E, T extends ReactForm.FieldProps & {className?: string}>(
+export const FormField: <E, T extends ReactForm.FieldProps & { className?: string}>(
     props: React.Props<E> & {
-    label?: string,
-    field: string,
-    formApi: ReactForm.FormApi,
-    component: React.ComponentType<T>,
-    componentProps?: T,
-}) => React.ReactElement<E> = (props) => {
+        label?: string,
+        field: string,
+        formApi: ReactForm.FormApi,
+        component: React.ComponentType<T>,
+        componentProps?: T,
+    },
+) => React.ReactElement<E> = (props) => {
+
+    const FormComponent = props.component as React.ComponentType<any>;
 
     return (
         <div>
-            <props.component
+            <FormComponent
                 {...props.componentProps || {}}
                 field={props.field}
                 className={classNames({ 'argo-field': true, 'argo-has-value': !!props.formApi.values[props.field] })}/>

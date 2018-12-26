@@ -1,4 +1,5 @@
 import { Store, withState } from '@dump247/storybook-state';
+import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
@@ -38,6 +39,10 @@ storiesOf('Select', module)
                 <Autocomplete
                     value={store.state.selected}
                     options={['option1', { value: 'option2', title: 'Option 2' }]}
+                    onChange={(val, e) => {
+                        store.set({ selected: val });
+                        action(`Value changed`)(e);
+                    }}
                     />
             </div>
         ))),
