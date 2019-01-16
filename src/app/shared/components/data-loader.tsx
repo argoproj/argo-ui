@@ -8,12 +8,13 @@ import { NotificationType } from './notifications/notifications';
 interface LoaderProps<I, D> {
     load: (input: I) => Promise<D> | Observable<D>;
     input?: I;
+    noLoaderOnInputChange?: boolean;
     loadingRenderer?: React.ComponentType;
     errorRenderer?: (children: React.ReactNode) => React.ReactNode;
     children: (data: D) => React.ReactNode;
 }
 
-export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D>, { loading: boolean; data: D; error: boolean; input: I; }> {
+export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D>, { loading: boolean; data: D; error: boolean; input: I; inputChanged: boolean}> {
     public static contextTypes = {
         router: PropTypes.object,
         apis: PropTypes.object,
@@ -21,7 +22,7 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
 
     public static getDerivedStateFromProps(nextProps: LoaderProps<any, any>, prevState: { input: any }) {
         if (JSON.stringify(nextProps.input) !== JSON.stringify(prevState.input)) {
-            return { data: null as any, input: nextProps.input };
+            return { inputChanged: true, input: nextProps.input };
         }
         return null;
     }
@@ -31,7 +32,7 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
 
     constructor(props: LoaderProps<I, D>) {
         super(props);
-        this.state = { loading: false, error: false, data: null, input: props.input };
+        this.state = { loading: false, error: false, data: null, input: props.input, inputChanged: false };
     }
 
     public getData() {
@@ -75,8 +76,8 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
     }
 
     private async loadData() {
-        if (!this.state.error && !this.state.loading && this.state.data == null) {
-            this.setState({ error: false, loading: true });
+        if (!this.state.error && !this.state.loading && (this.state.data == null || this.state.inputChanged)) {
+            this.setState({ error: false, loading: true, inputChanged: false, data: this.props.noLoaderOnInputChange ? this.state.data : null });
             try {
                 const res = this.props.load(this.props.input);
                 if ((res as Promise<D>).then) {
