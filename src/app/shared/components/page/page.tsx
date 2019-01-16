@@ -8,7 +8,11 @@ require('./page.scss');
 
 type PageProps = TopBarProps;
 
-export const PageContext = React.createContext({ title: 'Argo' });
+export interface PageContextProps {
+    title: string;
+}
+
+export const PageContext = React.createContext<PageContextProps>({ title: 'Argo' });
 
 export const Page = (props: PageProps) => (
     <div className={classNames('page', { 'page--has-toolbar': !!props.toolbar })}>

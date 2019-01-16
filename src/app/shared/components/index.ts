@@ -2,7 +2,7 @@ require('../styles/main.scss');
 
 export { Utils  } from './utils';
 export { Layout } from './layout/layout';
-export { Page } from './page/page';
+export { Page, PageContext, PageContextProps } from './page/page';
 export { MockupList } from './mockup-list/mockup-list';
 export { DropDown } from './dropdown/dropdown';
 export { DropDownMenu, DropDownMenuProps, MenuItem } from './dropdown-menu';
