@@ -14,7 +14,7 @@ interface LoaderProps<I, D> {
     children: (data: D) => React.ReactNode;
 }
 
-export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D>, { loading: boolean; data: D; error: boolean; input: I; inputChanged: boolean}> {
+export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D>, { loading: boolean; dataWrapper: { data: D }; error: boolean; input: I; inputChanged: boolean}> {
     public static contextTypes = {
         router: PropTypes.object,
         apis: PropTypes.object,
@@ -32,15 +32,15 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
 
     constructor(props: LoaderProps<I, D>) {
         super(props);
-        this.state = { loading: false, error: false, data: null, input: props.input, inputChanged: false };
+        this.state = { loading: false, error: false, dataWrapper: null, input: props.input, inputChanged: false };
     }
 
     public getData() {
-        return this.state.data;
+        return this.state.dataWrapper && this.state.dataWrapper.data || null;
     }
 
     public setData(data: D) {
-        return this.setState({ data });
+        return this.setState({ dataWrapper: { data } });
     }
 
     public componentDidMount() {
@@ -65,29 +65,29 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
             }
             return error;
         }
-        if (this.state.data) {
-            return this.props.children(this.state.data);
+        if (this.state.dataWrapper) {
+            return this.props.children(this.state.dataWrapper.data);
         }
         return this.props.loadingRenderer ? <this.props.loadingRenderer/> : <p style={style}>Loading...</p>;
     }
 
     public reload() {
-        this.setState({ data: null, error: false });
+        this.setState({ dataWrapper: null, error: false });
     }
 
     private async loadData() {
-        if (!this.state.error && !this.state.loading && (this.state.data == null || this.state.inputChanged)) {
-            this.setState({ error: false, loading: true, inputChanged: false, data: this.props.noLoaderOnInputChange ? this.state.data : null });
+        if (!this.state.error && !this.state.loading && (this.state.dataWrapper == null || this.state.inputChanged)) {
+            this.setState({ error: false, loading: true, inputChanged: false, dataWrapper: this.props.noLoaderOnInputChange ? this.state.dataWrapper : null });
             try {
                 const res = this.props.load(this.props.input);
                 if ((res as Promise<D>).then) {
                     const data = await (res as Promise<D>);
                     if (!this.unmounted) {
-                        this.setState({ data, loading: false });
+                        this.setState({ dataWrapper: { data }, loading: false });
                     }
                 } else {
                     this.ensureUnsubscribed();
-                    this.subscription = (res as Observable<D>).subscribe((data: D) => this.setState({ loading: false, data }), (e) => this.handleError(e));
+                    this.subscription = (res as Observable<D>).subscribe((data: D) => this.setState({ loading: false, dataWrapper: { data } }), (e) => this.handleError(e));
                 }
             } catch (e) {
                 this.handleError(e);

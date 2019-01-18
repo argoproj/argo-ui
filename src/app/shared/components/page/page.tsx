@@ -1,12 +1,18 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
+import { Observable } from 'rxjs';
 
-import { TopBar, TopBarProps } from '../top-bar/top-bar';
+import { DataLoader } from '../data-loader';
+import { Toolbar, TopBar } from '../top-bar/top-bar';
+import { Utils } from '../utils';
 
 require('./page.scss');
 
-type PageProps = TopBarProps;
+interface PageProps extends React.Props<any> {
+    title: string;
+    toolbar?: Toolbar | Observable<Toolbar>;
+}
 
 export interface PageContextProps {
     title: string;
@@ -16,26 +22,34 @@ export const PageContext = React.createContext<PageContextProps>({ title: 'Argo'
 
 export const Page = (props: PageProps) => (
     <div className={classNames('page', { 'page--has-toolbar': !!props.toolbar })}>
-        <PageContext.Consumer>
-            {(ctx) => {
-                const titleParts = [ctx.title];
-                if (props.toolbar && props.toolbar.breadcrumbs && props.toolbar.breadcrumbs.length > 0) {
-                    titleParts.push(props.toolbar.breadcrumbs.map((item) => item.title).join(' / '));
-                } else if (props.title) {
-                    titleParts.push(props.title);
-                }
-                return (
-                    <Helmet>
-                        <title>{titleParts.join(' - ')}</title>
-                    </Helmet>
-                );
-            }}
-        </PageContext.Consumer>
-        <div className='page__top-bar'>
-            <TopBar {...props}/>
-        </div>
-        <div className='page__content-wrapper'>
-            {props.children}
-        </div>
+        <React.Fragment>
+            <DataLoader input={new Date()} load={() => Utils.toObservable(props.toolbar)}>
+            {(toolbar: Toolbar) => (
+                <React.Fragment>
+                    <PageContext.Consumer>
+                        {(ctx) => {
+                            const titleParts = [ctx.title];
+                            if (toolbar && toolbar.breadcrumbs && toolbar.breadcrumbs.length > 0) {
+                                titleParts.push(toolbar.breadcrumbs.map((item) => item.title).join(' / '));
+                            } else if (props.title) {
+                                titleParts.push(props.title);
+                            }
+                            return (
+                                <Helmet>
+                                    <title>{titleParts.join(' - ')}</title>
+                                </Helmet>
+                            );
+                        }}
+                    </PageContext.Consumer>
+                    <div className='page__top-bar'>
+                        <TopBar title={props.title} toolbar={toolbar}/>
+                    </div>
+                </React.Fragment>
+            )}
+            </DataLoader>
+            <div className='page__content-wrapper'>
+                {props.children}
+            </div>
+        </React.Fragment>
     </div>
 );
