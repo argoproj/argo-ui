@@ -7,7 +7,7 @@ export { MockupList } from './mockup-list/mockup-list';
 export { DropDown } from './dropdown/dropdown';
 export { DropDownMenu, DropDownMenuProps, MenuItem } from './dropdown-menu';
 export { Checkbox } from './checkbox';
-export { TopBarProps, TopBarFilter } from './top-bar/top-bar';
+export { TopBarProps, Toolbar, TopBarFilter } from './top-bar/top-bar';
 export { Tab, Tabs } from './tabs/tabs';
 export { Duration } from './duration';
 export { SlidingPanel } from './sliding-panel/sliding-panel';
