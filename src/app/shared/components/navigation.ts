@@ -2,7 +2,7 @@ import { History } from 'history';
 import * as React from 'react';
 
 export interface NavigationApi {
-    goto(path: string, query?: {[name: string]: any}, event?: React.MouseEvent): void;
+    goto(path: string, query?: {[name: string]: any}, options?: { event?: React.MouseEvent, replace?: boolean }): void;
 }
 
 export class NavigationManager implements NavigationApi {
@@ -13,7 +13,7 @@ export class NavigationManager implements NavigationApi {
         this.history = history;
     }
 
-    public goto(path: string, query: {[name: string]: any} = {}, event: React.MouseEvent): void {
+    public goto(path: string, query: {[name: string]: any} = {}, options?: { event?: React.MouseEvent, replace?: boolean }): void {
         if (path.startsWith('.')) {
             path = this.history.location.pathname + path.slice(1);
         }
@@ -35,10 +35,15 @@ export class NavigationManager implements NavigationApi {
         if (urlQuery !== '') {
             path = `${path}?${urlQuery}`;
         }
-        if (event && event.metaKey) {
+        options = options || {};
+        if (options.event && options.event.metaKey) {
             window.open(path, '__target');
         } else {
-            this.history.push(path);
+            if (options.replace) {
+                this.history.replace(path);
+            } else {
+                this.history.push(path);
+            }
         }
     }
 }
