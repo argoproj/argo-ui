@@ -17,7 +17,8 @@ export class NavigationManager implements NavigationApi {
         if (path.startsWith('.')) {
             path = this.history.location.pathname + path.slice(1);
         }
-        const params = new URLSearchParams(this.history.location.search);
+        const noPathChange = path === this.history.location.pathname;
+        const params = noPathChange ? new URLSearchParams(this.history.location.search) : new URLSearchParams();
         for (const name of Object.keys(query)) {
             const val = query[name];
             params.delete(name);
