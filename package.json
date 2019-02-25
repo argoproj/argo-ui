@@ -1,6 +1,6 @@
 {
     "name": "argo-ui",
-    "version": "2.2.0-alpha19",
+    "version": "2.2.0-alpha20",
     "main": "./bundle/lib/index.js",
     "types": "./bundle/lib/index.d.ts",
     "license": "MIT",
@@ -26,7 +26,6 @@
         "storybook": "start-storybook -p 6006"
     },
     "dependencies": {
-        "@types/react-autocomplete": "^1.8.4",
         "@types/react-form": "^2.16.1",
         "@types/react-helmet": "^5.0.8",
         "aws-sdk": "^2.188.0",
@@ -44,7 +43,6 @@
         "moment": "^2.20.1",
         "prop-types": "^15.6.0",
         "react": "^16.4.1",
-        "react-autocomplete": "^1.8.1",
         "react-dom": "^16.4.1",
         "react-form": "2.16.0",
         "react-helmet": "^5.2.0",

@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as ReactForm from 'react-form';
 
-import { Autocomplete, AutocompleteProps, Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
+import { Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
 
 require('./form-field.scss');
 
@@ -56,14 +56,3 @@ export const FormSelect = ReactForm.FormField((props: SelectProps & { fieldApi: 
         </div>
     );
 }) as React.ComponentType<ReactForm.FieldProps & { options: (SelectOption | string)[], multiSelect?: boolean, className?: string }>;
-
-export const FormAutocomplete = ReactForm.FormField((props: AutocompleteProps & { fieldApi: ReactForm.FieldApi, className?: string }) => {
-    const { fieldApi: {getValue, setValue}, ...rest } = props;
-    const value = getValue();
-
-    return (
-        <Autocomplete
-            inputProps={{className: props.className, style: { borderBottom: 'none' }}}
-            wrapperProps={{className: props.className}} {...rest} value={value} onChange={(val) => setValue(val)}/>
-    );
-}) as React.ComponentType<ReactForm.FieldProps & { options: (SelectOption | string)[], className?: string }>;

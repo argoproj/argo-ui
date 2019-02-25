@@ -16,7 +16,7 @@ export * from './notifications/notifications';
 export * from './notifications/notification-manager';
 export * from './popup/popup';
 export * from './popup/popup-manager';
-export { Autocomplete, Select, SelectOption, SelectProps } from './select/select';
+export { Select, SelectOption, SelectProps } from './select/select';
 export * from './ticker';
 export * from './data-loader';
 export * from './error-notification';
