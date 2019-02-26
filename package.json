@@ -1,11 +1,10 @@
 {
     "name": "argo-ui",
     "version": "2.2.0-alpha20",
-    "main": "./bundle/lib/index.js",
-    "types": "./bundle/lib/index.d.ts",
+    "main": "./src/lib/index.ts",
+    "types": "./src/lib/index.ts",
     "license": "MIT",
     "files": [
-        "bundle",
         "src"
     ],
     "scripts": {
@@ -22,7 +21,6 @@
         "lint:api": "tslint -p ./src/api",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
         "test": "mocha --require ts-node/register ./src/app/**/*.spec.ts",
-        "prepublishOnly": "rm -rf bundle && tsc -p ./src/lib/tsconfig.json && webpack --config ./src/lib/webpack.config.js && copyfiles -u 2 ./src/app/**/*.scss bundle/app && copyfiles -u 2 ./src/assets/**/* bundle/assets",
         "storybook": "start-storybook -p 6006"
     },
     "dependencies": {
@@ -42,8 +40,8 @@
         "kubernetes-client": "3.17.1",
         "moment": "^2.20.1",
         "prop-types": "^15.6.0",
-        "react": "^16.4.1",
-        "react-dom": "^16.4.1",
+        "react": "^16.8.3",
+        "react-dom": "^16.8.3",
         "react-form": "2.16.0",
         "react-helmet": "^5.2.0",
         "react-router-dom": "^4.2.2",
@@ -71,8 +69,8 @@
         "@types/history": "^4.6.2",
         "@types/mocha": "^2.2.48",
         "@types/prop-types": "^15.5.2",
-        "@types/react": "^16.4.7",
-        "@types/react-dom": "^16.0.6",
+        "@types/react": "^16.8.5",
+        "@types/react-dom": "^16.8.2",
         "@types/react-router-dom": "^4.2.3",
         "@types/storybook__addon-actions": "^3.0.2",
         "@types/storybook__addon-links": "^3.3.0",
@@ -103,5 +101,8 @@
         "webfonts-generator": "^0.4.0",
         "webpack": "^3.10.0",
         "webpack-dev-server": "^2.11.1"
+    },
+    "resolutions": {
+        "@types/react": "16.8.5"
     }
 }
