@@ -43,7 +43,7 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
 
 export const FormSelect = ReactForm.FormField((props: SelectProps & { fieldApi: ReactForm.FieldApi, className?: string }) => {
     const { fieldApi: {getValue, setValue}, ...rest } = props;
-    const value = props.value || getValue();
+    const value = props.value !== undefined ? props.value : getValue();
 
     return (
         <div className={classNames(props.className, 'form-field__select')}>
