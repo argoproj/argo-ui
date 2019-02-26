@@ -55,4 +55,4 @@ export const FormSelect = ReactForm.FormField((props: SelectProps & { fieldApi: 
             />
         </div>
     );
-}) as React.ComponentType<ReactForm.FieldProps & { options: (SelectOption | string)[], multiSelect?: boolean, className?: string }>;
+}) as React.ComponentType<ReactForm.FieldProps & { value?: (string | string[]), options: (SelectOption | string)[], multiSelect?: boolean, className?: string }>;
