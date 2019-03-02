@@ -31,11 +31,11 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
             <FormComponent
                 {...props.componentProps || {}}
                 field={props.field}
-                className={classNames({ 'argo-field': true, 'argo-has-value': !!props.formApi.values[props.field] })}/>
+                className={classNames({ 'argo-field': true, 'argo-has-value': !!getNestedField(props.formApi.values, props.field) })}/>
 
             {props.label && <label className='argo-label-placeholder'>{props.label}</label>}
             {getNestedField(props.formApi.touched, props.field) &&
-                (props.formApi.errors[props.field] && <div className='argo-form-row__error-msg'>{props.formApi.errors[props.field]}</div>)
+                (props.formApi.errors[props.field] && <div className='argo-form-row__error-msg'>{getNestedField(props.formApi.errors, props.field)}</div>)
             }
         </div>
     );

@@ -1,6 +1,6 @@
 {
     "name": "argo-ui",
-    "version": "2.2.0-alpha20",
+    "version": "next",
     "main": "./src/lib/index.ts",
     "types": "./src/lib/index.ts",
     "license": "MIT",
