@@ -35,7 +35,7 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
 
             {props.label && <label className='argo-label-placeholder'>{props.label}</label>}
             {getNestedField(props.formApi.touched, props.field) &&
-                (props.formApi.errors[props.field] && <div className='argo-form-row__error-msg'>{getNestedField(props.formApi.errors, props.field)}</div>)
+                (props.formApi.errors[props.field] && <div className='argo-form-row__error-msg'>{props.formApi.errors[props.field]}</div>)
             }
         </div>
     );
