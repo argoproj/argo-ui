@@ -96,6 +96,7 @@ export function create(
         }) as models.WorkflowList;
 
         workflowList.items.sort(models.compareWorkflows);
+        workflowList.items = await Promise.all(workflowList.items.map(deCompressNodes));
         return workflowList;
     }));
 
