@@ -112,7 +112,7 @@ export function create(
             stream.on('close', () => observer.complete());
             stream = stream.pipe(new JSONStream());
             stream.on('data', (data) => data && observer.next(data));
-        }).flatMap(deCompressNodes);
+        }).flatMap((change) => Observable.fromPromise(deCompressNodes(change.object).then((workflow) => ({...change, object: workflow}))));
         if (ns) {
             updatesSource = updatesSource.filter((change) => {
                 return change.object.metadata.namespace === ns;
