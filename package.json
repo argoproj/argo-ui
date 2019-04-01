@@ -24,6 +24,7 @@
         "storybook": "start-storybook -p 6006"
     },
     "dependencies": {
+        "@tippy.js/react": "^2.1.2",
         "@types/react-form": "^2.16.1",
         "@types/react-helmet": "^5.0.8",
         "aws-sdk": "^2.188.0",
