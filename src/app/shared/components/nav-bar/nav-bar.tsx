@@ -1,9 +1,9 @@
 import * as classNames from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import Tooltip from '../tooltip/tooltip';
 
 import { AppContext } from '../../context';
+import {Tooltip} from '../tooltip/tooltip';
 
 require('./nav-bar.scss');
 
