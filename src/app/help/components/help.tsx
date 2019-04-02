@@ -11,7 +11,7 @@ export const Help = () => (
                 <div className='help-box'>
                     <div className='help-box__ico help-box__ico--manual'/>
                     <h3>Documentation</h3>
-                    <a href='https://argoproj.io/' target='_blank' className='help-box__link'> Argo Project</a>
+                    <a href='https://argoproj.github.io/' target='_blank' className='help-box__link'> Argo Project</a>
                 </div>
             </div>
             <div className='columns large-4 medium-12'>
