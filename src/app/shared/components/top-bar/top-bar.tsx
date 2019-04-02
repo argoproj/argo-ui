@@ -96,10 +96,10 @@ const renderActionMenu = (actionMenu: ActionMenu) => (
 
 const renderToolbar = (toolbar: Toolbar) => (
     <div className='top-bar row' key='tool-bar'>
-        <div className='columns small-10 top-bar__left-side'>
+        <div className='columns small-9 top-bar__left-side'>
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
         </div>        
-        <div className='columns small-2 top-bar__right-side'>
+        <div className='columns small-3 top-bar__right-side'>
             {toolbar.tools}
             {toolbar.filter && renderFilter(toolbar.filter)}
         </div>
