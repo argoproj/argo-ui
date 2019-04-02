@@ -87,7 +87,7 @@ const renderActionMenu = (actionMenu: ActionMenu) => (
     <div>
         {actionMenu.items.map(item => (
             <button className="argo-button argo-button--base" onClick={() => item.action()} style={{marginRight: 2}}>
-                {item.iconClassName && (<i className={item.iconClassName} style={{marginRight: 2}}/>)}
+                {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: "-5px", marginRight: "5px"}}/>)}
                 {item.title}
             </button>
         ))}
@@ -96,10 +96,10 @@ const renderActionMenu = (actionMenu: ActionMenu) => (
 
 const renderToolbar = (toolbar: Toolbar) => (
     <div className='top-bar row' key='tool-bar'>
-        <div className='columns small-11 top-bar__left-side'>
+        <div className='columns small-10 top-bar__left-side'>
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
         </div>        
-        <div className='columns small-1 top-bar__right-side'>
+        <div className='columns small-2 top-bar__right-side'>
             {toolbar.tools}
             {toolbar.filter && renderFilter(toolbar.filter)}
         </div>

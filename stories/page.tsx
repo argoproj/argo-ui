@@ -16,7 +16,6 @@ const breadcrumbs = [{
 }];
 
 const actionMenu = {
-    className: 'fa fa-plus',
     items: [{
         title: 'New Item 1',
         iconClassName: 'fa fa-history',
@@ -25,7 +24,7 @@ const actionMenu = {
         },
     }, {
         title: 'New Item 2',
-        iconClassName: 'fa fa-history',
+        iconClassName: 'icon argo-icon-deploy',
         action: () => {
             // do nothing
         },
@@ -38,6 +37,7 @@ const actionMenu = {
     },
     {
         title: 'New Item 4',
+        iconClassName: 'fa fa-times-circle',
         action: () => {
             // do nothing
         },
