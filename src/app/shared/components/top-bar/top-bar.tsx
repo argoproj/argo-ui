@@ -101,8 +101,8 @@ const renderToolbar = (toolbar: Toolbar) => (
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
         </div>
         <div className='columns small-3 top-bar__right-side'>
-            {toolbar.tools}
             {toolbar.filter && renderFilter(toolbar.filter)}
+            {toolbar.tools}
         </div>
     </div>
 );
