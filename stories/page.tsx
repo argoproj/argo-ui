@@ -18,18 +18,30 @@ const breadcrumbs = [{
 const actionMenu = {
     className: 'fa fa-plus',
     items: [{
-        title: 'New Item1',
+        title: 'New Item 1',
         iconClassName: 'fa fa-history',
         action: () => {
             // do nothing
         },
     }, {
-        title: 'New Item2',
+        title: 'New Item 2',
         iconClassName: 'fa fa-history',
         action: () => {
             // do nothing
         },
-    }],
+    }, 
+    {
+        title: 'New Item 3',
+        action: () => {
+            // do nothing
+        },
+    },
+    {
+        title: 'New Item 4',
+        action: () => {
+            // do nothing
+        },
+    }]
 };
 
 const history = createHistory();

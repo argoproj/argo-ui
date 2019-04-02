@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Checkbox } from '../checkbox';
-import { DropDownMenu } from '../dropdown-menu';
 import { DropDown } from '../dropdown/dropdown';
 
 require('./top-bar.scss');
@@ -85,26 +84,24 @@ const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => 
 );
 
 const renderActionMenu = (actionMenu: ActionMenu) => (
-    <div className='top-bar__action-menu'>
-        <DropDownMenu items={actionMenu.items} anchor={() => (
-            <a className='argo-button argo-button--radius argo-button--has-icon'>
-                <i aria-hidden='true' className={actionMenu.className || 'fa fa-ellipsis-v'}/>
-            </a>)}
-        />
+    <div>
+        {actionMenu.items.map(item => (
+            <button className="argo-button argo-button--base" onClick={() => item.action()} style={{marginRight: 2}}>
+                {item.iconClassName && (<i className={item.iconClassName} style={{marginRight: 2}}/>)}
+                {item.title}
+            </button>
+        ))}
     </div>
 );
 
 const renderToolbar = (toolbar: Toolbar) => (
     <div className='top-bar row' key='tool-bar'>
-        <div className='top-bar__left-side columns small-9'>
-            {toolbar.breadcrumbs && renderBreadcrumbs(toolbar.breadcrumbs)}
-        </div>
-        <div className='columns small-3'>
+        <div className='columns small-11 top-bar__left-side'>
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
-            <div className='top-bar__right-side '>
-                {toolbar.tools}
-                {toolbar.filter && renderFilter(toolbar.filter)}
-            </div>
+        </div>        
+        <div className='columns small-1 top-bar__right-side'>
+            {toolbar.tools}
+            {toolbar.filter && renderFilter(toolbar.filter)}
         </div>
     </div>
 );
@@ -113,9 +110,10 @@ export const TopBar = (props: TopBarProps) => (
     <div>
         <div className='top-bar' key='top-bar'>
             <div className='row'>
-                <div className='columns small-9 top-bar__left-side'>
-                    <div className='top-bar__title text-truncate'>{props.title}</div>
+                <div className='columns top-bar__left-side'>
+                    {props.toolbar.breadcrumbs && renderBreadcrumbs(props.toolbar.breadcrumbs)}
                 </div>
+                <div className='top-bar__title text-truncate top-bar__right-side'>{props.title}</div>
             </div>
         </div>
         {props.toolbar && renderToolbar(props.toolbar)}
