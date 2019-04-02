@@ -85,10 +85,10 @@ const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => 
 
 const renderActionMenu = (actionMenu: ActionMenu) => (
     <div>
-        {actionMenu.items.map(item => (
-            <button className="argo-button argo-button--base" onClick={() => item.action()} style={{marginRight: 2}}
+        {actionMenu.items.map((item) => (
+            <button className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}}
                 key={item.title}>
-                {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: "-5px", marginRight: "5px"}}/>)}
+                {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: '-5px', marginRight: '5px'}}/>)}
                 {item.title}
             </button>
         ))}
@@ -99,7 +99,7 @@ const renderToolbar = (toolbar: Toolbar) => (
     <div className='top-bar row' key='tool-bar'>
         <div className='columns small-9 top-bar__left-side'>
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
-        </div>        
+        </div>
         <div className='columns small-3 top-bar__right-side'>
             {toolbar.tools}
             {toolbar.filter && renderFilter(toolbar.filter)}
