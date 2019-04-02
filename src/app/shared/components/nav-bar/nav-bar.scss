@@ -11,7 +11,7 @@ $nav-break-height-sm: 746px;
     padding-top: 160px;
     z-index: $nav-z-index;
     width: $nav-width;
-    background: linear-gradient(to bottom, #0C3C5A, #004C67, #0f4965, #156883, #1f96ac);
+    background: linear-gradient(to bottom, #333, #444, #555, #666, #999);
     box-shadow: inset -2px 0 4px 0 rgba(0,0,0,0.59);
 
     &__logo {
@@ -41,7 +41,7 @@ $nav-break-height-sm: 746px;
         }
 
         &:not(:hover):not(.active) i {
-            background: -webkit-gradient(linear, left top, left bottom, from(#4ecbe8), to(#8cd58b));
+            background: -webkit-gradient(linear, left top, left bottom, from(#bbb), to(#999));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
