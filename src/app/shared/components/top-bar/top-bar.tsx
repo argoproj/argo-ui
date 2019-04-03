@@ -112,7 +112,7 @@ export const TopBar = (props: TopBarProps) => (
         <div className='top-bar' key='top-bar'>
             <div className='row'>
                 <div className='columns top-bar__left-side'>
-                    {props.toolbar.breadcrumbs && renderBreadcrumbs(props.toolbar.breadcrumbs)}
+                    {props.toolbar && props.toolbar.breadcrumbs && renderBreadcrumbs(props.toolbar.breadcrumbs)}
                 </div>
                 <div className='top-bar__title text-truncate top-bar__right-side'>{props.title}</div>
             </div>
