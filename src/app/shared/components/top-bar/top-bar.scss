@@ -82,12 +82,4 @@
         border-left: 1px solid $argo-color-gray-4;
         transform: rotate(24deg);
     }
-
-    &__action-menu {
-        position: absolute;
-        top: 1.3em;
-        a {
-            color: white;
-        }
-    }
 }
