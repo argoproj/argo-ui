@@ -2,7 +2,8 @@
 @import './argo-icon';
 
 @import 'node_modules/foundation-sites/scss/foundation';
-@import 'node_modules/font-awesome/scss/font-awesome';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/solid';
 
 @include foundation-global-styles;
 @include foundation-flex-classes;

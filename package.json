@@ -24,6 +24,7 @@
         "storybook": "start-storybook -p 6006"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.8.1",
         "@tippy.js/react": "^2.1.2",
         "@types/react-form": "^2.16.1",
         "@types/react-helmet": "^5.0.8",
@@ -34,7 +35,6 @@
         "deep-equal": "^1.0.1",
         "express": "^4.16.2",
         "express-winston": "^3.0.0",
-        "font-awesome": "^4.7.0",
         "foundation-sites": "^6.4.3",
         "history": "^4.7.2",
         "json-stream": "^1.0.0",

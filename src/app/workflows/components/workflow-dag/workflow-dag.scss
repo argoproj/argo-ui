@@ -1,6 +1,6 @@
 @import '../../../shared/styles/config';
-@import 'node_modules/font-awesome/scss/variables';
-@import 'node_modules/font-awesome/scss/mixins';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/variables';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/mixins';
 
 .workflow-dag {
     position: relative;
@@ -88,7 +88,7 @@
             background-color: $argo-failed-color;
             &::after {
                 @include fa-icon;
-                content: $fa-var-times-circle;
+                content: fa-content($fa-var-times-circle);
             }
         }
 
@@ -96,7 +96,7 @@
             background-color: $argo-status-warning-color;
             &::after {
                 @include fa-icon;
-                content: $fa-var-clock-o;
+                content: fa-content($fa-var-clock);
                 font-size: 1em;
                 animation-name: spin;
                 animation-duration: 10000ms;
@@ -109,7 +109,7 @@
             background-color: $argo-running-color;
             &::after {
                 @include fa-icon;
-                content: $fa-var-circle-o-notch;
+                content: $fa-var-circle-notch;
                 animation-name: spin;
                 animation-duration: 4000ms;
                 animation-iteration-count: infinite;
@@ -126,7 +126,7 @@
             background-color: $argo-success-color;
             &::after {
                 @include fa-icon;
-                content: $fa-var-check;
+                content: fa-content($fa-var-check);
             }
         }
         &--skipped {
