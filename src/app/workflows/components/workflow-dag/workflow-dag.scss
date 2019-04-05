@@ -109,7 +109,7 @@
             background-color: $argo-running-color;
             &::after {
                 @include fa-icon;
-                content: $fa-var-circle-notch;
+                content: fa-content($fa-var-circle-notch);
                 animation-name: spin;
                 animation-duration: 4000ms;
                 animation-iteration-count: infinite;

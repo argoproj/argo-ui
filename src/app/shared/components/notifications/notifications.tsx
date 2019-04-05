@@ -31,7 +31,7 @@ export const Notifications = (props: NotificationsProps) => (
             })}>
                 {notification.type === NotificationType.Success && <i className='fa fa-check-circle'/>}
                 {notification.type === NotificationType.Warning && <i className='fa fa-exclamation-triangle'/>}
-                {notification.type === NotificationType.Error && <i className='fa fa-times-circle-o'/>}
+                {notification.type === NotificationType.Error && <i className='fa fa-times-circle'/>}
                 <div className='argo-notification__content'>
                     {notification.content}
                 </div>

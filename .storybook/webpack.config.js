@@ -21,7 +21,7 @@ module.exports = (baseConfig, env) => {
     config.plugins.push(new CopyWebpackPlugin([{
         from: 'src/assets', to: 'assets'
     }, {
-        from: 'node_modules/node_modules/@fortawesome/fontawesome-free/webfonts', to: 'assets/fonts'
+        from: 'node_modules/@fortawesome/fontawesome-free/webfonts', to: 'assets/fonts'
     }]));
 
     return config;

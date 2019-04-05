@@ -13,13 +13,13 @@ export const Utils = {
                 classes = ['fa-check-circle', 'status-icon--success'];
                 break;
             case NODE_PHASE.RUNNING:
-                classes = ['fa-circle-o-notch', 'status-icon--running', 'status-icon--spin'];
+                classes = ['fa-circle-notch', 'status-icon--running', 'status-icon--spin'];
                 break;
             case NODE_PHASE.PENDING:
-                classes = ['fa-clock-o', 'status-icon--pending', 'status-icon--slow-spin'];
+                classes = ['fa-clock', 'status-icon--pending', 'status-icon--slow-spin'];
                 break;
             default:
-                classes = ['fa-clock-o', 'status-icon--init'];
+                classes = ['fa-clock', 'status-icon--init'];
                 break;
         }
         return classes.join(' ');
