@@ -4,6 +4,8 @@ import * as ReactForm from 'react-form';
 
 import { Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
 
+const uuid = require('uuid/v1');
+
 require('./form-field.scss');
 
 export function getNestedField(src: any, path: string): any {
@@ -23,6 +25,7 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
         componentProps?: T,
     },
 ) => React.ReactElement<E> = (props) => {
+    const [id] = React.useState(uuid());
 
     const FormComponent = props.component as React.ComponentType<any>;
 
@@ -30,10 +33,11 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
         <div>
             <FormComponent
                 {...props.componentProps || {}}
+                id={id}
                 field={props.field}
                 className={classNames({ 'argo-field': true, 'argo-has-value': !!getNestedField(props.formApi.values, props.field) })}/>
 
-            {props.label && <label className='argo-label-placeholder'>{props.label}</label>}
+            {props.label && <label htmlFor={id} className='argo-label-placeholder'>{props.label}</label>}
             {getNestedField(props.formApi.touched, props.field) &&
                 (props.formApi.errors[props.field] && <div className='argo-form-row__error-msg'>{props.formApi.errors[props.field]}</div>)
             }
