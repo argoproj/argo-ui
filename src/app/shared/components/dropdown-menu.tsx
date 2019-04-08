@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DropDown } from './dropdown/dropdown';
 
 export interface MenuItem {
-    title: string | React.ReactNode;
+    title: string | React.ReactElement;
     iconClassName?: string;
     action: () => any;
 }
