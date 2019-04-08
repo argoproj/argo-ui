@@ -38,6 +38,7 @@ const actionMenu = {
     {
         title: 'New Item 4',
         iconClassName: 'fa fa-times-circle',
+        disabled: true,
         action: () => {
             // do nothing
         },
