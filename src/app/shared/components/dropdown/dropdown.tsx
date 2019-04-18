@@ -2,9 +2,10 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-export interface DropDownProps extends React.Props<any> {
+export interface DropDownProps {
     isMenu?: boolean;
     anchor: React.ComponentType;
+    children: React.ReactNode | (() => React.ReactNode);
 }
 
 export interface DropDownState {
@@ -34,7 +35,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
                 </div>
                 <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
                     style={{top: this.state.top, left: this.state.left}}>
-                    {this.props.children}
+                    {this.state.opened && this.renderChildren()}
                 </div>
             </div>
         );
@@ -56,6 +57,13 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
 
     public close() {
         this.setState({ opened: false });
+    }
+
+    private renderChildren() {
+        if (typeof this.props.children === 'function') {
+            return (this.props.children as () => React.ReactNode)();
+        }
+        return this.props.children as React.ReactNode;
     }
 
     private open() {
