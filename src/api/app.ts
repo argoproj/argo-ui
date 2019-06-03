@@ -9,7 +9,7 @@ import * as Api from 'kubernetes-client';
 import * as path from 'path';
 import { Observable, Observer } from 'rxjs';
 import * as nodeStream from 'stream';
-import * as Util from 'util';
+import * as promisify from 'util.promisify';
 import * as winston from 'winston';
 
 import * as zlib from 'zlib';
@@ -136,7 +136,7 @@ export function create(
     async function deCompressNodes(workFlow: models.Workflow): Promise<models.Workflow> {
         if (workFlow.status.compressedNodes !== undefined && workFlow.status.compressedNodes !== '') {
             const buffer = Buffer.from(workFlow.status.compressedNodes, 'base64');
-            const unCompressedBuffer = await Util.promisify(zlib.unzip)(buffer);
+            const unCompressedBuffer = await promisify(zlib.unzip)(buffer);
             workFlow.status.nodes = JSON.parse(unCompressedBuffer.toString());
             delete workFlow.status.compressedNodes;
             return workFlow;
