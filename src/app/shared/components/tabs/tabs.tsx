@@ -5,7 +5,7 @@ import * as classNames from 'classnames';
 export interface Tab {
     title: string;
     icon?: string;
-    badge?: string;
+    badge?: string | number;
     key: string;
     content: React.ReactNode;
     isOnlyContentScrollable?: boolean;
