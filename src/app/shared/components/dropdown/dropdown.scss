@@ -9,7 +9,7 @@
 
     &__content {
         position: absolute;
-        z-index: 10;
+        z-index: $notifications-z-index;
         padding: 1rem;
         background-color: $white-color;
         box-shadow: 0 0 4px rgba(#000, .2);
