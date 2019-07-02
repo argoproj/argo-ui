@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 export interface DropDownProps {
@@ -20,6 +21,7 @@ const dropDownOpened = new BehaviorSubject<DropDown>(null);
 
 export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private el: HTMLDivElement;
+    private content: HTMLDivElement;
     private subscription: Subscription;
 
     constructor(props: DropDownProps) {
@@ -28,15 +30,28 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     }
 
     public render() {
+        let children: React.ReactNode = null;
+        if (typeof this.props.children === 'function') {
+            if (this.state.opened) {
+                const fun = this.props.children as () => React.ReactNode;
+                children = fun();
+            }
+        } else {
+            children = this.props.children as React.ReactNode;
+        }
+
         return (
             <div className='argo-dropdown' ref={(el) => this.el = el}>
                 <div className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
                     <this.props.anchor/>
                 </div>
-                <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
-                    style={{top: this.state.top, left: this.state.left}}>
-                    {this.state.opened && this.renderChildren()}
-                </div>
+                {ReactDOM.createPortal((
+                    <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
+                        style={{top: this.state.top, left: this.state.left}}
+                        ref={(el) => this.content = el}>
+                        {children}
+                    </div>
+                ), document.body)}
             </div>
         );
     }
@@ -44,8 +59,12 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     public componentWillMount() {
         this.subscription = Observable.merge(
             dropDownOpened.filter((dropdown) => dropdown !== this),
-            Observable.fromEvent(document, 'click').filter((event: Event) => !this.el.contains(event.target as Node) && this.state.opened),
-        ).subscribe(() => this.close());
+            Observable.fromEvent(document, 'click').filter((event: Event) => {
+                return this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
+            }),
+        ).subscribe(() => {
+            this.close();
+        });
     }
 
     public componentWillUnmount() {
@@ -59,43 +78,29 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         this.setState({ opened: false });
     }
 
-    private renderChildren() {
-        if (typeof this.props.children === 'function') {
-            return (this.props.children as () => React.ReactNode)();
-        }
-        return this.props.children as React.ReactNode;
-    }
-
     private open() {
-        let scrollWindowTop = 0;
-        let scrollWindowLeft = 0;
-        let offsetParent = this.el.offsetParent as HTMLElement;
-        let top = this.el.offsetTop;
-        let left = this.el.offsetLeft;
-        const anchor = this.el.querySelector('.argo-dropdown__anchor') as HTMLElement;
-        const content = this.el.querySelector('.argo-dropdown__content') as HTMLElement;
-        const anchorHeight = anchor.offsetHeight + 2;
 
-        for (; offsetParent !== null; offsetParent = offsetParent.offsetParent as HTMLElement) {
-            scrollWindowTop += offsetParent.scrollTop;
-            scrollWindowLeft += offsetParent.scrollLeft;
-            top += offsetParent.offsetTop;
-            left += offsetParent.offsetLeft;
+        if (!this.content || !this.el) {
+            return;
         }
+
+        const anchor = this.el.querySelector('.argo-dropdown__anchor') as HTMLElement;
+        const {top, left} = anchor.getBoundingClientRect();
+        const anchorHeight = anchor.offsetHeight + 2;
 
         const newState = { left: this.state.left, top: this.state.top, opened: this.state.opened };
         // Set top position
-        if (content.offsetHeight + top + anchorHeight - scrollWindowTop > window.innerHeight) {
-            newState.top = anchor.offsetTop - content.offsetHeight - 2;
+        if (this.content.offsetHeight + top + anchorHeight > window.innerHeight) {
+            newState.top = top - this.content.offsetHeight - 2;
         } else {
-            newState.top = anchor.offsetTop + anchorHeight;
+            newState.top = top + anchorHeight;
         }
 
         // Set left position
-        if (content.offsetWidth + left - scrollWindowLeft > window.innerWidth) {
-            newState.left = anchor.offsetLeft - content.offsetWidth + anchor.offsetWidth;
+        if (this.content.offsetWidth + left > window.innerWidth) {
+            newState.left = left - this.content.offsetWidth + anchor.offsetWidth;
         } else {
-            newState.left = anchor.offsetLeft;
+            newState.left = left;
         }
 
         newState.opened = true;
