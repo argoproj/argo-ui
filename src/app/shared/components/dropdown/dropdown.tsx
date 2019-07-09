@@ -85,7 +85,9 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         }
 
         const anchor = this.el.querySelector('.argo-dropdown__anchor') as HTMLElement;
-        const {top, left} = anchor.getBoundingClientRect();
+        let {top, left} = anchor.getBoundingClientRect();
+        left += window.pageXOffset;
+        top += window.pageYOffset;
         const anchorHeight = anchor.offsetHeight + 2;
 
         const newState = { left: this.state.left, top: this.state.top, opened: this.state.opened };
