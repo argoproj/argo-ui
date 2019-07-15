@@ -32,10 +32,8 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     public render() {
         let children: React.ReactNode = null;
         if (typeof this.props.children === 'function') {
-            if (this.state.opened) {
-                const fun = this.props.children as () => React.ReactNode;
-                children = fun();
-            }
+            const fun = this.props.children as () => React.ReactNode;
+            children = fun();
         } else {
             children = this.props.children as React.ReactNode;
         }
