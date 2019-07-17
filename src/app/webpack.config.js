@@ -67,10 +67,4 @@ const config = {
     }
 };
 
-if (isProd) {
-    config
-        .plugins
-        .push(new webpack.optimize.UglifyJsPlugin());
-}
-
 module.exports = config;
