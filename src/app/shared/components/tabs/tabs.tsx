@@ -5,6 +5,7 @@ import * as classNames from 'classnames';
 export interface Tab {
     title: string;
     icon?: string;
+    badge?: string | number;
     key: string;
     content: React.ReactNode;
     isOnlyContentScrollable?: boolean;
@@ -55,6 +56,7 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
                             {this.props.tabs.map((tab) => (
                                 <a key={tab.key} onClick={() => this.selectTab(tab)} className={classNames({active: this.isTabSelected(tab)})}>
                                     {tab.icon && <i className={`fa ${tab.icon}`}/>} {tab.title}
+                                    {tab.badge && <span className='fa-stack has-badge' data-count={tab.badge}/>}
                                 </a>
                             ))}
                             <div className={classNames('tabs__indicator', {

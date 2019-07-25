@@ -9,8 +9,10 @@ import * as Api from 'kubernetes-client';
 import * as path from 'path';
 import { Observable, Observer } from 'rxjs';
 import * as nodeStream from 'stream';
+import * as promisify from 'util.promisify';
 import * as winston from 'winston';
 
+import * as zlib from 'zlib';
 import * as models from '../models';
 import * as consoleProxy from './console-proxy';
 
@@ -94,15 +96,15 @@ export function create(
         }) as models.WorkflowList;
 
         workflowList.items.sort(models.compareWorkflows);
+        workflowList.items = await Promise.all(workflowList.items.map(deCompressNodes));
         return workflowList;
     }));
 
     app.get('/api/workflows/:namespace/:name',
-        async (req, res) => serve(res, () => (forceNamespaceIsolation ? crd.ns(namespace) : crd.ns(req.params.namespace)).workflows.get(req.params.name)));
+        async (req, res) => serve(res, () => (forceNamespaceIsolation ? crd.ns(namespace) : crd.ns(req.params.namespace)).workflows.get(req.params.name).then((deCompressNodes))));
 
     app.get('/api/workflows/live', async (req, res) => {
         const ns = getNamespace(req);
-
         let updatesSource = new Observable((observer: Observer<any>) => {
             const labelSelector = getWorkflowLabelSelector(req);
             let stream = (ns ? crd.ns(ns) : crd).workflows.getStream({ qs: { watch: true, labelSelector: labelSelector.join(',') } });
@@ -111,7 +113,7 @@ export function create(
             stream.on('close', () => observer.complete());
             stream = stream.pipe(new JSONStream());
             stream.on('data', (data) => data && observer.next(data));
-        });
+        }).flatMap((change) => Observable.fromPromise(deCompressNodes(change.object).then((workflow) => ({...change, object: workflow}))));
         if (ns) {
             updatesSource = updatesSource.filter((change) => {
                 return change.object.metadata.namespace === ns;
@@ -128,7 +130,19 @@ export function create(
     }
 
     function getWorkflow(ns: string, name: string): Promise<models.Workflow> {
-        return crd.ns(ns).workflows.get(name);
+        return crd.ns(ns).workflows.get(name).then(deCompressNodes);
+    }
+
+    async function deCompressNodes(workFlow: models.Workflow): Promise<models.Workflow> {
+        if (workFlow.status.compressedNodes !== undefined && workFlow.status.compressedNodes !== '') {
+            const buffer = Buffer.from(workFlow.status.compressedNodes, 'base64');
+            const unCompressedBuffer = await promisify(zlib.unzip)(buffer);
+            workFlow.status.nodes = JSON.parse(unCompressedBuffer.toString());
+            delete workFlow.status.compressedNodes;
+            return workFlow;
+        } else {
+            return workFlow;
+        }
     }
 
     function loadNodeArtifact(wf: models.Workflow, nodeId: string, artifactName: string): Promise<{ data: Buffer, fileName: string }> {

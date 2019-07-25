@@ -6,6 +6,7 @@ export interface PopupProps extends React.Props<any> {
     title: string | React.ReactNode;
     content?: React.ComponentType;
     footer?: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 require('./popup.scss');
@@ -23,7 +24,7 @@ export const Popup = (props: PopupProps) => (
                     </div>
                 }
                 <div className={classNames('columns', {'large-10': !!props.icon, 'large-12': !props.icon})}>
-                    <props.content/>
+                    {props.children ? props.children : <props.content/>}
                 </div>
             </div>
 

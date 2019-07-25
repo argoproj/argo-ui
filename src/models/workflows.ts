@@ -704,6 +704,8 @@ export interface WorkflowStatus {
      * The contents of this list are drained at the end of the workflow.
      */
     persistentVolumeClaims: kubernetes.Volume[];
+
+    compressedNodes: string;
 }
 
 /**

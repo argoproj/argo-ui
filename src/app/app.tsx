@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Router, Switch } from 'react-router';
 
 import { uiUrl } from './shared/base';
-import { Layout, NotificationInfo, Notifications, NotificationsManager, Popup, PopupManager, PopupProps } from './shared/components';
+import { Layout, Notifications, NotificationsManager, Popup, PopupManager, PopupProps } from './shared/components';
 import { AppContext } from './shared/context';
 
 export const history = createHistory();
@@ -30,7 +30,7 @@ const navItems = [{
     iconClassName: 'argo-icon-docs',
 }];
 
-export class App extends React.Component<{}, { notifications: NotificationInfo[], popupProps: PopupProps }> {
+export class App extends React.Component<{}, { popupProps: PopupProps }> {
     public static childContextTypes = {
         history: PropTypes.object,
         apis: PropTypes.object,
@@ -41,14 +41,13 @@ export class App extends React.Component<{}, { notifications: NotificationInfo[]
 
     constructor(props: {}) {
         super(props);
-        this.state = { notifications: [], popupProps: null };
+        this.state = { popupProps: null };
         this.popupManager = new PopupManager();
         this.notificationsManager = new NotificationsManager();
     }
 
     public componentDidMount() {
         this.popupManager.popupProps.subscribe((popupProps) => this.setState({ popupProps }));
-        this.notificationsManager.notifications.subscribe((notifications) => this.setState({ notifications }));
     }
 
     public render() {
@@ -67,7 +66,7 @@ export class App extends React.Component<{}, { notifications: NotificationInfo[]
                             }
                         } }/>
                         <Layout navItems={navItems}>
-                            <Notifications leftOffset={60} closeNotification={(item) => this.notificationsManager.close(item)} notifications={this.state.notifications}/>
+                            <Notifications notifications={this.notificationsManager.notifications}/>
                             {Object.keys(routes).map((path) => {
                                 const route = routes[path];
                                 return <Route key={path} path={path} component={route.component}/>;

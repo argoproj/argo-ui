@@ -23,6 +23,7 @@ export interface SelectProps {
     onChange?: (option: SelectOption) => any;
     onMultiChange?: (options: SelectOption[]) => any;
     multiSelect?: boolean;
+    id?: string;
 }
 
 require('./select.scss');
@@ -78,7 +79,7 @@ export class Select extends React.Component<SelectProps, State> {
         }
         return (
             <div className='select' ref={(el) => this.el = el}>
-                {!this.state.opened && <input className='select__focus-receiver' type='text' onFocus={() => this.openDropdown()}/>}
+                {!this.state.opened && <input id={this.props.id} className='select__focus-receiver' type='text' onFocus={() => this.openDropdown()}/>}
                 <div className='select__value' onClick={() => this.openDropdown()}>
                     {selectedOptions.length > 0 ? selectedOptions.map((item) => item.title).join(', ') : this.props.placeholder || ''}
                     <div className='select__value-arrow'><i className='argo-icon-expand-arrow'/></div>
