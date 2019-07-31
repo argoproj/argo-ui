@@ -12,8 +12,7 @@
     &__row {
         position: relative;
         margin: 8px 0;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        line-height: 60px;
         font-size: .8125em;
         color: $argo-color-gray-6;
         background-color: #fff;
@@ -37,10 +36,6 @@
             }
         }
 
-        .wrap {
-            white-space: normal !important;
-        }
-
         &.selected {
             background-color: $argo-color-teal-2;
         }
@@ -58,7 +53,6 @@
             margin-bottom: 20px;
             line-height: inherit;
         }
-
     }
 
     &__loader {
