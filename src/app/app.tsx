@@ -1,4 +1,4 @@
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Router, Switch } from 'react-router';
@@ -7,7 +7,7 @@ import { uiUrl } from './shared/base';
 import { Layout, Notifications, NotificationsManager, Popup, PopupManager, PopupProps } from './shared/components';
 import { AppContext } from './shared/context';
 
-export const history = createHistory();
+export const history = createBrowserHistory();
 
 import help from './help';
 import workflows from './workflows';
