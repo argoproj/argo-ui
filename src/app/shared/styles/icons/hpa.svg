@@ -62,7 +62,7 @@
        transform="matrix(0.91708941,0,0,0.88661142,0.84998242,1.6871552)">
       <path
          sodipodi:nodetypes="ccccccccccccccccccc"
-         style="fill:#8fa4b1;fill-rule:evenodd;stroke:none;stroke-width:0.15791963;stroke-linecap:square;stroke-miterlimit:10"
+         style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.15791963;stroke-linecap:square;stroke-miterlimit:10"
          inkscape:connector-curvature="0"
          d="M 2.329607,9.2906665 4.585246,7.0350278 v 1.127819 H 5.415554 V 4.7793895 h 9.14581 v 3.3834573 h 0.830309 v -1.127819 l 2.25564,2.2556387 -2.25564,2.2556475 v -1.127819 h -0.830309 v 3.383457 H 5.415554 V 10.418495 H 4.585246 v 1.127819 z"
          id="path7034" />

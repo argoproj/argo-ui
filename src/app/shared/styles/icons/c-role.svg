@@ -67,19 +67,19 @@
          rx="0.50633514"
          cy="9.9493122"
          cx="9.9282999"
-         style="fill:#8fa4b1;fill-opacity:1;stroke:none;stroke-width:0.12665248" />
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.12665248" />
       <path
          id="path7840-40"
          pointer-events="none"
          d="M 10.010926,5.8761701 6.9028749,7.2503511 V 9.300852 c 0,1.901056 1.3247841,3.677988 3.1080511,4.109873 1.780734,-0.431885 3.106786,-2.208817 3.106786,-4.109873 V 7.2503511 Z m 1.645216,5.5182459 H 8.364444 V 8.6308581 h 0.472414 v -0.301428 c 0,-0.650995 0.53194,-1.17914 1.189266,-1.17914 0.657327,0 1.189267,0.528145 1.189267,1.17914 v 0.301428 h 0.440751 z"
          inkscape:connector-curvature="0"
-         style="fill:#8fa4b1;fill-opacity:1;stroke:none;stroke-width:0.12665248" />
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.12665248" />
       <path
          id="path7836-7"
          pointer-events="none"
          d="m 9.9878259,7.5890498 c -0.393889,0.0014 -0.713053,0.317896 -0.713053,0.707987 v 0.296364 h 1.4273741 v -0.301428 c -0.0038,-0.388828 -0.321698,-0.701659 -0.7143211,-0.702923 z"
          inkscape:connector-curvature="0"
-         style="fill:#8fa4b1;fill-opacity:1;stroke:none;stroke-width:0.12665248" />
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.12665248" />
     </g>
   </g>
 </svg>
