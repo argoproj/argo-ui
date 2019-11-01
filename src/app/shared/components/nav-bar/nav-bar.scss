@@ -85,4 +85,11 @@ $nav-break-height-sm: 746px;
             content: '';
         }
     }
+
+    &__version {
+        font-size: smaller;
+        color: $argo-color-gray-2;
+        overflow: hidden;
+        text-align: center;
+    }
 }
