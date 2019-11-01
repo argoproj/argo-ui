@@ -22,7 +22,7 @@ const dropDownOpened = new BehaviorSubject<DropDown>(null);
 export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private el: HTMLDivElement;
     private content: HTMLDivElement;
-    private subscription: Subscription;
+    private subscriptions: Subscription[];
 
     constructor(props: DropDownProps) {
         super(props);
@@ -57,43 +57,33 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     }
 
     public componentWillMount() {
-        this.subscription = Observable.merge(
+        this.subscriptions = [Observable.merge(
             dropDownOpened.filter((dropdown) => dropdown !== this),
             Observable.fromEvent(document, 'click').filter((event: Event) => {
                 return this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
             }),
         ).subscribe(() => {
             this.close();
-        });
+        }), Observable.fromEvent(document, 'scroll', true).subscribe(() => {
+            if (this.state.opened && this.content && this.el) {
+                this.setState(this.refreshState());
+            }
+        })];
     }
 
     public componentWillUnmount() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-            this.subscription = null;
-        }
+        (this.subscriptions || []).forEach((s) => s.unsubscribe());
+        this.subscriptions = [];
     }
 
     public close() {
         this.setState({ opened: false });
     }
 
-    private open() {
-
-        if (!this.content || !this.el) {
-            return;
-        }
-
-        let offsetParent = this.el.offsetParent as HTMLElement;
-        let top = this.el.offsetTop;
-        let left = this.el.offsetLeft;
+    private refreshState() {
         const anchor = this.el.querySelector('.argo-dropdown__anchor') as HTMLElement;
+        const {top, left} = anchor.getBoundingClientRect();
         const anchorHeight = anchor.offsetHeight + 2;
-
-        for (; offsetParent !== null; offsetParent = offsetParent.offsetParent as HTMLElement) {
-            top += offsetParent.offsetTop;
-            left += offsetParent.offsetLeft;
-        }
 
         const newState = { left: this.state.left, top: this.state.top, opened: this.state.opened };
         // Set top position
@@ -109,7 +99,15 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         } else {
             newState.left = left;
         }
+        return newState;
+    }
 
+    private open() {
+        if (!this.content || !this.el) {
+            return;
+        }
+
+        const newState = this.refreshState();
         newState.opened = true;
         this.setState(newState);
         dropDownOpened.next(this);

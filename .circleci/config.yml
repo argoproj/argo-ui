@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:11.15.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - yarn-packages-v4-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile --ignore-optional --non-interactive
+      - save_cache:
+          key: yarn-packages-v4-{{ checksum "yarn.lock" }}
+          paths: [~/.cache/yarn, node_modules]
+      - run: yarn test
+      - run: yarn build
+      - run: yarn lint

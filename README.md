@@ -2,9 +2,15 @@
 
 ![Argo Image](https://github.com/argoproj/argo/blob/master/argo.png?raw=true)
 
-Argo UI is the web-based user interface for the Argo workflow engine. Argo UI allows users to view Argo workflows running in the cluster, view, container, logs, etc.
-
 Some Argo UI components (such as Workflow DAG viewer, Workflow timeline etc.) are available via the [argo-ui npm package](https://www.npmjs.com/package/argo-ui).
+
+A web-based UI for the Argo Workflow engine. 
+
+The UI has the following features:
+* View live Argo Workflows running in the cluster
+* View completed Argo Workflows
+* View container logs
+
 
 ## Build, Run, & Release
 
