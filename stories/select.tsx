@@ -2,7 +2,7 @@ import { Store, withState } from '@dump247/storybook-state';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { Autocomplete, Select } from '../src/app/shared/components';
+import { Select } from '../src/app/shared/components';
 
 storiesOf('Select', module)
     .add('default', withState({ selected: 'option1' })(({store}: { store: Store<any> }) => (
@@ -29,15 +29,6 @@ storiesOf('Select', module)
                     placeholder='Select something'
                     options={['option1', { value: 'option2', title: 'Option 2' }]}
                     onMultiChange={(options) => store.set({ selected: options.map((item) => item.value) })}
-                    />
-            </div>
-        ))),
-    ).add('autocomplete', withState({ selected: 'option1' })(({store}: { store: Store<any> }) => (
-        () => (
-            <div>
-                <Autocomplete
-                    value={store.state.selected}
-                    options={['option1', { value: 'option2', title: 'Option 2' }]}
                     />
             </div>
         ))),

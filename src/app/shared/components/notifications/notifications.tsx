@@ -1,5 +1,10 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import { Observable, Subscription } from 'rxjs';
+
+require('react-toastify/dist/ReactToastify.css');
+
+const AUTO_CLOSE_TIMEOUT = 10000;
 
 export enum NotificationType {
     Success,
@@ -9,34 +14,56 @@ export enum NotificationType {
 
 export interface NotificationInfo {
     type: NotificationType;
-    style?: React.CSSProperties;
     content: React.ReactNode;
 }
 
 export interface NotificationsProps {
-    notifications: NotificationInfo[];
-    closeNotification: (notification: NotificationInfo) => any;
-    leftOffset: number;
+    notifications: Observable<NotificationInfo>;
 }
 
-require('./notifications.scss');
+export class Notifications extends React.Component<NotificationsProps> {
+    private subscription: Subscription;
 
-export const Notifications = (props: NotificationsProps) => (
-    <div className='argo-notifications-list' style={{left: props.leftOffset}}>
-        {props.notifications.map((notification, i) => (
-            <div key={i} style={notification.style} className={classNames('argo-notification', {
-                success: notification.type === NotificationType.Success,
-                warning: notification.type === NotificationType.Warning,
-                error: notification.type === NotificationType.Error,
-            })}>
-                {notification.type === NotificationType.Success && <i className='fa fa-check-circle'/>}
-                {notification.type === NotificationType.Warning && <i className='fa fa-exclamation-triangle'/>}
-                {notification.type === NotificationType.Error && <i className='fa fa-times-circle-o'/>}
-                <div className='argo-notification__content'>
-                    {notification.content}
+    constructor(props: NotificationsProps) {
+        super(props);
+        this.subscription = props.notifications.subscribe((next) => {
+            let toastMethod = toast.success;
+            switch (next.type) {
+                case NotificationType.Error:
+                    toastMethod = toast.error;
+                    break;
+                case NotificationType.Warning:
+                    toastMethod = toast.warn;
+                    break;
+            }
+            toastMethod((
+                <div onClick={(e) => {
+                    const range = document.createRange();
+                    range.selectNode(e.target as Node);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                }}>
+                    {next.content}
                 </div>
-                {props.closeNotification && <div className='argo-notification__close' onClick={() => props.closeNotification(notification)}>x</div>}
-            </div>
-        ))}
-    </div>
-);
+            ), {
+                position: toast.POSITION.BOTTOM_RIGHT,
+                closeOnClick: false,
+                pauseOnHover: true,
+                pauseOnFocusLoss: true,
+                draggable: false,
+                autoClose: AUTO_CLOSE_TIMEOUT,
+            });
+        });
+    }
+
+    public componentWillUnmount() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
+    }
+
+    public render() {
+        return  <ToastContainer />;
+    }
+}

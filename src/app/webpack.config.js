@@ -3,6 +3,7 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const path = require('path');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -23,7 +24,7 @@ const config = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loaders: [ ...( isProd ? [] : ['react-hot-loader/webpack']), 'awesome-typescript-loader?configFileName=./src/app/tsconfig.json']
+                loaders: [ ...( isProd ? [] : ['react-hot-loader/webpack']), `ts-loader?configFile=${path.resolve('./src/app/tsconfig.json')}`]
             }, {
                 enforce: 'pre',
                 test: /\.js$/,
@@ -52,7 +53,7 @@ const config = {
         new CopyWebpackPlugin([{
             from: 'src/assets', to: 'assets'
         }, {
-            from: 'node_modules/font-awesome/fonts', to: 'assets/fonts'
+            from: 'node_modules/@fortawesome/fontawesome-free/webfonts', to: 'assets/fonts'
         }]),
     ],
     devServer: {
@@ -65,11 +66,5 @@ const config = {
         }
     }
 };
-
-if (isProd) {
-    config
-        .plugins
-        .push(new webpack.optimize.UglifyJsPlugin());
-}
 
 module.exports = config;

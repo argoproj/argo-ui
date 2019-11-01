@@ -100,4 +100,20 @@
             padding: 0;
         }
     }
+
+    .fa-stack[data-count]:after{
+        position:absolute;
+        right:0%;
+        top:1%;
+        content: attr(data-count);
+        font-size:70%;
+        padding:.6em;
+        border-radius:999px;
+        line-height:.75em;
+        color: white;
+        background:$argo-failed-color;
+        text-align:center;
+        min-width:2em;
+        font-weight:bold;
+      }
 }

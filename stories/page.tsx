@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Route, Router } from 'react-router';
 
 import { Layout, Page } from '../src/app/shared/components';
+import { Observable } from 'rxjs';
 
 const navItems = [{ path: location.pathname, title: 'Sample', iconClassName: 'argo-icon-docs' }];
 const breadcrumbs = [{
@@ -15,20 +16,33 @@ const breadcrumbs = [{
 }];
 
 const actionMenu = {
-    className: 'fa fa-plus',
     items: [{
-        title: 'New Item1',
+        title: 'New Item 1',
         iconClassName: 'fa fa-history',
         action: () => {
             // do nothing
         },
     }, {
-        title: 'New Item2',
-        iconClassName: 'fa fa-history',
+        title: 'New Item 2',
+        iconClassName: 'icon argo-icon-deploy',
         action: () => {
             // do nothing
         },
-    }],
+    }, 
+    {
+        title: 'New Item 3',
+        action: () => {
+            // do nothing
+        },
+    },
+    {
+        title: 'New Item 4',
+        iconClassName: 'fa fa-times-circle',
+        disabled: true,
+        action: () => {
+            // do nothing
+        },
+    }]
 };
 
 const history = createHistory();
@@ -75,4 +89,18 @@ storiesOf('Page', module)
                 </Layout>
             </Route>
         </Router>
-    )));
+    ))).add('dynamic toolbar', () => (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems}>
+                    <Page title='Hello world!' toolbar={Observable.timer(0, 1000).map(() => ({ breadcrumbs: [{title: 'hello ' + new Date().toLocaleTimeString()}] }))}>
+                        <div style={{padding: '1em'}}>
+                            <div className='white-box'>
+                                Hello world!
+                            </div>
+                        </div>
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
+    ));

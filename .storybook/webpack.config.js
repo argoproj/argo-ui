@@ -1,12 +1,10 @@
+const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const genDefaultConfig = require('@storybook/react/dist/server/config/defaults/webpack.config.js');
 
-module.exports = (baseConfig, env) => {
-    const config = genDefaultConfig(baseConfig, env);
-
+module.exports = ({config}) => {
     config.module.rules = [{
         test: /\.(ts|tsx)$/,
-        loader: 'awesome-typescript-loader?configFileName=./stories/tsconfig.json'
+        loader: `ts-loader?configFile=${path.resolve('./stories/tsconfig.json')}`
     }, {
         test: /\.scss$/,
         exclude: /node_modules/,
@@ -21,7 +19,7 @@ module.exports = (baseConfig, env) => {
     config.plugins.push(new CopyWebpackPlugin([{
         from: 'src/assets', to: 'assets'
     }, {
-        from: 'node_modules/font-awesome/fonts', to: 'assets/fonts'
+        from: 'node_modules/@fortawesome/fontawesome-free/webfonts', to: 'assets/fonts'
     }]));
 
     return config;

@@ -14,10 +14,10 @@ $argo-icon-fonts-root: '/' !default;
 
 @font-face {
     font-family: "argo-icon";
-    src: url($argo-icon-fonts-root + "argo-icon.eot?51d43a1be01e193a568d7d6a26b14f4c?#iefix") format("embedded-opentype"),
-url($argo-icon-fonts-root + "argo-icon.woff?51d43a1be01e193a568d7d6a26b14f4c") format("woff"),
-url($argo-icon-fonts-root + "argo-icon.ttf?51d43a1be01e193a568d7d6a26b14f4c") format("truetype"),
-url($argo-icon-fonts-root + "argo-icon.svg?51d43a1be01e193a568d7d6a26b14f4c#argo-icon") format("svg");
+    src: url($argo-icon-fonts-root + "argo-icon.eot?ccc4996926ddb03387f9250fe04a0860?#iefix") format("embedded-opentype"),
+url($argo-icon-fonts-root + "argo-icon.woff?ccc4996926ddb03387f9250fe04a0860") format("woff"),
+url($argo-icon-fonts-root + "argo-icon.ttf?ccc4996926ddb03387f9250fe04a0860") format("truetype"),
+url($argo-icon-fonts-root + "argo-icon.svg?ccc4996926ddb03387f9250fe04a0860#argo-icon") format("svg");
 }
 
 i {
@@ -240,168 +240,171 @@ i {
 .argo-icon-github:before {
   content: "\f13b";
 }
-.argo-icon-help:before {
+.argo-icon-helm:before {
   content: "\f13c";
 }
-.argo-icon-hosts:before {
+.argo-icon-help:before {
   content: "\f13d";
 }
-.argo-icon-import:before {
+.argo-icon-hosts:before {
   content: "\f13e";
 }
-.argo-icon-info:before {
+.argo-icon-import:before {
   content: "\f13f";
 }
-.argo-icon-integrations:before {
+.argo-icon-info:before {
   content: "\f140";
 }
-.argo-icon-intlogo:before {
+.argo-icon-integrations:before {
   content: "\f141";
 }
-.argo-icon-jira:before {
+.argo-icon-intlogo:before {
   content: "\f142";
 }
-.argo-icon-job:before {
+.argo-icon-jira:before {
   content: "\f143";
 }
-.argo-icon-label:before {
+.argo-icon-job:before {
   content: "\f144";
 }
-.argo-icon-launcher:before {
+.argo-icon-label:before {
   content: "\f145";
 }
-.argo-icon-lock:before {
+.argo-icon-launcher:before {
   content: "\f146";
 }
-.argo-icon-logout:before {
+.argo-icon-lock:before {
   content: "\f147";
 }
-.argo-icon-manage:before {
+.argo-icon-logout:before {
   content: "\f148";
 }
-.argo-icon-menu-2:before {
+.argo-icon-manage:before {
   content: "\f149";
 }
-.argo-icon-metrics:before {
+.argo-icon-menu-2:before {
   content: "\f14a";
 }
-.argo-icon-more:before {
+.argo-icon-metrics:before {
   content: "\f14b";
 }
-.argo-icon-new:before {
+.argo-icon-more:before {
   content: "\f14c";
 }
-.argo-icon-nonmarkingreturn:before {
+.argo-icon-new:before {
   content: "\f14d";
 }
-.argo-icon-notification:before {
+.argo-icon-nonmarkingreturn:before {
   content: "\f14e";
 }
-.argo-icon-pencil:before {
+.argo-icon-notification:before {
   content: "\f14f";
 }
-.argo-icon-play-2:before {
+.argo-icon-pencil:before {
   content: "\f150";
 }
-.argo-icon-play:before {
+.argo-icon-play-2:before {
   content: "\f151";
 }
-.argo-icon-pod:before {
+.argo-icon-play:before {
   content: "\f152";
 }
-.argo-icon-policies:before {
+.argo-icon-pod:before {
   content: "\f153";
 }
-.argo-icon-policy:before {
+.argo-icon-policies:before {
   content: "\f154";
 }
-.argo-icon-profile:before {
+.argo-icon-policy:before {
   content: "\f155";
 }
-.argo-icon-push:before {
+.argo-icon-profile:before {
   content: "\f156";
 }
-.argo-icon-report-card:before {
+.argo-icon-push:before {
   content: "\f157";
 }
-.argo-icon-resubmit-failed:before {
+.argo-icon-report-card:before {
   content: "\f158";
 }
-.argo-icon-retry:before {
+.argo-icon-resubmit-failed:before {
   content: "\f159";
 }
-.argo-icon-right-navigation-toolbar:before {
+.argo-icon-retry:before {
   content: "\f15a";
 }
-.argo-icon-safe:before {
+.argo-icon-right-navigation-toolbar:before {
   content: "\f15b";
 }
-.argo-icon-sales-channels:before {
+.argo-icon-safe:before {
   content: "\f15c";
 }
-.argo-icon-sample:before {
+.argo-icon-sales-channels:before {
   content: "\f15d";
 }
-.argo-icon-scale:before {
+.argo-icon-sample:before {
   content: "\f15e";
 }
-.argo-icon-search:before {
+.argo-icon-scale:before {
   content: "\f15f";
 }
-.argo-icon-settings:before {
+.argo-icon-search:before {
   content: "\f160";
 }
-.argo-icon-slack-02:before {
+.argo-icon-settings:before {
   content: "\f161";
 }
-.argo-icon-stop-property:before {
+.argo-icon-slack-02:before {
   content: "\f162";
 }
-.argo-icon-stop:before {
+.argo-icon-stop-property:before {
   content: "\f163";
 }
-.argo-icon-storageclass:before {
+.argo-icon-stop:before {
   content: "\f164";
 }
-.argo-icon-storageprovider:before {
+.argo-icon-storageclass:before {
   content: "\f165";
 }
-.argo-icon-tag:before {
+.argo-icon-storageprovider:before {
   content: "\f166";
 }
-.argo-icon-template:before {
+.argo-icon-tag:before {
   content: "\f167";
 }
-.argo-icon-terminate:before {
+.argo-icon-template:before {
   content: "\f168";
 }
-.argo-icon-test:before {
+.argo-icon-terminate:before {
   content: "\f169";
 }
-.argo-icon-timeline:before {
+.argo-icon-test:before {
   content: "\f16a";
 }
-.argo-icon-tools:before {
+.argo-icon-timeline:before {
   content: "\f16b";
 }
-.argo-icon-user-groups:before {
+.argo-icon-tools:before {
   content: "\f16c";
 }
-.argo-icon-user-profile:before {
+.argo-icon-user-groups:before {
   content: "\f16d";
 }
-.argo-icon-user:before {
+.argo-icon-user-profile:before {
   content: "\f16e";
 }
-.argo-icon-users:before {
+.argo-icon-user:before {
   content: "\f16f";
 }
-.argo-icon-volume:before {
+.argo-icon-users:before {
   content: "\f170";
 }
-.argo-icon-workflow:before {
+.argo-icon-volume:before {
   content: "\f171";
 }
-.argo-icon-yaml:before {
+.argo-icon-workflow:before {
   content: "\f172";
+}
+.argo-icon-yaml:before {
+  content: "\f173";
 }

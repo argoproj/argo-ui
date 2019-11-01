@@ -1,6 +1,5 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as ReactAutocomplete from 'react-autocomplete';
 import { Observable, Subscription } from 'rxjs';
 
 import { Checkbox } from '../checkbox';
@@ -24,14 +23,7 @@ export interface SelectProps {
     onChange?: (option: SelectOption) => any;
     onMultiChange?: (options: SelectOption[]) => any;
     multiSelect?: boolean;
-}
-
-export interface AutocompleteProps {
-    options: Array<SelectOption | string>;
-    value: string;
-    onChange?: (value: string) => any;
-    inputProps?: React.HTMLProps<HTMLInputElement>;
-    wrapperProps?: React.HTMLProps<HTMLDivElement>;
+    id?: string;
 }
 
 require('./select.scss');
@@ -39,30 +31,6 @@ require('./select.scss');
 function normalizeOptions(options: Array<SelectOption | string>) {
     return options.map((item) => typeof item === 'string' ? ({ value: item, title: item }) : item);
 }
-
-export const Autocomplete = (props: AutocompleteProps) => {
-    const options = normalizeOptions(props.options);
-    const wrapperProps = props.wrapperProps || {};
-    wrapperProps.className = classNames(wrapperProps.className || '', { autocomplete: true, empty: (props.options || []).length === 0 });
-    return (
-        <ReactAutocomplete ref={(el) => {
-            if (el) {
-                // workaround for 'autofill for forms not deactivatable' https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
-                (el.refs.input as HTMLInputElement).autocomplete = 'new-password';
-            }
-        }}
-            inputProps={{...props.inputProps || {}}}
-            wrapperProps={wrapperProps}
-            renderItem={(option: SelectOption, selected: boolean) => (
-            <div className={classNames('select__option', { selected })} key={option.value}>
-                {option.title}
-            </div>
-        )}
-        onSelect={(val) => props.onChange && props.onChange(val)}
-        onChange={(_, val) => props.onChange && props.onChange(val)}
-        value={props.value} items={options} getItemValue={(opt: SelectOption) => opt.value}/>
-    );
-};
 
 export class Select extends React.Component<SelectProps, State> {
 
@@ -111,7 +79,7 @@ export class Select extends React.Component<SelectProps, State> {
         }
         return (
             <div className='select' ref={(el) => this.el = el}>
-                {!this.state.opened && <input className='select__focus-receiver' type='text' onFocus={() => this.openDropdown()}/>}
+                {!this.state.opened && <input id={this.props.id} className='select__focus-receiver' type='text' onFocus={() => this.openDropdown()}/>}
                 <div className='select__value' onClick={() => this.openDropdown()}>
                     {selectedOptions.length > 0 ? selectedOptions.map((item) => item.title).join(', ') : this.props.placeholder || ''}
                     <div className='select__value-arrow'><i className='argo-icon-expand-arrow'/></div>

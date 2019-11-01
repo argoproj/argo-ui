@@ -6,6 +6,11 @@ import * as app from './app';
 
 const argv = yargs.argv;
 
+const ip = argv.ip || '0.0.0.0';
+const port = argv.port || '8001';
+// tslint:disable-next-line
+console.log(`start argo-ui on ${argv.ip}:${argv.port}`);
+
 app.create(
   argv.uiDist || path.join(__dirname, '..', '..', 'dist', 'app'),
   argv.uiBaseHref || '/',
@@ -14,4 +19,4 @@ app.create(
   argv.forceNamespaceIsolation === 'true',
   argv.instanceId || undefined,
   argv.crdVersion || 'v1alpha1',
-).listen(8001);
+).listen(port, ip);

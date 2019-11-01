@@ -32,12 +32,12 @@
 
     &--base {
         color: $argo-color-gray-1;
-        background-color: $argo-color-teal-6;
+        background-color: $argo-color-gray-6;
 
         &:not(.disabled):not([disabled]) {
             &:hover {
                 color: $argo-color-gray-1;
-                background-color: $argo-color-teal-5;
+                background-color: $argo-color-gray-5;
             }
         }
 

@@ -124,11 +124,11 @@
         padding: 10px 40px 10px 10px;
         font-size: 16px;
         background-color: white;
-        border: 1px solid #BDECF2;
+        border: 1px solid $argo-color-teal-5;
         transition: border .2s;
 
         &:focus {
-            border-color: #1FBDD0;
+            border-color: $argo-color-teal-5;
         }
     }
 }

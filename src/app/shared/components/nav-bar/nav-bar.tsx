@@ -3,11 +3,13 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
 import { AppContext } from '../../context';
+import {Tooltip} from '../tooltip/tooltip';
 
 require('./nav-bar.scss');
 
 export interface NavBarProps extends React.Props<any> {
     items: Array<{ path: string; iconClassName: string; title: string; }>;
+    version?: () => React.ReactElement;
 }
 
 export function isActiveRoute(locationPath: string, path: string) {
@@ -20,15 +22,15 @@ export const NavBar: React.StatelessComponent<NavBarProps> = (props: NavBarProps
         <div className='nav-bar'>
         <div className='nav-bar__logo'>
             <img src='assets/images/logo.png' alt='Argo'/>
+            <div className='nav-bar__version'>{props.version && props.version()}</div>
             {(props.items || []).map((item) => (
-                <div className={classNames('nav-bar__item', { active: isActiveRoute(locationPath, item.path) })}
-                     key={item.path + item.title}
-                     onClick={() => context.router.history.push(item.path)}>
+                <Tooltip content={item.title} placement='right' arrow={true} key={item.path + item.title}>
+                    <div className={classNames('nav-bar__item', { active: isActiveRoute(locationPath, item.path) })}
+                        onClick={() => context.router.history.push(item.path)}>
 
-                    <i className={item.iconClassName}/>
-                    <span className='nav-bar__item-tooltip'>{item.title}</span>
-
-                </div>
+                        <i className={item.iconClassName}/>
+                    </div>
+                </Tooltip>
             ))}
         </div>
     </div>);

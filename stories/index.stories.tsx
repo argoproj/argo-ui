@@ -6,3 +6,4 @@ import './page';
 import './popup';
 import './select';
 import './table';
+import './tabs';

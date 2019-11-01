@@ -16,8 +16,8 @@ $popup-border-radius: 8px;
         position: relative;
         box-shadow: 3px 3px 20px #888888;
         margin: 0 auto;
-        top: 25%;
-        width: 35%;
+        top: 50%;
+        transform: translateY(-50%);
         min-width: 400px;
         max-width: 1000px;
         max-height: 600px;
@@ -48,7 +48,7 @@ $popup-border-radius: 8px;
         }
 
         &__footer {
-            background-color: white;
+            background-color: $argo-color-gray-1;
             bottom: 0;
             padding-top: 10px;
             padding-left: 44px;
@@ -67,7 +67,7 @@ $popup-border-radius: 8px;
         }
 
         &__body {
-            background-color: white;
+            background-color: $argo-color-gray-1;
 
             h4, p {
                 padding-left: 30px;
