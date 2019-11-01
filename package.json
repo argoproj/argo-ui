@@ -87,7 +87,7 @@
         "chai": "^4.1.2",
         "copy-webpack-plugin": "^4.3.1",
         "copyfiles": "^1.2.0",
-        "foreman": "^2.0.0",
+        "foreman": "^3.0.1",
         "glob": "^7.1.2",
         "html-webpack-plugin": "^3.2.0",
         "jscs": "^3.0.7",
