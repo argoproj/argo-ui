@@ -1,0 +1,13 @@
+.slide-contents {
+    .slide-contents--title {
+        cursor: pointer;
+    }
+    .slide-contents--contents {
+        overflow-y: hidden;
+        max-height: 100%;
+
+        &.slide-contents--contents-hidden {
+            max-height: 0;
+        }
+    }
+}

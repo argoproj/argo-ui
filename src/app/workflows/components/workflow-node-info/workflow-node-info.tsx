@@ -48,7 +48,7 @@ export const WorkflowNodeSummary = (props: Props) => {
             </Ticker>
         ) },
     ];
-    const template = props.workflow.spec.templates.find((item) => item.name === props.node.templateName);
+    const [template] = Utils.getResolvedTemplates(props.workflow, props.node);
     return (
         <div className='white-box'>
             <div className='white-box__details'>
@@ -132,7 +132,7 @@ export class WorkflowNodeContainers extends React.Component<Props, { selectedSid
     }
 
     public render() {
-        const template = this.props.workflow.spec.templates.find((item) => item.name === this.props.node.templateName);
+        const [template] = Utils.getResolvedTemplates(this.props.workflow, this.props.node);
         if (!template || (!template.container && !template.script)) {
             return (
                 <div className='white-box'>

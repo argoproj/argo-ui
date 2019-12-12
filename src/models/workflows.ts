@@ -523,6 +523,16 @@ export interface Template {
      * DAG template
      */
     dag: DAGTemplate;
+
+    /**
+     * Template is the name of the template which is used as the base of this template.
+     */
+    template: string;
+
+    /**
+     * TemplateRef is the reference to the template resource which is used as the base of this template.
+     */
+    templateRef: TemplateRef;
 }
 /**
  * ValueFrom describes a location in which to obtain the value to a parameter
@@ -679,6 +689,33 @@ export interface NodeStatus {
      * Inputs captures input parameter values and artifact locations supplied to this template invocation
      */
     inputs: Inputs;
+
+    /**
+     * TemplateRef is the reference to the template resource which this node corresponds to.
+     * Not applicable to virtual nodes (e.g. Retry, StepGroup)
+     */
+    templateRef: TemplateRef;
+
+    /**
+     * TemplateScope is the template scope in which the template of this node was retrieved.
+     */
+    templateScope: string;
+}
+
+export interface TemplateRef {
+    /**
+     * Name is the resource name of the template.
+     */
+    name: string;
+    /**
+     * Template is the name of referred template in the resource.
+     */
+    template: string;
+    /**
+     * RuntimeResolution skips validation at creation time.
+     * By enabling this option, you can create the referred workflow template before the actual runtime.
+     */
+    runtimeResolution: boolean;
 }
 
 export interface WorkflowStatus {
@@ -706,6 +743,11 @@ export interface WorkflowStatus {
     persistentVolumeClaims: kubernetes.Volume[];
 
     compressedNodes: string;
+
+    /*
+     * StoredTemplates is a mapping between a template ref and the node's status.
+     */
+    storedTemplates: {[name: string]: Template};
 }
 
 /**
@@ -796,6 +838,11 @@ export interface DAGTask {
      * Name of template to execute
      */
     template: string;
+
+    /**
+     * TemplateRef is the reference to the template resource to execute.
+     */
+    templateRef: TemplateRef;
 
     /**
      * Arguments are the parameter and artifact arguments to the template
