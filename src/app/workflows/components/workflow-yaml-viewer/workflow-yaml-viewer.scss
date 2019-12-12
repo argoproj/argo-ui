@@ -3,6 +3,7 @@
 .workflow-yaml-viewer {
   font: normal 13px/1.2 'Courier', sans-serif;
   color: $argo-color-gray-7;
+  overflow-y: scroll;
 
   .workflow-yaml-section {
     margin: 0;
