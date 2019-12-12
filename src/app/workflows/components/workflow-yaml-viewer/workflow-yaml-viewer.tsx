@@ -71,7 +71,7 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
             const storedTemplatesStr = yaml.stringify(storedTemplates, 4, 1);
             contents.push((
             <SlideContents
-                title={'Stored Workflow Templates'}
+                title={'Stored Templates'}
                 contents={<div dangerouslySetInnerHTML={{__html: this.addCounterToDisplayedFiles(storedTemplatesStr)}} />}
                 className='workflow-yaml-section'
             />
