@@ -77,14 +77,13 @@ export const Utils = {
         return Observable.from([val as T]);
     },
 
-    getResolvedTemplates(workflow: models.Workflow, node: models.NodeStatus): [models.Template, string[]] {
+    getResolvedTemplates(workflow: models.Workflow, node: models.NodeStatus): models.Template {
         let tmpTemplate = {
             template: node.templateName,
             templateRef: node.templateRef,
         };
         let scope = node.templateScope;
         const referencedTemplates: models.Template[] = [];
-        const referencedTemplateNames: string[] = [];
         let resolvedTemplate: models.Template;
         const maxDepth = 10;
         for (let i = 1; i < maxDepth + 1; i ++) {
@@ -104,12 +103,9 @@ export const Utils = {
             if (!tmpl) {
                 // tslint:disable-next-line: no-console
                 console.error(`StoredTemplate ${storedTemplateName} not found`);
-                return [undefined, []];
+                return undefined;
             }
             referencedTemplates.push(tmpl);
-            if (storedTemplateName) {
-                referencedTemplateNames.push(storedTemplateName);
-            }
             if (!tmpl.template && !tmpl.templateRef) {
                 break;
             }
@@ -117,7 +113,7 @@ export const Utils = {
             if (i === maxDepth) {
                 // tslint:disable-next-line: no-console
                 console.error(`Template reference too deep`);
-                return [undefined, []];
+                return undefined;
             }
         }
         referencedTemplates.reverse().forEach((tmpl) => {
@@ -126,6 +122,6 @@ export const Utils = {
             delete tmpl.templateRef;
             resolvedTemplate = Object.assign({}, resolvedTemplate, tmpl);
         });
-        return [resolvedTemplate, referencedTemplateNames];
+        return resolvedTemplate;
     },
 };

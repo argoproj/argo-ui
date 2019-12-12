@@ -28,7 +28,7 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
         if (this.props.selectedNode) {
             const parentNode = this.props.workflow.status.nodes[this.props.selectedNode.boundaryID];
             if (parentNode) {
-                const [parentTemplate] = Utils.getResolvedTemplates(this.props.workflow, parentNode);
+                const parentTemplate = Utils.getResolvedTemplates(this.props.workflow, parentNode);
 
                 let nodeName = '';
                 if (this.props.selectedNode) {
@@ -46,7 +46,7 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
                 );
             }
 
-            const [template] = Utils.getResolvedTemplates(this.props.workflow, this.props.selectedNode);
+            const template = Utils.getResolvedTemplates(this.props.workflow, this.props.selectedNode);
             const templateStr = yaml.stringify(template, 4, 1);
             contents.push(
                 <div className='workflow-yaml-section'>
