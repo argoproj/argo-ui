@@ -2,7 +2,7 @@ import { Store, withState } from '@dump247/storybook-state';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { Select } from '../src/app/shared/components';
+import { Select } from '../src/components';
 
 storiesOf('Select', module)
     .add('default', withState({ selected: 'option1' })(({store}: { store: Store<any> }) => (

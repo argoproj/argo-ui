@@ -4,7 +4,7 @@ const config = require('../app/webpack.config');
 const webpack = require('webpack');
 
 module.exports = Object.assign({}, config, {
-    entry: './src/lib/index.ts',
+    entry: './src/index.ts',
     output: {
         filename: 'bundle.js',
         path: __dirname + '/../../bundle',

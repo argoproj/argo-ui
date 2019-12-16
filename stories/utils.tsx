@@ -1,7 +1,7 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { Notifications, NotificationsApi, NotificationsManager, Popup, PopupApi, PopupManager, PopupProps} from '../src/app/shared/components';
+import { Notifications, NotificationsApi, NotificationsManager, Popup, PopupApi, PopupManager, PopupProps} from '../src/components';
 
 export class App extends React.Component<{ children: (apis: {
     notifications: NotificationsApi,

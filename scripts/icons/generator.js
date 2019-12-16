@@ -7,7 +7,7 @@ const fs = require('fs');
 const FONT_TYPES = ['svg', 'ttf', 'woff', 'eot'];
 
 webfontsGenerator({
-    files: glob.sync('src/app/shared/styles/icons/*.svg'),
+    files: glob.sync('src/styles/icons/*.svg'),
     dest: 'src/assets/fonts',
     fontName: 'argo-icon',
     types: FONT_TYPES,
@@ -22,7 +22,7 @@ webfontsGenerator({
         console.log('Fail!', error);
     } else {
         const scss = fs.readFileSync('src/assets/fonts/argo-icon.css', 'utf-8').replace(/url\(\"argo-icon/g, 'url\($argo-icon-fonts-root + \"argo-icon');
-        fs.writeFileSync('src/app/shared/styles/argo-icon.scss', scss);
+        fs.writeFileSync('src/styles/argo-icon.scss', scss);
         fs.unlinkSync('src/assets/fonts/argo-icon.css');
     }
 });
