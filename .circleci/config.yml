@@ -12,6 +12,5 @@ jobs:
       - save_cache:
           key: yarn-packages-v4-{{ checksum "yarn.lock" }}
           paths: [~/.cache/yarn, node_modules]
-      - run: yarn test
       - run: yarn build
       - run: yarn lint

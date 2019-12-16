@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Text } from 'react-form';
 
-import { Checkbox, FormField } from '../src/app/shared/components';
+import { Checkbox, FormField } from '../src/components';
 import { App } from './utils';
 
 storiesOf('Popup', module)

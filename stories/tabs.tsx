@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { Tabs } from '../src/app/shared/components';
+import { Tabs } from '../src/components';
 
 storiesOf('Tabs', module)
     .add('basic tabs', () => (

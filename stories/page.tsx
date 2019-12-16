@@ -3,9 +3,9 @@ import { storiesOf } from '@storybook/react';
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
 import { Route, Router } from 'react-router';
-
-import { Layout, Page } from '../src/app/shared/components';
 import { Observable } from 'rxjs';
+
+import { Layout, Page } from '../src/components';
 
 const navItems = [{ path: location.pathname, title: 'Sample', iconClassName: 'argo-icon-docs' }];
 const breadcrumbs = [{
