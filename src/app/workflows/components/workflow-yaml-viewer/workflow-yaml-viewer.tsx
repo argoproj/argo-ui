@@ -3,6 +3,7 @@ import * as yaml from 'yamljs';
 
 import * as models from '../../../../models';
 import { Utils } from '../../../shared/components';
+import { SlideContents } from '../../../shared/components/slide-contents/slide-contents';
 
 require('./workflow-yaml-viewer.scss');
 
@@ -23,19 +24,64 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
     }
 
     public render() {
-        let nodeName = '';
+        const contents: JSX.Element[] = [];
         if (this.props.selectedNode) {
-            nodeName = this.normalizeNodeName(this.props.selectedNode.displayName || this.props.selectedNode.name);
-        }
-        const html = this.props.workflow.spec.templates.map((item) => {
-            let itemStr = yaml.stringify(item, 4, 1);
-            if (nodeName) {
-                itemStr = this.highlightStep(item, nodeName, itemStr);
+            const parentNode = this.props.workflow.status.nodes[this.props.selectedNode.boundaryID];
+            if (parentNode) {
+                const parentTemplate = Utils.getResolvedTemplates(this.props.workflow, parentNode);
+
+                let nodeName = '';
+                if (this.props.selectedNode) {
+                    nodeName = this.normalizeNodeName(this.props.selectedNode.displayName || this.props.selectedNode.name);
+                }
+                let parentTemplateStr = yaml.stringify(parentTemplate, 4, 1);
+                if (nodeName) {
+                    parentTemplateStr = this.highlightStep(parentTemplate, nodeName, parentTemplateStr);
+                }
+                contents.push(
+                <div className='workflow-yaml-section'>
+                    <h4>Parent Node</h4>
+                    <div dangerouslySetInnerHTML={{__html:  this.addCounterToDisplayedFiles(parentTemplateStr)}} />
+                </div>,
+                );
             }
-            return this.addCounterToDisplayedFiles(itemStr);
-        }).join('\n\n');
+
+            const template = Utils.getResolvedTemplates(this.props.workflow, this.props.selectedNode);
+            const templateStr = yaml.stringify(template, 4, 1);
+            contents.push(
+                <div className='workflow-yaml-section'>
+                    <h4>Current Node</h4>
+                    <div dangerouslySetInnerHTML={{__html:  this.addCounterToDisplayedFiles(templateStr)}} />
+                </div>,
+                );
+        }
+        const templates = this.props.workflow.spec.templates;
+        if (templates && Object.keys(templates).length) {
+            const templatesStr = yaml.stringify(templates, 4, 1);
+            contents.push((
+                <SlideContents
+                    title={'Templates'}
+                    contents={<div dangerouslySetInnerHTML={{__html: this.addCounterToDisplayedFiles(templatesStr)}} />}
+                    className='workflow-yaml-section'
+                />
+                ));
+        }
+        const storedTemplates = this.props.workflow.status.storedTemplates;
+        if (storedTemplates && Object.keys(storedTemplates).length) {
+            const storedTemplatesStr = yaml.stringify(storedTemplates, 4, 1);
+            contents.push((
+            <SlideContents
+                title={'Stored Templates'}
+                contents={<div dangerouslySetInnerHTML={{__html: this.addCounterToDisplayedFiles(storedTemplatesStr)}} />}
+                className='workflow-yaml-section'
+            />
+            ));
+        }
+
         return (
-            <div className='workflow-yaml-viewer' dangerouslySetInnerHTML={{ __html: html }} ref={(container) => this.container = container} />
+            <div className='workflow-yaml-viewer' ref={(container) => this.container = container}>
+                {contents}
+            </div>
         );
     }
 
@@ -47,7 +93,7 @@ export class WorkflowYamlViewer extends React.Component<WorkflowYamlViewerProps>
                 if (item !== '') {
                     if (item.indexOf('<span>') !== -1) {
                         item = item.match(/^<span>\s*/)[0] + item.substr(6);
-                        item = `<li class="highlight">${item}</li>`;
+                        item = `<li class='highlight'>${item}</li>`;
                     } else {
                         item = item.match(/^\s*/)[0] + item;
                         // special treatment to beautify resource templates
