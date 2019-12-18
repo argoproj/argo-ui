@@ -16,6 +16,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@tippy.js/react": "^2.1.2",
+        "@types/react-autocomplete": "^1.8.5",
         "@types/react-form": "^2.16.1",
         "@types/react-helmet": "^5.0.8",
         "classnames": "^2.2.5",
