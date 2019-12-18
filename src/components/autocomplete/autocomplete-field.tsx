@@ -7,7 +7,7 @@ import {Autocomplete, AutocompleteOption, AutocompleteProps} from './autocomplet
 export const AutocompleteField = ReactForm.FormField((props: AutocompleteProps & {fieldApi: ReactForm.FieldApi; className?: string}) => {
     const {
         fieldApi: {getValue, setValue, setTouched},
-        ...rest
+        ...rest,
     } = props;
     const value = getValue();
 
@@ -21,19 +21,19 @@ export const AutocompleteField = ReactForm.FormField((props: AutocompleteProps &
             }}
             inputProps={{
                 className: props.className,
-                style: {borderBottom: 'none'}
+                style: {borderBottom: 'none'},
             }}
             value={value}
-            renderInput={inputProps => (
+            renderInput={(inputProps) => (
                 <input
                     {...inputProps}
-                    onFocus={e => {
+                    onFocus={(e) => {
                         if (inputProps.onFocus) {
                             inputProps.onFocus(e);
                         }
                         setForceHasValue(true);
                     }}
-                    onBlur={e => {
+                    onBlur={(e) => {
                         if (inputProps.onBlur) {
                             inputProps.onBlur(e);
                         }
@@ -42,7 +42,7 @@ export const AutocompleteField = ReactForm.FormField((props: AutocompleteProps &
                     }}
                 />
             )}
-            onChange={val => setValue(val.target.value)}
+            onChange={(val) => setValue(val.target.value)}
             {...rest}
         />
     );

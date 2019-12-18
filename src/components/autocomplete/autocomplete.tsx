@@ -25,13 +25,13 @@ export interface AutocompleteProps {
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
-    const items = (props.items || []).map(item => {
+    const items = (props.items || []).map((item) => {
         if (typeof item === 'string') {
             return {value: item, label: item};
         } else {
             return {
                 value: item.value,
-                label: item.label || item.value
+                label: item.label || item.value,
             };
         }
     });
@@ -82,7 +82,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                                 el.setState({
                                     menuTop,
                                     menuLeft: rect.left + marginLeft,
-                                    menuWidth: rect.width + marginLeft + marginRight
+                                    menuWidth: rect.width + marginLeft + marginRight,
                                 });
                             }
                         };
@@ -95,7 +95,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                             if (el && el.refs.input) {
                                 el.setMenuPositions();
                             }
-                        }
+                        },
                     });
                 }
             }}
@@ -110,7 +110,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 }
                 return <div style={{...style, ...this.menuStyle, background: 'white', zIndex: 10, maxHeight: '20em'}} children={menuItems} />;
             }}
-            getItemValue={item => item.label}
+            getItemValue={(item) => item.label}
             items={items}
             value={props.value}
             renderItem={(item, isSelected) => (
