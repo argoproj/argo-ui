@@ -5,10 +5,7 @@ import * as ReactForm from 'react-form';
 import {Autocomplete, AutocompleteOption, AutocompleteProps} from './autocomplete';
 
 export const AutocompleteField = ReactForm.FormField((props: AutocompleteProps & {fieldApi: ReactForm.FieldApi; className?: string}) => {
-    const {
-        fieldApi: {getValue, setValue, setTouched},
-        ...rest,
-    } = props;
+    const {fieldApi: {getValue, setValue, setTouched}, ...rest} = props;
     const value = getValue();
 
     const [forceHasValue, setForceHasValue] = React.useState(false);
