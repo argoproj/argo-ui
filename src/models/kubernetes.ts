@@ -77,7 +77,7 @@ export interface EnvVar {
 }
 
 export interface Container {
-    name: string;
+    name?: string;
     image?: string;
     command?: string[];
     args?: string[];
