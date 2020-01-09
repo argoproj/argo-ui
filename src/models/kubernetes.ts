@@ -14,7 +14,7 @@ export type PersistentVolumeClaim = any;
 export type Affinity = any;
 
 export interface ListMeta {
-    _continue?: string;
+    continue?: string;
     resourceVersion?: string;
     selfLink?: string;
 }
@@ -39,22 +39,22 @@ export interface ObjectMeta {
 }
 
 export interface TypeMeta {
-    kind: string;
-    apiVersion: string;
+    kind?: string;
+    apiVersion?: string;
 }
 
 export interface LocalObjectReference {
-    name: string;
+    name?: string;
 }
 
 export interface ObjectReference {
-    kind: string;
-    namespace: string;
-    name: string;
-    uid: string;
-    apiVersion: string;
-    resourceVersion: string;
-    fieldPath: string;
+    kind?: string;
+    namespace?: string;
+    name?: string;
+    uid?: string;
+    apiVersion?: string;
+    resourceVersion?: string;
+    fieldPath?: string;
 }
 
 export interface SecretKeySelector extends LocalObjectReference {
@@ -63,40 +63,40 @@ export interface SecretKeySelector extends LocalObjectReference {
 }
 
 export interface ContainerPort {
-    name: string;
-    hostPort: number;
+    name?: string;
+    hostPort?: number;
     containerPort: number;
-    protocol: string;
-    hostIP: string;
+    protocol?: string;
+    hostIP?: string;
 }
 
 export interface EnvVar {
     name: string;
-    value: string;
-    valueFrom: EnvVarSource;
+    value?: string;
+    valueFrom?: EnvVarSource;
 }
 
 export interface Container {
     name: string;
-    image: string;
-    command: string[];
-    args: string[];
-    workingDir: string;
-    ports: ContainerPort[];
-    envFrom: EnvFromSource[];
-    env: EnvVar[];
-    resources: ResourceRequirements;
-    volumeMounts: VolumeMount[];
-    livenessProbe: Probe;
-    readinessProbe: Probe;
-    lifecycle: Lifecycle;
-    terminationMessagePath: string;
-    terminationMessagePolicy: TerminationMessagePolicy;
-    imagePullPolicy: PullPolicy;
-    securityContext: SecurityContext;
-    stdin: boolean;
-    stdinOnce: boolean;
-    tty: boolean;
+    image?: string;
+    command?: string[];
+    args?: string[];
+    workingDir?: string;
+    ports?: ContainerPort[];
+    envFrom?: EnvFromSource[];
+    env?: EnvVar[];
+    resources?: ResourceRequirements;
+    volumeMounts?: VolumeMount[];
+    livenessProbe?: Probe;
+    readinessProbe?: Probe;
+    lifecycle?: Lifecycle;
+    terminationMessagePath?: string;
+    terminationMessagePolicy?: TerminationMessagePolicy;
+    imagePullPolicy?: PullPolicy;
+    securityContext?: SecurityContext;
+    stdin?: boolean;
+    stdinOnce?: boolean;
+    tty?: boolean;
 }
 
 export interface WatchEvent<T> {
