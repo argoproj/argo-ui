@@ -39,6 +39,8 @@ export class NavigationManager implements NavigationApi {
         options = options || {};
         if (options.event && options.event.metaKey) {
             window.open(path, '__target');
+        } else if (options.event && options.event.ctrlKey) {
+            window.open(path, '_blank');
         } else {
             if (options.replace) {
                 this.history.replace(path);
