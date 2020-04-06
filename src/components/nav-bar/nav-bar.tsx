@@ -8,7 +8,7 @@ import {Tooltip} from '../tooltip/tooltip';
 require('./nav-bar.scss');
 
 export interface NavBarProps extends React.Props<any> {
-    items: Array<{ path: string; iconClassName: string; title: string; }>;
+    items: Array<{ path: string; iconClassName?: string; iconContent?: JSX.Element; title: string; }>;
     version?: () => React.ReactElement;
 }
 
@@ -27,8 +27,7 @@ export const NavBar: React.StatelessComponent<NavBarProps> = (props: NavBarProps
                 <Tooltip content={item.title} placement='right' arrow={true} key={item.path + item.title}>
                     <div className={classNames('nav-bar__item', { active: isActiveRoute(locationPath, item.path) })}
                         onClick={() => context.router.history.push(item.path)}>
-
-                        <i className={item.iconClassName}/>
+                        {item.iconContent ? item.iconContent : <i className={item.iconClassName}/>}
                     </div>
                 </Tooltip>
             ))}
