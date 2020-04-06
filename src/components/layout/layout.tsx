@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { NavBar } from '../nav-bar/nav-bar';
+import {NavBar, NavBarItem} from '../nav-bar/nav-bar';
 
 require('./layout.scss');
 
 export interface LayoutProps extends React.Props<any> {
-    navItems: Array<{ path: string; iconClassName: string; title: string; }>;
+    navItems: Array<NavBarItem>;
     version?: () => React.ReactElement;
 }
 

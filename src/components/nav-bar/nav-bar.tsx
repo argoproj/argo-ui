@@ -2,13 +2,20 @@ import * as classNames from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { AppContext } from '../../context';
+import {AppContext} from '../../context';
 import {Tooltip} from '../tooltip/tooltip';
 
 require('./nav-bar.scss');
 
+export interface NavBarItem {
+    path: string;
+    iconClassName?: string;
+    iconContent?: JSX.Element;
+    title: string;
+}
+
 export interface NavBarProps extends React.Props<any> {
-    items: Array<{ path: string; iconClassName?: string; iconContent?: JSX.Element; title: string; }>;
+    items: Array<NavBarItem>;
     version?: () => React.ReactElement;
 }
 
