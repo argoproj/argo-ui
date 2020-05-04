@@ -29,7 +29,7 @@
         "react": "^16.8.3",
         "react-autocomplete": "^1.8.1",
         "react-dom": "^16.8.3",
-        "react-form": "2.16.0",
+        "react-form": "^2.16.0",
         "react-helmet": "^5.2.0",
         "react-router-dom": "^4.2.2",
         "react-toastify": "^5.0.1",
