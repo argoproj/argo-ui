@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/react';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 
 class TableExample extends React.Component<{}, {selectedIndex: number}> {
