@@ -26,4 +26,5 @@ export * from './navigation';
 export * from './form-field';
 export * from './slide-contents/slide-contents';
 export * from './autocomplete/autocomplete';
+export * from './autosuggest/autosuggest';
 export * from './autocomplete/autocomplete-field';
