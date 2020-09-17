@@ -28,11 +28,11 @@ export const Page = (props: PageProps) => (
                 <React.Fragment>
                     <PageContext.Consumer>
                         {(ctx) => {
-                            const titleParts = [ctx.title];
+                            let titleParts = [ctx.title];
                             if (toolbar && toolbar.breadcrumbs && toolbar.breadcrumbs.length > 0) {
-                                titleParts.push(toolbar.breadcrumbs.map((item) => item.title).join(' / '));
+                                titleParts = [toolbar.breadcrumbs.map((item) => item.title).reverse().join(' / ')].concat(titleParts);
                             } else if (props.title) {
-                                titleParts.push(props.title);
+                                titleParts = [props.title].concat(titleParts);
                             }
                             return (
                                 <Helmet>
