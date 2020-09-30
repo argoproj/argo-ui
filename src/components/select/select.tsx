@@ -32,12 +32,18 @@ function normalizeOptions(options: Array<SelectOption | string>) {
     return options.map((item) => typeof item === 'string' ? ({ value: item, title: item }) : item);
 }
 
-export class Select extends React.Component<SelectProps, State> {
+interface SelectState {
+    opened: boolean;
+    search: string;
+    selected: string[];
+    toTop: boolean;
+}
 
+export class Select extends React.Component<SelectProps, State> {
     public static getDerivedStateFromProps(nextProps: SelectProps, prevState: State): Partial<State> {
         let selected: Array<string> = [];
         if (nextProps.value) {
-            selected = nextProps.value instanceof Array ? nextProps.value as Array<string> : [nextProps.value];
+            selected = Array.isArray(nextProps.value) ? nextProps.value : [nextProps.value];
         }
         const a = new Set(selected);
         const b = new Set(prevState.selected);
@@ -49,18 +55,19 @@ export class Select extends React.Component<SelectProps, State> {
         return null;
     }
 
+    public state: SelectState = { opened: false, search: '', selected: [], toTop: false };
+
     private el: HTMLElement;
     private searchEl: HTMLInputElement;
     private subscription: Subscription;
 
     public constructor(props: SelectProps) {
         super(props);
-        this.state = { opened: false, search: '', selected: [], toTop: false };
     }
 
     public componentDidMount() {
-        this.subscription = Observable.fromEvent(document, 'click')
-            .filter((event: Event) => !this.el.contains(event.target as Node) && this.state.opened)
+        this.subscription = Observable.fromEvent<MouseEvent>(document, 'click')
+            .filter((event) => !this.el.contains(event.target as Node) && this.state.opened)
             .subscribe(() => this.setState({ opened: false }));
     }
 
@@ -120,8 +127,10 @@ export class Select extends React.Component<SelectProps, State> {
                 top += offsetParent.offsetTop;
             }
 
+            const selectOptions = this.el.querySelector<HTMLDivElement>('.select__options');
+
             this.setState({
-                toTop: (this.el.querySelector('.select__options') as HTMLElement).offsetHeight + top - scrollWindowTop > window.innerHeight,
+                toTop: selectOptions.offsetHeight + top - scrollWindowTop > window.innerHeight,
                 opened: true,
             });
 

@@ -2,12 +2,14 @@
     "compilerOptions": {
         "outDir": "./../../bundle",
         "sourceMap": true,
+        "skipLibCheck": true,
         "noImplicitAny": true,
         "module": "commonjs",
         "target": "es5",
         "jsx": "react",
         "experimentalDecorators": true,
         "noUnusedLocals": true,
+        "strictFunctionTypes": true,
         "declaration": true,
         "lib": [
             "es2017",

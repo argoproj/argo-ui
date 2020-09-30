@@ -59,7 +59,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     public componentWillMount() {
         this.subscriptions = [Observable.merge(
             dropDownOpened.filter((dropdown) => dropdown !== this),
-            Observable.fromEvent(document, 'click').filter((event: Event) => {
+            Observable.fromEvent<MouseEvent>(document, 'click').filter((event) => {
                 return this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
             }),
         ).subscribe(() => {
