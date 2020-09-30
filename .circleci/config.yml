@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:11.15.0
+      - image: node:12.18.4
     steps:
       - checkout
       - restore_cache:
