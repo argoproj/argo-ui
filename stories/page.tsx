@@ -42,6 +42,14 @@ const actionMenu = {
         action: () => {
             // do nothing
         },
+    },
+    {
+        title: 'New Item 5',
+        iconClassName: 'fa fa-link',
+        action: () => {
+            // do nothing
+        },
+        link: "/",
     }]
 };
 

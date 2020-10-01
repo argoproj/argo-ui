@@ -21,6 +21,7 @@ export interface ActionMenu {
         title: string | React.ReactElement;
         iconClassName?: string;
         disabled?: boolean;
+        link?: string;
     }[];
 }
 
@@ -86,12 +87,23 @@ const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => 
 
 const renderActionMenu = (actionMenu: ActionMenu) => (
     <div>
-        {actionMenu.items.map((item, i) => (
-            <button disabled={!!item.disabled} className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}} key={i}>
-                {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: '-5px', marginRight: '5px'}}/>)}
-                {item.title}
-            </button>
-        ))}
+        {actionMenu.items.map((item, i) => {
+            const children = (
+                <>
+                    {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: '-5px', marginRight: '5px'}}/>)}
+                    {item.title}
+                </>
+            );
+            return item.link ? (
+                <a href={item.link} className='argo-button argo-button--base' style={{marginRight: 2}} key={i}>
+                    {children}
+                </a>
+            ) : (
+                <button disabled={!!item.disabled} className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}} key={i}>
+                    {children}
+                </button>
+            );
+        })}
     </div>
 );
 
