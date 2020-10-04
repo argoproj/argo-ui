@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { NotificationInfo } from './notifications';
 
 export interface NotificationsApi {
@@ -6,10 +6,10 @@ export interface NotificationsApi {
 }
 
 export class NotificationsManager {
-    private notificationsSubject: BehaviorSubject<NotificationInfo> = new BehaviorSubject(null);
+    private readonly notificationsSubject = new ReplaySubject<NotificationInfo>(1);
 
-    public get notifications(): Observable<NotificationInfo> {
-        return this.notificationsSubject.asObservable().filter((next) => !!next);
+    public get notifications() {
+        return this.notificationsSubject.asObservable();
     }
 
     public show(notification: NotificationInfo) {
