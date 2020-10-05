@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 
 export interface DropDownProps {
     isMenu?: boolean;
@@ -17,12 +17,12 @@ export interface DropDownState {
 
 require('./dropdown.scss');
 
-const dropDownOpened = new BehaviorSubject<DropDown>(null);
+const dropDownOpened = new ReplaySubject<DropDown>(1);
 
 export class DropDown extends React.Component<DropDownProps, DropDownState> {
-    private el: HTMLDivElement;
-    private content: HTMLDivElement;
-    private subscriptions: Subscription[];
+    private el: HTMLDivElement | null = null;
+    private content: HTMLDivElement | null = null;
+    private subscriptions: Subscription[] = [];
 
     constructor(props: DropDownProps) {
         super(props);
@@ -59,8 +59,8 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     public componentWillMount() {
         this.subscriptions = [Observable.merge(
             dropDownOpened.filter((dropdown) => dropdown !== this),
-            Observable.fromEvent(document, 'click').filter((event: Event) => {
-                return this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
+            Observable.fromEvent<MouseEvent>(document, 'click').filter((event: Event) => {
+                return !!this.content && this.state.opened && !this.content.contains(event.target as Node) && !!this.el && !this.el.contains(event.target as Node);
             }),
         ).subscribe(() => {
             this.close();
@@ -72,7 +72,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     }
 
     public componentWillUnmount() {
-        (this.subscriptions || []).forEach((s) => s.unsubscribe());
+        this.subscriptions.forEach((s) => s.unsubscribe());
         this.subscriptions = [];
     }
 
@@ -81,23 +81,26 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     }
 
     private refreshState() {
-        const anchor = this.el.querySelector('.argo-dropdown__anchor') as HTMLElement;
-        const {top, left} = anchor.getBoundingClientRect();
-        const anchorHeight = anchor.offsetHeight + 2;
-
+        const anchor = this.el && this.el.querySelector<HTMLElement>('.argo-dropdown__anchor');
         const newState = { left: this.state.left, top: this.state.top, opened: this.state.opened };
-        // Set top position
-        if (this.content.offsetHeight + top + anchorHeight > window.innerHeight) {
-            newState.top = top - this.content.offsetHeight - 2;
-        } else {
-            newState.top = top + anchorHeight;
-        }
 
-        // Set left position
-        if (this.content.offsetWidth + left > window.innerWidth) {
-            newState.left = left - this.content.offsetWidth + anchor.offsetWidth;
-        } else {
-            newState.left = left;
+        if (this.content && anchor) {
+            const {top, left} = anchor.getBoundingClientRect();
+            const anchorHeight = anchor.offsetHeight + 2;
+
+            // Set top position
+            if (this.content.offsetHeight + top + anchorHeight > window.innerHeight) {
+                newState.top = top - this.content.offsetHeight - 2;
+            } else {
+                newState.top = top + anchorHeight;
+            }
+
+            // Set left position
+            if (this.content.offsetWidth + left > window.innerWidth) {
+                newState.left = left - this.content.offsetWidth + anchor.offsetWidth;
+            } else {
+                newState.left = left;
+            }
         }
         return newState;
     }
