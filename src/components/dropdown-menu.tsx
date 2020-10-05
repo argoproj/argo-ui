@@ -13,12 +13,11 @@ export interface DropDownMenuProps {
 }
 
 export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
-
-    private dropdown: DropDown;
+    private dropdown: DropDown | null = null;
 
     public render() {
         return (
-            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown}>
+            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown) => this.dropdown = dropdown}>
                 <ul>
                     {this.props.items.map((item, i) => <li
                         onClick={(event) => this.onItemClick(item, event)} key={i}>
