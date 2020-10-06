@@ -25,6 +25,7 @@
         "foundation-sites": "^6.4.3",
         "handlebars": "^4.7.6",
         "history": "^4.7.2",
+        "is-promise": "^4.0.0",
         "moment": "^2.20.1",
         "prop-types": "^15.6.0",
         "react": "^16.8.3",
