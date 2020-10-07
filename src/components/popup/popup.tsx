@@ -30,7 +30,7 @@ export const Popup = (props: PopupProps) => (
                         <i className={`${props.icon.name} ${props.icon.color}`}/>
                     </div>
                 }
-                <div className={classNames('columns', {'large-10': !!props.icon, 'large-12': !props.icon, !props.icon && 'popup-container__body__hasNoIcon'})}>
+                <div className={classNames('columns', {'large-10': !!props.icon, 'large-12': !props.icon}, !props.icon && 'popup-container__body__hasNoIcon')}>
                     {isPopupWithChildren(props) ? props.children : <props.content/>}
                 </div>
             </div>
