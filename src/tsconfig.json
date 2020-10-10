@@ -9,6 +9,7 @@
         "experimentalDecorators": true,
         "noUnusedLocals": true,
         "declaration": true,
+        "strict": true,
         "lib": [
             "es2017",
             "dom"
