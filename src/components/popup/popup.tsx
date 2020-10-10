@@ -1,12 +1,18 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-export interface PopupProps extends React.Props<any> {
+export interface BasePopupProps {
     icon?: { name: string; color: string; };
     title: string | React.ReactNode;
-    content?: React.ComponentType;
     footer?: React.ReactNode;
-    children?: React.ReactNode;
+}
+
+export type PopupPropsWithContent = BasePopupProps & { content: React.ComponentType };
+export type PopupPropsWithChildren = BasePopupProps & { children: React.ReactNode};
+export type PopupProps = PopupPropsWithContent | PopupPropsWithChildren;
+
+function isPopupWithChildren(value: PopupProps): value is PopupPropsWithChildren {
+    return (value as any).children !== undefined;
 }
 
 require('./popup.scss');
@@ -24,7 +30,7 @@ export const Popup = (props: PopupProps) => (
                     </div>
                 }
                 <div className={classNames('columns', {'large-10': !!props.icon, 'large-12': !props.icon})}>
-                    {props.children ? props.children : <props.content/>}
+                    {isPopupWithChildren(props) ? props.children : <props.content/>}
                 </div>
             </div>
 

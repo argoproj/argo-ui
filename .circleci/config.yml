@@ -14,3 +14,4 @@ jobs:
           paths: [~/.cache/yarn, node_modules]
       - run: yarn build
       - run: yarn lint
+      - run: yarn tsc -p src/tsconfig.json

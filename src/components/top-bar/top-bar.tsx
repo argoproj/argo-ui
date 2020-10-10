@@ -70,15 +70,20 @@ const renderFilter = (filter: TopBarFilter<any>) => (
 const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => (
     <div className='top-bar__breadcrumbs'>
         {(breadcrumbs || []).map((breadcrumb, i) => {
+            const isLastItem = i === breadcrumbs.length - 1;
+            const className = isLastItem ? 'top-bar__breadcrumbs-last-item' : '';
             const nodes = [];
-            if (i === breadcrumbs.length - 1) {
-                nodes.push(<span key={breadcrumb.title} className='top-bar__breadcrumbs-last-item'>{breadcrumb.title}</span>);
+
+            if (breadcrumb.path) {
+                nodes.push(<Link className={className} key={breadcrumb.title} to={breadcrumb.path}> {breadcrumb.title} </Link>);
             } else {
-                nodes.push(<Link key={breadcrumb.title} to={breadcrumb.path}> {breadcrumb.title} </Link>);
+                nodes.push(<span key={breadcrumb.title} className={className}>{breadcrumb.title}</span>);
             }
-            if (i < breadcrumbs.length - 1) {
+
+            if (!isLastItem) {
                 nodes.push(<span key={`${breadcrumb.title}_sep`} className='top-bar__sep'/>);
             }
+
             return nodes;
         })}
     </div>

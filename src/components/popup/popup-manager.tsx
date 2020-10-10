@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Form, FormApi, FormValues, RenderReturn, ValidateValuesFunction } from 'react-form';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { PopupProps  } from './popup';
 
@@ -9,13 +9,13 @@ export interface PopupApi {
     prompt(title: string, form: (formApi: FormApi) => RenderReturn, settings?: {
         validate?: ValidateValuesFunction,
         submit?: (vals: FormValues, formApi: FormApi , close: () => any) => any,
-    }): Promise<FormValues>;
+    }): Promise<FormValues | null>;
 }
 
 export class PopupManager implements PopupApi {
-    private popupPropsSubject: BehaviorSubject<PopupProps> = new BehaviorSubject(null);
+    private popupPropsSubject = new BehaviorSubject<PopupProps | null>(null);
 
-    public get popupProps(): Observable<PopupProps> {
+    public get popupProps() {
         return this.popupPropsSubject.asObservable();
     }
 
@@ -50,22 +50,25 @@ export class PopupManager implements PopupApi {
             validate?: ValidateValuesFunction,
             submit?: (vals: FormValues, formApi: FormApi , close: () => any) => any,
         },
-    ): Promise<FormValues> {
+    ): Promise<FormValues | null> {
         return new Promise((resolve) => {
-            const closeAndResolve = (result: FormValues) => {
+            const closeAndResolve = (result: FormValues | null) => {
                 this.popupPropsSubject.next(null);
                 resolve(result);
             };
 
             let formApi: FormApi;
-            let onSubmit: (vals: FormValues) => any = null;
+            let onSubmit: (vals: FormValues) => any;
+
             if (settings && settings.submit) {
-                onSubmit = (vals) => (settings.submit(vals, formApi, () => closeAndResolve(vals)));
+                const submit = settings.submit.bind(settings);
+                onSubmit = (vals) => (submit(vals, formApi, () => closeAndResolve(vals)));
             } else {
                 onSubmit = (vals) => closeAndResolve(vals);
             }
 
             this.popupPropsSubject.next({
+                children: undefined,
                 title: (
                     <span>{title} <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
                 ),
@@ -83,7 +86,7 @@ export class PopupManager implements PopupApi {
                 ),
                 footer: (
                     <div>
-                        <button className='argo-button argo-button--base' onClick={() => formApi.submitForm(null)}>OK</button> <button
+                        <button className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button> <button
                             className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
                     </div>
                 ),

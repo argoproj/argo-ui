@@ -34,10 +34,10 @@ function normalizeOptions(options: Array<SelectOption | string>) {
 
 export class Select extends React.Component<SelectProps, State> {
 
-    public static getDerivedStateFromProps(nextProps: SelectProps, prevState: State): Partial<State> {
+    public static getDerivedStateFromProps(nextProps: SelectProps, prevState: State): Partial<State> | null {
         let selected: Array<string> = [];
         if (nextProps.value) {
-            selected = nextProps.value instanceof Array ? nextProps.value as Array<string> : [nextProps.value];
+            selected = Array.isArray(nextProps.value) ? nextProps.value : [nextProps.value];
         }
         const a = new Set(selected);
         const b = new Set(prevState.selected);
@@ -49,9 +49,9 @@ export class Select extends React.Component<SelectProps, State> {
         return null;
     }
 
-    private el: HTMLElement;
-    private searchEl: HTMLInputElement;
-    private subscription: Subscription;
+    private el: HTMLElement | null = null;
+    private searchEl: HTMLInputElement | null = null;
+    private subscription: Subscription | null = null;
 
     public constructor(props: SelectProps) {
         super(props);
@@ -59,8 +59,8 @@ export class Select extends React.Component<SelectProps, State> {
     }
 
     public componentDidMount() {
-        this.subscription = Observable.fromEvent(document, 'click')
-            .filter((event: Event) => !this.el.contains(event.target as Node) && this.state.opened)
+        this.subscription = Observable.fromEvent<MouseEvent>(document, 'click')
+            .filter((event) => !!this.el && !this.el.contains(event.target as Node) && this.state.opened)
             .subscribe(() => this.setState({ opened: false }));
     }
 

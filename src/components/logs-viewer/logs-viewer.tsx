@@ -18,7 +18,7 @@ export interface LogsViewerProps {
 
 export class LogsViewer extends React.Component<LogsViewerProps> {
     private terminal: any;
-    private subscription: Subscription;
+    private subscription: Subscription | null = null;
 
     constructor(props: LogsViewerProps) {
         super(props);
