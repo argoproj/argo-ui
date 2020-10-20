@@ -22,6 +22,7 @@ export interface AutocompleteProps {
     onSelect?: (value: string, item: any) => void;
     autoCompleteRef?: (api: AutocompleteApi) => any;
     filterSuggestions?: boolean;
+    qeid?: string;
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {

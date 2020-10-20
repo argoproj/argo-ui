@@ -7,6 +7,7 @@ export interface DropDownProps {
     isMenu?: boolean;
     anchor: React.ComponentType;
     children: React.ReactNode | (() => React.ReactNode);
+    qeId?: string;
 }
 
 export interface DropDownState {
@@ -42,7 +43,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
 
         return (
             <div className='argo-dropdown' ref={(el) => this.el = el}>
-                <div className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
+                <div qe-id={this.props.qeId} className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
                     <this.props.anchor/>
                 </div>
                 {ReactDOM.createPortal((

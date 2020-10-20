@@ -10,6 +10,7 @@ export interface MenuItem {
 export interface DropDownMenuProps {
     items: MenuItem[];
     anchor: React.ComponentType;
+    qeId?: string;
 }
 
 export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
@@ -18,9 +19,9 @@ export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
 
     public render() {
         return (
-            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown}>
+            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown} qeId={this.props.qeId}>
                 <ul>
-                    {this.props.items.map((item, i) => <li
+                    {this.props.items.map((item, i) => <li qe-id={this.props.qeId + `-` + item.title}
                         onClick={(event) => this.onItemClick(item, event)} key={i}>
                         {item.iconClassName && <i className={item.iconClassName}/>} {item.title}
                         </li>)}

@@ -35,8 +35,8 @@ export class PopupManager implements PopupApi {
                 content,
                 footer: (
                     <div>
-                        <button className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button> <button
-                            className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
+                        <button qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button> <button
+                            qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
                     </div>
                 ),
             });

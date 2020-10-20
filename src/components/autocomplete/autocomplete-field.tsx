@@ -24,6 +24,7 @@ export const AutocompleteField = ReactForm.FormField((props: AutocompleteProps &
             renderInput={(inputProps) => (
                 <input
                     {...inputProps}
+                    qe-id={props.qeid}
                     onFocus={(e) => {
                         if (inputProps.onFocus) {
                             inputProps.onFocus(e);
