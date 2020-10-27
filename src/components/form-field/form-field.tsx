@@ -23,6 +23,7 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
         formApi: ReactForm.FormApi,
         component: React.ComponentType<T>,
         componentProps?: T,
+        qeId?: string;
     },
 ) => React.ReactElement<E> = (props) => {
     const [id] = React.useState(uuid());
@@ -34,6 +35,7 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
             <FormComponent
                 {...props.componentProps || {}}
                 id={id}
+                qeid={props.qeId}
                 field={props.field}
                 className={classNames({ 'argo-field': true, 'argo-has-value': !!getNestedField(props.formApi.values, props.field) })}/>
 
