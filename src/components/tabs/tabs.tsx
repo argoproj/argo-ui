@@ -24,14 +24,14 @@ export interface TabsProps extends React.Props<any> {
 }
 
 export interface TabsState {
-    selectedTabKey: string;
+    selectedTabKey?: string;
     indicatorPosition: { left: number; right: number; directionToLeft: boolean };
 }
 
 require('./tabs.scss');
 
 export class Tabs extends React.Component<TabsProps, TabsState> {
-    private container: HTMLElement;
+    private container: HTMLElement | null = null;
 
     constructor(props: TabsProps) {
         super(props);
@@ -108,10 +108,14 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
     private refreshIndicatorPosition() {
         setTimeout(() => {
             if (this.container) {
-                const parentEl = this.container.querySelector('.tabs__nav-wrapper') as HTMLElement;
-                const el = parentEl.querySelector('.active') as HTMLElement;
-                if (el) {
-                    this.setState({ indicatorPosition: this.getIndicatorPosition(parentEl, el) });
+                const parentEl = this.container.querySelector<HTMLElement>('.tabs__nav-wrapper');
+
+                if (parentEl) {
+                    const el = parentEl.querySelector<HTMLElement>('.active');
+
+                    if (el) {
+                        this.setState({ indicatorPosition: this.getIndicatorPosition(parentEl, el) });
+                    }
                 }
             }
         }, 0);
