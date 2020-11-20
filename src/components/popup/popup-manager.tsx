@@ -6,10 +6,15 @@ import { PopupProps  } from './popup';
 
 export interface PopupApi {
     confirm(title: string, message: string | React.ComponentType): Promise<boolean>;
-    prompt(title: string, form: (formApi: FormApi) => RenderReturn, settings?: {
-        validate?: ValidateValuesFunction,
-        submit?: (vals: FormValues, formApi: FormApi , close: () => any) => any,
-    }): Promise<FormValues>;
+    prompt(
+        title: string,
+        form: (formApi: FormApi) => RenderReturn, settings?: {
+            validate?: ValidateValuesFunction,
+            submit?: (vals: FormValues, formApi: FormApi, close: () => any) => any,
+        },
+        customIcon?: {name: string, color: string},
+        titleColor?: string,
+    ): Promise<FormValues>;
 }
 
 export class PopupManager implements PopupApi {
@@ -50,6 +55,8 @@ export class PopupManager implements PopupApi {
             validate?: ValidateValuesFunction,
             submit?: (vals: FormValues, formApi: FormApi , close: () => any) => any,
         },
+        customIcon?: { name: string, color: string },
+        titleColor?: string,
     ): Promise<FormValues> {
         return new Promise((resolve) => {
             const closeAndResolve = (result: FormValues) => {
@@ -69,6 +76,8 @@ export class PopupManager implements PopupApi {
                 title: (
                     <span>{title} <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
                 ),
+                titleColor: titleColor ? titleColor : 'normal',
+                icon: customIcon ? { name: customIcon?.name, color: customIcon?.color} : undefined,
                 content: () => (
                     <Form
                         validateError={settings && settings.validate}

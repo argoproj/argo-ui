@@ -14,10 +14,10 @@ $argo-icon-fonts-root: '/' !default;
 
 @font-face {
     font-family: "argo-icon";
-    src: url($argo-icon-fonts-root + "argo-icon.eot?ccc4996926ddb03387f9250fe04a0860?#iefix") format("embedded-opentype"),
-url($argo-icon-fonts-root + "argo-icon.woff?ccc4996926ddb03387f9250fe04a0860") format("woff"),
-url($argo-icon-fonts-root + "argo-icon.ttf?ccc4996926ddb03387f9250fe04a0860") format("truetype"),
-url($argo-icon-fonts-root + "argo-icon.svg?ccc4996926ddb03387f9250fe04a0860#argo-icon") format("svg");
+    src: url($argo-icon-fonts-root + "argo-icon.eot?af0f627a6b22b6f9f7b649206eee4263?#iefix") format("embedded-opentype"),
+url($argo-icon-fonts-root + "argo-icon.woff?af0f627a6b22b6f9f7b649206eee4263") format("woff"),
+url($argo-icon-fonts-root + "argo-icon.ttf?af0f627a6b22b6f9f7b649206eee4263") format("truetype"),
+url($argo-icon-fonts-root + "argo-icon.svg?af0f627a6b22b6f9f7b649206eee4263#argo-icon") format("svg");
 }
 
 i {
@@ -402,9 +402,12 @@ i {
 .argo-icon-volume:before {
   content: "\f171";
 }
-.argo-icon-workflow:before {
+.argo-icon-warning:before {
   content: "\f172";
 }
-.argo-icon-yaml:before {
+.argo-icon-workflow:before {
   content: "\f173";
+}
+.argo-icon-yaml:before {
+  content: "\f174";
 }
