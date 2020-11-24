@@ -86,4 +86,139 @@ storiesOf('Popup', module)
                 }}>Click me</button>
             )}
         </App>
-    ));
+    )).add('prompt with red title and icon, with custom submit', () => (
+        <App>
+            {(apis) => (
+                <button className='argo-button argo-button--base' onClick={() => {
+                    apis.popup.prompt('Username: test Password: test', (api) => (
+                        <React.Fragment>
+                        <div className='argo-form-row'>
+                            <FormField label='Username' formApi={api} field='username' component={Text} />
+                        </div>
+                        <div className='argo-form-row'>
+                            <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
+                        </div>
+                        </React.Fragment>
+                    ), {
+                        validate: (vals) => ({
+                            username: !vals.username && 'Username is required',
+                            password: !vals.password && 'Password is required',
+                        }),
+                        submit: (vals, api, close) => {
+                            if (vals.username === 'test' && vals.password === 'test') {
+                                close();
+                                action('Prompt values')(vals);
+                            } else {
+                                api.setError('password', 'Username or password is invalid');
+                            }
+                        },
+                    },
+                    { name: 'argo-icon-warning', color: 'failed' },
+                    'red');
+                }}>Click me</button>
+            )}
+        </App>
+    )).add('prompt with yellow title and icon, three fields and custom submit.  Vertical center layout of icon', () => (
+        <App>
+            {(apis) => (
+                <button className='argo-button argo-button--base' onClick={() => {
+                    apis.popup.prompt('Username: test Password: test', (api) => (
+                        <React.Fragment>
+                        <div className='argo-form-row'>
+                            <FormField label='Username' formApi={api} field='username' component={Text} />
+                        </div>
+                        <div className='argo-form-row'>
+                            <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
+                        </div>
+                        <div className='argo-form-row'>
+                            <FormField label='Re-enter password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
+                        </div>
+                        <h4>This is an h4 header</h4>
+                        <p>This is a paragraph</p>
+                        <h4>This is another h4 header</h4>
+                        <p>This is a paragraph</p>
+                        </React.Fragment>
+                    ), {
+                        validate: (vals) => ({
+                            username: !vals.username && 'Username is required',
+                            password: !vals.password && 'Password is required',
+                        }),
+                        submit: (vals, api, close) => {
+                            if (vals.username === 'test' && vals.password === 'test') {
+                                close();
+                                action('Prompt values')(vals);
+                            } else {
+                                api.setError('password', 'Username or password is invalid');
+                            }
+                        },
+                    },
+                    { name: 'argo-icon-workflow', color: 'warning' },
+                    'yellow');
+                }}>Click me</button>
+            )}
+        </App>
+    )).add('prompt with green clock icon and custom submit', () => (
+        <App>
+            {(apis) => (
+                <button className='argo-button argo-button--base' onClick={() => {
+                    apis.popup.prompt('Username: test Password: test', (api) => (
+                        <React.Fragment>
+                        <div className='argo-form-row'>
+                            <FormField label='Username' formApi={api} field='username' component={Text} />
+                        </div>
+                        <div className='argo-form-row'>
+                            <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
+                        </div>
+                        </React.Fragment>
+                    ), {
+                        validate: (vals) => ({
+                            username: !vals.username && 'Username is required',
+                            password: !vals.password && 'Password is required',
+                        }),
+                        submit: (vals, api, close) => {
+                            if (vals.username === 'test' && vals.password === 'test') {
+                                close();
+                                action('Prompt values')(vals);
+                            } else {
+                                api.setError('password', 'Username or password is invalid');
+                            }
+                        },
+                    },
+                    { name: 'argo-icon-clock', color: 'success'}
+                    );
+                }}>Click me</button>
+            )}
+        </App>
+    )).add('prompt with just headers and paragraphs', () => (
+        <App>
+            {(apis) => (
+                <button className='argo-button argo-button--base' onClick={async () => {
+                    const values = await apis.popup.prompt('Enter name', (api) => (
+                        <div>
+                            <h4>This is an h4 header</h4>
+                            <p>This is a paragraph</p>
+                            <h4>This is another h4 header</h4>
+                            <p>This is a paragraph</p>
+                        </div>
+                        )
+                    );
+                    action('Prompt values')(values);
+                }}>Click me</button>
+            )}
+        </App>
+    )).add('prompt with only paragraphs. Additional top padding is optional for the first paragraph', () => (
+        <App>
+            {(apis) => (
+                <button className='argo-button argo-button--base' onClick={async () => {
+                    const values = await apis.popup.prompt('Enter name', (api) => (
+                        <div>
+                            <p style={{paddingTop: '20px'}}>This is a paragraph</p>
+                            <p>This is another paragraph</p>
+                        </div>
+                        )
+                    );
+                    action('Prompt values')(values);
+                }}>Click me</button>
+            )}
+        </App>
+    ))
