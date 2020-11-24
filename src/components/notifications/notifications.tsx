@@ -22,7 +22,7 @@ export interface NotificationsProps {
 }
 
 export class Notifications extends React.Component<NotificationsProps> {
-    private subscription: Subscription;
+    private subscription: Subscription | null = null;
 
     constructor(props: NotificationsProps) {
         super(props);
@@ -38,10 +38,15 @@ export class Notifications extends React.Component<NotificationsProps> {
             }
             toastMethod((
                 <div onClick={(e) => {
-                    const range = document.createRange();
-                    range.selectNode(e.target as Node);
-                    window.getSelection().removeAllRanges();
-                    window.getSelection().addRange(range);
+                    const sel = window.getSelection();
+
+                    if (sel) {
+                        const range = document.createRange();
+
+                        range.selectNode(e.target as Node);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
                 }}>
                     {next.content}
                 </div>

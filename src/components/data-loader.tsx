@@ -4,17 +4,26 @@ import { Observable, Subscription } from 'rxjs';
 import { AppContext } from '../context';
 import { ErrorNotification } from './error-notification';
 import { NotificationType } from './notifications/notifications';
+import { isPromise } from './utils';
 
-interface LoaderProps<I, D> {
-    load: (input: I) => Promise<D> | Observable<D>;
-    input?: I;
+interface LoaderProps<TInput, TResult> {
+    load: (input: TInput) => Promise<TResult> | Observable<TResult>;
+    input: TInput;
     noLoaderOnInputChange?: boolean;
     loadingRenderer?: React.ComponentType;
     errorRenderer?: (children: React.ReactNode) => React.ReactNode;
-    children: (data: D) => React.ReactNode;
+    children: (data: TResult) => React.ReactNode;
 }
 
-export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D>, { loading: boolean; dataWrapper: { data: D }; error: boolean; input: I; inputChanged: boolean}> {
+interface LoaderState<TInput, TResult> {
+  loading: boolean;
+  dataWrapper: { data: TResult } | null;
+  error: boolean;
+  input: TInput;
+  inputChanged: boolean;
+}
+
+export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderProps<I, D>, LoaderState<I, D>> {
     public static contextTypes = {
         router: PropTypes.object,
         apis: PropTypes.object,
@@ -27,7 +36,7 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
         return null;
     }
 
-    private subscription: Subscription;
+    private subscription: Subscription | null = null;
     private unmounted = false;
 
     constructor(props: LoaderProps<I, D>) {
@@ -80,14 +89,14 @@ export class DataLoader<D = {}, I = {}> extends React.Component<LoaderProps<I, D
             this.setState({ error: false, loading: true, inputChanged: false, dataWrapper: this.props.noLoaderOnInputChange ? this.state.dataWrapper : null });
             try {
                 const res = this.props.load(this.props.input);
-                if ((res as Promise<D>).then) {
-                    const data = await (res as Promise<D>);
+                if (isPromise(res)) {
+                    const data = await res;
                     if (!this.unmounted) {
                         this.setState({ dataWrapper: { data }, loading: false });
                     }
                 } else {
                     this.ensureUnsubscribed();
-                    this.subscription = (res as Observable<D>).subscribe((data: D) => this.setState({ loading: false, dataWrapper: { data } }), (e) => this.handleError(e));
+                    this.subscription = res.subscribe((data: D) => this.setState({ loading: false, dataWrapper: { data } }), (e) => this.handleError(e));
                 }
             } catch (e) {
                 this.handleError(e);

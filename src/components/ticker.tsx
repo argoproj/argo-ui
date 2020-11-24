@@ -4,7 +4,7 @@ import {Observable, Subscription} from 'rxjs';
 
 export class Ticker extends React.Component<{intervalMs?: number, disabled?: boolean, children?: ((time: moment.Moment) => React.ReactNode)}, {time: moment.Moment}> {
 
-    private subscription: Subscription;
+    private subscription: Subscription | null = null;
 
     constructor(props: {intervalMs?: number, children?: ((time: moment.Moment) => React.ReactNode)}) {
         super(props);
@@ -13,7 +13,7 @@ export class Ticker extends React.Component<{intervalMs?: number, disabled?: boo
     }
 
     public render() {
-        return this.props.children(this.state.time);
+        return this.props.children && this.props.children(this.state.time);
     }
 
     public componentDidUpdate() {

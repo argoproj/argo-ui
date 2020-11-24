@@ -1,5 +1,9 @@
 import { Observable } from 'rxjs';
 
+export function isPromise<T>(obj: any): obj is PromiseLike<T> {
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+}
+
 export const Utils = {
     getScrollParent(el: HTMLElement): HTMLElement {
         const regex = /(auto|scroll)/;
