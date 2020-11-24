@@ -28,7 +28,6 @@ $popup-border-radius: 8px;
             line-height: 60px;
             padding-left: 30px;
             height: 60px;
-            background-color: $argo-color-gray-2;
             border-top-right-radius: $popup-border-radius;
             border-top-left-radius: $popup-border-radius;
 
@@ -45,14 +44,27 @@ $popup-border-radius: 8px;
                 top: 20px;
                 cursor: pointer;
             }
+
+            &__normal {
+                background-color: $argo-color-gray-2;
+            }
+    
+            &__red {
+                background-color: $argo-color-red;
+                color: $argo-color-gray-1;
+            }
+
+            &__yellow {
+                background-color: $argo-color-yellow;
+            }    
         }
 
         &__footer {
             background-color: $argo-color-gray-1;
             bottom: 0;
-            padding-top: 10px;
-            padding-left: 44px;
-            padding-bottom: 40px;
+            padding-top: 20px;
+            padding-left: 30px;
+            padding-bottom: 30px;
             border-bottom-right-radius: $popup-border-radius;
             border-bottom-left-radius: $popup-border-radius;
 
@@ -62,27 +74,29 @@ $popup-border-radius: 8px;
             }
 
             &--additional-padding {
-                padding-left: 154px;
+                padding-left: 135px;
             }
         }
 
         &__body {
             background-color: $argo-color-gray-1;
 
-            h4, p {
+            &__hasNoIcon {
                 padding-left: 30px;
-                margin-top: 40px;
+            }
+
+            h4, p {
                 margin-right: 10px;
                 word-wrap: break-word;
             }
 
             h4 {
+                margin-top: 40px;
                 font-size: 15px;
                 font-weight: bold;
             }
 
             p {
-
                 font-size: 15px;
                 margin-top: 10px;
                 margin-bottom: 10px;
@@ -91,12 +105,13 @@ $popup-border-radius: 8px;
         }
 
         &__icon {
-            transform: translateY(36%);
+            display: inline-flex;
+            align-items: center;
+            max-width: 120px;
 
             & > i {
-                display: block;
-                text-align: end;
-                font-size: 40px;
+                margin-left: 5px;
+                font-size: 80px;
 
                 &.warning {
                     color: $argo-color-yellow;
