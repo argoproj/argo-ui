@@ -15,6 +15,14 @@ interface LoaderProps<TInput, TResult> {
     children: (data: TResult) => React.ReactNode;
 }
 
+interface LoaderPropsNoInput<TResult> {
+    load: () => Promise<TResult> | Observable<TResult>;
+    noLoaderOnInputChange?: boolean;
+    loadingRenderer?: React.ComponentType;
+    errorRenderer?: (children: React.ReactNode) => React.ReactNode;
+    children: (data: TResult) => React.ReactNode;
+}
+
 interface LoaderState<TInput, TResult> {
   loading: boolean;
   dataWrapper: { data: TResult } | null;
@@ -23,7 +31,7 @@ interface LoaderState<TInput, TResult> {
   inputChanged: boolean;
 }
 
-export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderProps<I, D>, LoaderState<I, D>> {
+export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderProps<I, D> | LoaderPropsNoInput<D>, LoaderState<I, D>> {
     public static contextTypes = {
         router: PropTypes.object,
         apis: PropTypes.object,
@@ -88,7 +96,8 @@ export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderPro
         if (!this.state.error && !this.state.loading && (this.state.dataWrapper == null || this.state.inputChanged)) {
             this.setState({ error: false, loading: true, inputChanged: false, dataWrapper: this.props.noLoaderOnInputChange ? this.state.dataWrapper : null });
             try {
-                const res = this.props.load(this.props.input);
+                const res = 'input' in this.props ? this.props.load(this.props.input) : this.props.load();
+
                 if (isPromise(res)) {
                     const data = await res;
                     if (!this.unmounted) {
