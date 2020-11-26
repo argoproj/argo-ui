@@ -15,7 +15,7 @@ require('./popup.scss');
 export const Popup = (props: PopupProps) => (
     <div className='popup-overlay'>
         <div className='popup-container'>
-            <div className={`'row popup-container__header ${props.titleColor !== undefined ? 'popup-container__header__' + props.titleColor : 'popup-container__header__normal'}`}>
+            <div className={`row popup-container__header ${props.titleColor !== undefined ? 'popup-container__header__' + props.titleColor : 'popup-container__header__normal'}`}>
                 {props.title}
             </div>
             <div className='row popup-container__body'>
