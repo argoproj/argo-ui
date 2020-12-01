@@ -18,7 +18,6 @@
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@tippy.js/react": "^2.1.2",
         "classnames": "^2.2.5",
-        "dagre": "^0.8.2",
         "deep-equal": "^1.0.1",
         "foundation-sites": "^6.4.3",
         "handlebars": "^4.7.6",
