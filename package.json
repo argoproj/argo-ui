@@ -8,7 +8,7 @@
         "src"
     ],
     "scripts": {
-        "build": "build-storybook -o ./dist/storybook",
+        "build": "tsc -p ./src && build-storybook -o ./dist/storybook",
         "lint": "tslint -p ./src",
         "test": "jest",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
@@ -24,6 +24,8 @@
         "history": "^4.7.2",
         "moment": "^2.20.1",
         "prop-types": "^15.6.0",
+        "react": "^16.9.3",
+        "react-dom": "^16.9.3",
         "react-autocomplete": "^1.8.1",
         "react-form": "^2.16.0",
         "react-helmet": "^6.1.0",
@@ -31,10 +33,6 @@
         "react-toastify": "^5.0.1",
         "rxjs": "^5.5.11",
         "xterm": "2.4.0"
-    },
-    "peerDependencies": {
-        "react": "^16.9.3",
-        "react-dom": "^16.9.3"
     },
     "devDependencies": {
         "@babel/core": "^7.11.6",
