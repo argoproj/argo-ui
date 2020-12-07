@@ -2,6 +2,7 @@ import { Store, withState } from '@dump247/storybook-state';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
+import { Checkbox as ReactCheckbox} from 'react-form';
 import { Text } from 'react-form';
 
 import { Checkbox, FormField } from '../src/components';
@@ -216,6 +217,46 @@ storiesOf('Popup', module)
                             <p>This is another paragraph</p>
                         </div>
                         )
+                    );
+                    action('Prompt values')(values);
+                }}>Click me</button>
+            )}
+        </App>
+    )).add('prompt with React Checkbox that is checked by default; Username default set to admin', () => (
+        <App>
+            {(apis) => (
+                <button className='argo-button argo-button--base' onClick={async () => {
+                    const values = await apis.popup.prompt('Setting default values in popup example',
+                        (api) => (
+                            <React.Fragment>
+                                <div className='argo-form-row'>
+                                    <FormField label='Username' formApi={api} field='username' component={Text} />
+                                </div>
+                                <div className='argo-form-row'>
+                                    <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
+                                </div>
+                                <div className='argo-form-row'>
+                                    <ReactCheckbox id='popup-react-checkbox' field='checkboxField'/> <label htmlFor='popup-react-checkbox'>This is a React Checkbox</label>
+                                </div>
+                            </React.Fragment>
+                        ),
+                        {
+                            validate: (vals) => ({
+                                username: !vals.username && 'Username is required',
+                                password: !vals.password && 'Password is required',
+                            }),
+                            submit: (vals, api, close) => {
+                                if (vals.username === 'admin' && vals.password === 'test') {
+                                    close();
+                                    action('Prompt values')(vals);
+                                } else {
+                                    api.setError('password', 'Username or password is invalid');
+                                }
+                            },    
+                        },
+                        undefined,
+                        undefined,
+                        {checkboxField: true, username: 'admin'},
                     );
                     action('Prompt values')(values);
                 }}>Click me</button>

@@ -14,6 +14,7 @@ export interface PopupApi {
         },
         customIcon?: {name: string, color: string},
         titleColor?: string,
+        defaultValues?: {},
     ): Promise<FormValues>;
 }
 
@@ -57,6 +58,7 @@ export class PopupManager implements PopupApi {
         },
         customIcon?: { name: string, color: string },
         titleColor?: string,
+        defaultValues?: {},
     ): Promise<FormValues> {
         return new Promise((resolve) => {
             const closeAndResolve = (result: FormValues) => {
@@ -81,6 +83,7 @@ export class PopupManager implements PopupApi {
                 content: () => (
                     <Form
                         validateError={settings && settings.validate}
+                        defaultValues={defaultValues}
                         onSubmit={onSubmit}
                         getApi={(api) => formApi = api}>
                         {(api) => (
