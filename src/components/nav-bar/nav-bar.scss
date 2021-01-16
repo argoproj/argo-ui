@@ -11,8 +11,7 @@ $nav-break-height-sm: 746px;
     padding-top: 160px;
     z-index: $nav-z-index;
     width: $nav-width;
-    background: linear-gradient(to bottom, #333, #444, #555, #666, #999);
-    box-shadow: inset -2px 0 4px 0 rgba(0,0,0,0.59);
+    background-color: $argo-color-gray-8;
 
     &__logo {
         position: absolute;
@@ -22,28 +21,28 @@ $nav-break-height-sm: 746px;
         padding: 8px 6px;
 
         img {
-            max-width: 104%;
+            display: block;
+            max-width: 85%;
+            margin: 0 auto;
         }
     }
 
     &__item {
         position: relative;
-        margin: 20px 0;
+        margin: 10px 0;
         padding-right: 3px;
-        font-size: 34px;
-        color: $white-color;
+        font-size: 25px;
         text-align: center;
         cursor: pointer;
+        color: $white-color;
         border-left: 3px solid transparent;
 
         &.active {
             border-color: $argo-color-teal-5;
         }
 
-        &:not(:hover):not(.active) i {
-            background: -webkit-gradient(linear, left top, left bottom, from(#bbb), to(#999));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        &:hover {
+            color: $argo-color-gray-4;
         }
 
       &:focus {
