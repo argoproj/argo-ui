@@ -105,7 +105,15 @@ export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderPro
                     }
                 } else {
                     this.ensureUnsubscribed();
-                    this.subscription = res.subscribe((data: D) => this.setState({ loading: false, dataWrapper: { data } }), (e) => this.handleError(e));
+                    this.subscription = res.subscribe((data: D) => {
+                        this.setState({ loading: false, dataWrapper: { data } });
+                    }, (e) => {
+                        this.handleError(e);
+                    }, () => {
+                        // observable might complete before returning any data
+                        // make sure to reset loading state
+                        this.setState({ loading: false, dataWrapper: { data: this.state.dataWrapper?.data } });
+                    });
                 }
             } catch (e) {
                 this.handleError(e);
