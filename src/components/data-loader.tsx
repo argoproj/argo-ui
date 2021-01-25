@@ -110,9 +110,11 @@ export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderPro
                     }, (e) => {
                         this.handleError(e);
                     }, () => {
-                        // observable might complete before returning any data
-                        // make sure to reset loading state
-                        this.setState({ loading: false, dataWrapper: { data: this.state.dataWrapper?.data } });
+                        if (this.state.loading) {
+                            // observable might complete before returning any data
+                            // make sure to reset loading state
+                            this.setState({ loading: false, dataWrapper: { data: this.state.dataWrapper?.data } });
+                        }
                     });
                 }
             } catch (e) {
