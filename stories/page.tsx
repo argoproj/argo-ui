@@ -103,18 +103,24 @@ storiesOf('Page', module)
                 </Layout>
             </Route>
         </Router>
-    )).add('nav bar style', () => (
-        <Router history={history}>
-            <Route path={location.pathname}>
-                <Layout navItems={navItems} navBarStyle={{light: true, compact: true}}>
-                    <Page title='Hello world!'>
-                        <div style={{padding: '1em'}}>
-                            <div className='white-box'>
-                                Hello world!
+    )).add('compact nav bar', () => {
+        const manyNavItems = [];
+        for (let i = 0; i < 10; i++) {
+            manyNavItems.push({ path: location.pathname + '/' + i, title: 'Sample', iconClassName: 'argo-icon-docs' });
+        }
+        return (
+            <Router history={history}>
+                <Route path={location.pathname}>
+                    <Layout navItems={manyNavItems}>
+                        <Page title='Hello world!'>
+                            <div style={{padding: '1em'}}>
+                                <div className='white-box'>
+                                    Hello world!
+                                </div>
                             </div>
-                        </div>
-                    </Page>
-                </Layout>
-            </Route>
-        </Router>
-    ));
+                        </Page>
+                    </Layout>
+                </Route>
+            </Router>
+        );
+    });

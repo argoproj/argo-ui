@@ -7,15 +7,9 @@ import {Tooltip} from '../tooltip/tooltip';
 
 require('./nav-bar.scss');
 
-export interface Style {
-    light?: boolean;
-    compact?: boolean;
-}
-
 export interface NavBarProps {
     items: Array<{ path: string; iconClassName: string; title: string; }>;
     version?: () => React.ReactElement;
-    style?: Style;
 }
 
 export function isActiveRoute(locationPath: string, path: string) {
@@ -23,12 +17,10 @@ export function isActiveRoute(locationPath: string, path: string) {
 }
 
 export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps, context: AppContext) => {
-    const viewModifications = props.style || {};
     const locationPath = context.router.route.location.pathname;
     return (
         <div className={classNames('nav-bar', {
-            'nav-bar--compact': !!viewModifications.compact,
-            'nav-bar--light': !!viewModifications.light,
+            'nav-bar--compact': (props.items || []).length >= 10,
         })}>
             <div className='nav-bar__logo'>
                 <img src='assets/images/logo.png' alt='Argo'/>
