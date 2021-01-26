@@ -103,4 +103,18 @@ storiesOf('Page', module)
                 </Layout>
             </Route>
         </Router>
+    )).add('nav bar style', () => (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems} navBarStyle={{light: true, compact: true}}>
+                    <Page title='Hello world!'>
+                        <div style={{padding: '1em'}}>
+                            <div className='white-box'>
+                                Hello world!
+                            </div>
+                        </div>
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
     ));
