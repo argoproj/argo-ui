@@ -3,9 +3,10 @@ import { NavBar } from '../nav-bar/nav-bar';
 
 require('./layout.scss');
 
-export interface LayoutProps extends React.Props<any> {
+export interface LayoutProps {
     navItems: Array<{ path: string; iconClassName: string; title: string; }>;
     version?: () => React.ReactElement;
+    children?: React.ReactNode;
 }
 
 export const Layout = (props: LayoutProps) => (
