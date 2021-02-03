@@ -103,7 +103,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
             inputProps={props.inputProps}
             wrapperProps={wrapperProps}
             shouldItemRender={(item: AutocompleteOption, val: string) => {
-                return !props.filterSuggestions || item.label.includes(val);
+                return !props.filterSuggestions || item.label.toLowerCase().includes(val.toLowerCase());
             }}
             renderMenu={function(menuItems, _, style) {
                 if (menuItems.length === 0) {
