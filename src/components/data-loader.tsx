@@ -89,11 +89,11 @@ export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderPro
     }
 
     public reload() {
-        this.setState({ dataWrapper: null, error: false });
+        this.setState({ dataWrapper: null, error: false, inputChanged: true });
     }
 
     private async loadData() {
-        if (!this.state.error && !this.state.loading && (this.state.dataWrapper == null || this.state.inputChanged)) {
+        if (!this.state.error && !this.state.loading && this.state.dataWrapper == null || this.state.inputChanged) {
             this.setState({ error: false, loading: true, inputChanged: false, dataWrapper: this.props.noLoaderOnInputChange ? this.state.dataWrapper : null });
             try {
                 const res = 'input' in this.props ? this.props.load(this.props.input) : this.props.load();
