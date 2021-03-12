@@ -22,10 +22,18 @@
         &:hover {
             color: $argo-color-gray-6;
         }
+        
+        &:focus {
+            color: $argo-color-gray-6;
+        }
     }
 
     &:not(.disabled):not([disabled]) {
         &:hover {
+            background-color: #d1d5d9;
+        }
+
+        &:focus {
             background-color: #d1d5d9;
         }
     }
@@ -38,6 +46,12 @@
             &:hover {
                 color: $argo-color-gray-1;
                 background-color: $argo-color-gray-5;
+            }
+
+            &:focus {
+                color: $argo-color-gray-1;
+                background-color: $argo-color-gray-5;
+                border: 1px solid $argo-color-teal-5 !important;
             }
         }
 
@@ -59,6 +73,10 @@
             &:hover {
                 background-color: $argo-color-gray-3;
             }
+
+            &:focus {
+                background-color: $argo-color-gray-3;
+            }
         }
 
         &.disabled,
@@ -66,6 +84,10 @@
             color: $argo-color-gray-6;
 
             &:hover {
+                background-color: transparent;
+            }
+
+            &:focus {
                 background-color: transparent;
             }
         }
@@ -80,6 +102,11 @@
                 color: $argo-color-gray-1;
                 background-color:$argo-color-teal-6;
             }
+
+            &:focus {
+                color: $argo-color-gray-1;
+                background-color:$argo-color-teal-6;
+            }
         }
 
         &.disabled,
@@ -88,6 +115,10 @@
             box-shadow: inset 0 0 0 1px $argo-color-gray-4;
 
             &:hover {
+                color: $argo-color-gray-7;
+            }
+
+            &:focus {
                 color: $argo-color-gray-7;
             }
         }
@@ -164,8 +195,16 @@
             background: lighten($argo-color-teal-5, 10) !important;
         }
 
+        &:focus {
+            background: lighten($argo-color-teal-5, 10) !important;
+        }
+
         &:not(.disabled) {
             &:hover {
+                color: #fff;
+            }
+
+            &:focus {
                 color: #fff;
             }
         }
@@ -199,8 +238,14 @@
         color: #fff;
         background: linear-gradient(-58deg, #49505c 0%, #3f51b5 36%, #00c7d6 100%);
 
-        &:not(.disabled):hover {
-            color: #fff;
+        &:not(.disabled) {
+            &:hover {
+                color: #fff;
+            }
+
+            &:focus {
+                color: #fff;
+            }
         }
     }
 

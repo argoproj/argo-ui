@@ -145,7 +145,6 @@
         position: absolute;
         width: 20px;
         height: 20px;
-        opacity: 0;
         cursor: pointer;
         top: 50%;
         transform: translateY(-50%);
@@ -176,6 +175,10 @@
                 display: block;
             }
         }
+
+        &:focus {
+            outline: 2px solid $argo-color-teal-5 !important;
+        } 
 
         &:disabled + span {
             background-color: $argo-color-gray-1;
