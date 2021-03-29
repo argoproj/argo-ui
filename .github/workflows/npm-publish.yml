@@ -3,6 +3,11 @@ name: Release NPM package
 on:
   release:
     types: [created]
+  push:
+    branches:
+      - 'master'
+      - 'release'
+      - 'release-*'
 
 jobs:
   build:
