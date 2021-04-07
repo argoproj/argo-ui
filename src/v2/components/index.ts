@@ -1,7 +1,9 @@
 export {ActionButton} from './action-button/action-button';
 export {Alert} from './alert/alert';
 export {Autocomplete} from './autocomplete/autocomplete';
+export {Columns} from './columns/columns';
 export {EffectDiv} from './effect-div/effect-div';
+export {Header, Brand} from './header/header';
 export {InfoItem} from './info-item/info-item';
 export {Input} from './input/input';
 export {Menu} from './menu/menu';

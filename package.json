@@ -15,6 +15,7 @@
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js"
     },
     "dependencies": {
+        "@babel/parser": "^7.13.13",
         "@babel/preset-react": "^7.13.13",
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -32,6 +33,7 @@
         "history": "^5.0.0",
         "lz-string": "^1.4.4",
         "moment": "^2.20.1",
+        "prettier": "^2.2.1",
         "prop-types": "^15.6.0",
         "react-autocomplete": "^1.8.1",
         "react-codemirror2": "^7.2.1",

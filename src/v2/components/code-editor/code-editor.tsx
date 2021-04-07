@@ -3,12 +3,17 @@ import ThemeDiv from '../theme-div/theme-div';
 import {Controlled as ReactCodeMirror} from 'react-codemirror2';
 import {Editor as CMEditor, EditorConfiguration} from 'codemirror';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/jsx/jsx';
 import 'codemirror/theme/neo.css';
 import './code-editor.scss';
 
 export const Editor = (props: {setCode: (code: string) => void; init?: string}) => {
     const [code, setCode] = React.useState(props.init || '');
     const editorRef = React.useRef<CMEditor | null>(null);
+
+    React.useEffect(() => {
+        setCode(props.init);
+    }, [props.init]);
 
     return (
         <ThemeDiv className='code-editor'>

@@ -5,7 +5,7 @@ import {ThemeDiv} from '../theme-div/theme-div';
 
 import './menu.scss';
 
-export const Menu = (props: {children: React.ReactNode; items: ActionButtonProps[]}) => {
+export const Menu = (props: {children: React.ReactNode; items: (ActionButtonProps | string)[]}) => {
     const [menuVisible, setMenuVisible] = React.useState(false);
     const ref = React.useRef(null);
 
@@ -21,21 +21,33 @@ export const Menu = (props: {children: React.ReactNode; items: ActionButtonProps
             document.removeEventListener('click', clickHandler);
         };
     });
+
     return (
         <div style={{position: 'relative'}}>
             <ThemeDiv className='menu' hidden={!menuVisible}>
-                {props.items.map((i) => (
-                    <div
-                        key={i.label}
-                        className='menu__item'
-                        onClick={(e) => {
-                            i.action();
-                            e.preventDefault();
-                        }}>
-                        {i.icon && <FontAwesomeIcon icon={i.icon} />}
-                        <div className='menu__item__label'>{i.label}</div>
-                    </div>
-                ))}
+                {props.items.map((i) => {
+                    let item: ActionButtonProps;
+                    if (typeof i === 'string') {
+                        item = {label: i};
+                    } else {
+                        item = i;
+                    }
+
+                    return (
+                        <div
+                            key={item.label}
+                            className='menu__item'
+                            onClick={(e) => {
+                                if (item.action) {
+                                    item.action();
+                                }
+                                e.preventDefault();
+                            }}>
+                            {item.icon && <FontAwesomeIcon icon={item.icon} />}
+                            <div className='menu__item__label'>{item.label}</div>
+                        </div>
+                    );
+                })}
             </ThemeDiv>
             <div ref={ref} onClick={() => setMenuVisible(true)}>
                 {props.children}

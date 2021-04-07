@@ -7,6 +7,7 @@ import './info-item.scss';
 export enum InfoItemKind {
     Default = 'default',
     Colored = 'colored',
+    Monospace = 'monospace',
     Canary = 'canary',
     BlueGreen = 'bluegreen',
 }

@@ -11,7 +11,7 @@ export const Autocomplete = (props: React.InputHTMLAttributes<HTMLInputElement> 
     const inputRef = React.useRef(null);
     const autocompleteRef = React.useRef(null);
     const [showSuggestions, setShowSuggestions] = React.useState(false);
-    const [pos, nav, reset] = useNav(props.items.length);
+    const [pos, nav, reset] = useNav((props.items || []).length);
 
     React.useEffect(() => {
         function unfocus(e: any) {
@@ -100,7 +100,7 @@ export const Autocomplete = (props: React.InputHTMLAttributes<HTMLInputElement> 
                 onFocus={() => setShowSuggestions(true)}
             />
             <ThemeDiv className='autocomplete__items' hidden={!showSuggestions}>
-                {curItems.map((i, n) => (
+                {(curItems || props.items || []).map((i, n) => (
                     <div
                         key={i}
                         onClick={() => {

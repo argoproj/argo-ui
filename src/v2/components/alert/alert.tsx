@@ -9,8 +9,12 @@ export enum AlertType {
     Success = 'success',
 }
 
-export const Alert = (props: {children: string | string[]; type: AlertType}) => {
-    return <ThemeDiv className={`alert alert--${props.type}`}>{props.children}</ThemeDiv>;
+export const Alert = (props: {children: string | string[]; type: AlertType; style?: React.CSSProperties}) => {
+    return (
+        <ThemeDiv style={props.style} className={`alert alert--${props.type}`}>
+            {props.children}
+        </ThemeDiv>
+    );
 };
 
 export default Alert;
