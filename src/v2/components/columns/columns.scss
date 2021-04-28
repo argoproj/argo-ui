@@ -1,0 +1,26 @@
+@import '../../styles/colors.scss';
+
+.columns {
+    display: flex;
+    font-family: 'Heebo', sans-serif;
+    .column {
+        width: 200px;
+        padding: 10px;
+        border-right: 1px solid $argo-color-gray-4;
+        &__item {
+            line-height: 2em;
+            cursor: pointer;
+            padding-left: 10px;
+            border-bottom: 1px solid $argo-color-gray-3;
+            &--selected {
+                background-color: $argo-color-gray-2;
+                color: $sea;
+            }
+
+            &--dead-end {
+                cursor: auto;
+                color: $argo-color-gray-7;
+            }
+        }
+    }
+}
