@@ -1,19 +1,19 @@
 name: Release NPM package
 
 on:
-  release:
-    types: [created]
-  push:
-    branches:
-      - 'master'
-      - 'release'
-      - 'release-*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Git tag to build release from
+        required: true
 
-jobs:    
-  publish-gpr:
+jobs:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag }}
       - uses: actions/setup-node@v1
         with:
           node-version: 12
