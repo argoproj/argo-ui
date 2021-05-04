@@ -1,7 +1,6 @@
 name: Release NPM package
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       tag:
@@ -20,4 +19,4 @@ jobs:
           node-version: 12
       - run: cd v2 && npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

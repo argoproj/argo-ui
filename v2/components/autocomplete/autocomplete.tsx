@@ -119,7 +119,7 @@ export const _Autocomplete = (props: AutocompleteProps) => {
                 }}
                 onFocus={() => setShowSuggestions(true)}
             />
-            <ThemeDiv className='autocomplete__items' hidden={!showSuggestions}>
+            <ThemeDiv className='autocomplete__items' hidden={!showSuggestions || (curItems || props.items || []).length < 1}>
                 {(curItems || props.items || []).map((i, n) => (
                     <div
                         key={i}
