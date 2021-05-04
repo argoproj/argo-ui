@@ -1,6 +1,7 @@
 name: Release NPM package
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       tag:
