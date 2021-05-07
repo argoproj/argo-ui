@@ -37,11 +37,11 @@
     },
     "scripts": {
         "start": "start-storybook",
-        "build": "yarn build-storybook -o dist -s ./.storybook/images",
+        "build": "yarn build-storybook -o ../docs/storybook -s ./.storybook/images",
         "storybook": "start-storybook -p 6006 -s ./.storybook/images",
         "build-storybook": "build-storybook",
         "storybook-docs": "start-storybook --docs --no-manager-cache",
-        "build-storybook-docs": "build-storybook --docs"
+        "build-storybook-docs": "build-storybook --docs -o ../docs"
     },
     "eslintConfig": {
         "extends": [
