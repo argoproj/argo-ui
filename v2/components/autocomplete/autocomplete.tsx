@@ -4,7 +4,6 @@ import {Input, useDebounce} from '../input/input';
 import ThemeDiv from '../theme-div/theme-div';
 
 import './autocomplete.scss';
-import {DocumentedComponent} from '../../types/documentation';
 
 interface AutocompleteProps extends React.InputHTMLAttributes<HTMLInputElement> {
     items: string[];
@@ -12,20 +11,10 @@ interface AutocompleteProps extends React.InputHTMLAttributes<HTMLInputElement> 
     onItemClick?: (item: string) => void;
 }
 
-export class Autocomplete extends DocumentedComponent<AutocompleteProps> {
-    static docs = {
-        name: 'Autocomplete',
-        description: 'An input form that suggests items from a list based on what a user has typed in the form',
-        props: [
-            {name: 'items', type: 'string[]', description: 'List of items that will be suggested to user when they click the form'},
-            {name: 'onItemClick', type: '(item: string) => void', description: 'Function that is called when a user clicks an item in the list'},
-            {name: 'inputStyle', type: 'React.CSSProperties', description: 'CSS Styles to be applied to inner Input component'},
-        ],
-    };
-    render = () => <_Autocomplete {...this.props} />;
-}
-
-export const _Autocomplete = (props: AutocompleteProps) => {
+/**
+ * An input form that suggests specified items
+ */
+export const Autocomplete = (props: AutocompleteProps) => {
     const [value, setValue] = React.useState((props.value as string) || '');
     const [curItems, setCurItems] = React.useState(props.items || []);
     const inputRef = React.useRef(null);

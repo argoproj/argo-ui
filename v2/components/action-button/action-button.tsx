@@ -7,72 +7,7 @@ import {EffectDiv} from '../effect-div/effect-div';
 import {Tooltip} from '../tooltip/tooltip';
 
 import './action-button.scss';
-import {DocumentedComponent, PropDoc} from '../../types/documentation';
-
-export class ActionButton extends DocumentedComponent<ActionButtonProps> {
-    static docs = {
-        name: 'ActionButton',
-        props: [
-            {
-                name: 'action',
-                type: 'Function',
-                description: 'What do you want this button to do when clicked?',
-            },
-            {
-                name: 'label',
-                type: 'string',
-                description: 'The text shown in the button',
-            },
-            {
-                name: 'icon',
-                type: 'IconDefinition',
-                description: 'Icon shown on left side of text, or centered if no text. Should be faSomething',
-            },
-            {
-                name: 'indicateLoading',
-                type: 'boolean',
-                description: 'If set, buttons icon (if exists) is briefly replaced with spinner after clicking',
-            },
-            {
-                name: 'dark',
-                type: 'boolean',
-                description: 'If set, button is always dark',
-            },
-            {
-                name: 'disabled',
-                type: 'boolean',
-                description: 'If set, button is, and appears, unclickable',
-            },
-            {
-                name: 'short',
-                type: 'boolean',
-                description: 'If set, button only displays icon (no label)',
-            },
-            {
-                name: 'style',
-                type: 'React.CSSProperties',
-                description: 'CSS styles',
-            },
-            {
-                name: 'tooltip',
-                type: 'React.ReactNode',
-                description: 'If set, a tooltip is shown on hover with this content',
-            },
-            {
-                name: 'shouldConfirm',
-                type: 'boolean',
-                description: 'If set, user must confirm action by clicking again, after clicking the first time',
-            },
-            {
-                name: 'indicateSuccess',
-                type: 'boolean',
-                description: 'If set, a checkmark will be briefly displayed in place of the preferred icon to indicate a successful action',
-            },
-        ] as PropDoc[],
-        description: 'ActionButtons are for providing users with clickable areas to perform an action',
-    };
-    render = () => <_ActionButton {...this.props} />;
-}
+import {Theme} from '../theme-div/theme-div';
 
 export interface ActionButtonProps {
     action?: Function;
@@ -80,6 +15,7 @@ export interface ActionButtonProps {
     icon?: IconDefinition;
     indicateLoading?: boolean;
     dark?: boolean;
+    theme?: Theme;
     disabled?: boolean;
     short?: boolean;
     style?: React.CSSProperties;
@@ -88,7 +24,10 @@ export interface ActionButtonProps {
     indicateSuccess?: boolean;
 }
 
-export const _ActionButton = (props: ActionButtonProps) => {
+/**
+ * Provide users with clickable buttons to perform an action
+ */
+export const ActionButton = (props: ActionButtonProps) => {
     const {label, action, icon, indicateLoading, short, shouldConfirm} = props;
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
@@ -129,12 +68,12 @@ export const _ActionButton = (props: ActionButtonProps) => {
             return displayIcon;
         }
     };
-
     const button = (
         <EffectDiv
-            className={`action-button ${props.dark ? 'action-button--dark' : ''} ${props.disabled ? 'action-button--disabled' : ''} ${confirmed ? 'action-button--selected' : ''}`}
+            className={`action-button ${props.disabled ? 'action-button--disabled' : ''} ${confirmed ? 'action-button--selected' : ''}`}
             style={props.style}
             innerref={ref}
+            theme={props.theme || (props.dark && Theme.Dark) || Theme.Light}
             onClick={(e) => {
                 if (props.disabled) {
                     e.preventDefault();
@@ -161,7 +100,7 @@ export const _ActionButton = (props: ActionButtonProps) => {
                 }
             }}>
             {icon && <FontAwesomeIcon icon={getIcon()} spin={loading && indicateLoading} />}
-            {label && !short && <span style={icon && {marginLeft: '5px'}}>{displayLabel}</span>}
+            {label && (!icon || !short) && <span style={icon && {marginLeft: '5px'}}>{displayLabel}</span>}
         </EffectDiv>
     );
     return props.tooltip ? <Tooltip content={props.tooltip}>{button}</Tooltip> : button;

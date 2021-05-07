@@ -5,6 +5,10 @@ import {ThemeDiv} from '../theme-div/theme-div';
 
 import './menu.scss';
 
+/**
+ * Wrapper component that displays a menu on click of its children.
+ * Menu items can be simple strings, or use identical props to `ActionButton` to add actions to menu items
+ */
 export const Menu = (props: {children: React.ReactNode; items: (ActionButtonProps | string)[]}) => {
     const [menuVisible, setMenuVisible] = React.useState(false);
     const ref = React.useRef(null);
@@ -25,7 +29,7 @@ export const Menu = (props: {children: React.ReactNode; items: (ActionButtonProp
     return (
         <div style={{position: 'relative'}}>
             <ThemeDiv className='menu' hidden={!menuVisible}>
-                {props.items.map((i) => {
+                {(props.items || []).map((i) => {
                     let item: ActionButtonProps;
                     if (typeof i === 'string') {
                         item = {label: i};

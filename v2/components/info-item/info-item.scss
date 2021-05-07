@@ -5,7 +5,6 @@
     border-radius: 3px;
     border: 1px solid $argo-color-gray-5;
     padding: 5px 7px;
-    margin-left: auto;
     margin-right: 5px;
     color: $argo-color-gray-8;
     display: flex;
@@ -55,6 +54,9 @@
         label {
             margin-right: auto;
             padding-right: 5px;
+        }
+        .info-item {
+            margin-left: auto;
         }
     }
 }

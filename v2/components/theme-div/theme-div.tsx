@@ -1,10 +1,13 @@
 import * as React from 'react';
 
-enum Theme {
+export enum Theme {
     Light = 'light',
     Dark = 'dark',
 }
 
+/**
+ * Automatically appends `--dark` to all classes on the div when `theme` prop is set to `Theme.Dark`
+ */
 export const ThemeDiv = (
     props: {
         children?: React.ReactNode;

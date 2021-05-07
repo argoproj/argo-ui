@@ -1,6 +1,7 @@
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
+import Text from '../text/text';
 import {ThemeDiv} from '../theme-div/theme-div';
 import './info-item.scss';
 
@@ -19,6 +20,9 @@ export interface InfoItemProps {
     kind?: InfoItemKind;
 }
 
+/**
+ * Displays a small piece encapsulated piece of data
+ */
 export const InfoItem = (props: InfoItemProps) => (
     <ThemeDiv className={`info-item${props.kind ? ` info-item--${props.kind}` : ''}`} style={props.style}>
         {props.icon && (
@@ -26,10 +30,13 @@ export const InfoItem = (props: InfoItemProps) => (
                 <FontAwesomeIcon icon={props.icon} />
             </span>
         )}
-        {props.content}
+        <Text>{props.content}</Text>
     </ThemeDiv>
 );
 
+/**
+ * Displays a right justified InfoItem (or multiple InfoItems) and a left justfied label
+ */
 export const InfoItemRow = (props: {label: string | React.ReactNode; items?: InfoItemProps | InfoItemProps[]}) => {
     let {label, items} = props;
     let itemComponents = null;
@@ -40,7 +47,11 @@ export const InfoItemRow = (props: {label: string | React.ReactNode; items?: Inf
 
     return (
         <div className='info-item--row'>
-            {props.label && <label>{label}</label>}
+            {props.label && (
+                <Text>
+                    <label>{label}</label>
+                </Text>
+            )}
             {props.items && <div style={{marginLeft: 'auto', display: 'flex'}}>{itemComponents}</div>}
         </div>
     );

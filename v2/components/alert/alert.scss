@@ -18,4 +18,12 @@
     &--success {
         background-color: $lime;
     }
+
+    &--dark#{&--success} {
+        background-color: $leaf;
+    }
+
+    &--warning {
+        background-color: $canary;
+    }
 }
