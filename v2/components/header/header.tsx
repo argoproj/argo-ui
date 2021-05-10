@@ -8,6 +8,7 @@ interface BrandProps {
     path?: string;
     welcomeText?: string;
     brandName?: string;
+    logo?: React.ReactNode;
 }
 /**
  * Brand Hero designed for display in a header. Includes the Argo Logo and a welcome message that fades after page load
@@ -23,7 +24,7 @@ export const Brand = (props: BrandProps) => {
     const welcomeText = props.welcomeText || 'Welcome to';
     return (
         <div className='header__brand'>
-            <Logo />
+            {props.logo ? props.logo : <Logo />}
             <h1>
                 <div className='header__welcome' style={{opacity: showWelcome ? 1 : 0, transform: showWelcome ? 'none' : 'scaleX(0.01)', width: `${welcomeText.length}ch`}}>
                     {welcomeText}

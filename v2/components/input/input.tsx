@@ -3,13 +3,13 @@ import {ThemeDiv} from '../theme-div/theme-div';
 
 import './input.scss';
 
-interface InputProps {
+export interface InputProps {
     value: string;
     ref: React.MutableRefObject<HTMLInputElement>;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-type SetInputFxn = (val: string) => void;
+export type SetInputFxn = (val: string) => void;
 export const FormResetFactory = (setFxns: SetInputFxn[]) => {
     return () => {
         setFxns.forEach((reset) => reset(''));

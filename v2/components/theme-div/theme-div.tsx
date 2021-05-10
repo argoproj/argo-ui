@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useTheme} from '../../shared/context/theme';
 
 export enum Theme {
     Light = 'light',
@@ -16,7 +17,7 @@ export const ThemeDiv = (
         theme?: Theme;
     } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 ) => {
-    let theme = props.theme || Theme.Light;
+    let theme = props.theme || useTheme();
     let clString = props.className;
 
     if (theme === Theme.Dark && !props.disabled) {

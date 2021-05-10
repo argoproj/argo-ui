@@ -70,10 +70,9 @@ export const ActionButton = (props: ActionButtonProps) => {
     };
     const button = (
         <EffectDiv
-            className={`action-button ${props.disabled ? 'action-button--disabled' : ''} ${confirmed ? 'action-button--selected' : ''}`}
+            className={`action-button ${props.dark ? 'action-button--dark' : ''} ${props.disabled ? 'action-button--disabled' : ''} ${confirmed ? 'action-button--selected' : ''}`}
             style={props.style}
             innerref={ref}
-            theme={props.theme || (props.dark && Theme.Dark) || Theme.Light}
             onClick={(e) => {
                 if (props.disabled) {
                     e.preventDefault();

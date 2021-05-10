@@ -30,11 +30,11 @@ export const useHover = (): [React.MutableRefObject<any>, boolean] => {
 /**
  * Displays a Tooltip when its children are hovered over
  */
-export const Tooltip = (props: {content: React.ReactNode | string} & React.PropsWithRef<any>) => {
+export const Tooltip = (props: {content: React.ReactNode | string; inverted?: boolean} & React.PropsWithRef<any>) => {
     const [tooltip, showTooltip] = useHover();
     return (
         <div style={{position: 'relative'}}>
-            <ThemeDiv hidden={!showTooltip} className='tooltip'>
+            <ThemeDiv hidden={!showTooltip} className={`tooltip ${props.inverted ? 'tooltip--inverted' : ''}`}>
                 {props.content}
             </ThemeDiv>
             <div ref={tooltip}>{props.children}</div>

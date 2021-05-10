@@ -1,13 +1,12 @@
 import * as React from 'react';
 import {appendSuffixToClasses} from '../../utils/utils';
-import ThemeDiv, {Theme} from '../theme-div/theme-div';
+import ThemeDiv from '../theme-div/theme-div';
 
 import './effect-div.scss';
 
 interface EffectDivProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     children?: React.ReactNode;
     innerref?: React.MutableRefObject<any>;
-    theme?: Theme;
 }
 
 /**
@@ -23,8 +22,8 @@ You can drop in replace a div with an EffectDiv, but to add a background effect,
 export const EffectDiv = (props: EffectDivProps) => {
     const backgroundCl = appendSuffixToClasses(props.className, '__background');
     return (
-        <ThemeDiv className={`${props.className} effect-div`} style={props.style} onClick={props.onClick} innerref={props.innerref} theme={props.theme}>
-            <ThemeDiv className={`effect-div__background ${backgroundCl}`} theme={props.theme} />
+        <ThemeDiv className={`${props.className} effect-div`} style={props.style} onClick={props.onClick} innerref={props.innerref}>
+            <ThemeDiv className={`effect-div__background ${backgroundCl}`} />
             <div style={{zIndex: 2, position: 'relative', display: 'inherit', flex: 'inherit', alignItems: 'inherit'}}>{props.children}</div>
         </ThemeDiv>
     );
