@@ -111,7 +111,7 @@ export const Autocomplete = (
     delete trimmedProps.onItemClick;
 
     return (
-        <div className='autocomplete' ref={autocompleteRef} style={style}>
+        <div className='autocomplete' ref={autocompleteRef} style={style as any}>
             <Input
                 {...trimmedProps}
                 style={props.inputStyle}
@@ -124,8 +124,8 @@ export const Autocomplete = (
                 }}
                 onFocus={() => setShowSuggestions(true)}
             />
-            <ThemeDiv className='autocomplete__items' hidden={!showSuggestions}>
-                {curItems.map((i, n) => (
+            <ThemeDiv className='autocomplete__items' hidden={!showSuggestions || (props.items || []).length < 1}>
+                {(curItems || []).map((i, n) => (
                     <div
                         key={i}
                         onClick={() => {

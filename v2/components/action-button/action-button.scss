@@ -11,6 +11,8 @@
     display: flex;
     box-sizing: border-box;
     align-items: center;
+    font-weight: 500;
+    justify-content: center;
 
     &--dark {
         color: $shine;
@@ -23,6 +25,20 @@
         border: 1px solid $silver-lining;
         background-color: $fog;
         color: $silver-lining;
+    }
+
+    &--transparent {
+        padding: 10px 5px;
+        color: $argo-color-gray-8;
+
+        &:hover {
+            color: $sherbert;
+        }
+    }
+
+    &--transparent > &__background {
+        background: none !important;
+        border: none !important;
     }
 
     &--dark > &__background {

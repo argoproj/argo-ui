@@ -33,7 +33,7 @@ export const useHover = (): [React.MutableRefObject<any>, boolean] => {
 export const Tooltip = (props: {content: React.ReactNode | string; inverted?: boolean} & React.PropsWithRef<any>) => {
     const [tooltip, showTooltip] = useHover();
     return (
-        <div style={{position: 'relative'}}>
+        <div style={{position: 'relative', minWidth: 0}}>
             <ThemeDiv hidden={!showTooltip} className={`tooltip ${props.inverted ? 'tooltip--inverted' : ''}`}>
                 {props.content}
             </ThemeDiv>

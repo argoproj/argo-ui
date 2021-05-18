@@ -1,7 +1,9 @@
 export * from './action-button/action-button'; // Documented
 export {Alert} from './alert/alert'; // Documented
 export * from './autocomplete/autocomplete'; // Documented
+export * from './checkbox/checkbox';
 export {EffectDiv} from './effect-div/effect-div'; // Documented
+export * from './flexy/flexy';
 export {Header, Brand} from './header/header'; // Documented
 export * from './info-item/info-item';
 export * from './input/input';

@@ -9,6 +9,15 @@
     color: $argo-color-gray-8;
     display: flex;
     align-items: center;
+    min-width: 0;
+
+    &--lightweight {
+        border: none;
+        background: none;
+        font-weight: 500;
+        padding-left: 0;
+        padding-right: 0;
+    }
 
     &--dark {
         background-color: $fog;
@@ -57,6 +66,9 @@
         }
         .info-item {
             margin-left: auto;
+            &:last-child {
+                margin-right: 0;
+            }
         }
     }
 }

@@ -22,6 +22,8 @@ export interface ActionButtonProps {
     tooltip?: React.ReactNode;
     shouldConfirm?: boolean;
     indicateSuccess?: boolean;
+    transparent?: boolean;
+    loading?: boolean;
 }
 
 /**
@@ -60,7 +62,7 @@ export const ActionButton = (props: ActionButtonProps) => {
     });
 
     const getIcon = () => {
-        if (loading && indicateLoading) {
+        if ((loading || props.loading) && indicateLoading) {
             return faCircleNotch;
         } else if (success && props.indicateSuccess) {
             return faCheck;
@@ -70,7 +72,9 @@ export const ActionButton = (props: ActionButtonProps) => {
     };
     const button = (
         <EffectDiv
-            className={`action-button ${props.dark ? 'action-button--dark' : ''} ${props.disabled ? 'action-button--disabled' : ''} ${confirmed ? 'action-button--selected' : ''}`}
+            className={`action-button ${props.dark ? 'action-button--dark' : ''} ${props.disabled ? 'action-button--disabled' : ''} ${confirmed ? 'action-button--selected' : ''} ${
+                props.transparent ? 'action-button--transparent' : ''
+            }`}
             style={props.style}
             innerref={ref}
             onClick={(e) => {
@@ -92,13 +96,13 @@ export const ActionButton = (props: ActionButtonProps) => {
                     }
                 }
                 if (action && (shouldConfirm ? confirmed : true)) {
-                    action();
+                    action(e);
                     setLoading(true);
                     setSuccess(true);
                     e.preventDefault();
                 }
             }}>
-            {icon && <FontAwesomeIcon icon={getIcon()} spin={loading && indicateLoading} />}
+            {icon && <FontAwesomeIcon icon={getIcon()} spin={(loading || props.loading) && indicateLoading} />}
             {label && (!icon || !short) && <span style={icon && {marginLeft: '5px'}}>{displayLabel}</span>}
         </EffectDiv>
     );
