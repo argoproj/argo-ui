@@ -1,6 +1,6 @@
 {
     "name": "argo-ux",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "main": "index.js",
     "license": "MIT",
     "dependencies": {
@@ -9,8 +9,6 @@
         "@fortawesome/free-regular-svg-icons": "^5.15.2",
         "@fortawesome/free-solid-svg-icons": "^5.15.2",
         "@fortawesome/react-fontawesome": "^0.1.14",
-        "@storybook/addon-controls": "^6.2.9",
-        "@storybook/addon-essentials": "^6.2.9",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
         "@types/jest": "^26.0.15",
@@ -65,6 +63,8 @@
     "devDependencies": {
         "@babel/core": "^7.14.0",
         "@storybook/addon-actions": "^6.2.9",
+        "@storybook/addon-controls": "^6.2.9",
+        "@storybook/addon-essentials": "^6.2.9",
         "@storybook/addon-links": "^6.2.9",
         "@storybook/addons": "^6.2.9",
         "@storybook/react": "^6.2.9",
