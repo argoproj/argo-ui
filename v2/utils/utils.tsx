@@ -10,9 +10,11 @@ export function useData<T>(getData: () => Promise<T>, init?: T, callback?: (data
     const [data, setData] = React.useState(init as T);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
+    const [retrying, retry] = React.useState(false);
     React.useEffect(() => {
         const fx = async () => {
             try {
+                setLoading(true);
                 const data = await getData();
                 setLoading(false);
                 setData(data);
@@ -22,8 +24,8 @@ export function useData<T>(getData: () => Promise<T>, init?: T, callback?: (data
             }
         };
         fx();
-    }, dependencies || []);
-    return [data as T, loading, {state: error, retry: setError} as Error];
+    }, [...(dependencies || []), retrying]);
+    return [data as T, loading, {state: error, retry: () => retry(!retrying)} as Error];
 }
 
 export function formatTimestamp(ts: string): string {
