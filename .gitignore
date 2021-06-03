@@ -4,3 +4,4 @@ bundle
 .vscode
 coverage/
 .DS_STORE
+docs/
