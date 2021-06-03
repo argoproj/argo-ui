@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:12.18.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - yarn-packages-v4-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile --ignore-optional --non-interactive
+      - save_cache:
+          key: yarn-packages-v4-{{ checksum "yarn.lock" }}
+          paths: [~/.cache/yarn, node_modules]
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn tsc -p src/tsconfig.json
+      - run:
+          name: Install JUnit coverage reporter
+          command: yarn add --dev jest-junit
+      - run:
+          name: Run tests with JUnit as reporter
+          command: yarn test --ci --runInBand --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+      - store_test_results:
+          path: ./reports/junit/
+      - store_artifacts:
+          path: ./reports/junit
