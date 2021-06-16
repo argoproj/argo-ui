@@ -5,3 +5,4 @@ bundle
 coverage/
 .DS_STORE
 docs/
+v2/storybook-static/
