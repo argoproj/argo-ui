@@ -1,0 +1,88 @@
+{
+    "name": "argo-ux",
+    "version": "1.1.10",
+    "main": "index.js",
+    "license": "MIT",
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.2",
+        "@fortawesome/fontawesome-svg-core": "^1.2.34",
+        "@fortawesome/free-regular-svg-icons": "^5.15.2",
+        "@fortawesome/free-solid-svg-icons": "^5.15.2",
+        "@fortawesome/react-fontawesome": "^0.1.14",
+        "@testing-library/react": "^11.1.0",
+        "@testing-library/user-event": "^12.1.10",
+        "@types/jest": "^26.0.15",
+        "@types/node": "^12.0.0",
+        "@types/react": "^16.9.3",
+        "@types/react-dom": "^16.9.3",
+        "@types/react-helmet": "^6.1.0",
+        "@types/react-router-dom": "^5.1.7",
+        "moment": "^2.29.1",
+        "moment-timezone": "^0.5.33",
+        "portable-fetch": "^3.0.0",
+        "react-helmet": "^6.1.0",
+        "react-hot-loader": "^3.1.3",
+        "react-keyhooks": "^0.2.2",
+        "react-router-dom": "^5.2.0",
+        "rxjs": "^6.6.6",
+        "typescript": "^4.1.2",
+        "web-vitals": "^1.0.1",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "peerDependencies": {
+        "react": "^16.9.3",
+        "react-dom": "^16.9.3"
+    },
+    "scripts": {
+        "start": "start-storybook",
+        "build": "yarn build-storybook -o ../docs/storybook -s ./.storybook/images",
+        "storybook": "start-storybook -p 6006 -s ./.storybook/images",
+        "build-storybook": "build-storybook",
+        "storybook-docs": "start-storybook --docs --no-manager-cache",
+        "build-storybook-docs": "build-storybook --docs -o ../docs"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/core": "^7.14.0",
+        "dtslint": "^4.0.9",
+        "@storybook/addon-actions": "^6.2.9",
+        "@storybook/addon-controls": "^6.2.9",
+        "@storybook/addon-essentials": "^6.2.9",
+        "@storybook/addon-links": "^6.2.9",
+        "@storybook/addons": "^6.2.9",
+        "@storybook/react": "^6.2.9",
+        "babel-loader": "^8.2.2",
+        "copy-webpack-plugin": "^6.3.2",
+        "mini-css-extract-plugin": "^1.3.9",
+        "raw-loader": "^4.0.2",
+        "react-dom": "^16.9.3",
+        "react": "^16.9.3",
+        "sass": "^1.32.8",
+        "sass-loader": "^10.1.1",
+        "storybook": "^6.2.9",
+        "ts-loader": "^8.0.17",
+        "webpack-bundle-analyzer": "^4.4.0",
+        "webpack-cli": "^4.5.0",
+        "webpack-merge": "^5.7.3"
+    },
+    "resolutions": {
+        "@types/react": "16.9.3"
+    }
+}
