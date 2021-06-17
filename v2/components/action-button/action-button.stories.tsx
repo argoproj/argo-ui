@@ -1,10 +1,9 @@
-import {faExclamationCircle, faHandPointUp} from '@fortawesome/free-solid-svg-icons';
 import * as React from 'react';
 import Text from '../text/text';
 
 import {ActionButton} from './action-button';
 
-const IconOptions = {faHandPointUp, faExclamationCircle};
+const IconOptions = ['fa-hand-point-up', 'fa-exclamation-circle'];
 
 export default {
     title: 'Components/ActionButton',
@@ -22,8 +21,8 @@ export default {
         style: {control: {disable: true}},
         icon: {
             name: 'Sample Icon',
-            description: 'A set of sample icons to choose from. For real component, use any FontAwesome icon',
-            options: Object.keys(IconOptions),
+            description: 'A set of sample icons to choose from. For real component, use any FontAwesome class name.',
+            options: IconOptions,
             mapping: IconOptions,
             control: {
                 type: 'select',

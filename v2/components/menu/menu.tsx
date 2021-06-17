@@ -1,4 +1,3 @@
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import {ActionButtonProps} from '../action-button/action-button';
 import {ThemeDiv} from '../theme-div/theme-div';
@@ -47,7 +46,7 @@ export const Menu = (props: {children: React.ReactNode; items: (ActionButtonProp
                                 }
                                 e.preventDefault();
                             }}>
-                            {item.icon && <FontAwesomeIcon icon={item.icon} />}
+                            {item.icon && <i className={`fa ${item.icon}`} />}
                             <div className='menu__item__label'>{item.label}</div>
                         </div>
                     );

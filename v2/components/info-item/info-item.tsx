@@ -1,5 +1,3 @@
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import Text from '../text/text';
 import {ThemeDiv} from '../theme-div/theme-div';
@@ -16,7 +14,7 @@ export enum InfoItemKind {
 
 export interface InfoItemProps {
     content?: string;
-    icon?: IconDefinition;
+    icon?: string;
     style?: React.CSSProperties;
     kind?: InfoItemKind;
     truncate?: boolean;
@@ -32,7 +30,7 @@ export const InfoItem = (props: InfoItemProps) => {
         <ThemeDiv className={`info-item${props.kind ? ` info-item--${props.kind}` : ''} ${props.lightweight ? 'info-item--lightweight' : ''}`} style={props.style}>
             {props.icon && (
                 <span style={props.content && {marginRight: '5px'}}>
-                    <FontAwesomeIcon icon={props.icon} />
+                    <i className={`fa ${props.icon}`} />
                 </span>
             )}
             <Text style={truncateStyle as React.CSSProperties}>{props.content}</Text>

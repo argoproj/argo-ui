@@ -1,5 +1,3 @@
-import {faCheckSquare, faSquare} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 
 import './checkbox.scss';
@@ -26,7 +24,7 @@ export const Checkbox = (props: {value?: boolean; onChange?: (value: boolean) =>
                 syncValue(!value);
             }}
             style={props.style}>
-            <FontAwesomeIcon icon={value ? faCheckSquare : faSquare} />
+            <i className={`fa fa-${value ? 'check-square' : 'square'}`} />
         </div>
     );
 };

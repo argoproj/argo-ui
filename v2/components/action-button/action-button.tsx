@@ -1,5 +1,3 @@
-import {faCheck, faCircleNotch, IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Key, useKeyListener} from 'react-keyhooks';
 import * as React from 'react';
 import {useClickOutside, useTimeout} from '../../utils/utils';
@@ -12,7 +10,7 @@ import {Theme} from '../theme-div/theme-div';
 export interface ActionButtonProps {
     action?: Function;
     label?: string;
-    icon?: IconDefinition;
+    icon?: string;
     indicateLoading?: boolean;
     dark?: boolean;
     theme?: Theme;
@@ -63,9 +61,9 @@ export const ActionButton = (props: ActionButtonProps) => {
 
     const getIcon = () => {
         if ((loading || props.loading) && indicateLoading) {
-            return faCircleNotch;
+            return 'fa-circle-notch';
         } else if (success && props.indicateSuccess) {
-            return faCheck;
+            return 'fa-check';
         } else {
             return displayIcon;
         }
@@ -85,7 +83,7 @@ export const ActionButton = (props: ActionButtonProps) => {
                 if (shouldConfirm) {
                     if (!confirmed) {
                         setDisplayLabel('SURE?');
-                        setDisplayIcon(faCheck);
+                        setDisplayIcon('fa-check');
                         confirm(true);
                         e.preventDefault();
                         return;
@@ -102,7 +100,7 @@ export const ActionButton = (props: ActionButtonProps) => {
                     e.preventDefault();
                 }
             }}>
-            {icon && <FontAwesomeIcon icon={getIcon()} spin={(loading || props.loading) && indicateLoading} />}
+            {icon && <i className={`fa ${getIcon()} ${(loading || props.loading) && indicateLoading && 'fa-spin'}`} />}
             {label && (!icon || !short) && <span style={icon && {marginLeft: '5px'}}>{displayLabel}</span>}
         </EffectDiv>
     );
