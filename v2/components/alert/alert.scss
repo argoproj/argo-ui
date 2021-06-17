@@ -1,0 +1,29 @@
+@import '../../styles/colors.scss';
+
+.alert {
+    font-family: 'Heebo', sans-serif;
+    height: 2em;
+    line-height: 2em;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    &--error {
+        background-color: $coral;
+    }
+
+    &--dark#{&}--error {
+        background-color: $dirt;
+    }
+
+    &--success {
+        background-color: $lime;
+    }
+
+    &--dark#{&--success} {
+        background-color: $leaf;
+    }
+
+    &--warning {
+        background-color: $canary;
+    }
+}

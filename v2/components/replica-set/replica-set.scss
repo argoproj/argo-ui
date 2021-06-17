@@ -1,0 +1,31 @@
+@import '../../styles/colors.scss';
+
+.pods {
+    &__header {
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        &__tags {
+            margin-left: auto;
+            display: flex;
+        }
+    }
+    &__container {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        border-radius: 3px;
+        background-color: $argo-color-gray-3;
+        padding: 7px;
+        flex-wrap: wrap;
+
+        .pod-icon {
+            margin: 3px;
+        }
+        &--dark {
+            border-color: $silver-lining;
+            background-color: $space;
+        }
+    }
+}
