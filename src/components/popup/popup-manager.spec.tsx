@@ -1,5 +1,6 @@
 import { mount } from 'enzyme';
-import {Observable, TestScheduler} from 'rxjs';
+import {from} from 'rxjs';
+import {TestScheduler} from 'rxjs/testing';
 import { Popup, PopupProps } from './popup';
 import {PopupManager} from './popup-manager';
 
@@ -18,7 +19,7 @@ describe('PopupManager', () => {
             const fn = jest.fn<void, [null | PopupProps]>();
             const manager = new PopupManager();
 
-            Observable.from(manager.popupProps, scheduler).subscribe(fn);
+            from(manager.popupProps, scheduler).subscribe(fn);
             scheduler.flush();
 
             expect(fn).toHaveBeenCalledTimes(1);
