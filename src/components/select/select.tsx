@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { Observable, Subscription } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { Checkbox } from '../checkbox';
 
@@ -59,9 +60,9 @@ export class Select extends React.Component<SelectProps, State> {
     }
 
     public componentDidMount() {
-        this.subscription = Observable.fromEvent<MouseEvent>(document, 'click')
-            .filter((event) => !!this.el && !this.el.contains(event.target as Node) && this.state.opened)
-            .subscribe(() => this.setState({ opened: false }));
+        this.subscription = fromEvent<MouseEvent>(document, 'click').pipe(
+                filter((event) => !!this.el && !this.el.contains(event.target as Node) && this.state.opened),
+            ).subscribe(() => this.setState({ opened: false }));
     }
 
     public componentWillUnmount() {
