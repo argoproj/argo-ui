@@ -1,6 +1,3 @@
-import {faArrowAltCircleDown, faCheckCircle, faQuestionCircle, faTimesCircle} from '@fortawesome/free-regular-svg-icons';
-import {faCircleNotch} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import {PodWidget, ThemeDiv, Tooltip, WaitFor} from '..';
 import {Pod} from '../pod/pod';
@@ -30,34 +27,34 @@ export const ReplicaSetStatusIcon = (props: {status: ReplicaSetStatus}) => {
     switch (status) {
         case 'Healthy':
         case 'Running': {
-            icon = faCheckCircle;
+            icon = 'fa-check-circle';
             className = 'healthy';
             break;
         }
         case 'ScaledDown': {
-            icon = faArrowAltCircleDown;
+            icon = 'fa-arrow-alt-circle-down';
             className = 'paused';
             break;
         }
         case 'Degraded': {
-            icon = faTimesCircle;
+            icon = 'fa-times-circle';
             className = 'degraded';
             break;
         }
         case 'Progressing': {
-            icon = faCircleNotch;
+            icon = 'fa-circle-notch';
             spin = true;
             className = 'progressing';
             break;
         }
         default: {
-            icon = faQuestionCircle;
+            icon = 'fa-question-circle';
             className = 'unknown';
         }
     }
     return (
         <Tooltip content={status}>
-            <FontAwesomeIcon icon={icon} className={`status-icon--${className}`} spin={spin} />
+            <i className={`status-icon--${className} fa ${icon} ${spin && 'fa-spin'}`} />
         </Tooltip>
     );
 };

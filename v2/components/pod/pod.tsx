@@ -1,6 +1,3 @@
-import {faQuestionCircle} from '@fortawesome/free-regular-svg-icons';
-import {faCheck, faCircleNotch, faClipboard, faExclamationCircle, faExclamationTriangle, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import {Menu, ThemeDiv, Tooltip} from '..';
 
@@ -46,47 +43,47 @@ export const PodIcon = (props: {status: string}) => {
     let icon;
     let spin = false;
     if (status.startsWith('Init:')) {
-        icon = faCircleNotch;
+        icon = 'fa-circle-notch';
         spin = true;
     }
     if (status.startsWith('Signal:') || status.startsWith('ExitCode:')) {
-        icon = faTimes;
+        icon = 'fa-times';
     }
     if (status.endsWith('Error') || status.startsWith('Err')) {
-        icon = faExclamationCircle;
+        icon = 'fa-exclamation-circle';
     }
 
     const className = ParsePodStatus(status);
 
     switch (className) {
         case PodStatus.Pending:
-            icon = faCircleNotch;
+            icon = 'fa-circle-notch';
             spin = true;
             break;
         case PodStatus.Success:
-            icon = faCheck;
+            icon = 'fa-check';
             break;
         case PodStatus.Failed:
-            icon = faTimes;
+            icon = 'fa-times';
             break;
         case PodStatus.Warning:
-            icon = faExclamationTriangle;
+            icon = 'fa-exclamation-triangle';
             break;
         default:
             spin = false;
-            icon = faQuestionCircle;
+            icon = 'fa-question-circle';
             break;
     }
 
     return (
         <ThemeDiv className={`pod-icon pod-icon--${className}`}>
-            <FontAwesomeIcon icon={icon} spin={spin} />
+            <i className={`fa ${icon} ${spin && 'fa-spin'}`} />
         </ThemeDiv>
     );
 };
 
 export const PodWidget = (props: {pod: Pod}) => (
-    <Menu items={[{label: 'Copy Name', action: () => navigator.clipboard.writeText(props.pod.objectMeta?.name), icon: faClipboard}]}>
+    <Menu items={[{label: 'Copy Name', action: () => navigator.clipboard.writeText(props.pod.objectMeta?.name), icon: 'fa-clipboard'}]}>
         <Tooltip
             content={
                 <div>

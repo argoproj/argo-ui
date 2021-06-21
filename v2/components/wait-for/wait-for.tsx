@@ -1,5 +1,3 @@
-import {faCircleNotch} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import {ThemeDiv} from '../theme-div/theme-div';
 import './spinner.scss';
@@ -7,7 +5,7 @@ import './loading-bar.scss';
 
 export const Spinner = () => (
     <ThemeDiv className='spinner'>
-        <FontAwesomeIcon icon={faCircleNotch} spin />
+        <i className='fa-circle-notch fa fa-spin' />
     </ThemeDiv>
 );
 

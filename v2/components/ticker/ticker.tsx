@@ -1,5 +1,3 @@
-import {faArrowDown, faArrowUp} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import {Flexy} from '../flexy/flexy';
 import Text from '../text/text';
@@ -23,7 +21,7 @@ export const Ticker = (props: TickerProps) => {
     return (
         <ThemeDiv>
             <Flexy>
-                <FontAwesomeIcon icon={delta > 0 ? faArrowDown : faArrowUp} style={{marginRight: '5px'}} />
+                <i className={`fa ${delta > 0 ? 'fa-arrow-down' : 'fa-arrow-up'}`} style={{marginRight: '5px'}} />
                 <Text>{props.value}</Text>
             </Flexy>
         </ThemeDiv>
