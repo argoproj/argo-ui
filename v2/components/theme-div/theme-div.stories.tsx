@@ -1,4 +1,3 @@
-import {faMoon, faSun} from '@fortawesome/free-solid-svg-icons';
 import * as React from 'react';
 import ActionButton from '../action-button/action-button';
 import {Flexy} from '../flexy/flexy';
@@ -23,7 +22,7 @@ export const Primary = (args: any) => {
     return (
         <ThemeDiv theme={theme} {...args} className='test' style={style}>
             <Flexy>
-                <ActionButton action={toggleTheme} theme={theme} icon={theme === Theme.Dark ? faSun : faMoon} />
+                <ActionButton action={toggleTheme} theme={theme} icon={theme === Theme.Dark ? 'fa-sun' : 'fa-moon'} />
                 <Text theme={theme}>
                     Classes: <code>{theme === Theme.Dark ? 'test test--dark' : 'test'}</code>
                 </Text>
