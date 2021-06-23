@@ -4,4 +4,4 @@ import {ThemeDiv} from '../theme-div/theme-div';
 
 import './row.scss';
 
-export const CenteredRow = (props: {children: React.ReactNode}) => <ThemeDiv className='row'>{props.children}</ThemeDiv>;
+export const CenteredRow = (props: {children: React.ReactNode}) => <ThemeDiv className='argo-row'>{props.children}</ThemeDiv>;
