@@ -18,7 +18,9 @@ export function useData<T>(getData: () => Promise<T>, init?: T, callback?: (data
                 const data = await getData();
                 setLoading(false);
                 setData(data);
-                callback(data);
+                if (callback) {
+                    callback(data);
+                }
             } catch (e) {
                 setError(e);
             }
