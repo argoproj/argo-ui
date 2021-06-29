@@ -34,6 +34,7 @@ export const Autocomplete = (
     const autocompleteRef = React.useRef(null);
     const [showSuggestions, setShowSuggestions] = React.useState(false);
     const [pos, nav, reset] = useNav(props.items.length);
+    const menuRef = React.useRef(null);
 
     React.useEffect(() => {
         function unfocus(e: any) {
@@ -109,6 +110,35 @@ export const Autocomplete = (
     delete trimmedProps.inputStyle;
     delete trimmedProps.onItemClick;
 
+    const [inverted, setInverted] = React.useState(false);
+
+    React.useEffect(() => {
+        const listener = (event: any) => {
+            if (autocompleteRef && autocompleteRef.current && menuRef.current && !(event.target === menuRef.current)) {
+                const node = inputRef.current;
+                if (node && menuRef.current) {
+                    const rect = node.getBoundingClientRect();
+                    const computedStyle = window.getComputedStyle(node);
+                    const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
+                    let menuTop = rect.bottom + marginBottom;
+                    if (window.innerHeight - (menuTop + menuRef.current.offsetHeight) < 0) {
+                        if (!inverted) {
+                            setInverted(true);
+                        }
+                    } else {
+                        if (inverted) {
+                            setInverted(false);
+                        }
+                    }
+                }
+            }
+        };
+        document.addEventListener('scroll', listener, true);
+        return () => {
+            document.removeEventListener('scroll', listener);
+        };
+    });
+
     return (
         <div className='autocomplete' ref={autocompleteRef} style={style as any}>
             <Input
@@ -123,22 +153,24 @@ export const Autocomplete = (
                 }}
                 onFocus={() => setShowSuggestions(true)}
             />
-            <ThemeDiv className='autocomplete__items' hidden={!showSuggestions || (props.items || []).length < 1}>
-                {(curItems || []).map((i, n) => (
-                    <div
-                        key={i}
-                        onClick={() => {
-                            if (props.onItemClick) {
-                                props.onItemClick(i);
-                            }
-                            props.onChange({target: {value: i}} as React.ChangeEvent<HTMLInputElement>);
-                            setShowSuggestions(false);
-                        }}
-                        className={`autocomplete__items__item ${pos === n ? 'autocomplete__items__item--selected' : ''}`}>
-                        {i}
-                    </div>
-                ))}
-            </ThemeDiv>
+            <div ref={menuRef}>
+                <ThemeDiv className={`autocomplete__items ${inverted ? 'autocomplete__items--inverted' : ''}`} hidden={!showSuggestions || (props.items || []).length < 1}>
+                    {(curItems || []).map((i, n) => (
+                        <div
+                            key={i}
+                            onClick={() => {
+                                props.onChange({target: {value: i}} as React.ChangeEvent<HTMLInputElement>);
+                                setShowSuggestions(false);
+                                if (props.onItemClick) {
+                                    props.onItemClick(i);
+                                }
+                            }}
+                            className={`autocomplete__items__item ${pos === n ? 'autocomplete__items__item--selected' : ''}`}>
+                            {i}
+                        </div>
+                    ))}
+                </ThemeDiv>
+            </div>
         </div>
     );
 };
