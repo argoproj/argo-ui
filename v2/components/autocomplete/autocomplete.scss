@@ -33,15 +33,17 @@
             border-bottom: 1px solid $argo-color-gray-4;
             box-sizing: border-box;
 
+            &:hover,
             &--selected {
-                border-bottom: 1px solid $sky;
-                box-shadow: 0px 1px 0px 0px $sky;
+                border-radius: 3px;
             }
 
             &:hover {
-                border-radius: 3px;
                 background-color: $argo-color-gray-3;
-                border-color: $argo-color-gray-3;
+            }
+
+            &--selected {
+                background-color: $argo-color-teal-3;
             }
         }
 

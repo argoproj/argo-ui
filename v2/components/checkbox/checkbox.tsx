@@ -24,7 +24,7 @@ export const Checkbox = (props: {value?: boolean; onChange?: (value: boolean) =>
                 syncValue(!value);
             }}
             style={props.style}>
-            <i className={`fa fa-${value ? 'check-square' : 'square'}`} />
+            <i className='fa fa-check' />
         </div>
     );
 };

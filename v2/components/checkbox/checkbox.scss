@@ -1,6 +1,23 @@
 @import '../../styles/colors.scss';
 
 .checkbox {
+    $size: 1.25em;
+    width: $size;
+    height: $size;
+    padding: 3px;
+    border: 2px solid $argo-color-gray-7;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0);
+
+    &--selected {
+        border-color: $argo-color-teal-6;
+        background-color: $argo-color-teal-6;
+        color: white;
+    }
+
     &__item {
         height: 2em;
         padding: 0 5px;
@@ -24,9 +41,6 @@
             background-color: $argo-color-teal-3;
             color: $argo-color-teal-8;
             font-weight: 500;
-            i {
-                color: $argo-color-teal-6;
-            }
         }
     }
 }
