@@ -78,3 +78,14 @@ export const useTimeout = (fx: () => void, timeoutMs: number, dependencies: any[
         return () => clearInterval(to);
     }, dependencies);
 };
+
+export const debounce = (fxn: () => any, ms: number) => {
+    let timer: any;
+    return () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            timer = null;
+            fxn.apply(this);
+        }, ms);
+    };
+};
