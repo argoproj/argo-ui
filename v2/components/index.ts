@@ -10,8 +10,6 @@ export * from './header/header';
 export * from './info-item/info-item';
 export * from './input/input';
 export * from './menu/menu';
-export * from './pod/pod';
-export * from './replica-set/replica-set';
 export * from './row/row';
 export * from './text/text';
 export {ThemeDiv} from './theme-div/theme-div';
