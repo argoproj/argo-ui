@@ -47,7 +47,9 @@ export const CheckboxRow = (props: {value: boolean; onChange?: (value: boolean) 
             <Checkbox
                 onChange={(val) => {
                     setValue(val);
-                    props.onChange(val);
+                    if (props.onChange) {
+                        props.onChange(val);
+                    }
                 }}
                 value={value}
                 style={{
