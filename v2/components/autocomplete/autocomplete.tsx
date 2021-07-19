@@ -68,7 +68,10 @@ export const RenderAutocomplete = (
 
     React.useEffect(() => {
         const filtered = (props.items || []).filter((i) => {
-            return i.includes(debouncedVal);
+            if (i) {
+                return i.includes(debouncedVal);
+            }
+            return false;
         });
         setCurItems(filtered.length > 0 ? filtered : props.items);
     }, [debouncedVal, props.items]);
