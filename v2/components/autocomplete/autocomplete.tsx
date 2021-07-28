@@ -69,7 +69,7 @@ export const RenderAutocomplete = (
     React.useEffect(() => {
         const filtered = (props.items || []).filter((i) => {
             if (i) {
-                return i.includes(debouncedVal);
+                return i.toLowerCase().includes(debouncedVal.toLowerCase());
             }
             return false;
         });
@@ -103,7 +103,6 @@ export const RenderAutocomplete = (
     useKeybinding(Key.ENTER, () => {
         if (showSuggestions && props.onItemClick) {
             props.onItemClick(curItems[pos]);
-            setShowSuggestions(false);
             return true;
         }
         return false;
