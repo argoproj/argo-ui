@@ -76,6 +76,12 @@ export const RenderAutocomplete = (
         setCurItems(filtered.length > 0 ? filtered : props.items);
     }, [debouncedVal, props.items]);
 
+    React.useEffect(() => {
+        if (props.value !== null && props.value !== '') {
+            setShowSuggestions(true);
+        }
+    }, [props.value]);
+
     const {useKeybinding} = React.useContext(KeybindingContext);
     useKeybinding(Key.TAB, (e) => {
         if (showSuggestions) {
@@ -103,6 +109,7 @@ export const RenderAutocomplete = (
     useKeybinding(Key.ENTER, () => {
         if (showSuggestions && props.onItemClick) {
             props.onItemClick(curItems[pos]);
+            setShowSuggestions(false);
             return true;
         }
         return false;
