@@ -1,4 +1,4 @@
-import {Key, KeybindingContext, KeybindingProvider, useNav} from 'react-keyhooks';
+import {Key, KeybindingContext, KeybindingProvider, useNav} from '../../shared';
 import * as React from 'react';
 import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/input';
 import ThemeDiv from '../theme-div/theme-div';
