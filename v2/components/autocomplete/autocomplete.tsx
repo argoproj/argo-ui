@@ -1,5 +1,6 @@
-import {Key, KeybindingContext, KeybindingProvider, useNav} from '../../shared';
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {Key, KeybindingContext, KeybindingProvider, useNav} from '../../shared';
 import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/input';
 import ThemeDiv from '../theme-div/theme-div';
 
@@ -9,14 +10,14 @@ interface AutocompleteProps extends InputProps {
     inputref?: React.MutableRefObject<HTMLInputElement>;
 }
 
-export const useAutocomplete = (init: string, callback?: (val: string) => void): [string, SetInputFxn, AutocompleteProps] => {
-    const [state, setState, Input] = useInput(init);
-    const Autocomplete = Input as AutocompleteProps;
-    if (Autocomplete.ref) {
-        Autocomplete.inputref = Input.ref;
-        delete Autocomplete.ref;
+export const useAutocomplete = (init: string): [string, SetInputFxn, AutocompleteProps] => {
+    const [state, setState, input] = useInput(init);
+    const autocomplete = input as AutocompleteProps;
+    if (autocomplete.ref) {
+        autocomplete.inputref = input.ref;
+        delete autocomplete.ref;
     }
-    return [state, setState, Autocomplete];
+    return [state, setState, autocomplete];
 };
 
 export const Autocomplete = (
@@ -26,7 +27,7 @@ export const Autocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    }
+    },
 ) => {
     return (
         <KeybindingProvider>
@@ -42,19 +43,20 @@ export const RenderAutocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    }
+    },
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
     const inputRef = props.inputref || nullInputRef;
     const autocompleteRef = React.useRef(null);
     const [showSuggestions, setShowSuggestions] = React.useState(false);
-    const [pos, nav, reset] = useNav(props.items.length);
+    const [pos, nav, reset] = useNav(props.items?.length);
     const menuRef = React.useRef(null);
 
     React.useEffect(() => {
         function unfocus(e: any) {
-            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target)) {
+            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) &&
+                    menuRef.current && !menuRef.current.contains(e.target)) {
                 setShowSuggestions(false);
                 reset();
             }
@@ -69,7 +71,7 @@ export const RenderAutocomplete = (
     React.useEffect(() => {
         const filtered = (props.items || []).filter((i) => {
             if (i) {
-                return i.toLowerCase().includes(debouncedVal.toLowerCase());
+                return i.toLowerCase().includes(debouncedVal?.toLowerCase());
             }
             return false;
         });
@@ -137,34 +139,42 @@ export const RenderAutocomplete = (
     delete trimmedProps.inputStyle;
     delete trimmedProps.onItemClick;
 
-    const [inverted, setInverted] = React.useState(false);
+    const [position, setPosition] = React.useState({top: 0, left: 0});
 
-    const checkDirection = (e: any) => {
+    const checkDirection = () => {
         if (autocompleteRef && autocompleteRef.current && menuRef.current) {
             if (inputRef.current && menuRef.current) {
+                const rect = inputRef.current.getBoundingClientRect();
                 const menuHeight = menuRef.current.clientHeight;
-                const offset = window.innerHeight - inputRef.current.getBoundingClientRect().bottom;
-                if (offset < menuHeight) {
-                    if (!inverted) {
-                        setInverted(true);
-                    }
-                } else {
-                    if (inverted) {
-                        setInverted(false);
-                    }
+                const offset = window.innerHeight - rect.bottom;
+                const inverted = offset < menuHeight;
+
+                const newPos = {
+                    top: inverted ? rect.top - menuRef.current.clientHeight : rect.top + rect.height,
+                    left: rect.left,
+                };
+                if (position.left !== newPos.left || position.top !== newPos.top) {
+                    setPosition(newPos);
                 }
             }
         }
     };
 
     React.useEffect(() => {
+        checkDirection();
         document.addEventListener('scroll', checkDirection, true);
         document.addEventListener('resize', checkDirection, true);
         return () => {
             document.removeEventListener('scroll', checkDirection);
             document.removeEventListener('resize', checkDirection);
         };
-    });
+    }, []);
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (props.onChange) {
+            props.onChange(e);
+        }
+    };
 
     return (
         <div className='autocomplete' ref={autocompleteRef} style={style as any}>
@@ -173,36 +183,38 @@ export const RenderAutocomplete = (
                 style={props.inputStyle}
                 innerref={inputRef}
                 className={(props.className || '') + ' autocomplete__input'}
-                onChange={(e) => {
-                    if (props.onChange) {
-                        props.onChange(e);
-                    }
-                }}
-                onFocus={(e) => {
+                onChange={onChange}
+                onFocus={() => {
                     setShowSuggestions(true);
-                    checkDirection(e);
+                    checkDirection();
                 }}
             />
 
-            <ThemeDiv
-                className={`autocomplete__items ${inverted ? 'autocomplete__items--inverted' : ''}`}
-                style={!showSuggestions || (props.items || []).length < 1 ? {visibility: 'hidden'} : {visibility: 'visible'}}
-                innerref={menuRef}>
-                {(curItems || []).map((i, n) => (
-                    <div
-                        key={i}
-                        onClick={() => {
-                            props.onChange({target: {value: i}} as React.ChangeEvent<HTMLInputElement>);
-                            setShowSuggestions(false);
-                            if (props.onItemClick) {
-                                props.onItemClick(i);
-                            }
-                        }}
-                        className={`autocomplete__items__item ${pos === n ? 'autocomplete__items__item--selected' : ''}`}>
-                        {i}
-                    </div>
-                ))}
-            </ThemeDiv>
+            {ReactDOM.createPortal((
+                <ThemeDiv
+                    className='autocomplete__items'
+                    style={{
+                        visibility: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : 'visible',
+                        top: position.top,
+                        left: position.left,
+                    }}
+                    innerref={menuRef}>
+                    {(curItems || []).map((i, n) => (
+                        <div
+                            key={i}
+                            onClick={() => {
+                                onChange({target: {value: i}} as React.ChangeEvent<HTMLInputElement>);
+                                setShowSuggestions(false);
+                                if (props.onItemClick) {
+                                    props.onItemClick(i);
+                                }
+                            }}
+                            className={`autocomplete__items__item ${pos === n ? 'autocomplete__items__item--selected' : ''}`}>
+                            {i}
+                        </div>
+                    ))}
+                </ThemeDiv>
+            ), document.body)}
         </div>
     );
 };

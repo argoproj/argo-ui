@@ -14,7 +14,7 @@ export default {
 
 export const Primary = (args: any) => (
     <div style={{width: '50%', paddingBottom: '6em'}}>
-        <Autocomplete items={['hello', 'world']} {...args} />
+        <Autocomplete {...args} items={['hello', 'world']} />
     </div>
 );
 
