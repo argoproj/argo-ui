@@ -26,8 +26,7 @@
         "moment": "^2.29.1",
         "react": "^16.9.3",
         "react-dom": "^16.9.3",
-        "rxjs": "^6.6.6",
-        "react-keyhooks": "^0.2.2"
+        "rxjs": "^6.6.6"
     },
     "scripts": {
         "start": "start-storybook",
