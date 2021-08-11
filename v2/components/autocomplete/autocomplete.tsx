@@ -83,52 +83,77 @@ export const RenderAutocomplete = (
     }, [props.value]);
 
     const {useKeybinding} = React.useContext(KeybindingContext);
-    useKeybinding(Key.TAB, (e) => {
-        if (showSuggestions) {
-            if (pos === curItems.length - 1) {
+    const target = {
+        combo: false,
+        target: autocompleteRef,
+    };
+
+    useKeybinding({
+        keys: Key.TAB,
+        action: (e) => {
+            if (showSuggestions) {
+                if (pos === curItems.length - 1) {
+                    reset();
+                }
+                nav(1);
+                return true;
+            }
+            return false;
+        },
+        ...target,
+    });
+
+    useKeybinding({
+        keys: Key.ESCAPE,
+        action: (e) => {
+            if (showSuggestions) {
                 reset();
+                setShowSuggestions(false);
+                if (inputRef && inputRef.current) {
+                    inputRef.current.blur();
+                }
+                return true;
             }
-            nav(1);
-            return true;
-        }
-        return false;
+            return false;
+        },
+        ...target,
     });
 
-    useKeybinding(Key.ESCAPE, (e) => {
-        if (showSuggestions) {
-            reset();
-            setShowSuggestions(false);
-            if (inputRef && inputRef.current) {
-                inputRef.current.blur();
+    useKeybinding({
+        keys: Key.ENTER,
+        action: () => {
+            if (showSuggestions && props.onItemClick) {
+                props.onItemClick(curItems[pos]);
+                setShowSuggestions(false);
+                return true;
+            }
+            return false;
+        },
+        ...target,
+    });
+
+    useKeybinding({
+        keys: Key.UP,
+        action: () => {
+            if (showSuggestions) {
+                nav(-1);
+                return false;
             }
             return true;
-        }
-        return false;
+        },
+        ...target,
     });
 
-    useKeybinding(Key.ENTER, () => {
-        if (showSuggestions && props.onItemClick) {
-            props.onItemClick(curItems[pos]);
-            setShowSuggestions(false);
+    useKeybinding({
+        keys: Key.DOWN,
+        action: () => {
+            if (showSuggestions) {
+                nav(1);
+                return false;
+            }
             return true;
-        }
-        return false;
-    });
-
-    useKeybinding(Key.UP, () => {
-        if (showSuggestions) {
-            nav(-1);
-            return false;
-        }
-        return true;
-    });
-
-    useKeybinding(Key.DOWN, () => {
-        if (showSuggestions) {
-            nav(1);
-            return false;
-        }
-        return true;
+        },
+        ...target,
     });
 
     const style = props.style;
