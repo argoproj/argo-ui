@@ -8,7 +8,7 @@
 
     &__items {
         z-index: 3;
-        position: absolute;
+        position: fixed;
         white-space: nowrap;
         max-height: 12em;
         overflow-y: auto;
@@ -19,10 +19,6 @@
         font-family: 'Heebo', sans-serif;
         box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
         line-height: 0.5em;
-
-        &--inverted {
-            bottom: 50px;
-        }
 
         &__item {
             z-index: 2;
