@@ -58,17 +58,23 @@
     &--row {
         display: flex;
         align-items: center;
-        margin: 0.5em 0;
         flex-grow: 1;
         label {
             margin-right: auto;
             padding-right: 5px;
         }
         .info-item {
+            margin: 0.25em 0;
+            margin-left: 5px;
+        }
+
+        &__container {
             margin-left: auto;
-            &:last-child {
-                margin-right: 0;
-            }
+            display: flex;
+            min-width: 0;
+            padding-left: 25px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
     }
 }
