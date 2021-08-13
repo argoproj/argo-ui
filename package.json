@@ -5,8 +5,7 @@
     "types": "./src/index.ts",
     "license": "MIT",
     "files": [
-        "src",
-        "v2"
+        "src"
     ],
     "scripts": {
         "build": "build-storybook -o ./dist/storybook",
