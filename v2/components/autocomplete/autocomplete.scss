@@ -51,6 +51,10 @@
 
             #{$autocompleteClass}__items__item {
                 border-bottom: 1px solid $silver-lining;
+
+                &:hover {
+                    background-color: $fog;
+                }
             }
         }
     }

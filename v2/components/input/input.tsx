@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ThemeDiv} from '../theme-div/theme-div';
+import {Theme, ThemeDiv} from '../theme-div/theme-div';
 
 import './input.scss';
 
@@ -51,8 +51,8 @@ export const useDebounce = (value: string, debouncems: number): string => {
  * A formatted field, accompanied by the `useInput` hook. `useInput` returns a `[data, setData, props]` thruple, where `data` and `setData` are analagous to `React.useState`,
  * and `props` are designed to be included in the Input component with a spread operator: `<Input YOUR_PROPS_HERE {...props} />`
  */
-export const Input = (props: React.InputHTMLAttributes<HTMLInputElement> & {innerref?: React.MutableRefObject<any>}) => (
-    <ThemeDiv className='input-container'>
+export const Input = (props: React.InputHTMLAttributes<HTMLInputElement> & {innerref?: React.MutableRefObject<any>; dark?: boolean}) => (
+    <ThemeDiv className='input-container' theme={props.dark ? Theme.Dark : Theme.Light}>
         <input {...(props as any)} className={props.className ? `${props.className} input` : 'input'} ref={props.innerref} />
     </ThemeDiv>
 );

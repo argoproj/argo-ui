@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {Key, KeybindingContext, KeybindingProvider, useNav} from '../../shared';
+import {Key, KeybindingContext, KeybindingProvider, Theme, useNav} from '../../shared';
 import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/input';
 import ThemeDiv from '../theme-div/theme-div';
 
@@ -27,7 +27,8 @@ export const Autocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+        dark?: boolean;
+    }
 ) => {
     return (
         <KeybindingProvider>
@@ -43,7 +44,8 @@ export const RenderAutocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+        dark?: boolean;
+    }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
@@ -55,8 +57,7 @@ export const RenderAutocomplete = (
 
     React.useEffect(() => {
         function unfocus(e: any) {
-            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) &&
-                    menuRef.current && !menuRef.current.contains(e.target)) {
+            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) && menuRef.current && !menuRef.current.contains(e.target)) {
                 setShowSuggestions(false);
                 reset();
             }
@@ -213,10 +214,12 @@ export const RenderAutocomplete = (
                     setShowSuggestions(true);
                     checkDirection();
                 }}
+                dark={props.dark}
             />
 
-            {ReactDOM.createPortal((
+            {ReactDOM.createPortal(
                 <ThemeDiv
+                    theme={props.dark ? Theme.Dark : Theme.Light}
                     className='autocomplete__items'
                     style={{
                         display: !showSuggestions || (props.items || []).length < 1 ? 'none' : 'block',
@@ -238,8 +241,9 @@ export const RenderAutocomplete = (
                             {i}
                         </div>
                     ))}
-                </ThemeDiv>
-            ), document.body)}
+                </ThemeDiv>,
+                document.body
+            )}
         </div>
     );
 };
