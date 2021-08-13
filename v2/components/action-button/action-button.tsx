@@ -1,4 +1,4 @@
-import {Key, useKeyListener} from 'react-keyhooks';
+import {Key, useKeyListener} from '../../shared';
 import * as React from 'react';
 import {useClickOutside, useTimeout} from '../../utils/utils';
 import {EffectDiv} from '../effect-div/effect-div';
