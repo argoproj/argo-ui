@@ -93,12 +93,18 @@ export const useNav = (upperBound: number, init?: number): [number, (n: number) 
     return [pos, nav, reset];
 };
 
-export type KeyState = {action: KeyAction; pressed: boolean; group: number};
+export type KeyState = {action: KeyAction; pressed: boolean; group: number; target?: React.MutableRefObject<any>};
 export type KeyAction = (keyCode?: number) => boolean;
 export type KeyMap = {[key: number]: KeyState};
 export type KeyHandler = (e: KeyboardEvent) => null;
 
-export type KeyFxn = (keys: AnyKeys, action: KeyAction, combo?: boolean) => void;
+export type KeyFxn = (props: KeyFxnProps) => void;
+export interface KeyFxnProps {
+    keys: AnyKeys;
+    action: KeyAction;
+    combo?: boolean;
+    target?: React.MutableRefObject<any>;
+}
 
 export interface GroupMap {
     groupForKey: {[key: number]: number};
@@ -109,6 +115,7 @@ export interface GroupMap {
 const handlePress = (e: KeyboardEvent, state: GroupMap) => {
     const {groups, groupForKey} = state;
     const g = groupForKey[e.keyCode];
+
     if (groups[g]) {
         let allPressed = true;
         groups[g][e.keyCode].pressed = true;
@@ -122,7 +129,9 @@ const handlePress = (e: KeyboardEvent, state: GroupMap) => {
             }
         }
 
-        if (allPressed) {
+        const curTarget = groups[g][e.keyCode]?.target?.current;
+
+        if (allPressed && (curTarget === e.target || (!curTarget && e.target === document.body))) {
             const prevent = groups[g][e.keyCode].action(e.keyCode);
             if (prevent) {
                 e.preventDefault();
@@ -157,7 +166,7 @@ export const useKeyListener = () => {
     let state = NewGroupMap();
     useKeyListen(state);
     return (keys: AnyKeys, action: KeyAction, combo?: boolean) => {
-        state = addKeybinding(state, keys, action, combo);
+        state = addKeybinding(state, {keys, action, combo});
     };
 };
 
@@ -177,8 +186,10 @@ const NewGroupMap = () => {
     };
 };
 
-export const addKeybinding = (state: GroupMap, keys: AnyKeys, action: KeyAction, combo?: boolean): GroupMap => {
+export const addKeybinding = (state: GroupMap, props: KeyFxnProps): GroupMap => {
     const {groups, groupForKey} = state;
+    const {keys, action, combo, target} = props;
+
     let index = state.index;
     if (Array.isArray(keys)) {
         let g = index;
@@ -194,6 +205,7 @@ export const addKeybinding = (state: GroupMap, keys: AnyKeys, action: KeyAction,
                 group: g,
                 action,
                 pressed: false,
+                target,
             };
 
             if (!combo) {
@@ -234,14 +246,14 @@ export const KeybindingContext = React.createContext<{
     useKeybinding: KeyFxn;
 }>({
     keybindingState: NewGroupMap(),
-    useKeybinding: (keys: AnyKeys, action: KeyAction, combo?: boolean) => null,
+    useKeybinding: (props: KeyFxnProps) => null,
 });
 
 export const KeybindingProvider = (props: {children: React.ReactNode}) => {
     let keybindingState: GroupMap = useSharedKeyListener();
 
-    const useKeybinding = (keys: AnyKeys, action: KeyAction, combo?: boolean) => {
-        keybindingState = addKeybinding(keybindingState, keys, action, combo);
+    const useKeybinding = (props: KeyFxnProps) => {
+        keybindingState = addKeybinding(keybindingState, props);
     };
 
     return <KeybindingContext.Provider value={{keybindingState, useKeybinding}}>{props.children}</KeybindingContext.Provider>;
