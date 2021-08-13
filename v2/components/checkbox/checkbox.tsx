@@ -35,7 +35,13 @@ export interface CheckboxOption {
     icon?: React.ReactNode;
 }
 
-export const CheckboxRow = (props: {value: boolean; onChange?: (value: boolean) => void; option: CheckboxOption}) => {
+export const CheckboxRow = (props: {
+    value: boolean;
+    onChange?: (value: boolean) => void;
+    option: CheckboxOption;
+    style?: React.CSSProperties;
+    selectedStyle?: React.CSSProperties;
+}) => {
     const [value, setValue] = React.useState(props.value);
 
     React.useEffect(() => {
@@ -43,7 +49,7 @@ export const CheckboxRow = (props: {value: boolean; onChange?: (value: boolean) 
     }, [props.value]);
 
     return (
-        <div className={`checkbox__item ${value ? 'checkbox__item--selected' : ''}`} onClick={() => setValue(!value)}>
+        <div className={`checkbox__item ${value ? 'checkbox__item--selected' : ''}`} onClick={() => setValue(!value)} style={value ? props.selectedStyle : props.style}>
             <Checkbox
                 onChange={(val) => {
                     setValue(val);
