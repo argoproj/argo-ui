@@ -1,14 +1,11 @@
-# Argo UI
+# Argo UI Components
 
 ![Argo Image](https://github.com/argoproj/argo/blob/master/argo.png?raw=true)
 
-Web-based UI for Argo workflow engine. Web UI allows to view Argo workflows running in the cluster, view container logs etc.
+Set of React components used by https://github.com/argoproj/argo and https://github.com/argoproj/argo-cd
 
-Some Argo UI components ( such as Workflow DAG viewer, Workflow timeline etc ) are available via [argo-ui](https://www.npmjs.com/package/argo-ui) NPM package.
+## Build & Run
 
-## Build, run, release
-
-* Install [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com)
-* Run: `yarn start` - starts API server and webpack dev UI server. API server uses current `kubectl` context to access workflow CRDs.
-* Build: `yarn build` - builds static resources into `./dist` directory.
-* Release: `IMAGE_NAMESPACE=argoproj IMAGE_TAG=latest DOCKER_PUSH=true yarn docker` - builds docker image and optionally push to docker registry.
+1. Install Toolset: [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com)
+2. Install Dependencies: From your command line, navigate to the argo-ui directory and run `yarn install` to install dependencies.
+3. Run: `yarn start` - starts https://storybook.js.org/ dev server
