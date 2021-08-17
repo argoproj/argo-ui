@@ -219,7 +219,8 @@ export const RenderAutocomplete = (
                 <ThemeDiv
                     className='autocomplete__items'
                     style={{
-                        display: !showSuggestions || (props.items || []).length < 1 ? 'none' : 'block',
+                        visibility: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : 'visible',
+                        overflow: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : null,
                         top: position.top,
                         left: position.left,
                     }}
