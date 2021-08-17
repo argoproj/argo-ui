@@ -27,7 +27,7 @@ export const Autocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+    }
 ) => {
     return (
         <KeybindingProvider>
@@ -43,7 +43,7 @@ export const RenderAutocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+    }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
@@ -55,8 +55,7 @@ export const RenderAutocomplete = (
 
     React.useEffect(() => {
         function unfocus(e: any) {
-            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) &&
-                    menuRef.current && !menuRef.current.contains(e.target)) {
+            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) && menuRef.current && !menuRef.current.contains(e.target)) {
                 setShowSuggestions(false);
                 reset();
             }
@@ -85,14 +84,15 @@ export const RenderAutocomplete = (
     }, [props.value]);
 
     const {useKeybinding} = React.useContext(KeybindingContext);
+
     const target = {
         combo: false,
-        target: autocompleteRef,
+        target: inputRef,
     };
 
     useKeybinding({
         keys: Key.TAB,
-        action: (e) => {
+        action: () => {
             if (showSuggestions) {
                 if (pos === curItems.length - 1) {
                     reset();
@@ -136,7 +136,7 @@ export const RenderAutocomplete = (
 
     useKeybinding({
         keys: Key.UP,
-        action: () => {
+        action: (e) => {
             if (showSuggestions) {
                 nav(-1);
                 return false;
@@ -215,7 +215,7 @@ export const RenderAutocomplete = (
                 }}
             />
 
-            {ReactDOM.createPortal((
+            {ReactDOM.createPortal(
                 <ThemeDiv
                     className='autocomplete__items'
                     style={{
@@ -239,8 +239,9 @@ export const RenderAutocomplete = (
                             {i}
                         </div>
                     ))}
-                </ThemeDiv>
-            ), document.body)}
+                </ThemeDiv>,
+                document.body
+            )}
         </div>
     );
 };
