@@ -224,6 +224,7 @@ export const addKeybinding = (state: GroupMap, props: KeyFxnProps): GroupMap => 
             group: index,
             action,
             pressed: false,
+            target,
         };
 
         index = index + 1;

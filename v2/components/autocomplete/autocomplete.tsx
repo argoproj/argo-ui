@@ -86,14 +86,15 @@ export const RenderAutocomplete = (
     }, [props.value]);
 
     const {useKeybinding} = React.useContext(KeybindingContext);
+
     const target = {
         combo: false,
-        target: autocompleteRef,
+        target: inputRef,
     };
 
     useKeybinding({
         keys: Key.TAB,
-        action: (e) => {
+        action: () => {
             if (showSuggestions) {
                 if (pos === curItems.length - 1) {
                     reset();
@@ -137,7 +138,7 @@ export const RenderAutocomplete = (
 
     useKeybinding({
         keys: Key.UP,
-        action: () => {
+        action: (e) => {
             if (showSuggestions) {
                 nav(-1);
                 return false;
@@ -222,7 +223,8 @@ export const RenderAutocomplete = (
                     theme={props.dark ? Theme.Dark : Theme.Light}
                     className='autocomplete__items'
                     style={{
-                        display: !showSuggestions || (props.items || []).length < 1 ? 'none' : 'block',
+                        visibility: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : 'visible',
+                        overflow: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : null,
                         top: position.top,
                         left: position.left,
                     }}

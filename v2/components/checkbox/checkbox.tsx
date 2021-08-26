@@ -28,37 +28,3 @@ export const Checkbox = (props: {value?: boolean; onChange?: (value: boolean) =>
         </div>
     );
 };
-
-export interface CheckboxOption {
-    label: string;
-    count?: number;
-    icon?: React.ReactNode;
-}
-
-export const CheckboxRow = (props: {value: boolean; onChange?: (value: boolean) => void; option: CheckboxOption}) => {
-    const [value, setValue] = React.useState(props.value);
-
-    React.useEffect(() => {
-        setValue(props.value);
-    }, [props.value]);
-
-    return (
-        <div className={`checkbox__item ${value ? 'checkbox__item--selected' : ''}`} onClick={() => setValue(!value)}>
-            <Checkbox
-                onChange={(val) => {
-                    setValue(val);
-                    if (props.onChange) {
-                        props.onChange(val);
-                    }
-                }}
-                value={value}
-                style={{
-                    marginRight: '8px',
-                }}
-            />
-            {props.option.icon && <div style={{marginRight: '5px'}}>{props.option.icon}</div>}
-            <div className='checkbox__item__label'>{props.option.label}</div>
-            <div style={{marginLeft: 'auto'}}>{props.option.count}</div>
-        </div>
-    );
-};
