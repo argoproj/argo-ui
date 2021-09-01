@@ -7,7 +7,7 @@ export enum Theme {
     Light = 'light',
 }
 
-const init = (JSON.parse(window.localStorage.getItem(THEME_KEY)) as Theme) || Theme.Light;
+const init = (JSON.parse(window?.localStorage?.getItem(THEME_KEY)) as Theme) || Theme.Light;
 
 interface ThemeContextProps {
     theme: Theme;
@@ -19,7 +19,7 @@ export const ThemeContext = React.createContext({theme: init} as ThemeContextPro
 export const ThemeProvider = (props: {children: React.ReactNode}) => {
     const [theme, setTheme] = React.useState(init);
     React.useEffect(() => {
-        window.localStorage.setItem(THEME_KEY, JSON.stringify(theme));
+        window?.localStorage?.setItem(THEME_KEY, JSON.stringify(theme));
     }, [theme]);
 
     return <ThemeContext.Provider value={{theme: theme, set: (th) => setTheme(th)}}>{props.children}</ThemeContext.Provider>;
