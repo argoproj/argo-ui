@@ -1,0 +1,22 @@
+name: Build Storybook Docs
+
+on:
+  push:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn tsc -p src/tsconfig.json
+      - run: yarn add --dev jest-junit
+        name: Install JUnit coverage reporter
+      - run: yarn test --ci --runInBand --reporters=default --reporters=jest-junit
+        name: Run tests with JUnit as reporter
+        env:
+          JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
