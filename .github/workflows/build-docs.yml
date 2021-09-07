@@ -1,4 +1,4 @@
-name: Build Storybook Docs
+name: Build Storybook Docs v2
 
 on:
   push:
