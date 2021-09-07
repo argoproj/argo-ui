@@ -3,7 +3,8 @@ import { storiesOf } from '@storybook/react';
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
 import { Route, Router } from 'react-router';
-import { Observable } from 'rxjs';
+import { timer } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Layout, Page } from '../src/components';
 
@@ -93,7 +94,7 @@ storiesOf('Page', module)
         <Router history={history}>
             <Route path={location.pathname}>
                 <Layout navItems={navItems}>
-                    <Page title='Hello world!' toolbar={Observable.timer(0, 1000).map(() => ({ breadcrumbs: [{title: 'hello ' + new Date().toLocaleTimeString()}] }))}>
+                    <Page title='Hello world!' toolbar={timer(0, 1000).pipe(map(() => ({ breadcrumbs: [{title: 'hello ' + new Date().toLocaleTimeString()}] })))}>
                         <div style={{padding: '1em'}}>
                             <div className='white-box'>
                                 Hello world!

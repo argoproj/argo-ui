@@ -1,0 +1,15 @@
+@import '../../styles/colors.scss';
+
+.filler {
+    box-sizing: border-box;
+    font-size: 18px;
+    text-align: center;
+    color: $argo-color-gray-5;
+    margin-top: 2em;
+    i {
+        margin-right: 5px;
+    }
+    &--dark {
+        color: $dull-shine;
+    }
+}

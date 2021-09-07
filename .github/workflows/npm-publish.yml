@@ -1,0 +1,22 @@
+name: Release NPM package v2
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Git tag to build release from
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: cd v2 && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

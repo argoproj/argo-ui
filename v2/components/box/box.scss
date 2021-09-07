@@ -1,0 +1,21 @@
+@import '../../styles/colors.scss';
+
+.argo-box {
+    border: 1px solid $argo-color-gray-4;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+    height: max-content;
+    box-sizing: border-box;
+
+    &__title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 0.5em;
+    }
+
+    &--dark {
+        background-color: $space;
+        border-color: $silver-lining;
+    }
+}
