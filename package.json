@@ -15,7 +15,7 @@
         "start": "start-storybook -p 6006"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.8.1",
+        "@fortawesome/fontawesome-free": "^5.15.2",
         "@tippy.js/react": "^2.1.2",
         "@types/react-autocomplete": "^1.8.5",
         "@types/react-form": "^2.16.1",
@@ -23,7 +23,9 @@
         "classnames": "^2.2.5",
         "foundation-sites": "^6.4.3",
         "history": "^4.7.2",
-        "moment": "^2.20.1",
+        "moment": "^2.29.1",
+        "moment-timezone": "^0.5.33",
+        "portable-fetch": "^3.0.0",
         "prop-types": "^15.6.0",
         "react-autocomplete": "^1.8.1",
         "react-form": "^2.16.0",
@@ -35,8 +37,10 @@
         "xterm": "2.4.0"
     },
     "peerDependencies": {
+        "moment": "^2.29.1",
         "react": "^16.9.3",
-        "react-dom": "^16.9.3"
+        "react-dom": "^16.9.3",
+        "rxjs": "^6.6.6"
     },
     "devDependencies": {
         "@babel/core": "^7.14.0",
