@@ -12211,6 +12211,14 @@ react-json-view@^1.13.3:
     react-lifecycles-compat "^3.0.4"
     react-textarea-autosize "^6.1.0"
 
+react-keyhooks@^0.2.2:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-keyhooks/-/react-keyhooks-0.2.3.tgz#57050244d9c501e5b812e2ee3156d8fb967afda9"
+  integrity sha512-1gzHAf5u/JFJ1xUT4Evz9q++eK4px52dhyz8EQ/BXYz4Sb9+idu9IHmq+aGVVoQMFDaO+zLkENoX9sdnVgJ3RQ==
+  dependencies:
+    "@types/react" "^16.9.3"
+    react "^16.9.3"
+
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
