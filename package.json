@@ -19,6 +19,7 @@
         "@fortawesome/fontawesome-free": "^5.15.2",
         "@tippy.js/react": "^2.1.2",
         "classnames": "^2.2.5",
+        "core-js": "^3.18.0",
         "foundation-sites": "^6.4.3",
         "history": "^4.7.2",
         "moment": "^2.29.1",
