@@ -23,6 +23,7 @@ export interface AutocompleteProps {
     autoCompleteRef?: (api: AutocompleteApi) => any;
     filterSuggestions?: boolean;
     qeid?: string;
+    open?: boolean;
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
@@ -122,6 +123,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
             onChange={props.onChange}
             onSelect={props.onSelect}
             renderInput={props.renderInput}
+            open={props.open}
         />
     );
 };
