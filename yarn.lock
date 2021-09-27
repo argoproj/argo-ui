@@ -3149,10 +3149,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-autocomplete@^1.8.5":
-  version "1.8.5"
-  resolved "https://registry.yarnpkg.com/@types/react-autocomplete/-/react-autocomplete-1.8.5.tgz#d26a027850cfb963a628145f5745834b06a23884"
-  integrity sha512-O9DENAvxh66Bz7ODa9tCYqHBxvw/bALB8FxKWuPIizo3J+0Qx3Et+x9qMwCEsk5pcAxmRk34MFNalyc9thYT6g==
+"@types/react-autocomplete@^1.8.6":
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/@types/react-autocomplete/-/react-autocomplete-1.8.6.tgz#999d0cd10ac4164ea605da04d263e5fb3fd5745f"
+  integrity sha512-v3MOyT7gfMfu0K1Y6n9inGVO325evf96YY3Aw4i4WJs5f9+7Y/TVMPbNXoXRnbhlubgkqel19VnrCdBSodwOEg==
   dependencies:
     "@types/react" "*"
 
