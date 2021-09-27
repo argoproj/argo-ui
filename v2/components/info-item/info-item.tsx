@@ -48,7 +48,7 @@ export const InfoItemRow = (props: {label: string | React.ReactNode; items?: Inf
     if (!Array.isArray(items)) {
         items = [items];
     }
-    itemComponents = items.map((c, i) => <InfoItem key={`${c} ${i}`} {...c} lightweight={c.lightweight === undefined ? props.lightweight : c.lightweight} />);
+    itemComponents = items?.map((c, i) => <InfoItem key={`${c} ${i}`} {...c} lightweight={c?.lightweight === undefined ? props.lightweight : c?.lightweight} />);
 
     return (
         <div className='info-item--row'>
@@ -57,7 +57,7 @@ export const InfoItemRow = (props: {label: string | React.ReactNode; items?: Inf
                     <label>{label}</label>
                 </Text>
             )}
-            {props.items && <div style={{marginLeft: 'auto', display: 'flex', minWidth: 0, paddingLeft: '25px'}}>{itemComponents}</div>}
+            {props.items && <div className='info-item--row__container'>{itemComponents}</div>}
         </div>
     );
 };

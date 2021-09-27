@@ -27,7 +27,7 @@ export const Autocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+    }
 ) => {
     return (
         <KeybindingProvider>
@@ -43,7 +43,7 @@ export const RenderAutocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+    }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
@@ -55,8 +55,7 @@ export const RenderAutocomplete = (
 
     React.useEffect(() => {
         function unfocus(e: any) {
-            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) &&
-                    menuRef.current && !menuRef.current.contains(e.target)) {
+            if (autocompleteRef.current && !autocompleteRef.current.contains(e.target) && menuRef.current && !menuRef.current.contains(e.target)) {
                 setShowSuggestions(false);
                 reset();
             }
@@ -85,52 +84,78 @@ export const RenderAutocomplete = (
     }, [props.value]);
 
     const {useKeybinding} = React.useContext(KeybindingContext);
-    useKeybinding(Key.TAB, (e) => {
-        if (showSuggestions) {
-            if (pos === curItems.length - 1) {
+
+    const target = {
+        combo: false,
+        target: inputRef,
+    };
+
+    useKeybinding({
+        keys: Key.TAB,
+        action: () => {
+            if (showSuggestions) {
+                if (pos === curItems.length - 1) {
+                    reset();
+                }
+                nav(1);
+                return true;
+            }
+            return false;
+        },
+        ...target,
+    });
+
+    useKeybinding({
+        keys: Key.ESCAPE,
+        action: (e) => {
+            if (showSuggestions) {
                 reset();
+                setShowSuggestions(false);
+                if (inputRef && inputRef.current) {
+                    inputRef.current.blur();
+                }
+                return true;
             }
-            nav(1);
-            return true;
-        }
-        return false;
+            return false;
+        },
+        ...target,
     });
 
-    useKeybinding(Key.ESCAPE, (e) => {
-        if (showSuggestions) {
-            reset();
-            setShowSuggestions(false);
-            if (inputRef && inputRef.current) {
-                inputRef.current.blur();
+    useKeybinding({
+        keys: Key.ENTER,
+        action: () => {
+            if (showSuggestions && props.onItemClick) {
+                props.onItemClick(curItems[pos]);
+                setShowSuggestions(false);
+                return true;
+            }
+            return false;
+        },
+        ...target,
+    });
+
+    useKeybinding({
+        keys: Key.UP,
+        action: (e) => {
+            if (showSuggestions) {
+                nav(-1);
+                return false;
             }
             return true;
-        }
-        return false;
+        },
+        ...target,
     });
 
-    useKeybinding(Key.ENTER, () => {
-        if (showSuggestions && props.onItemClick) {
-            props.onItemClick(curItems[pos]);
-            setShowSuggestions(false);
+    useKeybinding({
+        keys: Key.DOWN,
+        action: () => {
+            if (showSuggestions) {
+                nav(1);
+                return false;
+            }
             return true;
-        }
-        return false;
-    });
-
-    useKeybinding(Key.UP, () => {
-        if (showSuggestions) {
-            nav(-1);
-            return false;
-        }
-        return true;
-    });
-
-    useKeybinding(Key.DOWN, () => {
-        if (showSuggestions) {
-            nav(1);
-            return false;
-        }
-        return true;
+        },
+        ...target,
     });
 
     const style = props.style;
@@ -190,11 +215,12 @@ export const RenderAutocomplete = (
                 }}
             />
 
-            {ReactDOM.createPortal((
+            {ReactDOM.createPortal(
                 <ThemeDiv
                     className='autocomplete__items'
                     style={{
-                        display: !showSuggestions || (props.items || []).length < 1 ? 'none' : 'block',
+                        visibility: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : 'visible',
+                        overflow: !showSuggestions || (props.items || []).length < 1 ? 'hidden' : null,
                         top: position.top,
                         left: position.left,
                     }}
@@ -213,8 +239,9 @@ export const RenderAutocomplete = (
                             {i}
                         </div>
                     ))}
-                </ThemeDiv>
-            ), document.body)}
+                </ThemeDiv>,
+                document.body
+            )}
         </div>
     );
 };
