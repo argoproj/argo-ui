@@ -32,12 +32,11 @@
         "react-helmet": "^6.1.0",
         "react-router-dom": "^4.2.2",
         "react-toastify": "^5.0.1",
-        "rxjs": "^6.6.6",
         "typescript": "^4.1.2",
         "xterm": "2.4.0"
     },
     "peerDependencies": {
-        "moment": "^2.24.0",
+        "moment": "^2.29.1",
         "react": "^16.9.3",
         "react-dom": "^16.9.3",
         "rxjs": "^6.6.6"
