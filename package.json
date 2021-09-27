@@ -27,7 +27,6 @@
         "moment-timezone": "^0.5.33",
         "portable-fetch": "^3.0.0",
         "prop-types": "^15.6.0",
-        "react-autocomplete": "^1.8.1",
         "react-form": "^2.16.0",
         "react-helmet": "^6.1.0",
         "react-router-dom": "^4.2.2",
@@ -37,6 +36,7 @@
     },
     "peerDependencies": {
         "moment": "^2.29.1",
+        "react-autocomplete": "^1.8.1",
         "react": "^16.9.3",
         "react-dom": "^16.9.3",
         "rxjs": "^6.6.6"
