@@ -44,6 +44,7 @@
         "react-dom": "^16.9.3",
         "rxjs": "^6.6.6"
     },
+
     "devDependencies": {
         "@babel/core": "^7.14.0",
         "@dump247/storybook-state": "^1.6.1",
