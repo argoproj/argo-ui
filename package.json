@@ -14,7 +14,8 @@
         "test": "jest",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
         "start": "start-storybook -p 6006",
-        "start-v2": "start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006"
+        "start-v2": "start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
+        "build-v2": "build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
@@ -32,6 +33,7 @@
         "react-helmet": "^6.1.0",
         "react-router-dom": "^4.2.2",
         "react-toastify": "^5.0.1",
+        "rxjs": "^6.6.6",
         "typescript": "^4.1.2",
         "xterm": "2.4.0"
     },
