@@ -9,6 +9,7 @@
         "experimentalDecorators": true,
         "noUnusedLocals": true,
         "declaration": true,
+        "skipLibCheck": true,
         "lib": [
             "es2017",
             "dom"
@@ -18,5 +19,5 @@
         ]
     },
     "include": ["./**/*"],
-    "exclude": ["node_modules", "./**/*.test.ts", "./**/*.test.tsx"]
+    "exclude": ["node_modules", "./**/*.test.ts", "./**/*.test.tsx", "v2"]
 }
