@@ -10,7 +10,7 @@
     ],
     "scripts": {
         "build": "build-storybook -o ./dist/storybook",
-        "lint": "tslint -p ./src",
+        "lint": "tslint -p .",
         "test": "jest",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
         "start": "start-storybook -p 6006",
