@@ -20,7 +20,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
         "@tippy.js/react": "^2.1.2",
-        "classnames": "^2.2.5",
+        "classnames": "^2.2.6",
         "core-js": "^3.18.0",
         "foundation-sites": "^6.4.3",
         "history": "^4.7.2",
@@ -56,7 +56,7 @@
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
         "@types/chai": "^4.1.2",
-        "@types/classnames": "^2.2.3",
+        "@types/classnames": "^2.2.9",
         "@types/deep-equal": "^1.0.1",
         "@types/enzyme": "^3.10.8",
         "@types/enzyme-adapter-react-16": "^1.0.6",
