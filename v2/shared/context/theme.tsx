@@ -22,7 +22,7 @@ export const ThemeProvider = (props: {children: React.ReactNode}) => {
         window.localStorage.setItem(THEME_KEY, JSON.stringify(theme));
     }, [theme]);
 
-    return <ThemeContext.Provider value={{theme: theme, set: (th) => setTheme(th)}}>{props.children}</ThemeContext.Provider>;
+    return <ThemeContext.Provider value={{theme, set: (th) => setTheme(th)}}>{props.children}</ThemeContext.Provider>;
 };
 
 export const useTheme = () => {

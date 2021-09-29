@@ -29,7 +29,7 @@ const actionMenu = {
         action: () => {
             // do nothing
         },
-    }, 
+    },
     {
         title: 'New Item 3',
         action: () => {
@@ -43,7 +43,7 @@ const actionMenu = {
         action: () => {
             // do nothing
         },
-    }]
+    }],
 };
 
 const history = createHistory();

@@ -15,9 +15,9 @@ export const ThemeDiv = (
         disabled?: boolean;
         innerref?: React.LegacyRef<any>;
         theme?: Theme;
-    } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+    } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>,
 ) => {
-    let theme = props.theme || useTheme();
+    const theme = props.theme || useTheme();
     let clString = props.className;
 
     if (theme === Theme.Dark && !props.disabled) {

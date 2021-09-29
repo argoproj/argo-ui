@@ -93,9 +93,9 @@ export const useNav = (upperBound: number, init?: number): [number, (n: number) 
     return [pos, nav, reset];
 };
 
-export type KeyState = {action: KeyAction; pressed: boolean; group: number; target?: React.MutableRefObject<any>};
+export interface KeyState { action: KeyAction; pressed: boolean; group: number; target?: React.MutableRefObject<any>; }
 export type KeyAction = (keyCode?: number) => boolean;
-export type KeyMap = {[key: number]: KeyState};
+export interface KeyMap { [key: number]: KeyState; }
 export type KeyHandler = (e: KeyboardEvent) => null;
 
 export type KeyFxn = (props: KeyFxnProps) => void;
@@ -253,8 +253,8 @@ export const KeybindingContext = React.createContext<{
 export const KeybindingProvider = (props: {children: React.ReactNode}) => {
     let keybindingState: GroupMap = useSharedKeyListener();
 
-    const useKeybinding = (props: KeyFxnProps) => {
-        keybindingState = addKeybinding(keybindingState, props);
+    const useKeybinding = (aProps: KeyFxnProps) => {
+        keybindingState = addKeybinding(keybindingState, aProps);
     };
 
     return <KeybindingContext.Provider value={{keybindingState, useKeybinding}}>{props.children}</KeybindingContext.Provider>;
