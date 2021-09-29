@@ -19,5 +19,5 @@
         ]
     },
     "include": ["./**/*"],
-    "exclude": ["node_modules", "./**/*.test.ts", "./**/*.test.tsx", "v2"]
+    "exclude": ["node_modules", "./**/*.test.ts", "./**/*.test.tsx", "./**/*.stories.tsx"]
 }
