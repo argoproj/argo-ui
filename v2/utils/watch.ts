@@ -64,7 +64,7 @@ export function handlePageVisibility<T>(src: () => Observable<T>): Observable<T>
             subscription = src().subscribe(
                 (item: T) => observer.next(item),
                 (err) => observer.error(err),
-                () => observer.complete()
+                () => observer.complete(),
             );
         };
 
@@ -103,32 +103,32 @@ export function useWatchList<T, E extends WatchEvent>(url: string, findItem: (it
         let watch = stream.pipe(
             repeat(),
             retryWhen((errors) => errors.pipe(delay(500))),
-            scan((items, change) => {
-                const index = items.findIndex((i) => findItem(i, change));
+            scan((aItems, change) => {
+                const index = aItems.findIndex((i) => findItem(i, change));
                 switch (change.type) {
                     case 'Deleted':
                         if (index > -1) {
-                            items.splice(index, 1);
+                            aItems.splice(index, 1);
                         }
                         break;
                     case 'Updated':
                         if (index > -1) {
-                            const updated = {...items[index], ...getItem(change)};
-                            items[index] = updated as T;
+                            const updated = {...aItems[index], ...getItem(change)};
+                            aItems[index] = updated as T;
                         }
                         break;
                     default:
                         if (index > -1) {
-                            items[index] = getItem(change) as T;
+                            aItems[index] = getItem(change) as T;
                         } else {
-                            items.unshift(getItem(change) as T);
+                            aItems.unshift(getItem(change) as T);
                         }
                         break;
                 }
-                return items;
+                return aItems;
             }, init || []),
             bufferTime(BUFFER_TIME),
-            mergeMap((l) => l)
+            mergeMap((l) => l),
         );
 
         const sub = handlePageVisibility(() => watch).subscribe((l) => {
@@ -150,24 +150,24 @@ export function useWatch<T>(url: string, subscribe: boolean, isEqual: (a: T, b: 
             return;
         }
         const stream = fromEventSource(url).pipe(map((res) => JSON.parse(res).result as T));
-        let watch = stream.pipe(
+        const watch = stream.pipe(
             repeat(),
             retryWhen((errors) => errors.pipe(delay(500))),
             scan(
                 (acc, update) => {
                     return {data: update, updated: !isEqual(update, acc.data)};
                 },
-                {data: {} as T, updated: true}
+                {data: {} as T, updated: true},
             ),
             filter((i) => i.updated),
-            map((i) => i.data)
+            map((i) => i.data),
         );
 
         let liveStream = handlePageVisibility(() =>
             watch.pipe(
                 bufferTime(BUFFER_TIME),
-                mergeMap((r) => r)
-            )
+                mergeMap((r) => r),
+            ),
         );
 
         if (timeoutAfter > 0) {

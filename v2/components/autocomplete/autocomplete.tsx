@@ -27,7 +27,7 @@ export const Autocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    }
+    },
 ) => {
     return (
         <KeybindingProvider>
@@ -43,7 +43,7 @@ export const RenderAutocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    }
+    },
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
@@ -240,7 +240,7 @@ export const RenderAutocomplete = (
                         </div>
                     ))}
                 </ThemeDiv>,
-                document.body
+                document.body,
             )}
         </div>
     );

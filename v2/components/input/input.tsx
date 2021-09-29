@@ -20,7 +20,7 @@ export const useInput = (init: string, callback?: (val: string) => void): [strin
     const [state, setState] = React.useState(init);
     const inputRef = React.useRef(null);
 
-    const Input: InputProps = {
+    const InputP: InputProps = {
         value: state,
         ref: inputRef,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ export const useInput = (init: string, callback?: (val: string) => void): [strin
         },
     };
 
-    return [state, setState, Input];
+    return [state, setState, InputP];
 };
 
 export const useDebounce = (value: string, debouncems: number): string => {

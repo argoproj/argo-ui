@@ -43,7 +43,8 @@ export const InfoItem = (props: InfoItemProps) => {
  * Displays a right justified InfoItem (or multiple InfoItems) and a left justfied label
  */
 export const InfoItemRow = (props: {label: string | React.ReactNode; items?: InfoItemProps | InfoItemProps[]; lightweight?: boolean}) => {
-    let {label, items} = props;
+    let {items} = props;
+    const {label} = props;
     let itemComponents = null;
     if (!Array.isArray(items)) {
         items = [items];

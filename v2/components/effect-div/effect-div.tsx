@@ -11,13 +11,13 @@ interface EffectDivProps extends React.DetailedHTMLProps<React.HTMLAttributes<HT
 
 /**
  * EffectDiv is a component that attaches a background to a div, that can be animated with CSS transitions or otherwise.
-It was designed to avoid text artifacts when scaling a div; an EffectDiv allows you to easily scale JUST its background, and not its contents.
-
-You can drop in replace a div with an EffectDiv, but to add a background effect, you need to:
-
-- Remove background styles from the main div (including border and border-radius)
-- Add the styles you removed to the `&__background` selector
-- Add transitions to the `&__background` selector
+ * It was designed to avoid text artifacts when scaling a div; an EffectDiv allows you to easily scale JUST its background, and not its contents.
+ *
+ * You can drop in replace a div with an EffectDiv, but to add a background effect, you need to:
+ *
+ * - Remove background styles from the main div (including border and border-radius)
+ * - Add the styles you removed to the `&__background` selector
+ * - Add transitions to the `&__background` selector
  */
 export const EffectDiv = (props: EffectDivProps) => {
     const backgroundCl = appendSuffixToClasses(props.className, '__background');

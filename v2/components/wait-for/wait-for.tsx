@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ThemeDiv} from '../theme-div/theme-div';
-import './spinner.scss';
 import './loading-bar.scss';
+import './spinner.scss';
 
 export const Spinner = () => (
     <ThemeDiv className='spinner'>

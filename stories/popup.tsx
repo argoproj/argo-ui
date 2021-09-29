@@ -185,7 +185,7 @@ storiesOf('Popup', module)
                             }
                         },
                     },
-                    { name: 'argo-icon-clock', color: 'success'}
+                    { name: 'argo-icon-clock', color: 'success'},
                     );
                 }}>Click me</button>
             )}
@@ -201,7 +201,7 @@ storiesOf('Popup', module)
                             <h4>This is another h4 header</h4>
                             <p>This is a paragraph</p>
                         </div>
-                        )
+                        ),
                     );
                     action('Prompt values')(values);
                 }}>Click me</button>
@@ -216,7 +216,7 @@ storiesOf('Popup', module)
                             <p style={{paddingTop: '20px'}}>This is a paragraph</p>
                             <p>This is another paragraph</p>
                         </div>
-                        )
+                        ),
                     );
                     action('Prompt values')(values);
                 }}>Click me</button>
@@ -252,7 +252,7 @@ storiesOf('Popup', module)
                                 } else {
                                     api.setError('password', 'Username or password is invalid');
                                 }
-                            },    
+                            },
                         },
                         undefined,
                         undefined,
@@ -262,4 +262,4 @@ storiesOf('Popup', module)
                 }}>Click me</button>
             )}
         </App>
-    ))
+    ));
