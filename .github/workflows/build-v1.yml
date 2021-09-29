@@ -14,5 +14,5 @@ jobs:
       - run: yarn install
       - run: yarn build
       - run: yarn lint
-      - run: yarn tsc -p src/tsconfig.json
+      - run: yarn tsc -p tsconfig.json
       - run: yarn test --ci --runInBand

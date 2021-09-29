@@ -11,5 +11,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn --cwd v2 install
-      - run: yarn --cwd v2 build-storybook-docs
+      - run: yarn install
+      - run: yarn build-v2
