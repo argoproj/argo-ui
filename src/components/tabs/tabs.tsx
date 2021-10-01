@@ -114,7 +114,13 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
                     const el = parentEl.querySelector<HTMLElement>('.active');
 
                     if (el) {
-                        this.setState({ indicatorPosition: this.getIndicatorPosition(parentEl, el) });
+                        const newIndicatorPosition = this.getIndicatorPosition(parentEl, el);
+
+                        if (JSON.stringify(this.state.indicatorPosition) !== JSON.stringify(newIndicatorPosition)) {
+                            this.setState({
+                                indicatorPosition: this.getIndicatorPosition(parentEl, el),
+                            });
+                        }
                     }
                 }
             }
