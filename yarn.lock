@@ -7220,12 +7220,10 @@ forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
 
-foundation-sites@^6.4.3:
-  version "6.4.3"
-  resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.4.3.tgz#ea89eb599badf6f03dd526c51f00bdb942a844f6"
-  dependencies:
-    jquery ">=3.0.0"
-    what-input "^4.1.3"
+foundation-sites@^6.7.2:
+  version "6.7.3"
+  resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.7.3.tgz#e6e298ef720a7569d874c48ee83fd855409333c2"
+  integrity sha512-HgQA6iUQTEkRSeNwiRQH2PvTXkXGBfBpRS6CTm2auhKpyU4Tea7so3IPKrazSciE7nyv1Vp9WNKdH9fBPLbGeA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -9376,11 +9374,6 @@ jest@^26.6.2:
     "@jest/core" "^26.6.2"
     import-local "^3.0.2"
     jest-cli "^26.6.2"
-
-jquery@>=3.0.0:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
-  integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==
 
 js-string-escape@^1.0.1:
   version "1.0.1"
@@ -15502,10 +15495,6 @@ websocket-driver@^0.7.4:
 websocket-extensions@>=0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
-
-what-input@^4.1.3:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/what-input/-/what-input-4.3.1.tgz#b8ea7554ba1d9171887c4c6addf28185fec3d31d"
 
 whatwg-encoding@^1.0.5:
   version "1.0.5"
