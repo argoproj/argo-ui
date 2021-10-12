@@ -20,6 +20,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
         "@tippy.js/react": "^2.1.2",
+        "antd": "^4.16.13",
         "classnames": "^2.2.6",
         "core-js": "^3.18.0",
         "foundation-sites": "^6.4.3",
