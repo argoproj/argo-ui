@@ -43,7 +43,8 @@
         "moment": "^2.29.1",
         "react": "^16.9.3",
         "react-dom": "^16.9.3",
-        "rxjs": "^6.6.6"
+        "rxjs": "^6.6.6",
+        "antd": "^4.16.13"
     },
     "devDependencies": {
         "@babel/core": "^7.14.0",
