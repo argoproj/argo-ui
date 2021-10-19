@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Form, Input} from '../../index';
 
-import '../../antd.less';
+import '../../styles/antd.less';
 
 export default {
     title: 'Components/Input',

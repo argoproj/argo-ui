@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { Button } from '../../index';
 
-import '../../antd.less';
+import '../../styles/antd.less';
 
 const argg: Meta = {
     title: 'Components/Button',
