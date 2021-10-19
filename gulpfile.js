@@ -8,7 +8,7 @@ const rename = require("gulp-rename");  // переименовывает
 const config = {
     less: {
         input: './antd/styles/antd.less',
-        output: './antd/dist/css'
+        output: './antd/build/css'
     }
 };
 
