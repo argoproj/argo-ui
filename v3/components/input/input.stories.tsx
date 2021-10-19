@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input } from '../../index';
+import {Form, Input} from '../../index';
 
 import '../../antd.less';
 
@@ -14,7 +14,7 @@ export default {
     },
 };
 
-export const Primary = (args: any) => {
+export const Default = (args: any) => {
     return (
         <React.Fragment>
             <div style={{width: '50%', marginBottom: '1em'}}>
@@ -24,6 +24,89 @@ export const Primary = (args: any) => {
     );
 };
 
-Primary.args = {
+Default.args = {
+    placeholder: 'Type something here',
+};
+
+export const Disabled = (args: any) => {
+    return (
+        <React.Fragment>
+            <div style={{width: '50%', marginBottom: '1em'}}>
+                <Input disabled={true} {...args} />
+            </div>
+        </React.Fragment>
+    );
+};
+
+Disabled.args = {
+    placeholder: 'Type something here',
+};
+
+export const Error = (args: any) => {
+    return (
+        <div style={{width: '50%', marginBottom: '1em'}}>
+            <Form>
+                <Form.Item
+                    validateStatus="error"
+                    help="Should be combination of numbers & alphabets"
+                >
+                    <Input placeholder="Some error" id="error"/>
+                </Form.Item>
+            </Form>
+        </div>
+    );
+};
+
+Error.args = {
+    placeholder: 'Type something here',
+};
+
+export const Warning = (args: any) => {
+    return (
+        <div style={{width: '50%', marginBottom: '1em'}}>
+
+            <Form>
+                <Form.Item
+                    validateStatus="warning"
+                    help="Should be combination of numbers & alphabets"
+                >
+                    <Input placeholder="Some warning" id="warning"/>
+                </Form.Item>
+            </Form>
+        </div>
+    );
+};
+
+export const Suffix = (args: any) => {
+    return (
+        <React.Fragment>
+            <div style={{width: '50%', marginBottom: '1em'}}>
+                <Input
+                    {...args}
+                    suffix="SFX"
+                />
+            </div>
+        </React.Fragment>
+    );
+};
+
+Suffix.args = {
+    placeholder: 'Type something here',
+};
+
+export const Prefix = (args: any) => {
+    return (
+        <React.Fragment>
+            <div style={{width: '50%', marginBottom: '1em'}}>
+                <Input
+                    prefix="PRX"
+                    {...args}
+                />
+            </div>
+        </React.Fragment>
+    );
+};
+
+Suffix.args = {
     placeholder: 'Type something here',
 };
