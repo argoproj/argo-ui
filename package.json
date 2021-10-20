@@ -2,7 +2,7 @@
     "name": "argo-ui",
     "version": "1.0.0",
     "main": "./src/index.ts",
-    "types": "./antd/index.ts",
+    "types": "./src/index.ts",
     "license": "MIT",
     "files": [
         "src",
