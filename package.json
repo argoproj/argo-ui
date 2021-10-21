@@ -18,7 +18,6 @@
         "start-v2": "start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
         "build-v2": "build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook",
         "start-antd": "start-storybook -c antd/.storybook -s antd/.storybook/images -p 6006",
-        "build-antd": "build-storybook -o ./dist/storybook-v3 -c antd/.storybook",
         "compile-less-antd": "gulp compileLess"
     },
     "dependencies": {
