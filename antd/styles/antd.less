@@ -1,16 +1,21 @@
-@import '../../node_modules/antd/lib/style/themes/default.less';
-//@import '../../node_modules/antd/dist/antd.less'; // Import Ant Design styles by less entry
-//@import "../../node_modules/antd/lib/style/index.less";
-@import '../../node_modules/antd/lib/style/themes/index';
-//@import '../../node_modules/antd/lib/style/core/index';
-//@import '../../node_modules/antd/lib/style/core/index';
-@import '../../node_modules/antd/lib/style/mixins/index';
-@import '../../node_modules/antd/lib/style/core/base';
-//@import '../../node_modules/antd/lib/style/core/global';
-@import '../../node_modules/antd/lib/style/core/iconfont';
-@import '../../node_modules/antd/lib/style/core/motion';
+@antd: "../../node_modules/antd";
 
+// general
+@import '@{antd}/lib/style/themes/default.less';
+@import '@{antd}/lib/style/themes/index';
+@import '@{antd}/lib/style/mixins/index';
+@import '@{antd}/lib/style/core/base';
+@import '@{antd}/lib/style/core/iconfont';
+@import '@{antd}/lib/style/core/motion';
 
-@import "../../node_modules/antd/lib/button/style/index";
-@import "../../node_modules/antd/lib/input/style/index";
+// components
+@import "@{antd}/lib/button/style/index";
+@import "@{antd}/lib/input/style/index";
+@import "@{antd}/lib/form/style/index";
+@import "@{antd}/lib/checkbox/style/index";
+@import "@{antd}/lib/input-number/style/index";
+@import "@{antd}/lib/select/style/index";
+@import "@{antd}/lib/dropdown/style/index";
+@import "@{antd}/lib/radio/style/index";
+
 @import './argo-theme.less'; // variables to override above

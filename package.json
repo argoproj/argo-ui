@@ -6,7 +6,8 @@
     "license": "MIT",
     "files": [
         "src",
-        "v2"
+        "v2",
+        "antd"
     ],
     "scripts": {
         "build": "build-storybook -o ./dist/storybook",

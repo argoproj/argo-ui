@@ -1,5 +1,5 @@
+import { Form, Input } from 'antd';
 import * as React from 'react';
-import {Form, Input} from '../../index';
 
 import '../../styles/antd.less';
 
