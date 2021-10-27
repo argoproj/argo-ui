@@ -23,6 +23,7 @@ export const useAutocomplete = (init: string): [string, SetInputFxn, Autocomplet
 export const Autocomplete = (
     props: React.InputHTMLAttributes<HTMLInputElement> & {
         items: string[];
+        abbreviations?: { [key: string]: string };
         inputStyle?: React.CSSProperties;
         onItemClick?: (item: string) => void;
         icon?: string;
@@ -39,6 +40,7 @@ export const Autocomplete = (
 export const RenderAutocomplete = (
     props: React.InputHTMLAttributes<HTMLInputElement> & {
         items: string[];
+        abbreviations?: { [key: string]: string };
         inputStyle?: React.CSSProperties;
         onItemClick?: (item: string) => void;
         icon?: string;
@@ -70,7 +72,9 @@ export const RenderAutocomplete = (
     React.useEffect(() => {
         const filtered = (props.items || []).filter((i) => {
             if (i) {
-                return i.toLowerCase().includes(debouncedVal?.toLowerCase());
+                return props.abbreviations !== undefined
+                ? i.toLowerCase().includes(debouncedVal?.toLowerCase()) || props.abbreviations[i]?.includes(debouncedVal?.toLowerCase())
+                : i.toLowerCase().includes(debouncedVal?.toLowerCase());
             }
             return false;
         });
