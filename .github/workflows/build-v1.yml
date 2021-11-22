@@ -1,10 +1,10 @@
-name: Build Storybook Docs v2
+name: Build v1
 
 on:
   push:
 
 jobs:
-  build-docs:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,4 +12,7 @@ jobs:
         with:
           node-version: 12
       - run: yarn install
-      - run: yarn build-v2
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn tsc -p tsconfig.json
+      - run: yarn test --ci --runInBand

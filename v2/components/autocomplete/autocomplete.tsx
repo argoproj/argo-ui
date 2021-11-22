@@ -23,12 +23,13 @@ export const useAutocomplete = (init: string): [string, SetInputFxn, Autocomplet
 export const Autocomplete = (
     props: React.InputHTMLAttributes<HTMLInputElement> & {
         items: string[];
+        abbreviations?: Map<string, string>;
         inputStyle?: React.CSSProperties;
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
         dark?: boolean;
-    }
+    },
 ) => {
     return (
         <KeybindingProvider>
@@ -40,12 +41,13 @@ export const Autocomplete = (
 export const RenderAutocomplete = (
     props: React.InputHTMLAttributes<HTMLInputElement> & {
         items: string[];
+        abbreviations?: Map<string, string>;
         inputStyle?: React.CSSProperties;
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
         dark?: boolean;
-    }
+    },
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
@@ -72,7 +74,9 @@ export const RenderAutocomplete = (
     React.useEffect(() => {
         const filtered = (props.items || []).filter((i) => {
             if (i) {
-                return i.toLowerCase().includes(debouncedVal?.toLowerCase());
+                return props.abbreviations !== undefined
+                ? i.toLowerCase().includes(debouncedVal?.toLowerCase()) || props.abbreviations.get(i)?.includes(debouncedVal?.toLowerCase())
+                : i.toLowerCase().includes(debouncedVal?.toLowerCase());
             }
             return false;
         });
@@ -244,7 +248,7 @@ export const RenderAutocomplete = (
                         </div>
                     ))}
                 </ThemeDiv>,
-                document.body
+                document.body,
             )}
         </div>
     );

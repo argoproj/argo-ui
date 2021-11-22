@@ -1,13 +1,14 @@
-import {Key, useKeyListener} from '../../shared';
 import * as React from 'react';
+import {Key, useKeyListener} from '../../shared';
 import {useClickOutside, useTimeout} from '../../utils/utils';
 import {EffectDiv} from '../effect-div/effect-div';
 import {Tooltip} from '../tooltip/tooltip';
 
-import './action-button.scss';
 import {Theme} from '../theme-div/theme-div';
+import './action-button.scss';
 
 export interface ActionButtonProps {
+    // tslint:disable-next-line:ban-types
     action?: Function;
     label?: string;
     icon?: string;

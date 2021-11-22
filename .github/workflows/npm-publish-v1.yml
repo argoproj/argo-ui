@@ -1,15 +1,18 @@
-name: Build Storybook Docs v2
+name: Release NPM package v1
 
 on:
   push:
+    tags:
+      - v1.*
 
 jobs:
-  build-docs:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn install
-      - run: yarn build-v2
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

@@ -1,5 +1,5 @@
-import * as React from 'react';
 import * as moment from 'moment';
+import * as React from 'react';
 
 export interface Error {
     state: boolean;
@@ -15,11 +15,11 @@ export function useData<T>(getData: () => Promise<T>, init?: T, callback?: (data
         const fx = async () => {
             try {
                 setLoading(true);
-                const data = await getData();
+                const intData = await getData();
                 setLoading(false);
-                setData(data);
+                setData(intData);
                 if (callback) {
-                    callback(data);
+                    callback(intData);
                 }
             } catch (e) {
                 setError(e);
