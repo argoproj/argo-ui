@@ -12,6 +12,8 @@ require('./page.scss');
 interface PageProps extends React.Props<any> {
     title: string;
     toolbar?: Toolbar | Observable<Toolbar>;
+    topBarTitle?: string;
+    useTitleOnly?: boolean;
 }
 
 export interface PageContextProps {
@@ -32,7 +34,7 @@ export const Page = (props: PageProps) => {
                         <PageContext.Consumer>
                             {(ctx) => {
                                 let titleParts = [ctx.title];
-                                if (toolbar && toolbar.breadcrumbs && toolbar.breadcrumbs.length > 0) {
+                                if (!props.useTitleOnly && toolbar && toolbar.breadcrumbs && toolbar.breadcrumbs.length > 0) {
                                     titleParts = [toolbar.breadcrumbs.map((item) => item.title).reverse().join(' / ')].concat(titleParts);
                                 } else if (props.title) {
                                     titleParts = [props.title].concat(titleParts);
@@ -45,7 +47,7 @@ export const Page = (props: PageProps) => {
                             }}
                         </PageContext.Consumer>
                         <div className='page__top-bar'>
-                            <TopBar title={props.title} toolbar={toolbar}/>
+                            <TopBar title={props.topBarTitle ? props.topBarTitle : props.title} toolbar={toolbar}/>
                         </div>
                     </React.Fragment>
                 )}

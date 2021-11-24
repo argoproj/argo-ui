@@ -124,4 +124,18 @@ storiesOf('Page', module)
                 </Route>
             </Router>
         );
-    });
+    }).add('custom top bar title', () => (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems}>
+                    <Page title='helmet title' topBarTitle='Top Bar Title' toolbar={{ breadcrumbs: [{title: 'Apps ' , path: '/applications'}, {title: 'app name'}] }}>
+                        <div style={{padding: '1em'}}>
+                            <div className='white-box'>
+                                Test
+                            </div>
+                        </div>
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
+    ));
