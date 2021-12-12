@@ -138,4 +138,18 @@ storiesOf('Page', module)
                 </Layout>
             </Route>
         </Router>
+    )).add('background color', () => (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems} navBarStyle={{backgroundColor: 'red'}}>
+                    <Page title='Hello world!'>
+                        <div style={{padding: '1em'}}>
+                            <div className='white-box'>
+                                Hello world!
+                            </div>
+                        </div>
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
     ));
