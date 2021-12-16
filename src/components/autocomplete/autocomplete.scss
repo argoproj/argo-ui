@@ -1,0 +1,7 @@
+.autocomplete {
+  &__items__item {
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

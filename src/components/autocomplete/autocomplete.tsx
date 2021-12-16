@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as ReactAutocomplete from 'react-autocomplete';
 
+require('./autocomplete.scss');
 export interface AutocompleteApi {
     refresh(): any;
 }
