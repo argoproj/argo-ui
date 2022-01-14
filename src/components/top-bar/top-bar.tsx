@@ -27,7 +27,7 @@ export interface ActionMenu {
 
 export interface Toolbar {
     filter?: TopBarFilter<any>;
-    breadcrumbs?: { title: string, path?: string; }[];
+    breadcrumbs?: { title: string | React.ReactNode, path?: string; }[];
     tools?: React.ReactNode;
     actionMenu?: ActionMenu;
 }

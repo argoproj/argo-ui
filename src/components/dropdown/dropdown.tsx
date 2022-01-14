@@ -9,6 +9,7 @@ export interface DropDownProps {
     anchor: React.ComponentType;
     children: React.ReactNode | (() => React.ReactNode);
     qeId?: string;
+    onOpenStateChange?: (open: boolean) => void;
 }
 
 export interface DropDownState {
@@ -62,7 +63,8 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         this.subscriptions = [merge(
             dropDownOpened.pipe(filter((dropdown) => dropdown !== this)),
             fromEvent(document, 'click').pipe(filter((event: Event) => {
-                return this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
+                const targetAttached = (event.target as Node).parentElement;
+                return targetAttached && this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
             })),
         ).subscribe(() => {
             this.close();
@@ -80,6 +82,9 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
 
     public close() {
         this.setState({ opened: false });
+        if (this.props.onOpenStateChange) {
+            this.props.onOpenStateChange(false);
+        }
     }
 
     private refreshState() {
@@ -112,5 +117,8 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         const newState = this.refreshState();
         newState.opened = true;
         this.setState(newState);
+        if (this.props.onOpenStateChange) {
+            this.props.onOpenStateChange(true);
+        }
     }
 }
