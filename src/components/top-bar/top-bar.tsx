@@ -68,17 +68,17 @@ const renderFilter = (filter: TopBarFilter<any>) => (
     </DropDown>
 );
 
-const renderBreadcrumbs = (breadcrumbs: { title: string, path?: string; }[]) => (
+const renderBreadcrumbs = (breadcrumbs: { title: string | React.ReactNode, path?: string; }[]) => (
     <div className='top-bar__breadcrumbs'>
         {(breadcrumbs || []).map((breadcrumb, i) => {
             const nodes = [];
             if (i === breadcrumbs.length - 1) {
-                nodes.push(<span key={breadcrumb.title} className='top-bar__breadcrumbs-last-item'>{breadcrumb.title}</span>);
+                nodes.push(<span key={i} className='top-bar__breadcrumbs-last-item'>{breadcrumb.title}</span>);
             } else {
-                nodes.push(<Link key={breadcrumb.title} to={breadcrumb.path}> {breadcrumb.title} </Link>);
+                nodes.push(<Link key={i} to={breadcrumb.path}> {breadcrumb.title} </Link>);
             }
             if (i < breadcrumbs.length - 1) {
-                nodes.push(<span key={`${breadcrumb.title}_sep`} className='top-bar__sep'/>);
+                nodes.push(<span key={`${i}_sep`} className='top-bar__sep'/>);
             }
             return nodes;
         })}

@@ -2,6 +2,9 @@ name: Build v1
 
 on:
   push:
+  pull_request:
+    branches:
+      - 'master'
 
 jobs:
   build:
