@@ -8,6 +8,7 @@ export interface SlidingPanelProps extends React.Props<any> {
     hasNoPadding?: boolean;
     offCanvas?: boolean;
     hasCloseButton?: boolean;
+    closeOnEscape?: boolean;
     header?: React.ReactNode;
     footer?: React.ReactNode;
     onClose?: () => any;
@@ -15,8 +16,22 @@ export interface SlidingPanelProps extends React.Props<any> {
 
 require('./sliding-panel.scss');
 
-export const SlidingPanel = (props: SlidingPanelProps) => (
-    <div className={classNames('sliding-panel', {
+export const SlidingPanel = (props: SlidingPanelProps) => {
+
+    const handler = (e: any) => {
+        if (e.key === 'Escape' && props.onClose) {
+            props.onClose();
+        }
+    };
+    React.useEffect(() => {
+        if (props.closeOnEscape) {
+            document.addEventListener('keydown', handler);
+            return () => document.removeEventListener('keydown', handler);
+        }
+    }, [props.closeOnEscape]);
+
+    return(
+       <div className={classNames('sliding-panel', {
         'sliding-panel--has-header': !!props.header,
         'sliding-panel--has-footer': !!props.footer,
         'sliding-panel--is-narrow': props.isNarrow,
@@ -47,4 +62,5 @@ export const SlidingPanel = (props: SlidingPanelProps) => (
         </div>
         <div className='sliding-panel__outside' onClick={() => props.onClose && props.onClose()}/>
     </div>
-);
+    );
+};
