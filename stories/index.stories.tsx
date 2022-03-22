@@ -1,6 +1,7 @@
 import './data-loader';
 import './dropdown';
 import './forms';
+import './logs-viewer';
 import './notifications';
 import './page';
 import './popup';
