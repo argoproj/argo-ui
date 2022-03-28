@@ -36,6 +36,7 @@ const argg: Meta = {
 
 export default argg;
 
+
 const SwitchStoryComponent = (args: any) => {
     return <Switch {...args}/>;
 };
