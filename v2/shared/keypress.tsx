@@ -93,7 +93,7 @@ export const useNav = (upperBound: number, init?: number): [number, (n: number) 
     return [pos, nav, reset];
 };
 
-export interface KeyState { action: KeyAction; pressed: boolean; group: number; target?: React.MutableRefObject<any>; }
+export interface KeyState { action: KeyAction; pressed: boolean; group: number; target?: React.MutableRefObject<any> | React.MutableRefObject<any>[]; }
 export type KeyAction = (keyCode?: number) => boolean;
 export interface KeyMap { [key: number]: KeyState; }
 export type KeyHandler = (e: KeyboardEvent) => null;
@@ -103,7 +103,7 @@ export interface KeyFxnProps {
     keys: AnyKeys;
     action: KeyAction;
     combo?: boolean;
-    target?: React.MutableRefObject<any>;
+    target?: React.MutableRefObject<any> | React.MutableRefObject<any>[];
 }
 
 export interface GroupMap {
@@ -129,15 +129,29 @@ const handlePress = (e: KeyboardEvent, state: GroupMap) => {
             }
         }
 
-        const curTarget = groups[g][e.keyCode]?.target?.current;
+        const targetProp = groups[g][e.keyCode]?.target;
+        if (Array.isArray(targetProp)) {
+            const targets = targetProp as React.MutableRefObject<any>[];
+            targets.every((aTarget) => {
+                return checkTarget(allPressed, aTarget?.current, e, groups[g]);
+            });
+        } else {
+            const target = targetProp as React.MutableRefObject<any>;
+            checkTarget(allPressed, target?.current, e, groups[g]);
 
-        if (allPressed && (curTarget === e.target || (!curTarget && e.target === document.body))) {
-            const prevent = groups[g][e.keyCode].action(e.keyCode);
-            if (prevent) {
-                e.preventDefault();
-            }
         }
     }
+};
+
+const checkTarget = (allPressed: boolean, curTarget: any, e: KeyboardEvent, groupKeyMap: KeyMap): boolean => {
+    if (allPressed && (curTarget === e.target || (!curTarget && e.target === document.body))) {
+        const prevent = groupKeyMap[e.keyCode].action(e.keyCode);
+        if (prevent) {
+            e.preventDefault();
+        }
+        return false;
+    }
+    return true;
 };
 
 const handleKeyUp = (e: KeyboardEvent, state: GroupMap) => {
