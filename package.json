@@ -25,7 +25,7 @@
         "@tippy.js/react": "^2.1.2",
         "antd": "^4.17.0",
         "classnames": "^2.2.6",
-        "core-js": "^3.18.0",
+        "core-js": "^3.21.1",
         "foundation-sites": "^6.4.3",
         "history": "^4.7.2",
         "moment": "^2.29.2",
