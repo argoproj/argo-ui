@@ -30,7 +30,6 @@
         "history": "^4.10.1",
         "moment": "^2.29.2",
         "moment-timezone": "^0.5.33",
-        "portable-fetch": "^3.0.0",
         "prop-types": "^15.6.0",
         "react-autocomplete": "1.8.1",
         "react-form": "^2.16.0",
@@ -38,7 +37,7 @@
         "react-router-dom": "^4.2.2",
         "react-toastify": "^5.0.1",
         "rxjs": "^6.6.6",
-        "typescript": "^4.1.2",
+        "typescript": "^4.6.2",
         "xterm": "^4.18.0",
         "xterm-addon-fit": "^0.5.0"
     },
