@@ -12677,14 +12677,6 @@ popper.js@^1.14.7:
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.15.0.tgz#5560b99bbad7647e9faa475c6b8056621f5a4ff2"
   integrity sha512-w010cY1oCUmI+9KwwlWki+r5jxKfTFDVoadl7MSrIujHU5MJ5OR6HTDj6Xo8aoR/QsA56x8jKjA59qGH4ELtrA==
 
-portable-fetch@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/portable-fetch/-/portable-fetch-3.0.0.tgz#3cbf4aa6dbc5a5734b41c0419c9273313bfd9ad8"
-  integrity sha1-PL9KptvFpXNLQcBBnJJzMTv9mtg=
-  dependencies:
-    node-fetch "^1.0.1"
-    whatwg-fetch ">=0.10.0"
-
 portfinder@^1.0.26:
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.28.tgz#67c4622852bd5374dd1dd900f779f53462fac778"

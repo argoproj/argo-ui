@@ -30,7 +30,6 @@
         "history": "^4.7.2",
         "moment": "^2.29.2",
         "moment-timezone": "^0.5.33",
-        "portable-fetch": "^3.0.0",
         "prop-types": "^15.6.0",
         "react-autocomplete": "1.8.1",
         "react-form": "^2.16.0",
