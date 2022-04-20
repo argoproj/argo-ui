@@ -30,7 +30,7 @@
         "history": "^4.10.1",
         "moment": "^2.29.2",
         "moment-timezone": "^0.5.33",
-        "prop-types": "^15.6.0",
+        "prop-types": "^15.8.1",
         "react-autocomplete": "1.8.1",
         "react-form": "^2.16.0",
         "react-helmet": "^6.1.0",
