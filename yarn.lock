@@ -5441,7 +5441,7 @@ clone@^1.0.0:
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
 
-clone@^2.1.1, clone@^2.1.2:
+clone@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
   integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
@@ -10527,15 +10527,14 @@ lead@^1.0.0:
   dependencies:
     flush-write-stream "^1.0.2"
 
-less-loader@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-6.2.0.tgz#8b26f621c155b342eefc24f5bd6e9dc40c42a719"
-  integrity sha512-Cl5h95/Pz/PWub/tCBgT1oNMFeH1WTD33piG80jn5jr12T4XbxZcjThwNXDQ7AG649WEynuIzO4b0+2Tn9Qolg==
+less-loader@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-7.3.0.tgz#f9d6d36d18739d642067a05fb5bd70c8c61317e5"
+  integrity sha512-Mi8915g7NMaLlgi77mgTTQvK022xKRQBIVDSyfl3ErTuBhmZBQab0mjeJjNNqGbdR+qrfTleKXqbGI4uEFavxg==
   dependencies:
-    clone "^2.1.2"
-    less "^3.11.3"
+    klona "^2.0.4"
     loader-utils "^2.0.0"
-    schema-utils "^2.7.0"
+    schema-utils "^3.0.0"
 
 less-plugin-autoprefix@^2.0.0:
   version "2.0.0"
@@ -10544,22 +10543,6 @@ less-plugin-autoprefix@^2.0.0:
   dependencies:
     autoprefixer "^8.6.3"
     postcss "^6.0.22"
-
-less@^3.11.3:
-  version "3.13.1"
-  resolved "https://registry.yarnpkg.com/less/-/less-3.13.1.tgz#0ebc91d2a0e9c0c6735b83d496b0ab0583077909"
-  integrity sha512-SwA1aQXGUvp+P5XdZslUOhhLnClSLIjWvJhmd+Vgib5BFIr9lMNlQwmwUNOjXThF/A0x+MCYYPeWEfeWiLRnTw==
-  dependencies:
-    copy-anything "^2.0.1"
-    tslib "^1.10.0"
-  optionalDependencies:
-    errno "^0.1.1"
-    graceful-fs "^4.1.2"
-    image-size "~0.5.0"
-    make-dir "^2.1.0"
-    mime "^1.4.1"
-    native-request "^1.0.5"
-    source-map "~0.6.0"
 
 "less@^3.7.1 || ^4.0.0", less@^4.1.2:
   version "4.1.2"
@@ -11487,11 +11470,6 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
-
-native-request@^1.0.5:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/native-request/-/native-request-1.1.0.tgz#acdb30fe2eefa3e1bc8c54b3a6852e9c5c0d3cb0"
-  integrity sha512-uZ5rQaeRn15XmpgE0xoPL8YWqcX90VtCFglYwAgkvKM5e8fog+vePLAhHxuuv/gRkrQxIeh5U3q9sMNUrENqWw==
 
 native-url@^0.2.6:
   version "0.2.6"
