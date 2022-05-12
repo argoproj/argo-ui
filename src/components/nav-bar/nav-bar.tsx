@@ -1,4 +1,4 @@
-import {default as classNames} from 'classnames'
+import {default as classNames} from 'classnames';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
