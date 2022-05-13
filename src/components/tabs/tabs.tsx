@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import * as classNames from 'classnames';
+import {default as classNames} from 'classnames';
 
 export interface Tab {
     title: string;
