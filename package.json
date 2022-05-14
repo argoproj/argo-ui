@@ -59,7 +59,7 @@
         "@storybook/addons": "^6.2.9",
         "@storybook/react": "^6.2.9",
         "@testing-library/react": "^11.1.0",
-        "@testing-library/user-event": "^12.1.10",
+        "@testing-library/user-event": "^14.2.0",
         "@types/chai": "^4.1.2",
         "@types/classnames": "^2.2.9",
         "@types/deep-equal": "^1.0.1",
