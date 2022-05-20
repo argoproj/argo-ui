@@ -1,6 +1,6 @@
 import { Store, withState } from '@dump247/storybook-state';
 import { storiesOf } from '@storybook/react';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as createHistory } from 'history';
 import * as React from 'react';
 import { Route, Router } from 'react-router';
 import { timer } from 'rxjs';
