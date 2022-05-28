@@ -85,7 +85,7 @@
         "copy-webpack-plugin": "^4.3.1",
         "copyfiles": "^1.2.0",
         "css-loader": "^3.6.0",
-        "dtslint": "^4.0.9",
+        "dtslint": "^4.2.1",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.5",
         "enzyme-to-json": "^3.6.1",
