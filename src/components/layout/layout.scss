@@ -1,9 +1,18 @@
 @import '../../styles/config';
+@import '../../styles/theme.scss';
 
 .layout {
     overflow: hidden;
+    @include themify($themes) {
+        //  color: themed('text');
+          background-color: themed('body-bg');
+      }
     &__loader {
-        background-color: rgba($argo-color-gray-7, 0.4);
+        // background-color: rgba($argo-color-gray-7, 0.4);
+        @include themify($themes) {
+          //  color: themed('text');
+            background-color: themed('layout-bg');
+        }
         position: fixed;
         left: 0;
         top: 0;

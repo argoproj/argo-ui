@@ -1,6 +1,7 @@
 @import 'node_modules/foundation-sites/scss/util/util';
 
 @import '../../styles/config';
+@import '../../styles/theme.scss';
 
 $sliding-panel-header-height: 50px;
 $sliding-panel-footer-height: 64px;
@@ -50,7 +51,11 @@ $sliding-panel-middle-width: 600px;
         right: 0;
         bottom: 0;
         width: 80%;
-        background-color: #fff;
+        //background-color: #fff;
+        @include themify($themes) {
+            background-color: themed('top-bg');                  
+            color: themed('top-text');    
+        }
         transition: right .5s;
 
         @include breakpoint(medium down) {
@@ -97,13 +102,19 @@ $sliding-panel-middle-width: 600px;
         padding: 0 30px;
         line-height: $sliding-panel-header-height;
         color: $argo-color-gray-5;
-        background-color: $argo-color-gray-2;
+        // background-color: $argo-color-gray-2;
+        @include themify($themes) {                  
+            background-color: themed('light-gray-2');
+        }
         border-bottom: 1px solid #c6cfd1;
         font-weight: 500;
         font-size: .925em;
 
         .sliding-panel--off-canvas & {
-            background-color: $argo-color-gray-2;
+            //background-color: $argo-color-gray-2;
+            @include themify($themes) {                  
+                background-color: themed('light-gray-2');
+            }
         }
 
         strong {
@@ -120,8 +131,10 @@ $sliding-panel-middle-width: 600px;
         position: relative;
         height: 100%;
         overflow: auto;
-        background-color: $argo-color-gray-2;
-
+        // background-color: $argo-color-gray-2;
+        @include themify($themes) {                  
+            background-color: themed('light-gray-2');
+        }
         .sliding-panel:not(.sliding-panel--no-padding) & {
             padding: 30px;
         }

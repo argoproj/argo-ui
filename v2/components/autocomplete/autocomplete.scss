@@ -1,4 +1,5 @@
 @import '../../styles/colors.scss';
+@import '../../../src/styles/theme.scss';
 
 .autocomplete {
     min-width: 0;
@@ -13,7 +14,10 @@
         max-height: 12em;
         overflow-y: auto;
         border-radius: 3px;
-        background-color: white;
+       // background-color: white;
+        @include themify($themes) {
+            background-color: themed('autocomplete-bg');        
+        }
         border: 1px solid $argo-color-gray-4;
         padding: 10px;
         font-family: 'Heebo', sans-serif;
@@ -35,11 +39,19 @@
             }
 
             &:hover {
-                background-color: $argo-color-gray-3;
+                //background-color: $argo-color-gray-3;
+                @include themify($themes) {
+                    background-color: themed('body-bg');    
+                    color: themed('body-text');    
+                }
+                
             }
 
             &--selected {
-                background-color: $argo-color-teal-3;
+                //background-color: $argo-color-teal-3;
+                @include themify($themes) {
+                    background-color: themed('argo-teal-1');        
+                }
             }
         }
 

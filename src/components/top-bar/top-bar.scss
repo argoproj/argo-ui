@@ -1,9 +1,13 @@
 @import '../../styles/config';
 @import 'node_modules/foundation-sites/scss/util/util';
+@import '../../styles/theme.scss';
 
 .top-bar {
     line-height: $top-bar-height;
-    background: $white-color;
+    //background: $white-color;
+    @include themify($themes) {
+        background: themed('top-bg');        
+    }
     transition: right .5s;
     border-bottom: 1px solid $argo-color-gray-2;
 
@@ -52,7 +56,10 @@
         height: $top-bar-height;
         font-weight: 500;
         font-size: .8em;
-        color: $argo-color-gray-8;
+        // color: $argo-color-gray-8;
+        @include themify($themes) {
+            color: themed('top-text');
+        }
 
         a {
             display: inline-block;

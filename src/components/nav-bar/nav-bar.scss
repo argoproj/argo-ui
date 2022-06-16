@@ -1,4 +1,5 @@
 @import '../../styles/config';
+@import '../../styles/theme.scss';
 
 $nav-break-height-md: 900px;
 $nav-break-height-sm: 746px;
@@ -11,6 +12,10 @@ $nav-break-height-sm: 746px;
     padding-top: 160px;
     z-index: $nav-z-index;
     width: $nav-width;
+    // @include themify($themes) {
+    //     color: themed('text');
+    //     background: themed('bg');
+    // }
     background: linear-gradient(to bottom, #333, #444, #555, #666, #999);
     box-shadow: inset -2px 0 4px 0 rgba(0,0,0,0.59);
 
