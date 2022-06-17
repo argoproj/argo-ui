@@ -1,4 +1,6 @@
 @import '../../styles/config';
+@import '../../styles/theme';
+
 
 .tabs {
     .fixed-width {
@@ -11,7 +13,10 @@
         position: relative;
         z-index: 1;
         padding: 15px 20px 0;
-        background-color: $white-color;
+        //background-color: $white-color;
+        @include themify($themes) {                  
+            background-color: themed('top-bg');
+        }
         overflow: hidden;
         list-style: none;
         box-shadow: 0 1px 3px rgba(143,164,177,.3);

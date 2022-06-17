@@ -13,19 +13,21 @@ $themes: (
         light-gray-6: $argo-color-gray-6,
         light-gray-2: $argo-color-gray-2,
         argo-teal-1: $argo-color-teal-1,
+        cyan: lightcyan,
     ),
     dark: (
         layout-bg: rgba($argo-color-gray-3, 0.4),
         text: $white-color,
         bg: black,
-        top-bg: $argo-color-gray-8,
+        top-bg: #303237,
         top-text: $white-color,
         body-bg: rgb(16, 15, 15),
         body-text: $argo-color-gray-3,
         autocomplete-bg: $argo-color-gray-8,
         light-gray-6: $argo-color-gray-2,
-        light-gray-2: $argo-color-gray-6,
+        light-gray-2: rgb(40, 41, 42),
         argo-teal-1: $argo-color-gray-6,
+        cyan: $argo-color-teal-8,
 
     )
 );
