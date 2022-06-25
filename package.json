@@ -34,7 +34,7 @@
         "react-autocomplete": "1.8.1",
         "react-form": "^2.16.0",
         "react-helmet": "^6.1.0",
-        "react-router-dom": "^4.2.2",
+        "react-router-dom": "^6.3.0",
         "react-toastify": "^5.0.1",
         "rxjs": "^7.5.5",
         "typescript": "^4.7.3",
