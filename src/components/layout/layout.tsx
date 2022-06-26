@@ -13,12 +13,9 @@ export interface LayoutProps {
 
 export const Layout = (props: LayoutProps) => (
     <div className={props.theme ? 'theme-' + props.theme : 'theme-light'}>
-    {/* <div className='app-container'> */}
         <div className='layout'>
         <NavBar items={props.navItems} version={props.version} style={props.navBarStyle} />
         {props.children}
         </div>
-    {/* </div> */}
     </div>
-
 );

@@ -1,6 +1,5 @@
 @import './config';
 @import './argo-icon';
-@import './theme.scss';
 
 @import 'node_modules/foundation-sites/scss/foundation';
 @import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
@@ -36,12 +35,7 @@ a, a:hover {
 h1, h2 {
     color: $argo-color-teal-6;
 }
-.app-container {
-    @include themify($themes) {
-        color: themed('text');
-        background: themed('bg');
-    }
-}
+
 @import './elements/buttons';
 @import './elements/containers';
 @import './elements/table-list';

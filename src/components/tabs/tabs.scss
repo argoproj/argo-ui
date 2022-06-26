@@ -13,9 +13,8 @@
         position: relative;
         z-index: 1;
         padding: 15px 20px 0;
-        //background-color: $white-color;
         @include themify($themes) {                  
-            background-color: themed('top-bg');
+            background-color: themed('background-2');
         }
         overflow: hidden;
         list-style: none;
@@ -60,7 +59,9 @@
                 color: $argo-color-teal-5;
 
                 &.active {
-                    color: $argo-color-gray-8;
+                    @include themify($themes) {              
+                        color: themed('text-2');
+                    }
                 }
             }
         }

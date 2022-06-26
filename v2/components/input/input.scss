@@ -1,5 +1,4 @@
 @import '../../styles/colors.scss';
-@import '../../../src/styles/theme.scss';
 
 .input-container {
     min-width: 0;
@@ -10,13 +9,9 @@
         appearance: none;
         border-radius: 5px;
         padding: 7px 10px;
-        //background-color: $argo-color-gray-3;
-        border: 1px solid $argo-color-gray-5;
-        @include themify($themes) {                  
-            background-color: themed('body-bg');
-            color: themed('body-text');
-        }
-        //color: $argo-color-gray-7;
+        background-color: $argo-color-gray-3;
+        border: 1px solid $argo-color-gray-5;        
+        color: $argo-color-gray-7;
         min-width: 0;
         font-size: 14px;
         line-height: 1.5em;
