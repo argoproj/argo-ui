@@ -13,7 +13,7 @@
         max-height: 12em;
         overflow-y: auto;
         border-radius: 3px;
-        background-color: white;        
+        background-color: white;
         border: 1px solid $argo-color-gray-4;
         padding: 10px;
         font-family: 'Heebo', sans-serif;
@@ -35,7 +35,7 @@
             }
 
             &:hover {
-                background-color: $argo-color-gray-3;                
+                background-color: $argo-color-gray-3;
             }
 
             &--selected {
