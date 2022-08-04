@@ -1,6 +1,7 @@
 import {default as classNames} from 'classnames';
 import * as React from 'react';
 import * as ReactAutocomplete from 'react-autocomplete';
+import {useFuzzySearch} from '../../../v2';
 
 require('./autocomplete.scss');
 export interface AutocompleteApi {
@@ -27,7 +28,7 @@ export interface AutocompleteProps {
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
-    const items = (props.items || []).map((item) => {
+    const items: AutocompleteOption[] = (props.items || []).map((item) => {
         if (typeof item === 'string') {
             return {value: item, label: item};
         } else {
@@ -37,6 +38,12 @@ export const Autocomplete = (props: AutocompleteProps) => {
             };
         }
     });
+
+    const fuzzySearch = useFuzzySearch(items, {
+        keys: ['label'],
+        isCaseSensitive: false,
+    });
+
     const [autocompleteEl, setAutocompleteEl] = React.useState(null);
 
     React.useEffect(() => {
@@ -104,7 +111,10 @@ export const Autocomplete = (props: AutocompleteProps) => {
             inputProps={props.inputProps}
             wrapperProps={wrapperProps}
             shouldItemRender={(item: AutocompleteOption, val: string) => {
-                return !props.filterSuggestions || item.label.toLowerCase().includes(val.toLowerCase());
+                const isFuzzyMatched = fuzzySearch.search(val.toLowerCase()).some((match) => {
+                    return item.label === match.item.label;
+                });
+                return !props.filterSuggestions || isFuzzyMatched;
             }}
             renderMenu={function(menuItems, _, style) {
                 if (menuItems.length === 0) {

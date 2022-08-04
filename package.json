@@ -27,6 +27,7 @@
         "classnames": "^2.2.6",
         "core-js": "^3.22.0",
         "foundation-sites": "^6.4.3",
+        "fuse.js": "^6.6.2",
         "history": "^4.10.1",
         "moment": "^2.29.2",
         "moment-timezone": "^0.5.34",

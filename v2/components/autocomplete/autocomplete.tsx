@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+
 import {Key, KeybindingContext, KeybindingProvider, useNav} from '../../shared';
 import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/input';
 import ThemeDiv from '../theme-div/theme-div';
 
+import {useFuzzySearch} from '../../utils';
 import './autocomplete.scss';
 
 interface AutocompleteProps extends InputProps {
@@ -47,6 +49,10 @@ export const RenderAutocomplete = (
         inputref?: React.MutableRefObject<HTMLInputElement>;
     },
 ) => {
+    const fuzzySearch = useFuzzySearch(props.items, {
+        isCaseSensitive: false,
+    });
+
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
     const inputRef = props.inputref || nullInputRef;
@@ -70,11 +76,13 @@ export const RenderAutocomplete = (
     const debouncedVal = useDebounce(props.value as string, 350);
 
     React.useEffect(() => {
+        const results = fuzzySearch.search(debouncedVal?.toLowerCase()).map((result) => result.item);
         const filtered = (props.items || []).filter((i) => {
             if (i) {
+
                 return props.abbreviations !== undefined
-                ? i.toLowerCase().includes(debouncedVal?.toLowerCase()) || props.abbreviations.get(i)?.includes(debouncedVal?.toLowerCase())
-                : i.toLowerCase().includes(debouncedVal?.toLowerCase());
+                    ? results.includes(i) || props.abbreviations.get(i)?.includes(debouncedVal?.toLowerCase())
+                    : results.includes(i);
             }
             return false;
         });

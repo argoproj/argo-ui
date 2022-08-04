@@ -1,4 +1,5 @@
-import * as moment from 'moment';
+import Fuse from 'fuse.js';
+import moment from 'moment';
 import * as React from 'react';
 
 export interface Error {
@@ -50,6 +51,21 @@ export const appendSuffixToClasses = (classNames: string, suffix: string): strin
     }
     return suffixed.join(' ');
 };
+
+/**
+ * Provide a configurable Fuse.JS fuzzy search instance to react components
+ *
+ * @param items Any set of items that should be searched based on keys
+ * @param options Options to the Fuze.js runtime
+ */
+export function useFuzzySearch<E>(items: E[], options: Fuse.IFuseOptions<E>): Fuse<E> {
+    const [fuzzySearch, setFuzzySearch] = React.useState<Fuse<E>>(new Fuse(items || [], options));
+    React.useEffect(() => {
+        setFuzzySearch(new Fuse(items, options));
+    }, [items, options]);
+
+    return fuzzySearch;
+}
 
 export const useClickOutside = (ref: any, callback: () => void) => {
     React.useEffect(() => {
