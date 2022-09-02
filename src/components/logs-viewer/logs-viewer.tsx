@@ -24,7 +24,7 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
         super(props);
     }
 
-    public componentWillReceiveProps(nextProps: LogsViewerProps) {
+    public UNSAFE_componentWillReceiveProps(nextProps: LogsViewerProps) {
         if (this.props.source.key !== nextProps.source.key) {
             this.refresh(nextProps.source);
         }
@@ -61,7 +61,7 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
         );
     }
 
-    public shouldComponentUpdate(prevProps: LogsViewerProps) {
+    public shouldComponentUpdate() {
         return false;
     }
 

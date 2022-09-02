@@ -31,7 +31,7 @@ interface LoaderState<TInput, TResult> {
   inputChanged: boolean;
 }
 
-export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderProps<I, D> | LoaderPropsNoInput<D>, LoaderState<I, D>> {
+export class DataLoader<D = any, I = undefined> extends React.Component<LoaderProps<I, D> | LoaderPropsNoInput<D>, LoaderState<I, D>> {
     public static contextTypes = {
         router: PropTypes.object,
         apis: PropTypes.object,

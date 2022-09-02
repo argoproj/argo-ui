@@ -4,6 +4,7 @@ import * as ReactForm from 'react-form';
 
 import { Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const uuid = require('uuid/v1');
 
 require('./form-field.scss');

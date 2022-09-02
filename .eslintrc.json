@@ -12,6 +12,20 @@
   "plugins": ["@typescript-eslint", "react"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-non-null-assertio": "off"
+    "@typescript-eslint/no-non-null-assertion": "off"
+  },
+  "overrides": [
+    {
+      "files": "./stories/*.tsx",
+      "rules": {
+        "react/display-name": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

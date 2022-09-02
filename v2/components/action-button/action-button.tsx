@@ -8,7 +8,7 @@ import {Theme} from '../theme-div/theme-div';
 import './action-button.scss';
 
 export interface ActionButtonProps {
-    // tslint:disable-next-line:ban-types
+    // eslint-disable-next-line @typescript-eslint/ban-types
     action?: Function;
     label?: string;
     icon?: string;

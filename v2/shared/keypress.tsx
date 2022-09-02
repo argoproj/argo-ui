@@ -261,7 +261,7 @@ export const KeybindingContext = React.createContext<{
     useKeybinding: KeyFxn;
 }>({
     keybindingState: NewGroupMap(),
-    useKeybinding: (props: KeyFxnProps) => null,
+    useKeybinding: () => null,
 });
 
 export const KeybindingProvider = (props: {children: React.ReactNode}) => {

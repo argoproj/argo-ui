@@ -59,7 +59,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         );
     }
 
-    public componentWillMount() {
+    public UNSAFE_componentWillMount() {
         this.subscriptions = [merge(
             dropDownOpened.pipe(filter((dropdown) => dropdown !== this)),
             fromEvent(document, 'click').pipe(filter((event: Event) => {

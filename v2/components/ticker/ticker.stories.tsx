@@ -9,7 +9,7 @@ export default {
     },
 };
 
-export const Primary = (args: any) => {
+export const Primary = () => {
     const [randVal, setRandVal] = React.useState(0);
 
     React.useEffect(() => {
