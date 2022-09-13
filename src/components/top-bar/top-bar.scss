@@ -24,7 +24,9 @@
         float: left;
         font-weight: 500;
         font-size: .925em;
-        color: $argo-color-teal-7;
+        @include themify($themes) {
+            color: themed('light-argo-teal-7');
+        }
         text-transform: uppercase;
     }
 
