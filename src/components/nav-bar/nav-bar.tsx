@@ -15,6 +15,7 @@ export interface NavBarProps {
 
 export interface NavBarStyle {
     backgroundColor?: string;
+    display?: string;
 }
 
 export function isActiveRoute(locationPath: string, path: string) {
@@ -25,6 +26,7 @@ export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps,
     const locationPath = context.router.route.location.pathname;
     const navBarStyle = {
         ...(props.style?.backgroundColor && {background: `linear-gradient(to bottom, ${props.style?.backgroundColor}, #999`}),
+        ...(props.style?.display && {display: `${props.style?.display}`})
     };
     return (
         <div className={classNames('nav-bar', {
