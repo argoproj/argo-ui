@@ -1987,7 +1987,7 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@storybook/addon-actions@6.5.12", "@storybook/addon-actions@^6.5.10":
+"@storybook/addon-actions@*", "@storybook/addon-actions@6.5.12", "@storybook/addon-actions@^6.5.10":
   version "6.5.12"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-6.5.12.tgz#9d2bf3bffa41cf4f92c7220c8f6e3a3f5da55019"
   integrity sha512-yEbyKjBsSRUr61SlS+SOTqQwdumO8Wa3GoHO3AfmvoKfzdGrM7w8G5Zs9Iev16khWg/7bQvoH3KZsg/hQuKnNg==
@@ -3715,9 +3715,12 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/storybook__addon-actions@^3.0.2":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@types/storybook__addon-actions/-/storybook__addon-actions-3.0.3.tgz#99287c0b9ee6b84ea571ee4cb42d0779c56af208"
+"@types/storybook__addon-actions@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@types/storybook__addon-actions/-/storybook__addon-actions-5.2.1.tgz#1a6820d76d24e3af7d3cb2828b7b4ae4281e4093"
+  integrity sha512-FyxvLsL23H55GD1EEQnRd6TcYU+dbbxtRdreMtaRRgpmTVJ3N7BGyWZIYjou4ja1/pD8xwwvIaqZo3Ew7HEw2w==
+  dependencies:
+    "@storybook/addon-actions" "*"
 
 "@types/storybook__addon-links@^3.3.0":
   version "3.3.1"
