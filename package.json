@@ -95,7 +95,7 @@
         "gulp-less": "^5.0.0",
         "gulp-minify-css": "^1.2.4",
         "gulp-rename": "^2.0.0",
-        "html-webpack-plugin": "^4.5.2",
+        "html-webpack-plugin": "^5.5.0",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^26.6.3",
         "jscs": "^3.0.7",
