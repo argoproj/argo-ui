@@ -87,7 +87,7 @@
         "css-loader": "^3.6.0",
         "dtslint": "^4.2.1",
         "enzyme": "^3.11.0",
-        "enzyme-adapter-react-16": "^1.15.6",
+        "enzyme-adapter-react-16": "^1.15.7",
         "enzyme-to-json": "^3.6.2",
         "foreman": "^3.0.1",
         "glob": "^8.0.3",
