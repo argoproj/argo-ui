@@ -1,5 +1,4 @@
 @import '../config';
-@import '../theme';
 
 .argo-table-list {
     &__head {
@@ -15,10 +14,8 @@
         margin: 8px 0;
         line-height: 60px;
         font-size: .8125em;
-        @include themify($themes) {
-            background: themed('background-2');
-            color: themed('text-1');
-        }
+        color: $argo-color-gray-6;
+        background-color: #fff;
         border-radius: 4px;
         box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
 

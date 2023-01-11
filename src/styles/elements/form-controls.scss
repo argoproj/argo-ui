@@ -1,5 +1,4 @@
 @import '../config';
-@import '../theme';
 
 .argo-form-row {
     position: relative;
@@ -9,9 +8,7 @@
 
     label {
         font-size: .9em;
-        @include themify($themes) {                  
-            color: themed('light-argo-gray-6');
-        }
+        color: $argo-color-gray-6;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -72,9 +69,6 @@
     padding: 8px 0;
     font-size: 15px;
     background-color: transparent;
-    @include themify($themes) {                  
-        color: themed('text-2');
-    }
     border: 0;
     border-bottom: 2px solid #ccc;
     transition: border .2s;

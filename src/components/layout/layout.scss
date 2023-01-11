@@ -1,15 +1,9 @@
 @import '../../styles/config';
-@import '../../styles/theme';
 
 .layout {
     overflow: hidden;
-    @include themify($themes) {
-        background-color: themed('background-1');
-    }
     &__loader {
-        @include themify($themes) {
-            background-color: themed('layout-loader-bg');
-        }
+        background-color: rgba($argo-color-gray-7, 0.4);
         position: fixed;
         left: 0;
         top: 0;
