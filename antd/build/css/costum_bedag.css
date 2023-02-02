@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.nav-bar__logo img,
+.sidebar__logo img {
+  content: url(\\src\assets\images\Bedag@8x.png);
+}
+
+.sidebar,
+.nav-bar {
+  background: #2D1946;
+}
+
+.page__content-wrapper {
+  background: #EAF5E2;
+}
+
+.sliding-panel__header,
+.sliding-panel__body {
+  background: #EAF5E2;
+}
+
+/* primary */
+.argo-button--base,
+.argo-button--base:hover {
+  background: #ABA3B5 !important;
+}
+
+.argo-button--base:hover {
+  opacity: 0.8 !important;
+}
+
+/* secondary */
+.argo-button--base-o {
+  color: #6E50BE !important;
+  box-shadow: inset 0 0 0 1px #6E50BE !important;
+}
+
+.argo-button--base-o:hover,
+.argo-button--base-o:focus {
+  background: #6E50BE !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px #6E50BE !important;
+}
+
+/* disabled */
+.argo-button.disabled,
+.argo-button[disabled] {
+  background: #D2D2D2 !important;
+}
+
+a,
+/* title of the each item in list in settings page */
+.settings-overview__redirect-panel__title,
+.selected,
+.top-bar__title {
+  color: #2D1946 !important;
+}
+
+.tabs__indicator {
+  background: #2D1946 !important;
+}
+
