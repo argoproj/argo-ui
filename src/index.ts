@@ -3,6 +3,8 @@ import * as models from './models';
 export * from './components';
 export * from './context';
 
+export * from './locales';
+
 export {
     models,
 };

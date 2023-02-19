@@ -1,7 +1,9 @@
+import { t } from 'i18next';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Observable, Subscription } from 'rxjs';
 import { AppContext } from '../context';
+import { en } from '../locales';
 import { ErrorNotification } from './error-notification';
 import { NotificationType } from './notifications/notifications';
 import { isPromise } from './utils';
@@ -128,7 +130,12 @@ export class DataLoader<D = {}, I = undefined> extends React.Component<LoaderPro
             this.setState({ error: true, loading: false, inputChanged: false });
             if (e.status !== 401) {
                 this.appContext.apis.notifications.show({
-                    content: <ErrorNotification title='Unable to load data' e={e}/>,
+                    content: (
+                        <ErrorNotification title={t(
+                            'ui.data-loader.unable-to-load-data',
+                            en['ui.data-loader.unable-to-load-data'],
+                        )} e={e} />
+                    ),
                     type: NotificationType.Error,
                 });
             }
