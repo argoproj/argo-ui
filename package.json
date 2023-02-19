@@ -28,6 +28,7 @@
         "core-js": "^3.22.0",
         "foundation-sites": "^6.4.3",
         "history": "^4.10.1",
+        "i18next": "^22.4.10",
         "moment": "^2.29.4",
         "moment-timezone": "^0.5.34",
         "prop-types": "^15.8.1",
