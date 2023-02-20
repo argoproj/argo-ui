@@ -236,8 +236,8 @@
 
     &--special {
         color: #fff;
-        background: linear-gradient(-58deg, #49505c 0%, #3f51b5 36%, #00c7d6 100%);
-
+       // background: linear-gradient(-58deg, #49505c 0%, #3f51b5 36%, #00c7d6 100%);
+	background-color: #3f51bf;
         &:not(.disabled) {
             &:hover {
                 color: #fff;
