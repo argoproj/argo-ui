@@ -15,6 +15,7 @@ export enum NotificationType {
 export interface NotificationInfo {
     type: NotificationType;
     content: React.ReactNode;
+    autoCloseTimer?: any;
 }
 
 export interface NotificationsProps {
@@ -56,7 +57,7 @@ export class Notifications extends React.Component<NotificationsProps> {
                 pauseOnHover: true,
                 pauseOnFocusLoss: true,
                 draggable: false,
-                autoClose: AUTO_CLOSE_TIMEOUT,
+                autoClose: next.autoCloseTimer ? next.autoCloseTimer : AUTO_CLOSE_TIMEOUT,
             });
         });
     }
