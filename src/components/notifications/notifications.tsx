@@ -15,7 +15,7 @@ export enum NotificationType {
 export interface NotificationInfo {
     type: NotificationType;
     content: React.ReactNode;
-    autoCloseTimer?: number | boolean;
+    autoCloseTimer?: number;
 }
 
 export interface NotificationsProps {
