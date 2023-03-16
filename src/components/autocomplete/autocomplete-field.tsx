@@ -18,7 +18,7 @@ export const AutocompleteField = ReactForm.FormField((props: AutocompleteProps &
             }}
             inputProps={{
                 className: props.className,
-                style: {borderBottom: 'none'},
+                style: {borderBottom: 'none', position: 'unset'},
             }}
             value={value}
             renderInput={(inputProps) => (
