@@ -120,7 +120,7 @@
         "tslint": "^5.20.1",
         "tslint-react": "^3.4.0",
         "webfonts-generator": "^0.4.0",
-        "webpack": "^5.74.0",
+        "webpack": "^5.76.2",
         "webpack-bundle-analyzer": "^4.6.1",
         "webpack-cli": "^4.10.0",
         "webpack-dev-server": "^4.11.1",
