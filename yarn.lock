@@ -1523,7 +1523,7 @@
     tar "^2.2.2"
     tar-stream "^2.1.4"
 
-"@discoveryjs/json-ext@^0.5.0", "@discoveryjs/json-ext@^0.5.3":
+"@discoveryjs/json-ext@0.5.7", "@discoveryjs/json-ext@^0.5.0", "@discoveryjs/json-ext@^0.5.3":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
@@ -18246,11 +18246,12 @@ webidl-conversions@^6.1.0:
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-6.1.0.tgz#9111b4d7ea80acd40f5270d666621afa78b69514"
   integrity sha512-qBIvFLGiBpLjfwmYAaHPXsn+ho5xZnGvyGvsarywGNc8VyQJUMHJ8OBKGGrPER0okBeMDaan4mNBlgBROxuI8w==
 
-webpack-bundle-analyzer@^4.6.1:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-4.6.1.tgz#bee2ee05f4ba4ed430e4831a319126bb4ed9f5a6"
-  integrity sha512-oKz9Oz9j3rUciLNfpGFjOb49/jEpXNmWdVH8Ls//zNcnLlQdTGXQQMsBbb/gR7Zl8WNLxVCq+0Hqbx3zv6twBw==
+webpack-bundle-analyzer@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-4.9.0.tgz#fc093c4ab174fd3dcbd1c30b763f56d10141209d"
+  integrity sha512-+bXGmO1LyiNx0i9enBu3H8mv42sj/BJWhZNFwjz92tVnBa9J3JMGo2an2IXlEleoDOPn/Hofl5hr/xCpObUDtw==
   dependencies:
+    "@discoveryjs/json-ext" "0.5.7"
     acorn "^8.0.4"
     acorn-walk "^8.0.0"
     chalk "^4.1.0"
