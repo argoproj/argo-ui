@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.event.inputs.tag }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          node-version: 14.15
       - run: cd v2 && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

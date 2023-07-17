@@ -4,7 +4,7 @@ import * as ReactForm from 'react-form';
 
 import { Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
 
-const uuid = require('uuid/v1');
+import { v1 as uuid } from 'uuid';
 
 require('./form-field.scss');
 

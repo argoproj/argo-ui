@@ -6,6 +6,7 @@
         "module": "commonjs",
         "target": "es6",
         "jsx": "react",
+        "esModuleInterop": true,
         "experimentalDecorators": true,
         "noUnusedLocals": true,
         "declaration": true,
