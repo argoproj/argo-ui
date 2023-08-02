@@ -23,6 +23,7 @@ $popup-border-radius: 8px;
         max-height: 600px;
         z-index: 20;
         border-radius: $popup-border-radius;
+        overflow: auto;
 
         &__header {
             line-height: 60px;
