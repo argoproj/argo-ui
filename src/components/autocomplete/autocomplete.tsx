@@ -111,7 +111,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 if (menuItems.length === 0) {
                     return <div style={{display: 'none'}} />;
                 }
-                return <div style={{...style, ...this.menuStyle, background: 'white', zIndex: 20, maxHeight: '20em'}} children={menuItems} />;
+                return <div style={{...style, ...this.menuStyle, background: 'white', zIndex: 20, maxHeight: '20em'}}>{menuItems}</div>;
             }}
             getItemValue={(item: any) => item.label}
             items={items}
