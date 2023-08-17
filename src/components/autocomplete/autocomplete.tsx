@@ -1,6 +1,7 @@
 import {default as classNames} from 'classnames';
+import {CSSProperties, ReactNode} from 'react';
 import * as React from 'react';
-import * as ReactAutocomplete from 'react-autocomplete';
+import ReactAutocomplete from 'react-autocomplete';
 
 require('./autocomplete.scss');
 export interface AutocompleteApi {
@@ -106,16 +107,16 @@ export const Autocomplete = (props: AutocompleteProps) => {
             shouldItemRender={(item: AutocompleteOption, val: string) => {
                 return !props.filterSuggestions || item.label.toLowerCase().includes(val.toLowerCase());
             }}
-            renderMenu={function(menuItems, _, style) {
+            renderMenu={function(menuItems: ReactNode[], _: string, style: CSSProperties) {
                 if (menuItems.length === 0) {
                     return <div style={{display: 'none'}} />;
                 }
-                return <div style={{...style, ...this.menuStyle, background: 'white', zIndex: 10, maxHeight: '20em'}}>{menuItems}</div>;
+                return <div style={{...style, ...this.menuStyle, background: 'white', zIndex: 20, maxHeight: '20em'}} children={menuItems} />;
             }}
-            getItemValue={(item) => item.label}
+            getItemValue={(item: any) => item.label}
             items={items}
             value={props.value}
-            renderItem={(item, isSelected) => (
+            renderItem={(item: any, isSelected: boolean) => (
                 <div className={classNames('select__option', {selected: isSelected})} key={item.label}>
                     {(props.renderItem && props.renderItem(item)) || item.label}
                 </div>

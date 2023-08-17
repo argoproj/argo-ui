@@ -9,9 +9,11 @@ export default {
 
 export const Primary = (args: any) => {
     return (
-        <Tooltip {...args} content={<Text>{args.content}</Text>}>
-            <Text>Hover over me!</Text>
-        </Tooltip>
+        <div style={{padding:'1em', width: 'fit-content'}}>
+            <Tooltip {...args} content={<Text>{args.content}</Text>}>
+                <Text>Hover over me!</Text>
+            </Tooltip>
+        </div>
     );
 };
 

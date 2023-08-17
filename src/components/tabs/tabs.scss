@@ -1,4 +1,6 @@
 @import '../../styles/config';
+@import '../../styles/theme';
+
 
 .tabs {
     .fixed-width {
@@ -11,7 +13,9 @@
         position: relative;
         z-index: 1;
         padding: 15px 20px 0;
-        background-color: $white-color;
+        @include themify($themes) {                  
+            background-color: themed('background-2');
+        }
         overflow: hidden;
         list-style: none;
         box-shadow: 0 1px 3px rgba(143,164,177,.3);
@@ -23,8 +27,10 @@
         a {
             display: inline-block;
             margin: 0 16px;
-            padding: 12px 36px;
-            color: $argo-color-gray-6;
+            padding: 12px 36px;            
+            @include themify($themes) {
+                color: themed('light-argo-gray-6');
+            }
             font-size: 13px;
             font-weight: 500;
             text-transform: uppercase;
@@ -55,7 +61,9 @@
                 color: $argo-color-teal-5;
 
                 &.active {
-                    color: $argo-color-gray-8;
+                    @include themify($themes) {              
+                        color: themed('text-2');
+                    }
                 }
             }
         }

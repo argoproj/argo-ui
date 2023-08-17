@@ -1,3 +1,5 @@
+@import '../theme';
+
 .argo-container {
     position: relative;
     width: $basePageWidth + 160;
@@ -35,8 +37,10 @@
     position: relative;
     padding: 30px;
     font-size: 0.8125rem;
-    color: $argo-color-gray-6;
-    background-color: #fff;
+    @include themify($themes) {
+        background-color: themed('background-2');    
+        color: themed('light-argo-gray-6');    
+    }
     border-radius: 4px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
 
@@ -87,8 +91,9 @@
         }
 
         &-row {
-            color: $argo-color-gray-8;
-
+            @include themify($themes) {                  
+                color: themed('text-2');    
+            }
             .columns {
                 border-bottom: 1px solid $argo-color-gray-3;
                 padding: 0;
