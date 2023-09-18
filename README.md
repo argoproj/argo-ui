@@ -2,7 +2,7 @@
 
 <img src="https://github.com/argoproj/argo-ui/blob/master/src/assets/images/logo.png?raw=true" alt="Argo Image" height="200px">
 
-Set of React components used by https://github.com/argoproj/argo and https://github.com/argoproj/argo-cd
+Set of React components used by [Argo Workflows](https://github.com/argoproj/argo-workflows) and [Argo CD](https://github.com/argoproj/argo-cd).
 
 ## Build & Run
 
