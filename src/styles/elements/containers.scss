@@ -95,11 +95,14 @@
                 color: themed('text-2');    
             }
             .columns {
-                border-bottom: 1px solid $argo-color-gray-3;
                 padding: 0;
                 vertical-align: middle;
                 line-height: 50px;
                 overflow-wrap: break-word;
+
+                @include themify($themes) {
+                    border-bottom: 1px solid themed('border');    
+                }
 
                 &--narrower-height {
                     line-height: 20px;

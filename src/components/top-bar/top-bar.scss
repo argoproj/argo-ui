@@ -5,10 +5,14 @@
 .top-bar {
     line-height: $top-bar-height;
     @include themify($themes) {
-        background: themed('background-2');        
+        background: themed('background-2');
     }
     transition: right .5s;
     border-bottom: 1px solid $argo-color-gray-2;
+
+    .theme-dark & {
+        border-color: $argo-color-gray-7;
+    }
 
     &__left-side {
         padding-left: 20px;
