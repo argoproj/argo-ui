@@ -1,4 +1,5 @@
 @import '../../styles/config';
+@import '../../styles/theme';
 
 $popup-border-radius: 8px;
 
@@ -9,12 +10,17 @@ $popup-border-radius: 8px;
     width: 100%;
     height: 100%;
     z-index: 200;
+    // Just in case the theme class is not added
     background-color: rgba(222, 222, 222, 0.62); /*dim the background*/
-    border: 1px solid $argo-color-gray-4;
+    @include themify($themes) {
+        background-color: themed('overlay');        
+    }
 
     .popup-container {
         position: relative;
-        box-shadow: 3px 3px 20px #888888;
+        @include themify($themes) {
+            box-shadow: 3px 3px 20px themed('shadow');
+        }
         margin: 0 auto;
         top: 50%;
         transform: translateY(-50%);
@@ -47,7 +53,11 @@ $popup-border-radius: 8px;
             }
 
             &__normal {
+                // Just in case the theme class is not added
                 background-color: $argo-color-gray-2;
+                @include themify($themes) {
+                    background-color: themed('light-argo-gray-2');
+                }
             }
     
             &__red {
@@ -61,7 +71,11 @@ $popup-border-radius: 8px;
         }
 
         &__footer {
+            // Just in case the theme class is not added
             background-color: $argo-color-gray-1;
+            @include themify($themes) {
+                background-color: themed('background-2');        
+            }
             bottom: 0;
             padding-top: 20px;
             padding-left: 30px;
@@ -80,7 +94,11 @@ $popup-border-radius: 8px;
         }
 
         &__body {
+            // Just in case the theme class is not added
             background-color: $argo-color-gray-1;
+            @include themify($themes) {
+                background-color: themed('background-2');        
+            }
 
             &__hasNoIcon {
                 padding-left: 30px;
@@ -101,7 +119,12 @@ $popup-border-radius: 8px;
                 font-size: 15px;
                 margin-top: 10px;
                 margin-bottom: 10px;
+                // Just in case the theme class is not added
                 color: $argo-color-gray-6;
+
+                @include themify($themes) {
+                    color: themed('light-argo-gray-6');        
+                }
             }
         }
 
