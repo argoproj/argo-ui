@@ -1,8 +1,7 @@
 import { Store, withState } from '@dump247/storybook-state';
 import { storiesOf } from '@storybook/react';
-import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
-import { Route, Router } from 'react-router';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -46,8 +45,6 @@ const actionMenu = {
     }],
 };
 
-const history = createHistory();
-
 function ensureSelected(vals: string[], selected: string[]): string[] {
     const res = new Set(selected);
     vals.forEach((item) => res.add(item));
@@ -56,63 +53,101 @@ function ensureSelected(vals: string[], selected: string[]): string[] {
 
 storiesOf('Page', module)
     .add('default',  withState({ selectedFilter: [] })(({store}: { store: Store<any> }) => (
-        <Router history={history}>
-            <Route path={location.pathname}>
-                <Layout navItems={navItems}>
-                    <Page title='Hello world!' toolbar={{ breadcrumbs, actionMenu, filter: {
-                        items: [
-                            { content: (changeSelection) => (
-                                <React.Fragment>
-                                    Filter type one: <a onClick={() => changeSelection(ensureSelected(['1', '2'], store.state.selectedFilter))}>all</a>
-                                </React.Fragment>
-                            )},
-                            {label: 'filter 1', value: '1' },
-                            {label: 'filter 2', value: '2' },
-                            { content: (changeSelection) => (
-                                <React.Fragment>
-                                    Filter type two: <a onClick={() => changeSelection(ensureSelected(['3', '4'], store.state.selectedFilter))}>all</a>
-                                </React.Fragment>
-                            )},
-                            {label: 'filter 3', value: '3' },
-                            {label: 'filter 4', value: '4' },
-                        ],
-                        selectedValues: store.state.selectedFilter,
-                        selectionChanged: (vals) => {
-                            store.set({ selectedFilter: vals });
-                        },
-                    }}}>
-                        <div style={{padding: '1em'}}>
-                            <div className='white-box'>
-                                Hello world!
+        <BrowserRouter>
+            <Routes>
+                <Route path={location.pathname}>
+                    <Layout navItems={navItems}>
+                        <Page title='Hello world!' toolbar={{ breadcrumbs, actionMenu, filter: {
+                            items: [
+                                { content: (changeSelection) => (
+                                    <React.Fragment>
+                                        Filter type one: <a onClick={() => changeSelection(ensureSelected(['1', '2'], store.state.selectedFilter))}>all</a>
+                                    </React.Fragment>
+                                )},
+                                {label: 'filter 1', value: '1' },
+                                {label: 'filter 2', value: '2' },
+                                { content: (changeSelection) => (
+                                    <React.Fragment>
+                                        Filter type two: <a onClick={() => changeSelection(ensureSelected(['3', '4'], store.state.selectedFilter))}>all</a>
+                                    </React.Fragment>
+                                )},
+                                {label: 'filter 3', value: '3' },
+                                {label: 'filter 4', value: '4' },
+                            ],
+                            selectedValues: store.state.selectedFilter,
+                            selectionChanged: (vals) => {
+                                store.set({ selectedFilter: vals });
+                            },
+                        }}}>
+                            <div style={{padding: '1em'}}>
+                                <div className='white-box'>
+                                    Hello world!
+                                </div>
                             </div>
-                        </div>
-                    </Page>
-                </Layout>
-            </Route>
-        </Router>
+                        </Page>
+                    </Layout>
+                </Route>
+            </Routes>
+        </BrowserRouter>
     ))).add('dynamic toolbar', () => (
-        <Router history={history}>
-            <Route path={location.pathname}>
-                <Layout navItems={navItems}>
-                    <Page title='Hello world!' toolbar={timer(0, 1000).pipe(map(() => ({ breadcrumbs: [{title: 'hello ' + new Date().toLocaleTimeString()}] })))}>
-                        <div style={{padding: '1em'}}>
-                            <div className='white-box'>
-                                Hello world!
+        <BrowserRouter>
+            <Routes>
+                <Route path={location.pathname}>
+                    <Layout navItems={navItems}>
+                        <Page title='Hello world!' toolbar={timer(0, 1000).pipe(map(() => ({ breadcrumbs: [{title: 'hello ' + new Date().toLocaleTimeString()}] })))}>
+                            <div style={{padding: '1em'}}>
+                                <div className='white-box'>
+                                    Hello world!
+                                </div>
                             </div>
-                        </div>
-                    </Page>
-                </Layout>
-            </Route>
-        </Router>
+                        </Page>
+                    </Layout>
+                </Route>
+            </Routes>
+        </BrowserRouter>
     )).add('compact nav bar', () => {
         const manyNavItems = [];
         for (let i = 0; i < 10; i++) {
             manyNavItems.push({ path: location.pathname + '/' + i, title: 'Sample', iconClassName: 'argo-icon-docs' });
         }
         return (
-            <Router history={history}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path={location.pathname}>
+                        <Layout navItems={manyNavItems}>
+                            <Page title='Hello world!'>
+                                <div style={{padding: '1em'}}>
+                                    <div className='white-box'>
+                                        Hello world!
+                                    </div>
+                                </div>
+                            </Page>
+                        </Layout>
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        );
+    }).add('custom top bar title', () => (
+        <BrowserRouter>
+            <Routes>
                 <Route path={location.pathname}>
-                    <Layout navItems={manyNavItems}>
+                    <Layout navItems={navItems}>
+                        <Page title='helmet title' topBarTitle='Top Bar Title' toolbar={{ breadcrumbs: [{title: 'Apps ' , path: '/applications'}, {title: 'app name'}] }}>
+                            <div style={{padding: '1em'}}>
+                                <div className='white-box'>
+                                    Test
+                                </div>
+                            </div>
+                        </Page>
+                    </Layout>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    )).add('background color', () => (
+        <BrowserRouter>
+            <Routes>
+                <Route path={location.pathname}>
+                    <Layout navItems={navItems} navBarStyle={{backgroundColor: 'red'}}>
                         <Page title='Hello world!'>
                             <div style={{padding: '1em'}}>
                                 <div className='white-box'>
@@ -122,34 +157,6 @@ storiesOf('Page', module)
                         </Page>
                     </Layout>
                 </Route>
-            </Router>
-        );
-    }).add('custom top bar title', () => (
-        <Router history={history}>
-            <Route path={location.pathname}>
-                <Layout navItems={navItems}>
-                    <Page title='helmet title' topBarTitle='Top Bar Title' toolbar={{ breadcrumbs: [{title: 'Apps ' , path: '/applications'}, {title: 'app name'}] }}>
-                        <div style={{padding: '1em'}}>
-                            <div className='white-box'>
-                                Test
-                            </div>
-                        </div>
-                    </Page>
-                </Layout>
-            </Route>
-        </Router>
-    )).add('background color', () => (
-        <Router history={history}>
-            <Route path={location.pathname}>
-                <Layout navItems={navItems} navBarStyle={{backgroundColor: 'red'}}>
-                    <Page title='Hello world!'>
-                        <div style={{padding: '1em'}}>
-                            <div className='white-box'>
-                                Hello world!
-                            </div>
-                        </div>
-                    </Page>
-                </Layout>
-            </Route>
-        </Router>
+            </Routes>
+        </BrowserRouter>
     ));

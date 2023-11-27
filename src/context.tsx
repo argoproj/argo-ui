@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { match} from 'react-router';
+import { UIMatch} from 'react-router';
 import { NotificationsApi, PopupApi } from './components';
 
 export interface AppContext {
@@ -7,7 +7,7 @@ export interface AppContext {
         history: H.History;
         route: {
             location: H.Location;
-            match: match<any>;
+            match: UIMatch<any>;
         };
     };
     apis: {
