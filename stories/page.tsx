@@ -1,7 +1,7 @@
 import { Store, withState } from '@dump247/storybook-state';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 
