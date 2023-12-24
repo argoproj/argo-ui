@@ -85,7 +85,6 @@ export class Notifications extends React.Component<NotificationsProps> {
                 /* Add any other styles to enhance contrast */
             }
         ;
-
         return (
             <>
                 <ToastContainer />
