@@ -74,9 +74,9 @@
     background-color: transparent;
     @include themify($themes) {                  
         color: themed('text-2');
+        border-bottom: 2px solid themed('border');;
     }
     border: 0;
-    border-bottom: 2px solid #ccc;
     transition: border .2s;
 
     .error & {

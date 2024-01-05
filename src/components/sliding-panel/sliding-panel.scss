@@ -103,8 +103,8 @@ $sliding-panel-middle-width: 600px;
         color: $argo-color-gray-5;
         @include themify($themes) {                  
             background-color: themed('light-argo-gray-2');
+            border-bottom: 1px solid themed('border');
         }
-        border-bottom: 1px solid #c6cfd1;
         font-weight: 500;
         font-size: .925em;
 
