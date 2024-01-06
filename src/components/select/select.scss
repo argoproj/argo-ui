@@ -1,4 +1,5 @@
 @import '../../styles/config';
+@import '../../styles/theme';
 
 .select {
     position: relative;
@@ -15,12 +16,14 @@
         position: relative;
         padding: 8px 20px 8px 0;
         font-size: 15px;
-        border-bottom: 2px solid #ccc;
         transition: border .2s;
         cursor: pointer;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        @include themify($themes) {      
+            border-bottom: 2px solid themed('border');;
+        }
     }
     
     &__value-arrow {
