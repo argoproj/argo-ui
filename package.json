@@ -54,7 +54,7 @@
         "@babel/core": "^7.21.3",
         "@dump247/storybook-state": "^1.6.1",
         "@storybook/addon-actions": "^7.4.0",
-        "@storybook/addon-controls": "^6.5.9",
+        "@storybook/addon-controls": "^7.6.13",
         "@storybook/addon-essentials": "^6.5.14",
         "@storybook/addon-links": "^7.4.0",
         "@storybook/addons": "^7.0.20",
