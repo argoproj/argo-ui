@@ -14,7 +14,7 @@ export interface PopupApi {
         },
         customIcon?: {name: string, color: string},
         titleColor?: string,
-        defaultValues?: {},
+        defaultValues?: FormValues,
     ): Promise<FormValues | null>;
 }
 
@@ -58,7 +58,7 @@ export class PopupManager implements PopupApi {
         },
         customIcon?: { name: string, color: string },
         titleColor?: string,
-        defaultValues?: {},
+        defaultValues?: FormValues,
     ): Promise<FormValues | null> {
         return new Promise((resolve) => {
             const closeAndResolve = (result: FormValues | null) => {

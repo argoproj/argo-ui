@@ -28,7 +28,11 @@ export const Autocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+        value: string;
+        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+        className?: string;
+        style?: React.CSSProperties;
+    }
 ) => {
     return (
         <KeybindingProvider>
@@ -45,7 +49,11 @@ export const RenderAutocomplete = (
         onItemClick?: (item: string) => void;
         icon?: string;
         inputref?: React.MutableRefObject<HTMLInputElement>;
-    },
+        value: string;
+        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+        className?: string;
+        style?: React.CSSProperties;
+    }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
@@ -73,8 +81,8 @@ export const RenderAutocomplete = (
         const filtered = (props.items || []).filter((i) => {
             if (i) {
                 return props.abbreviations !== undefined
-                ? i.toLowerCase().includes(debouncedVal?.toLowerCase()) || props.abbreviations.get(i)?.includes(debouncedVal?.toLowerCase())
-                : i.toLowerCase().includes(debouncedVal?.toLowerCase());
+                    ? i.toLowerCase().includes(debouncedVal?.toLowerCase()) || props.abbreviations.get(i)?.includes(debouncedVal?.toLowerCase())
+                    : i.toLowerCase().includes(debouncedVal?.toLowerCase());
             }
             return false;
         });
@@ -111,7 +119,7 @@ export const RenderAutocomplete = (
 
     useKeybinding({
         keys: Key.ESCAPE,
-        action: (e) => {
+        action: () => {
             if (showSuggestions) {
                 reset();
                 setShowSuggestions(false);
@@ -140,7 +148,7 @@ export const RenderAutocomplete = (
 
     useKeybinding({
         keys: Key.UP,
-        action: (e) => {
+        action: () => {
             if (showSuggestions) {
                 nav(-1);
                 return false;
@@ -244,7 +252,7 @@ export const RenderAutocomplete = (
                         </div>
                     ))}
                 </ThemeDiv>,
-                document.body,
+                document.body
             )}
         </div>
     );

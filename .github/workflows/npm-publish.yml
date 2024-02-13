@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.event.inputs.tag }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 14.15
+          node-version-file: ".nvmrc"
       - run: cd v2 && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

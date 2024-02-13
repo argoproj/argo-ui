@@ -42,7 +42,7 @@ Disabled.args = {
     placeholder: 'Type something here',
 };
 
-export const Error = (args: any) => {
+export const Error = () => {
     return (
         <div style={{width: '50%', marginBottom: '1em'}}>
             <Form>
@@ -61,7 +61,7 @@ Error.args = {
     placeholder: 'Type something here',
 };
 
-export const Warning = (args: any) => {
+export const Warning = () => {
     return (
         <div style={{width: '50%', marginBottom: '1em'}}>
 

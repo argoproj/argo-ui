@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/react';
 import {default as classNames} from 'classnames';
 import * as React from 'react';
 
-class TableExample extends React.Component<{}, {selectedIndex: number}> {
+class TableExample extends React.Component<any, {selectedIndex: number}> {
 
     constructor(props: any) {
         super(props);
