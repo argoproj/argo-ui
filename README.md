@@ -2,33 +2,33 @@
 
 <img src="https://github.com/argoproj/argo-ui/blob/master/src/assets/images/logo.png?raw=true" alt="Argo Image" height="200px">
 
-Set of React components used by [Argo Workflows](https://github.com/argoproj/argo-workflows) and [Argo CD](https://github.com/argoproj/argo-cd).
+Set of React components used by [Argo Workflows](https://github.com/argoproj/argo-workflows), [Argo CD](https://github.com/argoproj/argo-cd), and [Argo Rollouts](https://github.com/argoproj/argo-rollouts).
 
 ## Build & Run
 
-1. Install Toolset: [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com)
-1. Install Dependencies: From your command line, navigate to the argo-ui directory and run `yarn install` to install dependencies.
-1. Run: `yarn start` - starts https://storybook.js.org/ dev server
+1. Install Toolset: [NodeJS](https://nodejs.org/en/download/) and [Yarn v1](https://classic.yarnpkg.com/en/docs)
+1. Install Dependencies: run `yarn install`
+1. Run: `yarn start` - starts the [Storybook v6](https://storybook.js.org/docs/6.5/get-started/install) dev server
 
 ## Local Development
 
-To test your changes locally against Argo CD or another Argo project, we recommend using [yalc](https://github.com/wclr/yalc).
+To test your changes locally against Argo CD or another Argo project, we recommend using [`yalc`](https://github.com/wclr/yalc).
 
 First, install `yalc`:
 
-```
+```sh
 npm i -g yalc
 ```
 
 Next, in your local `argo-ui` directory, run
 
-```
+```sh
 yalc publish
 ```
 
 Finally, in your local `argo-cd/ui` directory, run
 
-```
+```sh
 yalc add argo-ui
 ```
 
