@@ -10,14 +10,14 @@
         "antd"
     ],
     "scripts": {
-        "build": "build-storybook -o ./dist/storybook",
+        "build": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook",
         "lint": "eslint --ext .tsx .",
         "test": "jest",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
-        "start": "start-storybook -p 6006",
-        "start-v2": "start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
-        "build-v2": "build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook",
-        "start-antd": "start-storybook -c antd/.storybook -s antd/.storybook/images -p 6006",
+        "start": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -p 6006",
+        "start-v2": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
+        "build-v2": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook",
+        "start-antd": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -c antd/.storybook -s antd/.storybook/images -p 6006",
         "compile-less-antd": "gulp compileLess"
     },
     "dependencies": {
