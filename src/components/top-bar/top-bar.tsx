@@ -88,7 +88,7 @@ const renderBreadcrumbs = (breadcrumbs: { title: string | React.ReactNode, path?
 const renderActionMenu = (actionMenu: ActionMenu) => (
     <div>
         {actionMenu.items.map((item, i) => (
-            <button disabled={!!item.disabled} qe-id={item.qeId} className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}} key={i}>
+            <button disabled={!!item.disabled} data-qe-id={item.qeId} className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}} key={i}>
                 {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: '-5px', marginRight: '5px'}}/>)}
                 {item.title}
             </button>

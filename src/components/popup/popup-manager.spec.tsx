@@ -13,8 +13,8 @@ describe('PopupManager', () => {
 
     describe('confirm', () => {
         it.each([
-            ['OK', true, '[qe-id="argo-popup-ok-button"]'],
-            ['Cancel', false, '[qe-id="argo-popup-cancel-button"]'],
+            ['OK', true, '[data-qe-id="argo-popup-ok-button"]'],
+            ['Cancel', false, '[data-qe-id="argo-popup-cancel-button"]'],
         ])('%s', async (_, promiseResult, btnSelector) => {
             const fn = jest.fn<void, [null | PopupProps]>();
             const manager = new PopupManager();
