@@ -21,10 +21,13 @@ export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
         return (
             <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown} qeId={this.props.qeId}>
                 <ul>
-                    {this.props.items.map((item, i) => <li qe-id={this.props.qeId + `-` + item.title}
-                        onClick={(event) => this.onItemClick(item, event)} key={i}>
-                        {item.iconClassName && <i className={item.iconClassName}/>} {item.title}
-                        </li>)}
+                    {this.props.items.map((item, i) => <li key={i} qe-id={this.props.qeId + `-` + item.title}
+                        onClick={(event) => this.onItemClick(item, event)}>
+                        <a href="#" style={{ textDecoration: 'none', color: 'inherit' }} onClick={(e) => { e.preventDefault(); }}>
+                            {item.iconClassName && <i className={item.iconClassName} />} {item.title}
+                        </a>
+                    </li>
+                    )}
                 </ul>
             </DropDown>
         );
