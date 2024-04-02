@@ -57,6 +57,9 @@ export class Notifications extends React.Component<NotificationsProps> {
                 pauseOnFocusLoss: true,
                 draggable: false,
                 autoClose: AUTO_CLOSE_TIMEOUT,
+                style: {
+                    wordBreak: "break-all"
+                }
             });
         });
     }
