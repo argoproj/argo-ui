@@ -21,7 +21,7 @@ export interface NotificationsProps {
     notifications: Observable<NotificationInfo>;
 }
 
-require('./notifacation.scss');
+require('./notifications.scss');
 
 export class Notifications extends React.Component<NotificationsProps> {
     private subscription: Subscription | null = null;
