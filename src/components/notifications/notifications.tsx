@@ -21,6 +21,8 @@ export interface NotificationsProps {
     notifications: Observable<NotificationInfo>;
 }
 
+require('./notifacation.scss');
+
 export class Notifications extends React.Component<NotificationsProps> {
     private subscription: Subscription | null = null;
 
@@ -56,10 +58,7 @@ export class Notifications extends React.Component<NotificationsProps> {
                 pauseOnHover: true,
                 pauseOnFocusLoss: true,
                 draggable: false,
-                autoClose: AUTO_CLOSE_TIMEOUT,
-                style: {
-                    wordBreak: "break-all"
-                }
+                autoClose: AUTO_CLOSE_TIMEOUT
             });
         });
     }
