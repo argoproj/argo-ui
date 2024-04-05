@@ -58,7 +58,7 @@ export class Notifications extends React.Component<NotificationsProps> {
                 pauseOnHover: true,
                 pauseOnFocusLoss: true,
                 draggable: false,
-                autoClose: AUTO_CLOSE_TIMEOUT
+                autoClose: AUTO_CLOSE_TIMEOUT,
             });
         });
     }
