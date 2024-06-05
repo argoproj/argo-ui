@@ -9,5 +9,5 @@ import { formatDuration } from '../../v2';
  * @param {number} props.durationMs - The number of seconds. DEPRECATED: The "Ms" suffix is incorrect, use props.durationS instead.
  */
 export function Duration(props: {durationMs: number, durationS: number}) {
-    return <span>{formatDuration(props.durationMs || props.durationS)}</span>;
+    return <span>{formatDuration(props.durationMs || props.durationS, 2)}</span>;
 }
