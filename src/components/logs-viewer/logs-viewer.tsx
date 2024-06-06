@@ -43,6 +43,16 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
         this.terminal.loadAddon(this.fitAddon);
         this.terminal.open(container);
         this.fitAddon.fit();
+        // handle Ctrl+C for copying logs
+        this.terminal.attachCustomKeyEventHandler((ev) => {
+            if (ev.ctrlKey && ev.code === "KeyC" && ev.type === "keydown") {
+                const selection = this.terminal.getSelection();
+                if (!selection) return true;
+                
+                navigator.clipboard?.writeText(selection);
+                return false
+            }
+        });
     }
 
     public componentDidMount() {
