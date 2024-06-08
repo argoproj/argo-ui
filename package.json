@@ -15,7 +15,7 @@
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
         "start": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -p 6006",
         "start-v2": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
-        "build-v2": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook",
+        "build-v2": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.2.1",
