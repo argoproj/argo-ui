@@ -25,6 +25,7 @@ export interface AutocompleteProps {
     autoCompleteRef?: (api: AutocompleteApi) => any;
     filterSuggestions?: boolean;
     qeid?: string;
+    autoHighlight?: true; // ReactAutocomplete.Props['autoHighlight'] is missing the `true` default per https://github.com/argoproj/argo-ui/pull/560#issuecomment-2155872347
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
@@ -57,7 +58,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
     wrapperProps.className = classNames('select', wrapperProps.className);
     return (
         <ReactAutocomplete
-            autoHighlight={true}
+            autoHighlight={props.autoHighlight}
             ref={(el: any) => {
                 if (el) {
                     if (el.refs.input) {
