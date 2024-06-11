@@ -28,6 +28,7 @@
     
     &__value-arrow {
         // right most, vertically centered
+        position: absolute;
         top: 50%;
         right: 0;
         transform: translateY(-50%);
