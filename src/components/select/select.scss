@@ -27,9 +27,10 @@
     }
     
     &__value-arrow {
-        position: absolute;
-        top: 8px;
+        // right most, vertically centered
+        top: 50%;
         right: 0;
+        transform: translateY(-50%);
     }
     
     &__options {
