@@ -21,8 +21,6 @@ export interface NotificationsProps {
     notifications: Observable<NotificationInfo>;
 }
 
-require('./notifications.scss');
-
 export class Notifications extends React.Component<NotificationsProps> {
     private subscription: Subscription | null = null;
 
@@ -49,6 +47,9 @@ export class Notifications extends React.Component<NotificationsProps> {
                         sel.removeAllRanges();
                         sel.addRange(range);
                     }
+                }} style={{
+                    overflowWrap: 'break-word',
+                    maxWidth: '240px'
                 }}>
                     {next.content}
                 </div>
