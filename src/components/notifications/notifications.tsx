@@ -48,6 +48,7 @@ export class Notifications extends React.Component<NotificationsProps> {
                         sel.addRange(range);
                     }
                 }} style={{
+                    // fit long words by wrapping them instead of overflowing past the width
                     overflowWrap: 'break-word',
                     maxWidth: '240px'
                 }}>
