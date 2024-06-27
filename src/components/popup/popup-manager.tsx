@@ -41,8 +41,8 @@ export class PopupManager implements PopupApi {
                 content,
                 footer: (
                     <div>
-                        <button qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button> <button
-                            qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
+                        <button data-qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button>
+                        <button data-qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
                     </div>
                 ),
             });
@@ -98,8 +98,8 @@ export class PopupManager implements PopupApi {
                 ),
                 footer: (
                     <div>
-                        <button qe-id='prompt-popup-ok-button' className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button> <button
-                            qe-id='prompt-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
+                        <button data-qe-id='prompt-popup-ok-button' className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button>
+                        <button data-qe-id='prompt-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
                     </div>
                 ),
             });
