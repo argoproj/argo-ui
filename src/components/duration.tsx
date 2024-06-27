@@ -1,20 +1,13 @@
-import * as moment from 'moment';
 import * as React from 'react';
 
-export const Duration = (props: {durationMs: number, allowNewLines?: boolean}) => {
-    const momentTimeStart = moment.utc(0);
-    const momentTime = moment.utc(props.durationMs * 1000);
-    const duration = moment.duration(momentTime.diff(momentTimeStart));
-    let formattedTime = '';
+import { formatDuration } from '../../v2';
 
-    if (momentTime.diff(momentTimeStart, 'hours') === 0) {
-        formattedTime = ('0' + duration.minutes()).slice(-2) + ':' + ('0' + duration.seconds()).slice(-2) + ' min';
-    } else {
-        if (momentTime.diff(momentTimeStart, 'days') > 0) {
-            formattedTime += momentTime.diff(momentTimeStart, 'days') + ' days' + (props.allowNewLines ? '<br>' : ' ');
-        }
-
-        formattedTime += ('0' + duration.hours()).slice(-2) + ':' + ('0' + duration.minutes()).slice(-2) + ' hours';
-    }
-    return <span dangerouslySetInnerHTML={{__html: formattedTime}}/>;
-};
+/**
+ * Output a string duration from a number of seconds
+ *
+ * @param {number} props.durationS - The number of seconds.
+ * @param {number} props.durationMs - The number of seconds. DEPRECATED: The "Ms" suffix is incorrect, use props.durationS instead.
+ */
+export function Duration(props: {durationMs: number, durationS: number}) {
+    return <span>{formatDuration(props.durationMs || props.durationS, 2)}</span>;
+}

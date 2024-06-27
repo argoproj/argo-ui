@@ -1,4 +1,3 @@
-import moment from 'moment';
 import * as React from 'react';
 
 export interface Error {
@@ -28,15 +27,6 @@ export function useData<T>(getData: () => Promise<T>, init?: T, callback?: (data
         fx();
     }, [...(dependencies || []), retrying]);
     return [data as T, loading, {state: error, retry: () => retry(!retrying)} as Error];
-}
-
-export function formatTimestamp(ts: string): string {
-    const inputFormat = 'YYYY-MM-DD HH:mm:ss Z z';
-    const m = moment(ts, inputFormat);
-    if (!ts || !m.isValid()) {
-        return 'Never';
-    }
-    return m.format('MMM D YYYY [at] hh:mm:ss');
 }
 
 export const appendSuffixToClasses = (classNames: string, suffix: string): string => {
