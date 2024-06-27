@@ -14,7 +14,9 @@ export class NavigationManager implements NavigationApi {
     }
 
     public goto(path: string, query: {[name: string]: any} = {}, options?: { event?: React.MouseEvent, replace?: boolean }): void {
-        if (path.startsWith('.')) {
+        if (path.startsWith('./') && this.history.location.pathname.endsWith('/')) {
+            path = this.history.location.pathname + path.slice(2);
+        } else if (path.startsWith('.')) {
             path = this.history.location.pathname + path.slice(1);
         }
         const noPathChange = path === this.history.location.pathname;
