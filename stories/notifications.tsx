@@ -1,4 +1,3 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 import { NotificationType } from '../src/components/notifications/notifications';
@@ -15,20 +14,25 @@ function getMessage() {
     return messages[Math.floor(Math.random() * messages.length)];
 }
 
-storiesOf('Notifications', module)
-    .add('default', () => (
-        <App>
-            {(apis) => (
-                [
-                 {type: NotificationType.Success, title: 'Success'},
-                 {type: NotificationType.Warning, title: 'Warning'},
-                 {type: NotificationType.Error, title: 'Error'},
-                ].map((item) => (
-                    <button key={item.type} className='argo-button argo-button--base'
-                            onClick={() => apis.notifications.show({type: item.type, content: <div>{getMessage()}</div>})}>
-                        {item.title}
-                    </button>
-                ))
-            )}
-        </App>
-    ));
+export default {
+    title: 'Notifications',
+};
+
+export const Default = () => (
+    <App>
+        {(apis) => [
+            {type: NotificationType.Success, title: 'Success'},
+            {type: NotificationType.Warning, title: 'Warning'},
+            {type: NotificationType.Error, title: 'Error'},
+        ].map((item) => (
+            <button key={item.type} className='argo-button argo-button--base' onClick={() =>
+                apis.notifications.show({type: item.type, content: <div>{getMessage()}</div>})
+            }>
+                {item.title}
+            </button>
+        ))}
+    </App>
+);
+Default.story = {
+    name: 'default',
+};
