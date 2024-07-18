@@ -1,4 +1,4 @@
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import * as React from 'react';
 import { Route, Router } from 'react-router';
 import { timer } from 'rxjs';
@@ -45,7 +45,7 @@ const actionMenu = {
     }],
 };
 
-const history = createHistory();
+const history = createBrowserHistory();
 
 function ensureSelected(vals: string[], selected: string[]): string[] {
     const res = new Set(selected);
