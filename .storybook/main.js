@@ -5,9 +5,12 @@ module.exports = {
     addons: ['@storybook/addon-essentials'],
     webpackFinal: async (config, {configType}) => {
         config.module.rules.push({
+            test: /\.(ts|tsx)$/,
+            loader: 'ts-loader'
+        }, {
             test: /\.scss$/,
-            use: ['style-loader', 'css-loader', 'sass-loader'],
-            include: path.resolve(__dirname, '../'),
+            exclude: /node_modules/,
+            loader: 'style-loader!raw-loader!sass-loader'
         });
         return config;
     },
