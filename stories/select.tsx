@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { Select } from '../src/components';
+import { Select } from '../src/components/select/select';
 
 storiesOf('Select', module)
     .add('default', () => {

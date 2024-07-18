@@ -5,7 +5,8 @@ import { Route, Router } from 'react-router';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Layout, Page } from '../src/components';
+import { Layout } from '../src/components/layout/layout';
+import { Page } from '../src/components/page/page';
 
 const navItems = [{ path: location.pathname, title: 'Sample', iconClassName: 'argo-icon-docs' }];
 const breadcrumbs = [{

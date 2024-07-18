@@ -4,7 +4,8 @@ import * as React from 'react';
 import { Checkbox as ReactCheckbox} from 'react-form';
 import { Text } from 'react-form';
 
-import { Checkbox, FormField } from '../src/components';
+import { Checkbox } from '../src/components/checkbox';
+import { FormField } from '../src/components/form-field/form-field';
 import { App } from './utils';
 
 storiesOf('Popup', module)
