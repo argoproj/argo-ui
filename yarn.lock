@@ -140,11 +140,11 @@
     "@babel/types" "^7.15.4"
 
 "@babel/helper-annotate-as-pure@^7.16.7":
-  version "7.24.7"
-  resolved "https://registry.yarnpkg.com/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-7.24.7.tgz#5373c7bc8366b12a033b4be1ac13a206c6656aab"
-  integrity sha512-BaDeOonYvhdKw+JoMVkAixAAJzG2jVPIwWoKBPdYuY9b452e2rPuI9QPYh3KpofZ3pW2akOmwZLOiOsHMiqRAg==
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-7.16.7.tgz#bb2339a7534a9c128e3102024c60760a3a7f3862"
+  integrity sha512-s6t2w/IPQVTAET1HitoowRGXooX8mCgtuP5195wD/QJPV6wYjpujCGF7JuMODVX2ZAJOf1GT6DT9MHEZvLOFSw==
   dependencies:
-    "@babel/types" "^7.24.7"
+    "@babel/types" "^7.16.7"
 
 "@babel/helper-builder-binary-assignment-operator-visitor@^7.14.5":
   version "7.15.4"
@@ -378,11 +378,11 @@
     "@babel/types" "^7.15.4"
 
 "@babel/helper-optimise-call-expression@^7.16.7":
-  version "7.24.7"
-  resolved "https://registry.yarnpkg.com/@babel/helper-optimise-call-expression/-/helper-optimise-call-expression-7.24.7.tgz#8b0a0456c92f6b323d27cfd00d1d664e76692a0f"
-  integrity sha512-jKiTsW2xmWwxT1ixIdfXUZp+P5yURx2suzLZr5Hi64rURpDYdMW0pv+Uf17EYk2Rd428Lx4tLsnjGJzYKDM/6A==
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/helper-optimise-call-expression/-/helper-optimise-call-expression-7.16.7.tgz#a34e3560605abbd31a18546bd2aad3e6d9a174f2"
+  integrity sha512-EtgBhg7rd/JcnpZFXpBy0ze1YRfdm7BnBX4uKMBd3ixa3RGAE002JZB66FJyNH7g0F38U05pXmA5P8cBh7z+1w==
   dependencies:
-    "@babel/types" "^7.24.7"
+    "@babel/types" "^7.16.7"
 
 "@babel/helper-plugin-utils@7.10.4", "@babel/helper-plugin-utils@^7.10.4", "@babel/helper-plugin-utils@^7.8.0", "@babel/helper-plugin-utils@^7.8.3":
   version "7.10.4"
