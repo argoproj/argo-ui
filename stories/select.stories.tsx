@@ -23,9 +23,7 @@ export const Default = () => {
             </div>
         )
 };
-Default.story = {
-    name: 'default',
-};
+Default.storyName = 'default';
 
 export const MultiSelect = () => {
     const [selected, setSelected] = React.useState(['option1']);
@@ -41,6 +39,4 @@ export const MultiSelect = () => {
             </div>
         )
 };
-MultiSelect.story = {
-    name: 'multi-select',
-};
+MultiSelect.storyName = 'multi-select';

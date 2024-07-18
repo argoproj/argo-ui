@@ -19,6 +19,4 @@ export const BasicTabs = () => (
             badge: '5',
         }]}/>
 );
-BasicTabs.story = {
-    name: 'basic tabs',
-};
+BasicTabs.storyName = 'basic tabs';

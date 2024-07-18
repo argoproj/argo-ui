@@ -31,6 +31,4 @@ export const LoadingDataAsynchronously = () => {
         </App>
     );
 };
-LoadingDataAsynchronously.story = {
-    name: 'loading data asynchronously',
-};
+LoadingDataAsynchronously.storyName = 'loading data asynchronously';

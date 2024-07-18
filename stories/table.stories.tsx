@@ -38,6 +38,4 @@ class TableExample extends React.Component<any, {selectedIndex: number}> {
 }
 
 export const Default = () => <TableExample />;
-Default.story = {
-    name: 'default',
-};
+Default.storyName = 'default';

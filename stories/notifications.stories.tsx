@@ -33,6 +33,4 @@ export const Default = () => (
         ))}
     </App>
 );
-Default.story = {
-    name: 'default',
-};
+Default.storyName = 'default';

@@ -8,9 +8,7 @@ export default {
 };
 
 export const Default = () => (<DropDown anchor={() => <a>Click me</a>}><p>Dropdown content here</p></DropDown>);
-Default.story = {
-    name: 'default',
-};
+Default.storyName = 'default';
 
 export const Menu = () => (
     <DropDown isMenu={true} anchor={() => <a>Click me</a>}>
@@ -20,9 +18,7 @@ export const Menu = () => (
         </ul>
     </DropDown>
 );
-Menu.story = {
-  name: 'menu',
-};
+Menu.storyName = 'menu';
 
 export const MenuWrapper = () => (
     <DropDownMenu anchor={() => <a>Click me</a>} items={[{
@@ -30,6 +26,4 @@ export const MenuWrapper = () => (
         action: () => window.alert('Clicked!'),
     }]} />
 );
-MenuWrapper.story = {
-    name: 'menu wrapper',
-};
+MenuWrapper.storyName = 'menu wrapper';

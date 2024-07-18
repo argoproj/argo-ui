@@ -98,9 +98,7 @@ export const Default = () => {
         </Router>
     )
 };
-Default.story = {
-    name: 'default',
-};
+Default.storyName = 'default';
 
 export const DynamicToolbar = () => (
     <Router history={history}>
@@ -117,9 +115,7 @@ export const DynamicToolbar = () => (
         </Route>
     </Router>
 );
-DynamicToolbar.story = {
-    name: 'dynamic toolbar',
-};
+DynamicToolbar.storyName = 'dynamic toolbar';
 
 export const CompactNavBar = () => {
     const manyNavItems = [];
@@ -142,9 +138,7 @@ export const CompactNavBar = () => {
         </Router>
     );
 };
-CompactNavBar.story = {
-    name: 'compact nav bar',
-};
+CompactNavBar.storyName = 'compact nav bar';
 
 export const CustomTopBarTitle = () => (
     <Router history={history}>
@@ -164,9 +158,7 @@ export const CustomTopBarTitle = () => (
         </Route>
     </Router>
 );
-CustomTopBarTitle.story = {
-    name: 'custom top bar title',
-};
+CustomTopBarTitle.storyName = 'custom top bar title';
 
 export const BackgroundColor = () => (
     <Router history={history}>
@@ -183,6 +175,4 @@ export const BackgroundColor = () => (
         </Route>
     </Router>
 );
-BackgroundColor.story = {
-    name: 'background color',
-};
+BackgroundColor.storyName = 'background color';

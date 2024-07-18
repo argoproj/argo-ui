@@ -21,9 +21,7 @@ export const Confirmation = () => (
         )}
     </App>
 );
-Confirmation.story = {
-    name: 'confirmation',
-};
+Confirmation.storyName = 'confirmation';
 
 export const ConfirmationWithCustomFormInside = () => {
     const [checked, setChecked] = React.useState(false);
@@ -45,9 +43,7 @@ export const ConfirmationWithCustomFormInside = () => {
         </App>
     )
 };
-ConfirmationWithCustomFormInside.story = {
-    name: 'confirmation with custom form inside',
-};
+ConfirmationWithCustomFormInside.storyName = 'confirmation with custom form inside';
 
 export const Prompt = () => (
     <App>
@@ -72,9 +68,7 @@ export const Prompt = () => (
         )}
     </App>
 );
-Prompt.story = {
-    name: 'prompt',
-};
+Prompt.storyName = 'prompt';
 
 export const PromptWithCustomSubmit = () => (
     <App>
@@ -107,9 +101,7 @@ export const PromptWithCustomSubmit = () => (
         )}
     </App>
 );
-PromptWithCustomSubmit.story = {
-    name: 'prompt with custom submit',
-};
+PromptWithCustomSubmit.storyName = 'prompt with custom submit';
 
 export const PromptWithRedTitleAndIconWithCustomSubmit = () => (
     <App>
@@ -144,9 +136,7 @@ export const PromptWithRedTitleAndIconWithCustomSubmit = () => (
         )}
     </App>
 );
-PromptWithRedTitleAndIconWithCustomSubmit.story = {
-    name: 'prompt with red title and icon, with custom submit',
-};
+PromptWithRedTitleAndIconWithCustomSubmit.storyName = 'prompt with red title and icon, with custom submit';
 
 export const PromptWithYellowTitleAndIconThreeFieldsAndCustomSubmitVerticalCenterLayoutOfIcon = () => (
     <App>
@@ -188,9 +178,7 @@ export const PromptWithYellowTitleAndIconThreeFieldsAndCustomSubmitVerticalCente
         )}
     </App>
 );
-PromptWithYellowTitleAndIconThreeFieldsAndCustomSubmitVerticalCenterLayoutOfIcon.story = {
-    name: 'prompt with yellow title and icon, three fields and custom submit.  Vertical center layout of icon',
-};
+PromptWithYellowTitleAndIconThreeFieldsAndCustomSubmitVerticalCenterLayoutOfIcon.storyName = 'prompt with yellow title and icon, three fields and custom submit.  Vertical center layout of icon';
 
 export const PromptWithGreenClockIconAndCustomSubmit = () => (
     <App>
@@ -224,9 +212,7 @@ export const PromptWithGreenClockIconAndCustomSubmit = () => (
         )}
     </App>
 );
-PromptWithGreenClockIconAndCustomSubmit.story = {
-    name: 'prompt with green clock icon and custom submit',
-};
+PromptWithGreenClockIconAndCustomSubmit.storyName = 'prompt with green clock icon and custom submit';
 
 export const PromptWithJustHeadersAndParagraphs = () => (
     <App>
@@ -245,9 +231,7 @@ export const PromptWithJustHeadersAndParagraphs = () => (
         )}
     </App>
 );
-PromptWithJustHeadersAndParagraphs.story = {
-    name: 'prompt with just headers and paragraphs',
-};
+PromptWithJustHeadersAndParagraphs.storyName = 'prompt with just headers and paragraphs';
 
 export const PromptWithOnlyParagraphsAdditionalTopPaddingIsOptionalForTheFirstParagraph = () => (
     <App>
@@ -264,9 +248,7 @@ export const PromptWithOnlyParagraphsAdditionalTopPaddingIsOptionalForTheFirstPa
         )}
     </App>
 );
-PromptWithOnlyParagraphsAdditionalTopPaddingIsOptionalForTheFirstParagraph.story = {
-    name: 'prompt with only paragraphs. Additional top padding is optional for the first paragraph',
-};
+PromptWithOnlyParagraphsAdditionalTopPaddingIsOptionalForTheFirstParagraph.storyName = 'prompt with only paragraphs. Additional top padding is optional for the first paragraph';
 
 export const PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAdmin = () => (
     <App>
@@ -307,6 +289,4 @@ export const PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAd
         )}
     </App>
 );
-PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAdmin.story = {
-    name: 'prompt with React Checkbox that is checked by default; Username default set to admin',
-};
+PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAdmin.storyName = 'prompt with React Checkbox that is checked by default; Username default set to admin';

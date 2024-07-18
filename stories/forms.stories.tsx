@@ -24,6 +24,4 @@ export const Default = () => (
         )}
     </Form>
 );
-Default.story = {
-    name: 'default',
-};
+Default.storyName = 'default';
