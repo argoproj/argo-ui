@@ -10,6 +10,8 @@ module.exports = {
         }, {
             test: /\.scss$/,
             exclude: /node_modules/,
+            include: path.resolve(__dirname, '../'),
+            sideEffects: true, // get side-effect styles to load per: https://github.com/storybookjs/storybook/issues/4690#issuecomment-435909433
             loader: 'style-loader!raw-loader!sass-loader'
         });
         return config;
