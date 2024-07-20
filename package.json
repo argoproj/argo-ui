@@ -9,11 +9,12 @@
         "v2"
     ],
     "scripts": {
-        "build": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook",
         "lint": "eslint --ext .tsx .",
+        "deduplicate": "npx yarn-deduplicate -s fewer yarn.lock",
         "test": "jest",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
         "start": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -p 6006",
+        "build": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook",
         "start-v2": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
         "build-v2": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook"
     },
