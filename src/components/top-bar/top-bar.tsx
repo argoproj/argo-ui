@@ -30,7 +30,7 @@ export interface Toolbar {
     breadcrumbs?: { title: string | React.ReactNode, path?: string; }[];
     tools?: React.ReactNode;
     actionMenu?: ActionMenu;
-    toolBarExtensions?: React.ReactNode[];
+    actionMenuExtensions?: React.ReactNode[];
 }
 
 export interface TopBarProps extends React.Props<any> {
@@ -86,7 +86,7 @@ const renderBreadcrumbs = (breadcrumbs: { title: string | React.ReactNode, path?
     </div>
 );
 
-const renderActionMenu = (actionMenu: ActionMenu, toolBarExts: React.ReactNode[]) => (
+const renderActionMenu = (actionMenu: ActionMenu, actionMenuExtensions: React.ReactNode[]) => (
     <div>
         {actionMenu.items.map((item, i) => (
             <button disabled={!!item.disabled} qe-id={item.qeId} className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}} key={i}>
@@ -94,7 +94,7 @@ const renderActionMenu = (actionMenu: ActionMenu, toolBarExts: React.ReactNode[]
                 {item.title}
             </button>
         ))}
-        {toolBarExts && toolBarExts.map((ext, index) => (
+        {actionMenuExtensions && actionMenuExtensions.map((ext, index) => (
             <React.Fragment key={index}>{ext}</React.Fragment>
         ))}
     </div>
@@ -103,7 +103,7 @@ const renderActionMenu = (actionMenu: ActionMenu, toolBarExts: React.ReactNode[]
 const renderToolbar = (toolbar: Toolbar) => (
     <div className='top-bar row' key='tool-bar'>
         <div className='columns small-9 top-bar__left-side'>
-            {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu, toolbar.toolBarExtensions)}
+            {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu, toolbar.actionMenuExtensions)}
         </div>
 
         <div className='columns small-3 top-bar__right-side'>
