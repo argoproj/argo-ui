@@ -36,7 +36,7 @@ export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps,
                 {(props.items || []).map((item) => (
                     <Tooltip content={item.title} placement='right' arrow={true} key={item.path + item.title}>
                         <div className={classNames('nav-bar__item', { active: isActiveRoute(locationPath, item.path) })}
-                            onClick={() => context.router.history.push(item.path)}>
+                            onClick={() => context.router.history.push(item.path)} role="checkbox">
                             <i className={item.iconClassName}/>
                         </div>
                     </Tooltip>
