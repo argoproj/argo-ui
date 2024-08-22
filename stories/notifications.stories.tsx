@@ -18,19 +18,21 @@ export default {
     title: 'Notifications',
 };
 
-export const Default = () => (
-    <App>
-        {(apis) => [
-            {type: NotificationType.Success, title: 'Success'},
-            {type: NotificationType.Warning, title: 'Warning'},
-            {type: NotificationType.Error, title: 'Error'},
-        ].map((item) => (
-            <button key={item.type} className='argo-button argo-button--base' onClick={() =>
-                apis.notifications.show({type: item.type, content: <div>{getMessage()}</div>})
-            }>
-                {item.title}
-            </button>
-        ))}
-    </App>
-);
+export const Default = () => {
+    return (
+        <App>
+            {(apis) => [
+                {type: NotificationType.Success, title: 'Success'},
+                {type: NotificationType.Warning, title: 'Warning'},
+                {type: NotificationType.Error, title: 'Error'},
+            ].map((item) => (
+                <button key={item.type} className='argo-button argo-button--base' onClick={() =>
+                    apis.notifications.show({type: item.type, content: <div>{getMessage()}</div>})
+                }>
+                    {item.title}
+                </button>
+            ))}
+        </App>
+    );
+}
 Default.storyName = 'default';

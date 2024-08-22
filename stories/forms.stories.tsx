@@ -25,5 +25,5 @@ export const Default = () => {
             )}
         </Form>
     );
-};
+}
 Default.storyName = 'default';

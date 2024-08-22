@@ -100,21 +100,23 @@ export const Default = () => {
 };
 Default.storyName = 'default';
 
-export const DynamicToolbar = () => (
-    <Router history={history}>
-        <Route path={location.pathname}>
-            <Layout navItems={navItems}>
-                <Page title='Hello world!' toolbar={timer(0, 1000).pipe(map(() => ({breadcrumbs: [
-                    { title: 'hello ' + new Date().toLocaleTimeString() },
-                ]})))}>
-                    <div style={{ padding: '1em' }}>
-                        <div className='white-box'>Hello world!</div>
-                    </div>
-                </Page>
-            </Layout>
-        </Route>
-    </Router>
-);
+export const DynamicToolbar = () => {
+    return (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems}>
+                    <Page title='Hello world!' toolbar={timer(0, 1000).pipe(map(() => ({breadcrumbs: [
+                        { title: 'hello ' + new Date().toLocaleTimeString() },
+                    ]})))}>
+                        <div style={{ padding: '1em' }}>
+                            <div className='white-box'>Hello world!</div>
+                        </div>
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
+    );
+}
 DynamicToolbar.storyName = 'dynamic toolbar';
 
 export const CompactNavBar = () => {
@@ -140,39 +142,43 @@ export const CompactNavBar = () => {
 };
 CompactNavBar.storyName = 'compact nav bar';
 
-export const CustomTopBarTitle = () => (
-    <Router history={history}>
-        <Route path={location.pathname}>
-            <Layout navItems={navItems}>
-                <Page title='helmet title' topBarTitle='Top Bar Title' toolbar={{breadcrumbs: [
-                    { title: 'Apps ', path: '/applications' },
-                    { title: 'app name' },
-                ]}}>
-                    <div style={{ padding: '1em' }}>
-                        <div className='white-box'>
-                            Test
+export const CustomTopBarTitle = () => {
+    return (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems}>
+                    <Page title='helmet title' topBarTitle='Top Bar Title' toolbar={{breadcrumbs: [
+                        { title: 'Apps ', path: '/applications' },
+                        { title: 'app name' },
+                    ]}}>
+                        <div style={{ padding: '1em' }}>
+                            <div className='white-box'>
+                                Test
+                            </div>
                         </div>
-                    </div>
-                </Page>
-            </Layout>
-        </Route>
-    </Router>
-);
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
+    );
+}
 CustomTopBarTitle.storyName = 'custom top bar title';
 
-export const BackgroundColor = () => (
-    <Router history={history}>
-        <Route path={location.pathname}>
-            <Layout navItems={navItems} navBarStyle={{ backgroundColor: 'red' }}>
-                <Page title='Hello world!'>
-                    <div style={{ padding: '1em' }}>
-                        <div className='white-box'>
-                            Hello world!
+export const BackgroundColor = () => {
+    return (
+        <Router history={history}>
+            <Route path={location.pathname}>
+                <Layout navItems={navItems} navBarStyle={{ backgroundColor: 'red' }}>
+                    <Page title='Hello world!'>
+                        <div style={{ padding: '1em' }}>
+                            <div className='white-box'>
+                                Hello world!
+                            </div>
                         </div>
-                    </div>
-                </Page>
-            </Layout>
-        </Route>
-    </Router>
-);
+                    </Page>
+                </Layout>
+            </Route>
+        </Router>
+    );
+}
 BackgroundColor.storyName = 'background color';

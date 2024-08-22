@@ -19,7 +19,7 @@ export const Menu = () => {
             </ul>
         </DropDown>
     );
-};
+}
 Menu.storyName = 'menu';
 
 export const MenuWrapper = () => {
@@ -29,5 +29,5 @@ export const MenuWrapper = () => {
             action: () => window.alert('Clicked!'),
         }]} />
     );
-};
+}
 MenuWrapper.storyName = 'menu wrapper';
