@@ -63,10 +63,12 @@ export const Prompt = () => {
                                 <FormField label='Last Name' formApi={api} field='lastName' component={Text} />
                             </div>
                         </React.Fragment>
-                    ), { validate: (vals) => ({
-                        firstName: !vals.firstName && 'First Name is required',
-                        lastName: !vals.lastName && 'Last Name is required',
-                    })});
+                    ), {
+                        validate: (vals) => ({
+                            firstName: !vals.firstName && 'First Name is required',
+                            lastName: !vals.lastName && 'Last Name is required',
+                        })
+                    });
 
                     action('Prompt values')(values);
                 }}>Click me</button>
@@ -273,36 +275,37 @@ export const PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAd
         <App>
             {(apis) => (
                 <button className='argo-button argo-button--base' onClick={async () => {
-                    const values = await apis.popup.prompt('Setting default values in popup example', (api) => (
-                        <React.Fragment>
-                            <div className='argo-form-row'>
-                                <FormField label='Username' formApi={api} field='username' component={Text} />
-                            </div>
-                            <div className='argo-form-row'>
-                                <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
-                            </div>
-                            <div className='argo-form-row'>
-                                <ReactCheckbox id='popup-react-checkbox' field='checkboxField' />{' '}
-                                <label htmlFor='popup-react-checkbox'>This is a React Checkbox</label>
-                            </div>
-                        </React.Fragment>
-                    ), {
-                        validate: (vals) => ({
-                            username: !vals.username && 'Username is required',
-                            password: !vals.password && 'Password is required',
-                        }),
-                        submit: (vals, api, close) => {
-                            if (vals.username === 'admin' && vals.password === 'test') {
-                                close();
-                                action('Prompt values')(vals);
-                            } else {
-                                api.setError('password', 'Username or password is invalid');
-                            }
+                    const values = await apis.popup.prompt('Setting default values in popup example',
+                        (api) => (
+                            <React.Fragment>
+                                <div className='argo-form-row'>
+                                    <FormField label='Username' formApi={api} field='username' component={Text} />
+                                </div>
+                                <div className='argo-form-row'>
+                                    <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
+                                </div>
+                                <div className='argo-form-row'>
+                                    <ReactCheckbox id='popup-react-checkbox' field='checkboxField' />{' '}
+                                    <label htmlFor='popup-react-checkbox'>This is a React Checkbox</label>
+                                </div>
+                            </React.Fragment>
+                        ), {
+                            validate: (vals) => ({
+                                username: !vals.username && 'Username is required',
+                                password: !vals.password && 'Password is required',
+                            }),
+                            submit: (vals, api, close) => {
+                                if (vals.username === 'admin' && vals.password === 'test') {
+                                    close();
+                                    action('Prompt values')(vals);
+                                } else {
+                                    api.setError('password', 'Username or password is invalid');
+                                }
+                            },
                         },
-                    },
-                    undefined,
-                    undefined,
-                    {checkboxField: true, username: 'admin'});
+                        undefined,
+                        undefined,
+                        {checkboxField: true, username: 'admin'});
                     action('Prompt values')(values);
                 }}>Click me</button>
             )}
