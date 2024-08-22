@@ -305,7 +305,8 @@ export const PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAd
                         },
                         undefined,
                         undefined,
-                        {checkboxField: true, username: 'admin'});
+                        {checkboxField: true, username: 'admin'}
+                    );
                     action('Prompt values')(values);
                 }}>Click me</button>
             )}
