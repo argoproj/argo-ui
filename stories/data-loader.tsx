@@ -1,4 +1,3 @@
-import { Store, withState } from '@dump247/storybook-state';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
@@ -11,12 +10,13 @@ function loadData(input: string): Promise<string> {
 }
 
 storiesOf('Data Loader', module)
-    .add('loading data asynchronously', withState({ input: 'world' })(({store}: { store: Store<any> }) => (
-        <App>
+    .add('loading data asynchronously', () => {
+        const [input, setInput] = React.useState('world');
+        return <App>
             {() => (
                 <React.Fragment>
-                    <input value={store.state.input} onChange={(e) => store.set({ input: e.target.value })}/>
-                    <DataLoader input={store.state.input} load={(input) => loadData(input)}>
+                    <input value={input} onChange={(e) => setInput(e.target.value)}/>
+                    <DataLoader input={input} load={loadData}>
                         {(data) => (
                             <div>
                                 {data}
@@ -26,4 +26,4 @@ storiesOf('Data Loader', module)
                 </React.Fragment>
             )}
         </App>
-    )));
+    });

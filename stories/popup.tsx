@@ -1,11 +1,11 @@
-import { Store, withState } from '@dump247/storybook-state';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Checkbox as ReactCheckbox} from 'react-form';
 import { Text } from 'react-form';
 
-import { Checkbox, FormField } from '../src/components';
+import { Checkbox } from '../src/components/checkbox';
+import { FormField } from '../src/components/form-field/form-field';
 import { App } from './utils';
 
 storiesOf('Popup', module)
@@ -18,24 +18,26 @@ storiesOf('Popup', module)
                 }}>Click me</button>
             )}
         </App>
-    )).add('confirmation with custom form inside',  withState({ checked: false })(({store}: { store: Store<any> }) => (
+    )).add('confirmation with custom form inside',  () => {
+        const [checked, setChecked] = React.useState(false);
+        return (
             <App>
                 {(apis) => (
                     <div>
                     <button className='argo-button argo-button--base' onClick={async () => {
                         const confirmed = await apis.popup.confirm('Do it!', () => (
                             <div>
-                                Click checkbox and confirm <Checkbox checked={store.state.checked} onChange={(val) => store.set({ checked: val })} />
+                                Click checkbox and confirm <Checkbox checked={checked} onChange={setChecked} />
                             </div>
                         ));
                         action('Confirmed')(confirmed);
                     }}>Click me</button>
-                    <p>Checked?: {JSON.stringify(store.state.checked)}</p>
+                    <p>Checked?: {JSON.stringify(checked)}</p>
                     </div>
                 )}
             </App>
-        ),
-    )).add('prompt', () => (
+        )
+    }).add('prompt', () => (
         <App>
             {(apis) => (
                 <button className='argo-button argo-button--base' onClick={async () => {

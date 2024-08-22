@@ -1,7 +1,8 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Form, Text } from 'react-form';
-import { FormField, FormSelect } from '../src/components';
+
+import { FormField, FormSelect } from '../src/components/form-field/form-field';
 
 storiesOf('Forms', module)
     .add('default', () => (

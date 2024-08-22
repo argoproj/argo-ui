@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { Tabs } from '../src/components';
+
+import { Tabs } from '../src/components/tabs/tabs';
 
 storiesOf('Tabs', module)
     .add('basic tabs', () => (

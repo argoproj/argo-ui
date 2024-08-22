@@ -1,7 +1,8 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { DropDown, DropDownMenu } from '../src/components';
+import { DropDown } from '../src/components/dropdown/dropdown';
+import { DropDownMenu } from '../src/components/dropdown-menu';
 
 storiesOf('Dropdown', module)
     .add('default', () => <DropDown anchor={() => <a>Click me</a>}><p>Dropdown content here</p></DropDown>)

@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { NotificationType} from '../src/components';
+import { NotificationType } from '../src/components/notifications/notifications';
 
 import { App } from './utils';
 
