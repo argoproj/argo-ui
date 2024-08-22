@@ -32,15 +32,15 @@ export const ConfirmationWithCustomFormInside = () => {
             <App>
                 {(apis) => (
                     <div>
-                        <button className='argo-button argo-button--base' onClick={async () => {
-                            const confirmed = await apis.popup.confirm('Do it!', () => (
-                                <div>
-                                    Click checkbox and confirm <Checkbox checked={checked} onChange={setChecked} />
-                                </div>
-                            ));
-                            action('Confirmed')(confirmed);
-                        }}>Click me</button>
-                        <p>Checked?: {JSON.stringify(checked)}</p>
+                    <button className='argo-button argo-button--base' onClick={async () => {
+                        const confirmed = await apis.popup.confirm('Do it!', () => (
+                            <div>
+                                Click checkbox and confirm <Checkbox checked={checked} onChange={setChecked} />
+                            </div>
+                        ));
+                        action('Confirmed')(confirmed);
+                    }}>Click me</button>
+                    <p>Checked?: {JSON.stringify(checked)}</p>
                     </div>
                 )}
             </App>
@@ -256,7 +256,7 @@ export const PromptWithOnlyParagraphsAdditionalTopPaddingIsOptionalForTheFirstPa
                 <button className='argo-button argo-button--base' onClick={async () => {
                     const values = await apis.popup.prompt('Enter name', (api) => (
                         <div>
-                            <p style={{ paddingTop: '20px' }}>This is a paragraph</p>
+                            <p style={{paddingTop: '20px'}}>This is a paragraph</p>
                             <p>This is another paragraph</p>
                         </div>
                     ));
@@ -279,7 +279,7 @@ export const PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAd
                                 <FormField label='Username' formApi={api} field='username' component={Text} />
                             </div>
                             <div className='argo-form-row'>
-                                <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{ type: 'password' }} />
+                                <FormField label='Password' formApi={api} field='password' component={Text} componentProps={{type: 'password'}} />
                             </div>
                             <div className='argo-form-row'>
                                 <ReactCheckbox id='popup-react-checkbox' field='checkboxField' />{' '}
@@ -302,7 +302,7 @@ export const PromptWithReactCheckboxThatIsCheckedByDefaultUsernameDefaultSetToAd
                     },
                     undefined,
                     undefined,
-                    { checkboxField: true, username: 'admin' });
+                    {checkboxField: true, username: 'admin'});
                     action('Prompt values')(values);
                 }}>Click me</button>
             )}
