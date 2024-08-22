@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, FormApi, FormValues, RenderReturn, ValidateValuesFunction } from 'react-form';
 import { BehaviorSubject } from 'rxjs';
 
-import { PopupProps  } from './popup';
+import { PopupProps } from './popup';
 
 export interface PopupApi {
     confirm(title: string, message: string | React.ComponentType): Promise<boolean>;
@@ -41,8 +41,8 @@ export class PopupManager implements PopupApi {
                 content,
                 footer: (
                     <div>
-                        <button qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button> <button
-                            qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
+                        <button qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button>
+                        <button qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
                     </div>
                 ),
             });
@@ -98,8 +98,8 @@ export class PopupManager implements PopupApi {
                 ),
                 footer: (
                     <div>
-                        <button qe-id='prompt-popup-ok-button' className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button> <button
-                            qe-id='prompt-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
+                        <button qe-id='prompt-popup-ok-button' className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button>
+                        <button qe-id='prompt-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
                     </div>
                 ),
             });
