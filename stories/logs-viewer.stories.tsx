@@ -8,15 +8,15 @@ export default {
 };
 
 export const Default = () => (
-    <div>
-        <LogsViewer source={{
-            key: 'test',
-            loadLogs: () => new Observable<string>((observer) => {
-                const interval = setInterval(() => observer.next('test\n'), 1000);
-                return () => clearInterval(interval);
-            }),
-            shouldRepeat: () => false,
-        }}/>
-    </div>
+  <div>
+    <LogsViewer source={{
+        key: 'test',
+        loadLogs: () => new Observable<string>((observer) => {
+            const interval = setInterval(() => observer.next('test\n'), 1000);
+            return () => clearInterval(interval);
+        }),
+        shouldRepeat: () => false,
+    }}/>
+  </div>
 );
 Default.storyName = 'default';
