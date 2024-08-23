@@ -1,12 +1,14 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 import { Select } from '../src/components/select/select';
 
-storiesOf('Select', module)
-    .add('default', () => {
-        const [selected, setSelected] = React.useState('option1');
-        return (
+export default {
+  title: 'Select',
+};
+
+export const Default = () => {
+    const [selected, setSelected] = React.useState('option1');
+    return (
             <div>
                 <h4>
                     Selected option value: {selected}
@@ -19,10 +21,13 @@ storiesOf('Select', module)
                     onChange={(option) => setSelected(option.value)}
                     />
             </div>
-        )},
-    ).add('multi-select', () => {
-        const [selected, setSelected] = React.useState(['option1']);
-        return (
+        )
+};
+Default.storyName = 'default';
+
+export const MultiSelect = () => {
+    const [selected, setSelected] = React.useState(['option1']);
+    return (
             <div>
                 <Select
                     value={selected}
@@ -32,5 +37,6 @@ storiesOf('Select', module)
                     onMultiChange={(options) => setSelected(options.map((item) => item.value))}
                     />
             </div>
-        )},
-    );
+        )
+};
+MultiSelect.storyName = 'multi-select';
