@@ -9,11 +9,12 @@
         "v2"
     ],
     "scripts": {
-        "build": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook",
         "lint": "eslint --ext .tsx .",
+        "deduplicate": "yarn-deduplicate -s fewer yarn.lock",
         "test": "jest",
         "utils:icons": "rm -f src/assets/fonts/* && node ./scripts/icons/generator.js",
         "start": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -p 6006",
+        "build": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook",
         "start-v2": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -c ./v2/.storybook -s ./v2/.storybook/images -p 6006",
         "build-v2": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o ./dist/storybook-v2 -c ./v2/.storybook"
     },
@@ -87,7 +88,8 @@
         "ts-jest": "^26.5.6",
         "ts-node": "^10.9.1",
         "webfonts-generator": "^0.4.0",
-        "webpack": "^4.46.0"
+        "webpack": "^4.46.0",
+        "yarn-deduplicate": "^6.0.2"
     },
     "resolutions": {
         "@types/react": "^16.8.5",

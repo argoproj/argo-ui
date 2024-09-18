@@ -15,6 +15,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
       - run: yarn install
+      - run: yarn deduplicate
       - run: yarn build
       - run: yarn lint
       - run: yarn tsc -p tsconfig.json
