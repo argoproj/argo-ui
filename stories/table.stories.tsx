@@ -1,6 +1,9 @@
-import { storiesOf } from '@storybook/react';
 import {default as classNames} from 'classnames';
 import * as React from 'react';
+
+export default {
+    title: 'Table',
+};
 
 class TableExample extends React.Component<any, {selectedIndex: number}> {
 
@@ -34,5 +37,5 @@ class TableExample extends React.Component<any, {selectedIndex: number}> {
     }
 }
 
-storiesOf('Table', module)
-    .add('default', () => <TableExample/>);
+export const Default = () => <TableExample />;
+Default.storyName = 'default';

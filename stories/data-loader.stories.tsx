@@ -1,5 +1,3 @@
-import { Store, withState } from '@dump247/storybook-state';
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
 import { App } from './utils';
@@ -10,13 +8,18 @@ function loadData(input: string): Promise<string> {
     return new Promise((resolve) => window.setTimeout(() => resolve(`hello ${input}`), 50));
 }
 
-storiesOf('Data Loader', module)
-    .add('loading data asynchronously', withState({ input: 'world' })(({store}: { store: Store<any> }) => (
+export default {
+  title: 'Data Loader',
+};
+
+export const LoadingDataAsynchronously = () => {
+    const [input, setInput] = React.useState('world');
+    return (
         <App>
             {() => (
                 <React.Fragment>
-                    <input value={store.state.input} onChange={(e) => store.set({ input: e.target.value })}/>
-                    <DataLoader input={store.state.input} load={(input) => loadData(input)}>
+                    <input value={input} onChange={(e) => setInput(e.target.value)}/>
+                    <DataLoader input={input} load={loadData}>
                         {(data) => (
                             <div>
                                 {data}
@@ -26,4 +29,6 @@ storiesOf('Data Loader', module)
                 </React.Fragment>
             )}
         </App>
-    )));
+    );
+};
+LoadingDataAsynchronously.storyName = 'loading data asynchronously';

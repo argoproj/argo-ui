@@ -1,10 +1,14 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { Tabs } from '../src/components';
 
-storiesOf('Tabs', module)
-    .add('basic tabs', () => (
-        <Tabs tabs={[{
+import { Tabs } from '../src/components/tabs/tabs';
+
+export default {
+    title: 'Tabs',
+};
+
+export const BasicTabs = () => (
+    <Tabs
+        tabs={[{
             title: 'Tab 1',
             content: <p>Tab 1 content</p>,
             key: 'tab1',
@@ -14,4 +18,5 @@ storiesOf('Tabs', module)
             key: 'tab2',
             badge: '5',
         }]}/>
-    ));
+);
+BasicTabs.storyName = 'basic tabs';
