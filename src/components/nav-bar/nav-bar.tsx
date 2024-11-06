@@ -35,10 +35,12 @@ export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps,
                 <div className='nav-bar__version'>{props.version && props.version()}</div>
                 {(props.items || []).map((item) => (
                     <Tooltip content={item.title} placement='right' arrow={true} key={item.path + item.title}>
+                    <a href="#">
                         <div className={classNames('nav-bar__item', { active: isActiveRoute(locationPath, item.path) })}
                             onClick={() => context.router.history.push(item.path)}>
                             <i className={item.iconClassName}/>
                         </div>
+                    </a>
                     </Tooltip>
                 ))}
             </div>
