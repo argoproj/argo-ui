@@ -14,10 +14,10 @@ $argo-icon-fonts-root: '/' !default;
 
 @font-face {
     font-family: "argo-icon";
-    src: url($argo-icon-fonts-root + "argo-icon.eot?dc7d942cb67a42904c1a8d10acd6973a?#iefix") format("embedded-opentype"),
-url($argo-icon-fonts-root + "argo-icon.woff?dc7d942cb67a42904c1a8d10acd6973a") format("woff"),
-url($argo-icon-fonts-root + "argo-icon.ttf?dc7d942cb67a42904c1a8d10acd6973a") format("truetype"),
-url($argo-icon-fonts-root + "argo-icon.svg?dc7d942cb67a42904c1a8d10acd6973a#argo-icon") format("svg");
+    src: url($argo-icon-fonts-root + "argo-icon.eot?73a3124f147facf3e90960528bdfae73?#iefix") format("embedded-opentype"),
+url($argo-icon-fonts-root + "argo-icon.woff?73a3124f147facf3e90960528bdfae73") format("woff"),
+url($argo-icon-fonts-root + "argo-icon.ttf?73a3124f147facf3e90960528bdfae73") format("truetype"),
+url($argo-icon-fonts-root + "argo-icon.svg?73a3124f147facf3e90960528bdfae73#argo-icon") format("svg");
 }
 
 i {
@@ -300,114 +300,117 @@ i {
 .argo-icon-notification:before {
   content: "\f14f";
 }
-.argo-icon-pencil:before {
+.argo-icon-oci:before {
   content: "\f150";
 }
-.argo-icon-play-2:before {
+.argo-icon-pencil:before {
   content: "\f151";
 }
-.argo-icon-play:before {
+.argo-icon-play-2:before {
   content: "\f152";
 }
-.argo-icon-pod:before {
+.argo-icon-play:before {
   content: "\f153";
 }
-.argo-icon-policies:before {
+.argo-icon-pod:before {
   content: "\f154";
 }
-.argo-icon-policy:before {
+.argo-icon-policies:before {
   content: "\f155";
 }
-.argo-icon-profile:before {
+.argo-icon-policy:before {
   content: "\f156";
 }
-.argo-icon-push:before {
+.argo-icon-profile:before {
   content: "\f157";
 }
-.argo-icon-report-card:before {
+.argo-icon-push:before {
   content: "\f158";
 }
-.argo-icon-resubmit-failed:before {
+.argo-icon-report-card:before {
   content: "\f159";
 }
-.argo-icon-retry:before {
+.argo-icon-resubmit-failed:before {
   content: "\f15a";
 }
-.argo-icon-right-navigation-toolbar:before {
+.argo-icon-retry:before {
   content: "\f15b";
 }
-.argo-icon-safe:before {
+.argo-icon-right-navigation-toolbar:before {
   content: "\f15c";
 }
-.argo-icon-sales-channels:before {
+.argo-icon-safe:before {
   content: "\f15d";
 }
-.argo-icon-sample:before {
+.argo-icon-sales-channels:before {
   content: "\f15e";
 }
-.argo-icon-scale:before {
+.argo-icon-sample:before {
   content: "\f15f";
 }
-.argo-icon-search:before {
+.argo-icon-scale:before {
   content: "\f160";
 }
-.argo-icon-settings:before {
+.argo-icon-search:before {
   content: "\f161";
 }
-.argo-icon-slack-02:before {
+.argo-icon-settings:before {
   content: "\f162";
 }
-.argo-icon-stop-property:before {
+.argo-icon-slack-02:before {
   content: "\f163";
 }
-.argo-icon-stop:before {
+.argo-icon-stop-property:before {
   content: "\f164";
 }
-.argo-icon-storageclass:before {
+.argo-icon-stop:before {
   content: "\f165";
 }
-.argo-icon-storageprovider:before {
+.argo-icon-storageclass:before {
   content: "\f166";
 }
-.argo-icon-tag:before {
+.argo-icon-storageprovider:before {
   content: "\f167";
 }
-.argo-icon-template:before {
+.argo-icon-tag:before {
   content: "\f168";
 }
-.argo-icon-terminate:before {
+.argo-icon-template:before {
   content: "\f169";
 }
-.argo-icon-test:before {
+.argo-icon-terminate:before {
   content: "\f16a";
 }
-.argo-icon-timeline:before {
+.argo-icon-test:before {
   content: "\f16b";
 }
-.argo-icon-tools:before {
+.argo-icon-timeline:before {
   content: "\f16c";
 }
-.argo-icon-user-groups:before {
+.argo-icon-tools:before {
   content: "\f16d";
 }
-.argo-icon-user-profile:before {
+.argo-icon-user-groups:before {
   content: "\f16e";
 }
-.argo-icon-user:before {
+.argo-icon-user-profile:before {
   content: "\f16f";
 }
-.argo-icon-users:before {
+.argo-icon-user:before {
   content: "\f170";
 }
-.argo-icon-volume:before {
+.argo-icon-users:before {
   content: "\f171";
 }
-.argo-icon-warning:before {
+.argo-icon-volume:before {
   content: "\f172";
 }
-.argo-icon-workflow:before {
+.argo-icon-warning:before {
   content: "\f173";
 }
-.argo-icon-yaml:before {
+.argo-icon-workflow:before {
   content: "\f174";
+}
+.argo-icon-yaml:before {
+  content: "\f175";
 }
