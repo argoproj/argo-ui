@@ -14,7 +14,10 @@ export class NavigationManager implements NavigationApi {
     }
 
     public goto(path: string, query: {[name: string]: any} = {}, options?: { event?: React.MouseEvent, replace?: boolean }): void {
-        if (path.startsWith('.')) {
+        if (this.history.location.pathname.endsWith('/') && path.startsWith('./')) {
+            // Prevent ending up with two slashes - e.g. my-argo.test/applications//my-app
+            path = this.history.location.pathname + path.slice(2);
+        } else {
             path = this.history.location.pathname + path.slice(1);
         }
         const noPathChange = path === this.history.location.pathname;
