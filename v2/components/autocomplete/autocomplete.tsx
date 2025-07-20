@@ -53,6 +53,7 @@ export const RenderAutocomplete = (
         onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
         className?: string;
         style?: React.CSSProperties;
+        wildcard?: boolean;
     }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
@@ -78,11 +79,27 @@ export const RenderAutocomplete = (
     const debouncedVal = useDebounce(props.value as string, 350);
 
     React.useEffect(() => {
+        const convertWildcardToRegex = (pattern: string): RegExp => {
+            const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const wildcardPattern = escapedPattern.replace(/\\\*/g, '.*');
+            return new RegExp(wildcardPattern, 'i');
+        };
+
         const filtered = (props.items || []).filter((i) => {
             if (i) {
+                const searchValue = debouncedVal?.toLowerCase() || '';
+
+                if (props.wildcard && searchValue.includes('*')) {
+                    const regex = convertWildcardToRegex(searchValue);
+                    const itemMatches = regex.test(i.toLowerCase());
+                    const abbreviationMatches = props.abbreviations !== undefined ? regex.test(props.abbreviations.get(i)?.toLowerCase() || '') : false;
+
+                    return itemMatches || abbreviationMatches;
+                }
+
                 return props.abbreviations !== undefined
-                    ? i.toLowerCase().includes(debouncedVal?.toLowerCase()) || props.abbreviations.get(i)?.includes(debouncedVal?.toLowerCase())
-                    : i.toLowerCase().includes(debouncedVal?.toLowerCase());
+                    ? i.toLowerCase().includes(searchValue) || props.abbreviations.get(i)?.toLowerCase().includes(searchValue)
+                    : i.toLowerCase().includes(searchValue);
             }
             return false;
         });
