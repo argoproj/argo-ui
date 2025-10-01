@@ -5,6 +5,7 @@ import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/in
 import ThemeDiv from '../theme-div/theme-div';
 
 import './autocomplete.scss';
+import minimatch from 'minimatch';
 
 interface AutocompleteProps extends InputProps {
     inputref?: React.MutableRefObject<HTMLInputElement>;
@@ -79,20 +80,13 @@ export const RenderAutocomplete = (
     const debouncedVal = useDebounce(props.value as string, 350);
 
     React.useEffect(() => {
-        const convertWildcardToRegex = (pattern: string): RegExp => {
-            const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const wildcardPattern = escapedPattern.replace(/\\\*/g, '.*');
-            return new RegExp(wildcardPattern, 'i');
-        };
-
         const filtered = (props.items || []).filter((i) => {
             if (i) {
                 const searchValue = debouncedVal?.toLowerCase() || '';
 
                 if (props.wildcard && searchValue.includes('*')) {
-                    const regex = convertWildcardToRegex(searchValue);
-                    const itemMatches = regex.test(i.toLowerCase());
-                    const abbreviationMatches = props.abbreviations !== undefined ? regex.test(props.abbreviations.get(i)?.toLowerCase() || '') : false;
+                    const itemMatches = minimatch(i.toLowerCase(), searchValue, {nocase: true});
+                    const abbreviationMatches = props.abbreviations !== undefined ? minimatch(props.abbreviations.get(i)?.toLowerCase() || '', searchValue, {nocase: true}) : false;
 
                     return itemMatches || abbreviationMatches;
                 }
