@@ -84,7 +84,7 @@ export const RenderAutocomplete = (
             if (i) {
                 const searchValue = debouncedVal?.toLowerCase() || '';
 
-                if (props.wildcard && searchValue.includes('*')) {
+                if (props.wildcard) {
                     const itemMatches = minimatch(i.toLowerCase(), searchValue, {nocase: true});
                     const abbreviationMatches = props.abbreviations !== undefined ? minimatch(props.abbreviations.get(i)?.toLowerCase() || '', searchValue, {nocase: true}) : false;
 
