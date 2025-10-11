@@ -9,16 +9,38 @@ export default {
         items: {control: {type: 'object'}},
         inputStyle: {control: {disable: true}},
         placeholder: {control: {type: 'text'}},
-        wildcard: {control: {type: 'boolean'}},
+        glob: {control: {type: 'boolean'}},
     },
 };
 
 export const Primary = (args: any) => {
     const [input, setInput] = React.useState('');
 
+    const items = [
+        'User',
+        'AppServer',
+        'AuthService',
+        'Backend',
+        'Cache',
+        'Config',
+        'Database',
+        'Frontend',
+        'Logger',
+        'utils.js',
+        'data-01.csv',
+        'data-02.csv',
+        'data-final.csv',
+        'src/index.js',
+        'src/components/Button.js',
+        'src/components/Input.ts',
+        'test/app.test.js',
+        '.env',
+        'README.md',
+    ];
+
     return (
         <div style={{width: '50%', paddingBottom: '6em'}}>
-            <Autocomplete {...args} items={['hello', 'world', 'hello world', 'hello world2']} value={input} onChange={(e) => setInput(e.target.value)} />
+            <Autocomplete {...args} items={items} value={input} onChange={(e) => setInput(e.target.value)} />
         </div>
     );
 };
