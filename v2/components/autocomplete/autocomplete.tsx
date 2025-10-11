@@ -5,7 +5,7 @@ import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/in
 import ThemeDiv from '../theme-div/theme-div';
 
 import './autocomplete.scss';
-import minimatch from 'minimatch';
+import {Minimatch, IOptions} from 'minimatch';
 
 interface AutocompleteProps extends InputProps {
     inputref?: React.MutableRefObject<HTMLInputElement>;
@@ -54,7 +54,7 @@ export const RenderAutocomplete = (
         onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
         className?: string;
         style?: React.CSSProperties;
-        wildcard?: boolean;
+        glob?: boolean | IOptions;
     }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
@@ -84,11 +84,13 @@ export const RenderAutocomplete = (
             if (i) {
                 const searchValue = debouncedVal?.toLowerCase() || '';
 
-                if (props.wildcard) {
-                    const itemMatches = minimatch(i.toLowerCase(), searchValue, {nocase: true});
-                    const abbreviationMatches = props.abbreviations !== undefined ? minimatch(props.abbreviations.get(i)?.toLowerCase() || '', searchValue, {nocase: true}) : false;
+                const useGlob = typeof props.glob === 'boolean' ? props.glob : !!props.glob;
+                const globOptions = typeof props.glob === 'boolean' ? null : props.glob;
 
-                    return itemMatches || abbreviationMatches;
+                const globMatcher = useGlob && searchValue ? new Minimatch(searchValue, globOptions) : null;
+
+                if (globMatcher) {
+                    return props.abbreviations !== undefined ? globMatcher.match(i) || globMatcher.match(props.abbreviations?.get(i) ?? '') : globMatcher.match(i);
                 }
 
                 return props.abbreviations !== undefined
