@@ -33,6 +33,7 @@ export const Autocomplete = (
         onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
         className?: string;
         style?: React.CSSProperties;
+        glob?: boolean | IOptions;
     }
 ) => {
     return (
