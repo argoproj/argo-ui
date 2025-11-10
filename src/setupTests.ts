@@ -1,4 +1,2 @@
-import {configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-configure({ adapter: new Adapter() });
+// Configure testing environment for React 18
+(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
