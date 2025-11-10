@@ -39,29 +39,30 @@
         "xterm-addon-fit": "^0.5.0"
     },
     "peerDependencies": {
-        "@types/react": "^16.8.5",
-        "react": "^16.9.3",
-        "react-dom": "^16.9.3"
+        "@types/react": "^18.0.0",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.21.3",
-        "@storybook/addon-actions": "6.5.0-beta.1",
-        "@storybook/addon-controls": "6.5.0-beta.1",
-        "@storybook/addon-essentials": "6.5.0-beta.1",
-        "@storybook/addon-links": "6.5.0-beta.1",
-        "@storybook/addons": "6.5.0-beta.1",
-        "@storybook/react": "6.5.0-beta.1",
+        "@storybook/addon-actions": "^7.6.0",
+        "@storybook/addon-controls": "^7.6.0",
+        "@storybook/addon-essentials": "^7.6.0",
+        "@storybook/addon-links": "^7.6.0",
+        "@storybook/addons": "^7.6.0",
+        "@storybook/react": "^7.6.0",
+        "@storybook/react-webpack5": "^7.6.0",
         "@types/classnames": "^2.3.1",
         "@types/deep-equal": "^1.0.1",
-        "@types/enzyme": "^3.10.12",
-        "@types/enzyme-adapter-react-16": "^1.0.6",
+
+
         "@types/history": "^4.7.8",
         "@types/jest": "^26.0.15",
         "@types/node": "^18.15.3",
         "@types/prop-types": "^15.7.5",
-        "@types/react": "^16.8.5",
+        "@types/react": "^18.0.0",
         "@types/react-autocomplete": "^1.8.4",
-        "@types/react-dom": "^16.9.3",
+        "@types/react-dom": "^18.0.0",
         "@types/react-form": "^2.16.1",
         "@types/react-helmet": "^6.1.6",
         "@types/react-router-dom": "^4.2.2",
@@ -71,20 +72,20 @@
         "babel-loader": "^8.2.5",
         "copy-webpack-plugin": "^4.3.1",
         "css-loader": "^3.6.0",
-        "enzyme": "^3.11.0",
-        "enzyme-adapter-react-16": "^1.15.7",
-        "enzyme-to-json": "^3.6.2",
+
+
+
         "eslint": "^8.23.0",
         "eslint-plugin-react": "^7.31.1",
         "glob": "^8.0.3",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^26.6.3",
         "raw-loader": "^4.0.2",
-        "react": "^16.9.3",
-        "react-dom": "^16.9.3",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
         "sass": "^1.55.0",
         "sass-loader": "^v10.1.0",
-        "storybook": "6.5.0-beta.1",
+        "storybook": "^7.6.0",
         "style-loader": "^2.0.0",
         "ts-jest": "^26.5.6",
         "ts-node": "^10.9.1",
@@ -93,7 +94,7 @@
         "yarn-deduplicate": "^6.0.2"
     },
     "resolutions": {
-        "@types/react": "^16.8.5",
+        "@types/react": "^18.0.0",
         "@types/node": "14.11.2"
     }
 }
