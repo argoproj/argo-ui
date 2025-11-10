@@ -35,7 +35,8 @@ export interface Toolbar {
     actionMenu?: ActionMenu;
 }
 
-export interface TopBarProps extends React.Props<any> {
+export interface TopBarProps {
+    children?: React.ReactNode;
     title: string;
     toolbar?: Toolbar;
 }

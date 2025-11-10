@@ -30,7 +30,7 @@ export const useHover = (): [React.MutableRefObject<any>, boolean] => {
 /**
  * Displays a Tooltip when its children are hovered over
  */
-export const Tooltip = (props: {content: React.ReactNode | string; inverted?: boolean} & React.PropsWithRef<any>) => {
+export const Tooltip = (props: {content: React.ReactNode | string; inverted?: boolean; children?: React.ReactNode}) => {
     const [tooltip, showTooltip] = useHover();
     return (
         <div ref={tooltip} style={{position: 'relative', minWidth: 0}}>
