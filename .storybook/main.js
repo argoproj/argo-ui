@@ -3,10 +3,6 @@ const path = require('path');
 module.exports = {
     stories: ['../stories/*.stories.tsx'],
     addons: ['@storybook/addon-essentials'],
-    framework: {
-        name: '@storybook/react-webpack5',
-        options: {}
-    },
     typescript: {
         check: false, // typecheck separately
         reactDocgen: false, // substantially improves performance: https://github.com/storybookjs/storybook/issues/22164#issuecomment-1603627308
@@ -18,7 +14,7 @@ module.exports = {
             exclude: /node_modules/,
             include: path.resolve(__dirname, '../'),
             sideEffects: true, // get side-effect styles to load per: https://github.com/storybookjs/storybook/issues/4690#issuecomment-435909433
-            use: ['style-loader', 'raw-loader', 'sass-loader']
+            loader: 'style-loader!raw-loader!sass-loader'
         });
         return config;
     },
