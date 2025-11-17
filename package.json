@@ -30,7 +30,6 @@
         "react-autocomplete": "1.8.1",
         "react-form": "^2.16.0",
         "react-helmet": "^6.1.0",
-        "react-router-dom": "^4.2.2",
         "react-toastify": "9.0.3",
         "rxjs": "^7.8.1",
         "typescript": "^4.9.5",
@@ -41,7 +40,8 @@
     "peerDependencies": {
         "@types/react": "^18.0.0",
         "react": "^18.0.0",
-        "react-dom": "^18.0.0"
+        "react-dom": "^18.0.0",
+        "react-router-dom": "^5.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.21.3",
@@ -54,8 +54,6 @@
         "@storybook/react-webpack5": "^7.6.0",
         "@types/classnames": "^2.3.1",
         "@types/deep-equal": "^1.0.1",
-
-
         "@types/history": "^4.7.8",
         "@types/jest": "^26.0.15",
         "@types/node": "^18.15.3",
@@ -65,16 +63,13 @@
         "@types/react-dom": "^18.0.0",
         "@types/react-form": "^2.16.1",
         "@types/react-helmet": "^6.1.6",
-        "@types/react-router-dom": "^4.2.2",
+        "@types/react-router-dom": "^5.0.0",
         "@types/uuid": "^9.0.3",
         "@typescript-eslint/eslint-plugin": "^5.36.1",
         "@typescript-eslint/parser": "^5.36.1",
         "babel-loader": "^8.2.5",
         "copy-webpack-plugin": "^4.3.1",
         "css-loader": "^3.6.0",
-
-
-
         "eslint": "^8.23.0",
         "eslint-plugin-react": "^7.31.1",
         "glob": "^8.0.3",
@@ -83,6 +78,7 @@
         "raw-loader": "^4.0.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
+        "react-router-dom": "^5.0.0",
         "sass": "^1.55.0",
         "sass-loader": "^v10.1.0",
         "storybook": "^7.6.0",
