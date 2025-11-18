@@ -44,6 +44,7 @@
         "react-router-dom": "^5.0.0"
     },
     "devDependencies": {
+        "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@babel/core": "^7.21.3",
         "@storybook/addon-actions": "6.5.0-beta.1",
         "@storybook/addon-controls": "6.5.0-beta.1",
@@ -53,6 +54,7 @@
         "@storybook/react": "6.5.0-beta.1",
         "@types/classnames": "^2.3.1",
         "@types/deep-equal": "^1.0.1",
+        "@types/enzyme": "^3.10.12",
         "@types/history": "^4.7.8",
         "@types/jest": "^26.0.15",
         "@types/node": "^18.15.3",
@@ -69,6 +71,8 @@
         "babel-loader": "^8.2.5",
         "copy-webpack-plugin": "^4.3.1",
         "css-loader": "^3.6.0",
+        "enzyme": "^3.11.0",
+        "enzyme-to-json": "^3.6.2",
         "eslint": "^8.23.0",
         "eslint-plugin-react": "^7.31.1",
         "glob": "^8.0.3",
