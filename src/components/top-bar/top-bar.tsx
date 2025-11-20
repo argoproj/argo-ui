@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Checkbox } from '../checkbox';
 import { DropDown } from '../dropdown/dropdown';
+import './top-bar.scss';
 
 require('./top-bar.scss');
 
