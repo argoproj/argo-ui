@@ -25,6 +25,7 @@
         "core-js": "^3.32.1",
         "foundation-sites": "^6.4.3",
         "history": "^4.10.1",
+        "minimatch": "5.1.6",
         "prop-types": "^15.8.1",
         "react-autocomplete": "1.8.1",
         "react-form": "^2.16.0",
