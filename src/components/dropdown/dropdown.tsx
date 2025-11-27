@@ -72,6 +72,8 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
             if (this.state.opened && this.content && this.el) {
                 this.setState(this.refreshState());
             }
+        }), fromEvent<KeyboardEvent>(document, 'keydown').pipe(filter((event) => event.key === 'Enter' || event.keyCode === 13)).subscribe((event) => {
+            this.selectTopResult(event);
         })];
     }
 
@@ -84,6 +86,21 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         this.setState({ opened: false });
         if (this.props.onOpenStateChange) {
             this.props.onOpenStateChange(false);
+        }
+    }
+
+    private selectTopResult(event: KeyboardEvent) {
+        if (!this.state.opened || !this.content || !this.el) {
+            return;
+        }
+        const target = event.target as Node;
+        if (target && !this.el.contains(target) && !this.content.contains(target)) {
+            return;
+        }
+        const firstItem = this.content.querySelector('li') as HTMLElement;
+        if (firstItem) {
+            event.preventDefault();
+            firstItem.click();
         }
     }
 
