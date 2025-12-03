@@ -5,7 +5,12 @@ import { BehaviorSubject } from 'rxjs';
 import { PopupProps } from './popup';
 
 export interface PopupApi {
-    confirm(title: string, message: string | React.ComponentType): Promise<boolean>;
+    confirm(
+        title: string, 
+        message: string | React.ComponentType,
+        customIcon?: {name: string, color: string},
+        titleColor?: string,
+    ): Promise<boolean>;
     prompt(
         title: string,
         form: (formApi: FormApi) => RenderReturn, settings?: {
@@ -25,7 +30,12 @@ export class PopupManager implements PopupApi {
         return this.popupPropsSubject.asObservable();
     }
 
-    public confirm(title: string, message: string | React.ComponentType): Promise<boolean> {
+    public confirm(
+        title: string, 
+        message: string | React.ComponentType,
+        customIcon?: {name: string, color: string},
+        titleColor?: string,
+    ): Promise<boolean> {
         const content = typeof message === 'string' && (() => (<p>{message}</p>)) || message as React.ComponentType;
 
         return new Promise((resolve) => {
@@ -45,6 +55,8 @@ export class PopupManager implements PopupApi {
                         <button qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
                     </div>
                 ),
+                titleColor: titleColor ? titleColor : 'normal',
+                icon: customIcon ? { name: customIcon?.name, color: customIcon?.color} : undefined,
             });
         });
     }
