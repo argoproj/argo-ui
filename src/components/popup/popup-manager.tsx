@@ -50,7 +50,7 @@ export class PopupManager implements PopupApi {
                 ),
                 content,
                 footer: (
-                    <div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
                         <button qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button>
                         <button qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
                     </div>
@@ -109,7 +109,7 @@ export class PopupManager implements PopupApi {
                     </Form>
                 ),
                 footer: (
-                    <div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
                         <button qe-id='prompt-popup-ok-button' className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button>
                         <button qe-id='prompt-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
                     </div>
