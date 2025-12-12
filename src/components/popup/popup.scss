@@ -34,6 +34,7 @@ $popup-border-radius: 8px;
         &__header {
             line-height: 60px;
             padding-left: 30px;
+            padding-right: 30px;
             height: 60px;
             border-top-right-radius: $popup-border-radius;
             border-top-left-radius: $popup-border-radius;
@@ -45,10 +46,6 @@ $popup-border-radius: 8px;
 
             i {
                 font-size: 21px;
-                float: right;
-                position: absolute;
-                right: 20px;
-                top: 5px;
                 cursor: pointer;
             }
 
