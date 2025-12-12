@@ -5,7 +5,12 @@ import { BehaviorSubject } from 'rxjs';
 import { PopupProps } from './popup';
 
 export interface PopupApi {
-    confirm(title: string, message: string | React.ComponentType): Promise<boolean>;
+    confirm(
+        title: string, 
+        message: string | React.ComponentType,
+        customIcon?: {name: string, color: string},
+        titleColor?: string,
+    ): Promise<boolean>;
     prompt(
         title: string,
         form: (formApi: FormApi) => RenderReturn, settings?: {
@@ -25,7 +30,12 @@ export class PopupManager implements PopupApi {
         return this.popupPropsSubject.asObservable();
     }
 
-    public confirm(title: string, message: string | React.ComponentType): Promise<boolean> {
+    public confirm(
+        title: string, 
+        message: string | React.ComponentType,
+        customIcon?: {name: string, color: string},
+        titleColor?: string,
+    ): Promise<boolean> {
         const content = typeof message === 'string' && (() => (<p>{message}</p>)) || message as React.ComponentType;
 
         return new Promise((resolve) => {
@@ -36,15 +46,17 @@ export class PopupManager implements PopupApi {
 
             this.popupPropsSubject.next({
                 title: (
-                    <span>{title} <i className='argo-icon-close' onClick={() => closeAndResolve(false)}/></span>
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(false)}/></span>
                 ),
                 content,
                 footer: (
-                    <div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
                         <button qe-id='argo-popup-ok-button' className='argo-button argo-button--base' onClick={() => closeAndResolve(true)}>OK</button>
                         <button qe-id='argo-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(false)}>Cancel</button>
                     </div>
                 ),
+                titleColor: titleColor ? titleColor : 'normal',
+                icon: customIcon ? { name: customIcon?.name, color: customIcon?.color} : undefined,
             });
         });
     }
@@ -79,7 +91,7 @@ export class PopupManager implements PopupApi {
             this.popupPropsSubject.next({
                 children: undefined,
                 title: (
-                    <span>{title} <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
                 ),
                 titleColor: titleColor ? titleColor : 'normal',
                 icon: customIcon ? { name: customIcon?.name, color: customIcon?.color} : undefined,
@@ -97,7 +109,7 @@ export class PopupManager implements PopupApi {
                     </Form>
                 ),
                 footer: (
-                    <div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
                         <button qe-id='prompt-popup-ok-button' className='argo-button argo-button--base' onClick={(e) => formApi.submitForm(e)}>OK</button>
                         <button qe-id='prompt-popup-cancel-button' className='argo-button argo-button--base-o' onClick={() => closeAndResolve(null)}>Cancel</button>
                     </div>

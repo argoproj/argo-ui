@@ -26,6 +26,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private el: HTMLDivElement;
     private content: HTMLDivElement;
     private subscriptions: Subscription[];
+    private isFirstOpen = true;
 
     constructor(props: DropDownProps) {
         super(props);
@@ -107,6 +108,38 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
             newState.left = left;
         }
         return newState;
+    }
+
+    public componentDidUpdate(_prevProps: DropDownProps, prevState: DropDownState) {
+        // When menu changes from closed to open state
+        if (!prevState.opened && this.state.opened) {
+            // Mark as first open
+            this.isFirstOpen = true;
+            // Use setTimeout to ensure content has been rendered
+            setTimeout(() => {
+                if (this.state.opened && this.content && this.el) {
+                    const newState = this.refreshState();
+                    // Only update state if calculated position differs from current position
+                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                        this.setState(newState);
+                    }
+                    this.isFirstOpen = false;
+                }
+            }, 0);
+        }
+        
+        // If content changes and it's not the first open, recalculate position
+        if (this.state.opened && !this.isFirstOpen && this.content && this.el) {
+            // Use setTimeout to ensure calculation happens after DOM updates
+            setTimeout(() => {
+                if (this.state.opened) {
+                    const newState = this.refreshState();
+                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                        this.setState(newState);
+                    }
+                }
+            }, 0);
+        }
     }
 
     private open() {
