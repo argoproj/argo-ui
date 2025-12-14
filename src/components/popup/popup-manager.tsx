@@ -46,7 +46,7 @@ export class PopupManager implements PopupApi {
 
             this.popupPropsSubject.next({
                 title: (
-                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(false)}/></span>
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(false)}/></span>
                 ),
                 content,
                 footer: (
