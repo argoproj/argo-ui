@@ -64,7 +64,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 if (el) {
                     if (el.refs.input) {
                         // workaround for 'autofill for forms not deactivatable' https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
-                        (el.refs.input as HTMLInputElement).autocomplete = 'no-autocomplete';
+                        (el.refs.input as HTMLInputElement).autocomplete = 'off';
                     }
                     if (!el.setMenuPositionsOverridden) {
                         el.setMenuPositionsOverridden = true;

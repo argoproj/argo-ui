@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Checkbox } from '../checkbox';
 import { DropDown } from '../dropdown/dropdown';
+import './top-bar.scss';
 
 require('./top-bar.scss');
 
@@ -32,7 +33,8 @@ export interface Toolbar {
     actionMenu?: ActionMenu;
 }
 
-export interface TopBarProps extends React.Props<any> {
+export interface TopBarProps {
+    children?: React.ReactNode;
     title: string;
     toolbar?: Toolbar;
 }
