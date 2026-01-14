@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DropDown} from '../dropdown/dropdown';
+import {DropDown, DropDownHandle} from '../dropdown/dropdown';
 
 require('./split-button.scss');
 
@@ -30,7 +30,7 @@ export interface SplitButtonProps {
  */
 export const SplitButton = (props: SplitButtonProps) => {
     const {action, title, iconClassName, subActions, disabled, qeId} = props;
-    const dropdownRef = React.useRef<DropDown>(null);
+    const dropdownRef = React.useRef<DropDownHandle>(null);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 
     return (
