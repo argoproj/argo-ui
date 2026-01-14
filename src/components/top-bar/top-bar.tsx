@@ -40,7 +40,7 @@ export interface TopBarProps extends React.Props<any> {
     toolbar?: Toolbar;
 }
 
-const FilterDropdown = ({filter}: {filter: TopBarFilter<any>}) => (
+const renderFilter = (filter: TopBarFilter<any>) => (
     <DropDown isMenu={true}
             anchor={() => (
                 <div className={classNames('top-bar__filter', { 'top-bar__filter--selected': filter.selectedValues.length > 0 })} title='Filter'>
@@ -125,7 +125,7 @@ const renderToolbar = (toolbar: Toolbar) => (
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
         </div>
         <div className='columns small-3 top-bar__right-side'>
-            {toolbar.filter && <FilterDropdown filter={toolbar.filter} />}
+            {toolbar.filter && renderFilter(toolbar.filter)}
             {toolbar.tools}
         </div>
     </div>
