@@ -57,8 +57,6 @@ export const SplitButton = (props: SplitButtonProps) => {
                 qe-id={qeId ? `${qeId}-toggle` : undefined}
                 onClick={() => {
                     dropdownRef.current?.open()
-                    console.log('SplitButton: Toggle dropdown menu');
-                    console.log(`ref: ${anchorRef.current}`);
                 }}
             >
                 <i className='fa fa-caret-down' />
