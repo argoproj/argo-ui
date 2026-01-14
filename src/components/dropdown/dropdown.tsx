@@ -1,132 +1,157 @@
-/* eslint-disable react/prop-types */
 import {default as classNames} from 'classnames';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { BehaviorSubject, fromEvent, merge, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 export interface DropDownProps {
     isMenu?: boolean;
-    anchor: React.RefObject<HTMLElement>;
+    anchor: React.ComponentType;
     children: React.ReactNode | (() => React.ReactNode);
     qeId?: string;
     onOpenStateChange?: (open: boolean) => void;
 }
 
-export interface DropDownHandle {
-    open: () => void;
-    close: () => void;
+export interface DropDownState {
+    opened: boolean;
+    left: number;
+    top: number;
 }
 
 require('./dropdown.scss');
 
-export const DropDown = React.forwardRef<DropDownHandle, DropDownProps>((props, ref) => {
-    const [opened, setOpened] = React.useState(false);
-    const [position, setPosition] = React.useState({ left: 0, top: 0 });
-    const contentRef = React.useRef<HTMLDivElement>(null);
+const dropDownOpened = new BehaviorSubject<DropDown | null>(null);
 
-    const calculatePosition = React.useCallback(() => {
-        const anchor = props.anchor.current;
-        const content = contentRef.current;
-        if (!anchor || !content) {
-            return position;
+export class DropDown extends React.Component<DropDownProps, DropDownState> {
+    private el!: HTMLDivElement;
+    private content!: HTMLDivElement;
+    private subscriptions: Subscription[] = [];
+    private isFirstOpen = true;
+
+    constructor(props: DropDownProps) {
+        super(props);
+        this.state = { opened: false, left: 0, top: 0 };
+    }
+
+    public render() {
+        let children: React.ReactNode = null;
+        if (typeof this.props.children === 'function') {
+            if (this.state.opened) {
+                const fun = this.props.children as () => React.ReactNode;
+                children = fun();
+            }
+        } else {
+            children = this.props.children as React.ReactNode;
         }
 
-        const { top, left } = anchor.getBoundingClientRect();
+        return (
+            <div className='argo-dropdown' ref={(el) => this.el = el!}>
+                <div qe-id={this.props.qeId} className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
+                    <this.props.anchor/>
+                </div>
+                {ReactDOM.createPortal((
+                    <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
+                        style={{top: this.state.top, left: this.state.left}}
+                        ref={(el) => this.content = el!}>
+                        {children}
+                    </div>
+                ), document.body)}
+            </div>
+        );
+    }
+
+    public UNSAFE_componentWillMount() {
+        this.subscriptions = [merge(
+            dropDownOpened.pipe(filter((dropdown) => dropdown !== this)),
+            fromEvent(document, 'click').pipe(filter((event: Event) => {
+                const targetAttached = (event.target as Node).parentElement;
+                return targetAttached && this.content && this.state.opened && !this.content.contains(event.target as Node) && !this.el.contains(event.target as Node);
+            })),
+        ).subscribe(() => {
+            this.close();
+        }), fromEvent(document, 'scroll', {passive: true}).subscribe(() => {
+            if (this.state.opened && this.content && this.el) {
+                this.setState(this.refreshState());
+            }
+        })];
+    }
+
+    public componentWillUnmount() {
+        (this.subscriptions || []).forEach((s) => s.unsubscribe());
+        this.subscriptions = [];
+    }
+
+    public close() {
+        this.setState({ opened: false });
+        if (this.props.onOpenStateChange) {
+            this.props.onOpenStateChange(false);
+        }
+    }
+
+    private refreshState() {
+        const anchor = this.el.querySelector('.argo-dropdown__anchor') as HTMLElement;
+        const {top, left} = anchor.getBoundingClientRect();
         const anchorHeight = anchor.offsetHeight + 2;
 
-        let newTop: number;
-        let newLeft: number;
-
-        // Set top position - flip above anchor if not enough space below
-        if (content.offsetHeight + top + anchorHeight > window.innerHeight) {
-            newTop = top - content.offsetHeight - 2;
+        const newState = { left: this.state.left, top: this.state.top, opened: this.state.opened };
+        // Set top position
+        if (this.content.offsetHeight + top + anchorHeight > window.innerHeight) {
+            newState.top = top - this.content.offsetHeight - 2;
         } else {
-            newTop = top + anchorHeight;
+            newState.top = top + anchorHeight;
         }
 
-        // Set left position - align right edge if not enough space on right
-        if (content.offsetWidth + left > window.innerWidth) {
-            newLeft = left - content.offsetWidth + anchor.offsetWidth;
+        // Set left position
+        if (this.content.offsetWidth + left > window.innerWidth) {
+            newState.left = left - this.content.offsetWidth + anchor.offsetWidth;
         } else {
-            newLeft = left;
+            newState.left = left;
+        }
+        return newState;
+    }
+
+    public componentDidUpdate(_prevProps: DropDownProps, prevState: DropDownState) {
+        // When menu changes from closed to open state
+        if (!prevState.opened && this.state.opened) {
+            // Mark as first open
+            this.isFirstOpen = true;
+            // Use setTimeout to ensure content has been rendered
+            setTimeout(() => {
+                if (this.state.opened && this.content && this.el) {
+                    const newState = this.refreshState();
+                    // Only update state if calculated position differs from current position
+                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                        this.setState(newState);
+                    }
+                    this.isFirstOpen = false;
+                }
+            }, 0);
         }
 
-        return { left: newLeft, top: newTop };
-    }, [props.anchor, position]);
+        // If content changes and it's not the first open, recalculate position
+        if (this.state.opened && !this.isFirstOpen && this.content && this.el) {
+            // Use setTimeout to ensure calculation happens after DOM updates
+            setTimeout(() => {
+                if (this.state.opened) {
+                    const newState = this.refreshState();
+                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                        this.setState(newState);
+                    }
+                }
+            }, 0);
+        }
+    }
 
-    const close = React.useCallback(() => {
-        setOpened(false);
-        props.onOpenStateChange?.(false);
-    }, [props.onOpenStateChange]);
-
-    const open = React.useCallback(() => {
-        if (!contentRef.current || !props.anchor.current) {
+    private open() {
+        if (!this.content || !this.el) {
             return;
         }
 
-        setPosition(calculatePosition());
-        setOpened(true);
-        props.onOpenStateChange?.(true);
-    }, [props.anchor, props.onOpenStateChange, calculatePosition]);
-
-    // Expose open/close methods via ref
-    React.useImperativeHandle(ref, () => ({ open, close }), [open, close]);
-
-    // Click outside handler
-    React.useEffect(() => {
-        if (!opened) return;
-
-        const handleClick = (event: MouseEvent) => {
-            const target = event.target as Node;
-            const content = contentRef.current;
-            const anchor = props.anchor.current;
-
-            // Ignore if target is detached from DOM
-            if (!target.parentElement) return;
-
-            // Close if click is outside both content and anchor
-            if (content && !content.contains(target) && (!anchor || !anchor.contains(target))) {
-                close();
-            }
-        };
-
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
-    }, [opened, props.anchor, close]);
-
-    // Scroll repositioning handler
-    React.useEffect(() => {
-        if (!opened) return;
-
-        const handleScroll = () => {
-            if (contentRef.current && props.anchor.current) {
-                setPosition(calculatePosition());
-            }
-        };
-
-        document.addEventListener('scroll', handleScroll, { passive: true });
-        return () => document.removeEventListener('scroll', handleScroll);
-    }, [opened, props.anchor, calculatePosition]);
-
-    // Render children - lazy evaluation if function
-    let children: React.ReactNode = null;
-    if (typeof props.children === 'function') {
-        if (opened) {
-            children = (props.children as () => React.ReactNode)();
+        const newState = this.refreshState();
+        newState.opened = true;
+        this.setState(newState);
+        if (this.props.onOpenStateChange) {
+            this.props.onOpenStateChange(true);
         }
-    } else {
-        children = props.children;
     }
-
-    return ReactDOM.createPortal(
-        <div
-            className={classNames('argo-dropdown__content', { opened, 'is-menu': props.isMenu })}
-            style={{ top: position.top, left: position.left }}
-            ref={contentRef}
-        >
-            {children}
-        </div>,
-        document.body
-    );
-});
-
-DropDown.displayName = 'DropDown';
+}

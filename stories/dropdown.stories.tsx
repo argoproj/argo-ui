@@ -7,31 +7,17 @@ export default {
     title: 'Dropdown',
 };
 
-export const Default = () => {
-    const anchorRef = React.useRef<HTMLAnchorElement>(null);
-    const dropdownRef = React.useRef<DropDown>(null);
-    return (
-        <>
-            <a ref={anchorRef} onClick={() => dropdownRef.current?.open()} style={{cursor: 'pointer'}}>Click me</a>
-            <DropDown ref={dropdownRef} anchor={anchorRef}><p>Dropdown content here</p></DropDown>
-        </>
-    );
-};
+export const Default = () => (<DropDown anchor={() => <a>Click me</a>}><p>Dropdown content here</p></DropDown>);
 Default.storyName = 'default';
 
 export const Menu = () => {
-    const anchorRef = React.useRef<HTMLAnchorElement>(null);
-    const dropdownRef = React.useRef<DropDown>(null);
     return (
-        <>
-            <a ref={anchorRef} onClick={() => dropdownRef.current?.open()} style={{cursor: 'pointer'}}>Click me</a>
-            <DropDown ref={dropdownRef} isMenu={true} anchor={anchorRef}>
-                <ul>
-                    <li><a>menu item 1</a></li>
-                    <li><a>menu item 2</a></li>
-                </ul>
-            </DropDown>
-        </>
+        <DropDown isMenu={true} anchor={() => <a>Click me</a>}>
+            <ul>
+                <li><a>menu item 1</a></li>
+                <li><a>menu item 2</a></li>
+            </ul>
+        </DropDown>
     );
 }
 Menu.storyName = 'menu';

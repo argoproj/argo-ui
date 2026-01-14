@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DropDown, DropDownHandle} from '../dropdown/dropdown';
+import {AnchoredDropdown, AnchoredDropdownHandle} from '../dropdown/anchored-dropdown';
 
 require('./split-button.scss');
 
@@ -30,7 +30,7 @@ export interface SplitButtonProps {
  */
 export const SplitButton = (props: SplitButtonProps) => {
     const {action, title, iconClassName, subActions, disabled, qeId} = props;
-    const dropdownRef = React.useRef<DropDownHandle>(null);
+    const dropdownRef = React.useRef<AnchoredDropdownHandle>(null);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 
     return (
@@ -63,7 +63,7 @@ export const SplitButton = (props: SplitButtonProps) => {
             >
                 <i className='fa fa-caret-down' />
             </button>
-                <DropDown
+                <AnchoredDropdown
                     ref={dropdownRef}
                     isMenu={true}
                     anchor={anchorRef}
@@ -87,7 +87,7 @@ export const SplitButton = (props: SplitButtonProps) => {
                         </li>
                     ))}
                 </ul>
-                </DropDown>
+                </AnchoredDropdown>
         </div>
     );
 };
