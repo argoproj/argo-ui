@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {AnchoredDropdown, AnchoredDropdownHandle} from '../dropdown/anchored-dropdown';
+import {DropDown} from '../dropdown/dropdown';
 
 require('./split-button.scss');
 
@@ -30,13 +30,11 @@ export interface SplitButtonProps {
  */
 export const SplitButton = (props: SplitButtonProps) => {
     const {action, title, iconClassName, subActions, disabled, qeId} = props;
-    const dropdownRef = React.useRef<AnchoredDropdownHandle>(null);
-    const anchorRef = React.useRef<HTMLButtonElement>(null);
+    const dropdownRef = React.useRef<DropDown>(null);
 
     return (
         <div className={`argo-split-button ${disabled ? 'argo-split-button--disabled' : ''}`}>
             <button
-                ref={anchorRef}
                 disabled={disabled}
                 qe-id={qeId}
                 className='argo-split-button__primary'
@@ -55,18 +53,11 @@ export const SplitButton = (props: SplitButtonProps) => {
                 disabled={disabled}
                 className='argo-split-button__toggle'
                 qe-id={qeId ? `${qeId}-toggle` : undefined}
-                onClick={() => {
-                    dropdownRef.current?.open()
-                    console.log('SplitButton: Toggle dropdown menu');
-                    console.log(`ref: ${anchorRef.current}`);
-                }}
             >
-                <i className='fa fa-caret-down' />
-            </button>
-                <AnchoredDropdown
+                <DropDown
                     ref={dropdownRef}
                     isMenu={true}
-                    anchor={anchorRef}
+                    anchor={() => <><i className='fa fa-caret-down' /></>}
                     qeId={qeId ? `${qeId}-dropdown` : undefined}
                 >
                 <ul>
@@ -87,7 +78,8 @@ export const SplitButton = (props: SplitButtonProps) => {
                         </li>
                     ))}
                 </ul>
-                </AnchoredDropdown>
+                </DropDown>
+            </button>
         </div>
     );
 };
