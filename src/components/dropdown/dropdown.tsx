@@ -20,17 +20,16 @@ export interface DropDownState {
 
 require('./dropdown.scss');
 
-const dropDownOpened = new BehaviorSubject<DropDown | null>(null);
+const dropDownOpened = new BehaviorSubject<DropDown>(null);
 
 export class DropDown extends React.Component<DropDownProps, DropDownState> {
-    private el!: HTMLDivElement;
-    private content!: HTMLDivElement;
-    private subscriptions: Subscription[] = [];
-    private isFirstOpen = true;
+    private el: HTMLDivElement;
+    private content: HTMLDivElement;
+    private subscriptions: Subscription[];
 
     constructor(props: DropDownProps) {
         super(props);
-        this.state = { opened: false, left: 0, top: 0 };
+        this.state = { opened: false, left: 0, top: 0};
     }
 
     public render() {
@@ -45,14 +44,14 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         }
 
         return (
-            <div className='argo-dropdown' ref={(el) => this.el = el!}>
+            <div className='argo-dropdown' ref={(el) => this.el = el}>
                 <div qe-id={this.props.qeId} className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
                     <this.props.anchor/>
                 </div>
                 {ReactDOM.createPortal((
                     <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
                         style={{top: this.state.top, left: this.state.left}}
-                        ref={(el) => this.content = el!}>
+                        ref={(el) => this.content = el}>
                         {children}
                     </div>
                 ), document.body)}
@@ -108,38 +107,6 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
             newState.left = left;
         }
         return newState;
-    }
-
-    public componentDidUpdate(_prevProps: DropDownProps, prevState: DropDownState) {
-        // When menu changes from closed to open state
-        if (!prevState.opened && this.state.opened) {
-            // Mark as first open
-            this.isFirstOpen = true;
-            // Use setTimeout to ensure content has been rendered
-            setTimeout(() => {
-                if (this.state.opened && this.content && this.el) {
-                    const newState = this.refreshState();
-                    // Only update state if calculated position differs from current position
-                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
-                        this.setState(newState);
-                    }
-                    this.isFirstOpen = false;
-                }
-            }, 0);
-        }
-
-        // If content changes and it's not the first open, recalculate position
-        if (this.state.opened && !this.isFirstOpen && this.content && this.el) {
-            // Use setTimeout to ensure calculation happens after DOM updates
-            setTimeout(() => {
-                if (this.state.opened) {
-                    const newState = this.refreshState();
-                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
-                        this.setState(newState);
-                    }
-                }
-            }, 0);
-        }
     }
 
     private open() {
