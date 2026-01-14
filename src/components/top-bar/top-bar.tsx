@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Checkbox } from '../checkbox';
 import { DropDown } from '../dropdown/dropdown';
+import { SplitButton, SplitButtonAction } from '../split-button/split-button';
 
 require('./top-bar.scss');
 
@@ -22,6 +23,8 @@ export interface ActionMenu {
         iconClassName?: string;
         qeId?: string;
         disabled?: boolean;
+        /** Optional sub-actions - when provided, renders as a split button */
+        subActions?: SplitButtonAction[];
     }[];
 }
 
@@ -86,13 +89,33 @@ const renderBreadcrumbs = (breadcrumbs: { title: string | React.ReactNode, path?
 );
 
 const renderActionMenu = (actionMenu: ActionMenu) => (
-    <div>
-        {actionMenu.items.map((item, i) => (
-            <button disabled={!!item.disabled} qe-id={item.qeId} className='argo-button argo-button--base' onClick={() => item.action()} style={{marginRight: 2}} key={i}>
-                {item.iconClassName && (<i className={item.iconClassName} style={{marginLeft: '-5px', marginRight: '5px'}}/>)}
-                {item.title}
-            </button>
-        ))}
+    <div className='top-bar__action-menu'>
+        {actionMenu.items.map((item, i) =>
+            item.subActions && item.subActions.length > 0 ? (
+                <SplitButton
+                    key={i}
+                    action={item.action}
+                    title={item.title}
+                    iconClassName={item.iconClassName}
+                    subActions={item.subActions}
+                    disabled={item.disabled}
+                    qeId={item.qeId}
+                />
+            ) : (
+                <button
+                    disabled={!!item.disabled}
+                    qe-id={item.qeId}
+                    className='argo-button argo-button--base'
+                    onClick={() => item.action()}
+                    key={i}
+                >
+                    {item.iconClassName && (
+                        <i className={item.iconClassName} style={{ marginLeft: '-5px', marginRight: '5px' }} />
+                    )}
+                    {item.title}
+                </button>
+            )
+        )}
     </div>
 );
 
