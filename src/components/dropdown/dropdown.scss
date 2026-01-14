@@ -1,59 +1,51 @@
 @import '../../styles/config';
 
-.argo-dropdown {
-    display: inline-block;
+.argo-dropdown__content {
+    position: fixed;
+    z-index: $notifications-z-index;
+    padding: 1rem;
+    background-color: $white-color;
+    box-shadow: 0 0 4px rgba(#000, .2);
+    transition: opacity .2s, transform .2s, visibility .2s;
 
-    &__anchor {
-        cursor: pointer;
+    &:not(.opened) {
+        transform: translateY(-30%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .2s, transform .2s .2s, visibility .2s;
     }
 
-    &__content {
-        position: fixed;
-        z-index: $notifications-z-index;
-        padding: 1rem;
-        background-color: $white-color;
-        box-shadow: 0 0 4px rgba(#000, .2);
-        transition: opacity .2s, transform .2s, visibility .2s;
+    &.is-menu {
+        overflow: auto;
+        max-height: 360px;
+        padding: 0;
+        border: 0;
 
-        &:not(.opened) {
-            transform: translateY(-30%);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .2s, transform .2s .2s, visibility .2s;
-        }
+        ul {
+            margin: 0;
+            list-style-type: none;
+            white-space: nowrap;
+            text-align: left;
+            cursor: pointer;
+            min-width: 150px;
 
-        &.is-menu {
-            overflow: auto;
-            max-height: 360px;
-            padding: 0;
-            border: 0;
-
-            ul {
-                margin: 0;
-                list-style-type: none;
-                white-space: nowrap;
-                text-align: left;
+            li {
+                padding: 0.5em 1em;
+                font-size: 14px;
+                border-bottom: 1px solid $argo-color-gray-2;
+                color: $argo-color-gray-6;
                 cursor: pointer;
-                min-width: 150px;
 
-                li {
-                    padding: 0.5em 1em;
-                    font-size: 14px;
-                    border-bottom: 1px solid $argo-color-gray-2;
-                    color: $argo-color-gray-6;
-                    cursor: pointer;
+                i {
+                    margin-right: 2px;
+                }
 
-                    i {
-                        margin-right: 2px;
-                    }
+                &:hover {
+                    background-color: $argo-color-gray-1;
+                }
 
-                    &:hover {
-                        background-color: $argo-color-gray-1;
-                    }
-
-                    &:last-child {
-                        border-bottom: none;
-                    }
+                &:last-child {
+                    border-bottom: none;
                 }
             }
         }

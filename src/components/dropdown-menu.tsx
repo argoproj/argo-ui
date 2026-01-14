@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropDown } from './dropdown/dropdown';
+import { DropDown, DropDownHandle } from './dropdown/dropdown';
 
 export interface MenuItem {
     title: string | React.ReactElement;
@@ -15,18 +15,31 @@ export interface DropDownMenuProps {
 
 export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
 
-    private dropdown: DropDown;
+    private dropdown: DropDownHandle | null = null;
+    private anchorRef = React.createRef<HTMLDivElement>();
 
     public render() {
+        const Anchor = this.props.anchor;
         return (
-            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown} qeId={this.props.qeId}>
-                <ul>
-                    {this.props.items.map((item, i) => <li qe-id={this.props.qeId + `-` + item.title}
-                        onClick={(event) => this.onItemClick(item, event)} key={i}>
-                        {item.iconClassName && <i className={item.iconClassName}/>} {item.title}
-                        </li>)}
-                </ul>
-            </DropDown>
+            <>
+                <div
+                    ref={this.anchorRef}
+                    className='argo-dropdown-menu__anchor'
+                    style={{display: 'inline-block', cursor: 'pointer'}}
+                    qe-id={this.props.qeId}
+                    onClick={(event) => { this.dropdown?.open(); event.stopPropagation(); }}
+                >
+                    <Anchor />
+                </div>
+                <DropDown anchor={this.anchorRef} isMenu={true} ref={(dropdown) => this.dropdown = dropdown}>
+                    <ul>
+                        {this.props.items.map((item, i) => <li qe-id={this.props.qeId + `-` + item.title}
+                            onClick={(event) => this.onItemClick(item, event)} key={i}>
+                            {item.iconClassName && <i className={item.iconClassName}/>} {item.title}
+                            </li>)}
+                    </ul>
+                </DropDown>
+            </>
         );
     }
 
