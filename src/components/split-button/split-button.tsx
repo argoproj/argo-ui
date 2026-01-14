@@ -30,6 +30,7 @@ export interface SplitButtonProps {
  */
 export const SplitButton = (props: SplitButtonProps) => {
     const {action, title, iconClassName, subActions, disabled, qeId} = props;
+<<<<<<< HEAD
     const dropdownRef = React.useRef<AnchoredDropdownHandle>(null);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 

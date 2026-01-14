@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Checkbox } from '../checkbox';
-import { DropDown } from '../dropdown/dropdown';
+import { DropDown, DropDownHandle } from '../dropdown/dropdown';
 import { SplitButton, SplitButtonAction } from '../split-button/split-button';
 
 require('./top-bar.scss');
@@ -40,36 +40,47 @@ export interface TopBarProps extends React.Props<any> {
     toolbar?: Toolbar;
 }
 
-const renderFilter = (filter: TopBarFilter<any>) => (
-    <DropDown isMenu={true}
-            anchor={() => (
-                <div className={classNames('top-bar__filter', { 'top-bar__filter--selected': filter.selectedValues.length > 0 })} title='Filter'>
-                    <i className='argo-icon-filter' aria-hidden='true'/>
-                    <i className='fa fa-angle-down' aria-hidden='true'/>
-                </div>)}>
-        <ul>
-        {filter.items.map((item, i) => (
-            <li key={i} className={classNames({'top-bar__filter-item': !item.content})}>
-                {item.content && item.content((vals) => filter.selectionChanged(vals)) || (
-                    <React.Fragment>
-                        <Checkbox id={`filter__${item.value}`} checked={filter.selectedValues.includes(item.value)} onChange={(checked) => {
-                            const selectedValues = filter.selectedValues.slice();
-                            const index = selectedValues.indexOf(item.value);
-                            if (index > -1 && !checked) {
-                                selectedValues.splice(index, 1);
-                            } else {
-                                selectedValues.push(item.value);
-                            }
-                            filter.selectionChanged(selectedValues);
-                        }} />
-                        <label htmlFor={`filter__${item.value}`}>{item.label}</label>
-                    </React.Fragment>
-                )}
-            </li>
-        ))}
-        </ul>
-    </DropDown>
-);
+const FilterDropdown = ({filter}: {filter: TopBarFilter<any>}) => {
+    const anchorRef = React.useRef<HTMLDivElement>(null);
+    const dropdownRef = React.useRef<DropDownHandle>(null);
+    return (
+        <>
+            <div
+                ref={anchorRef}
+                className={classNames('top-bar__filter', { 'top-bar__filter--selected': filter.selectedValues.length > 0 })}
+                title='Filter'
+                onClick={() => dropdownRef.current?.open()}
+                style={{cursor: 'pointer'}}
+            >
+                <i className='argo-icon-filter' aria-hidden='true'/>
+                <i className='fa fa-angle-down' aria-hidden='true'/>
+            </div>
+            <DropDown ref={dropdownRef} isMenu={true} anchor={anchorRef}>
+                <ul>
+                {filter.items.map((item, i) => (
+                    <li key={i} className={classNames({'top-bar__filter-item': !item.content})}>
+                        {item.content && item.content((vals) => filter.selectionChanged(vals)) || (
+                            <React.Fragment>
+                                <Checkbox id={`filter__${item.value}`} checked={filter.selectedValues.includes(item.value)} onChange={(checked) => {
+                                    const selectedValues = filter.selectedValues.slice();
+                                    const index = selectedValues.indexOf(item.value);
+                                    if (index > -1 && !checked) {
+                                        selectedValues.splice(index, 1);
+                                    } else {
+                                        selectedValues.push(item.value);
+                                    }
+                                    filter.selectionChanged(selectedValues);
+                                }} />
+                                <label htmlFor={`filter__${item.value}`}>{item.label}</label>
+                            </React.Fragment>
+                        )}
+                    </li>
+                ))}
+                </ul>
+            </DropDown>
+        </>
+    );
+};
 
 const renderBreadcrumbs = (breadcrumbs: { title: string | React.ReactNode, path?: string; }[]) => (
     <div className='top-bar__breadcrumbs'>
@@ -125,7 +136,7 @@ const renderToolbar = (toolbar: Toolbar) => (
             {toolbar.actionMenu && renderActionMenu(toolbar.actionMenu)}
         </div>
         <div className='columns small-3 top-bar__right-side'>
-            {toolbar.filter && renderFilter(toolbar.filter)}
+            {toolbar.filter && <FilterDropdown filter={toolbar.filter} />}
             {toolbar.tools}
         </div>
     </div>
