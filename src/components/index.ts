@@ -1,11 +1,13 @@
 require('../styles/main.scss');
 
-export { Utils  } from './utils';
+export { Utils } from './utils';
 export { Layout } from './layout/layout';
 export { Page, PageContext, type PageContextProps } from './page/page';
 export { MockupList } from './mockup-list/mockup-list';
 export { DropDown } from './dropdown/dropdown';
+export { AnchoredDropdown, type AnchoredDropdownProps, type AnchoredDropdownHandle } from './dropdown/anchored-dropdown';
 export { DropDownMenu, type DropDownMenuProps, type MenuItem } from './dropdown-menu';
+export { SplitButton, type SplitButtonProps, type SplitButtonAction } from './split-button/split-button';
 export { Checkbox } from './checkbox';
 export { type TopBarProps, type Toolbar, type TopBarFilter } from './top-bar/top-bar';
 export { type Tab, Tabs } from './tabs/tabs';
