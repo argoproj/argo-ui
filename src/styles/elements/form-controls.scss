@@ -87,30 +87,49 @@
         outline: 0;
         border-color: $argo-color-teal-6;
     }
+}
 
-    & + label.argo-label-placeholder {
-        position: absolute;
-        top: 24px;
-        left: 0;
-        line-height: 1;
-        cursor: text;
-        font-size: 15px;
-    }
+.argo-field-container {
+    position: relative;
+    display: grid;
+    padding-top: 12px;
+}
 
-    &:focus + label.argo-label-placeholder,
-    &.argo-focus-out + label.argo-label-placeholder {
-        transition: top .2s, font .2s, color .2s;
-    }
+.argo-field-container > .argo-field,
+.argo-field-container > .argo-textarea {
+    grid-area: 1 / 1;
+}
 
-    &.argo-has-value + label.argo-label-placeholder,
-    &:focus + label.argo-label-placeholder {
-        top: 0;
-        font-size: 12px;
-    }
+.argo-field-container > label.argo-label-placeholder {
+    grid-area: 1 / 1;
+    align-self: center;
+    justify-self: start;
+    line-height: 1;
+    cursor: text;
+    font-size: 15px;
+    transform: translateY(6px);
+    transition: transform .2s, font .2s, color .2s;
+    pointer-events: none;
+}
 
-    &:focus + label.argo-label-placeholder {
-        color: $argo-color-teal-6;
-    }
+.argo-field-container > .argo-field:focus + label.argo-label-placeholder,
+.argo-field-container > .argo-textarea:focus + label.argo-label-placeholder,
+.argo-field-container > .argo-field.argo-focus-out + label.argo-label-placeholder,
+.argo-field-container > .argo-textarea.argo-focus-out + label.argo-label-placeholder {
+    transition: transform .2s, font .2s, color .2s;
+}
+
+.argo-field-container > .argo-field.argo-has-value + label.argo-label-placeholder,
+.argo-field-container > .argo-textarea.argo-has-value + label.argo-label-placeholder,
+.argo-field-container > .argo-field:focus + label.argo-label-placeholder,
+.argo-field-container > .argo-textarea:focus + label.argo-label-placeholder {
+    transform: translateY(-25px);
+    font-size: 12px;
+}
+
+.argo-field-container > .argo-field:focus + label.argo-label-placeholder,
+.argo-field-container > .argo-textarea:focus + label.argo-label-placeholder {
+    color: $argo-color-teal-6;
 }
 
 .argo-field {
