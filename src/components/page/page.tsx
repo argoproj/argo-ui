@@ -9,7 +9,8 @@ import { Utils } from '../utils';
 
 require('./page.scss');
 
-interface PageProps extends React.Props<any> {
+interface PageProps {
+    children?: React.ReactNode;
     title: string;
     toolbar?: Toolbar | Observable<Toolbar>;
     topBarTitle?: string;

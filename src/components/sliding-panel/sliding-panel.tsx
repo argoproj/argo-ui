@@ -2,7 +2,8 @@ import {default as classNames} from 'classnames';
 import * as React from 'react';
 import { Key, KeybindingContext, KeybindingProvider } from '../../../v2';
 
-export interface SlidingPanelProps extends React.Props<any> {
+export interface SlidingPanelProps {
+    children?: React.ReactNode;
     isShown?: boolean;
     isNarrow?: boolean;
     isMiddle?: boolean;

@@ -17,7 +17,8 @@ export function getNestedField(src: any, path: string): any {
 }
 
 export const FormField: <E, T extends ReactForm.FieldProps & { className?: string}>(
-    props: React.Props<E> & {
+    props: {
+        children?: React.ReactNode;
         label?: string,
         field: string,
         formApi: ReactForm.FormApi,
