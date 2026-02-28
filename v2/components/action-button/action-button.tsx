@@ -8,7 +8,6 @@ import {Theme} from '../theme-div/theme-div';
 import './action-button.scss';
 
 export interface ActionButtonProps {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     action?: Function;
     label?: string;
     icon?: string;
@@ -23,6 +22,8 @@ export interface ActionButtonProps {
     indicateSuccess?: boolean;
     transparent?: boolean;
     loading?: boolean;
+    children?: React.ReactNode;
+    className?: string;
 }
 
 /**

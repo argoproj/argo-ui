@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     stories: ['../components/**/*.stories.tsx'],
     addons: ['@storybook/addon-essentials'],
-    webpackFinal: async (config, {configType}) => {
+    webpackFinal: async (config) => {
         config.module.rules.push({
             test: /\.scss$/,
             use: ['style-loader', 'css-loader', 'sass-loader'],
