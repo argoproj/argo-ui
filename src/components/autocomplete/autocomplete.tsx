@@ -1,4 +1,5 @@
 import {default as classNames} from 'classnames';
+import { Minimatch, IOptions } from 'minimatch';
 import {CSSProperties, ReactNode} from 'react';
 import * as React from 'react';
 import ReactAutocomplete from 'react-autocomplete';
@@ -27,6 +28,7 @@ export interface AutocompleteProps {
     qeid?: string;
     /** @default true */ // per https://github.com/reactjs/react-autocomplete/blob/41388f7d7760bf6cf38e7946e43d4fddd9c7c176/lib/Autocomplete.js#L188
     autoHighlight?: ReactAutocomplete.Props['autoHighlight'];
+    glob?: boolean | IOptions;
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
@@ -107,6 +109,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
             inputProps={props.inputProps}
             wrapperProps={wrapperProps}
             shouldItemRender={(item: AutocompleteOption, val: string) => {
+                if (props.glob) {
+                    const useGlob = typeof props.glob === 'boolean' ? props.glob : !!props.glob;
+                    const globOptions = typeof props.glob === 'boolean' ? null : props.glob;
+                    const globMatcher = useGlob && val ? new Minimatch(val, globOptions) : null;
+
+                    return globMatcher ? globMatcher.match(item.label) : true;
+                }
                 return !props.filterSuggestions || item.label.toLowerCase().includes(val.toLowerCase());
             }}
             renderMenu={function(menuItems: ReactNode[], _: string, style: CSSProperties) {
