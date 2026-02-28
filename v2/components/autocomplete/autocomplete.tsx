@@ -21,20 +21,21 @@ export const useAutocomplete = (init: string): [string, SetInputFxn, Autocomplet
     return [state, setState, autocomplete];
 };
 
-export const Autocomplete = (
-    props: React.InputHTMLAttributes<HTMLInputElement> & {
-        items: string[];
-        abbreviations?: Map<string, string>;
-        inputStyle?: React.CSSProperties;
-        onItemClick?: (item: string) => void;
-        icon?: string;
-        inputref?: React.MutableRefObject<HTMLInputElement>;
-        value: string;
-        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-        className?: string;
-        style?: React.CSSProperties;
-    }
-) => {
+type Props = React.InputHTMLAttributes<HTMLInputElement> & {
+    items: string[];
+    abbreviations?: Map<string, string>;
+    inputStyle?: React.CSSProperties;
+    onItemClick?: (item: string) => void;
+    icon?: string;
+    inputref?: React.MutableRefObject<HTMLInputElement>;
+    value: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    className?: string;
+    style?: React.CSSProperties;
+    glob?: boolean | IOptions;
+};
+
+export const Autocomplete = (props: Props) => {
     return (
         <KeybindingProvider>
             <RenderAutocomplete {...props} />
@@ -42,21 +43,7 @@ export const Autocomplete = (
     );
 };
 
-export const RenderAutocomplete = (
-    props: React.InputHTMLAttributes<HTMLInputElement> & {
-        items: string[];
-        abbreviations?: Map<string, string>;
-        inputStyle?: React.CSSProperties;
-        onItemClick?: (item: string) => void;
-        icon?: string;
-        inputref?: React.MutableRefObject<HTMLInputElement>;
-        value: string;
-        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-        className?: string;
-        style?: React.CSSProperties;
-        glob?: boolean | IOptions;
-    }
-) => {
+export const RenderAutocomplete = (props: Props) => {
     const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
     const inputRef = props.inputref || nullInputRef;
