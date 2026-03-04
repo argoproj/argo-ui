@@ -8,7 +8,7 @@ Set of React components used by [Argo Workflows](https://github.com/argoproj/arg
 
 1. Install Toolset: [NodeJS](https://nodejs.org/en/download/) and [Yarn v1](https://classic.yarnpkg.com/en/docs)
 1. Install Dependencies: run `yarn install`
-1. Run: `yarn start` - starts the [Storybook v6](https://storybook.js.org/docs/6.5/get-started/install) dev server
+1. Run: `yarn start` - starts the [Storybook v8](https://storybook.js.org/docs) dev server
 
 ## Local Development
 
