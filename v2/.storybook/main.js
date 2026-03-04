@@ -2,9 +2,10 @@ const path = require('path');
 
 module.exports = {
     stories: ['../components/**/*.stories.tsx'],
-    addons: ['@storybook/addon-essentials'],
-    core: {
-        builder: 'webpack5',
+    addons: ['@storybook/addon-essentials', '@storybook/addon-webpack5-compiler-swc'],
+    framework: {
+        name: '@storybook/react-webpack5',
+        options: {},
     },
     webpackFinal: async (config, {configType}) => {
         config.module.rules.push({

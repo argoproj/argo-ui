@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Text } from 'react-form';
+import { Form, Text } from '../src/components/form/compat';
 
 import { FormField, FormSelect } from '../src/components/form-field/form-field';
 

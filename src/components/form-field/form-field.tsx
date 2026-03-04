@@ -1,6 +1,6 @@
 import {default as classNames} from 'classnames';
 import * as React from 'react';
-import * as ReactForm from 'react-form';
+import * as ReactForm from '../form/compat';
 
 import { Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
 
