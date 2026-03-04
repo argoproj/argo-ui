@@ -1,7 +1,6 @@
 import {default as classNames} from 'classnames';
-import {CSSProperties, ReactNode} from 'react';
 import * as React from 'react';
-import ReactAutocomplete from 'react-autocomplete';
+import {useCombobox} from 'downshift';
 
 require('./autocomplete.scss');
 export interface AutocompleteApi {
@@ -25,8 +24,7 @@ export interface AutocompleteProps {
     autoCompleteRef?: (api: AutocompleteApi) => any;
     filterSuggestions?: boolean;
     qeid?: string;
-    /** @default true */ // per https://github.com/reactjs/react-autocomplete/blob/41388f7d7760bf6cf38e7946e43d4fddd9c7c176/lib/Autocomplete.js#L188
-    autoHighlight?: ReactAutocomplete.Props['autoHighlight'];
+    autoHighlight?: boolean;
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
@@ -40,92 +38,134 @@ export const Autocomplete = (props: AutocompleteProps) => {
             };
         }
     });
-    const [autocompleteEl, setAutocompleteEl] = React.useState(null);
+    const wrapperProps = props.wrapperProps || {};
+    const [menuTop, setMenuTop] = React.useState(0);
+    const [menuLeft, setMenuLeft] = React.useState(0);
+    const [menuWidth, setMenuWidth] = React.useState(0);
+    const inputRef = React.useRef<HTMLInputElement | null>(null);
+    const menuRef = React.useRef<HTMLDivElement | null>(null);
+    const inputValue = props.value || '';
+    const filteredItems = items.filter((item) => !props.filterSuggestions || item.label.toLowerCase().includes(inputValue.toLowerCase()));
 
-    React.useEffect(() => {
-        const listener = (event: any) => {
-            // Recalculate menu position on scroll
-            if (autocompleteEl && autocompleteEl.refs.input && autocompleteEl.refs.menu && !(event.target === autocompleteEl.refs.menu)) {
-                autocompleteEl.setMenuPositions();
+    const {
+        isOpen,
+        highlightedIndex,
+        getMenuProps,
+        getInputProps,
+        getItemProps,
+        openMenu,
+    } = useCombobox({
+        items: filteredItems,
+        itemToString: (item) => item?.label || '',
+        inputValue,
+        defaultHighlightedIndex: props.autoHighlight === false ? -1 : 0,
+        onSelectedItemChange: ({selectedItem}) => {
+            if (selectedItem && props.onSelect) {
+                props.onSelect(selectedItem.label, selectedItem);
             }
-        };
-        document.addEventListener('scroll', listener, true);
-        return () => {
-            document.removeEventListener('scroll', listener);
-        };
+        },
     });
 
-    const wrapperProps = props.wrapperProps || {};
+    const setMenuPositions = React.useCallback(() => {
+        if (!inputRef.current) {
+            return;
+        }
+        const rect = inputRef.current.getBoundingClientRect();
+        const computedStyle = window.getComputedStyle(inputRef.current);
+        const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
+        const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
+        const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
+        let top = rect.bottom + marginBottom + window.scrollY;
+        if (menuRef.current) {
+            const overflow = window.innerHeight - (rect.bottom + marginBottom + menuRef.current.offsetHeight);
+            if (overflow < 0) {
+                const correctedTop = rect.top + window.scrollY - menuRef.current.offsetHeight - inputRef.current.offsetHeight;
+                if (correctedTop > 0) {
+                    top = correctedTop;
+                }
+            }
+        }
+        setMenuTop(top);
+        setMenuLeft(rect.left + marginLeft + window.scrollX);
+        setMenuWidth(rect.width + marginLeft + marginRight);
+    }, []);
+
+    React.useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+        setMenuPositions();
+        const listener = (event: Event) => {
+            if (menuRef.current && event.target === menuRef.current) {
+                return;
+            }
+            setMenuPositions();
+        };
+        document.addEventListener('scroll', listener, true);
+        window.addEventListener('resize', listener);
+        return () => {
+            document.removeEventListener('scroll', listener, true);
+            window.removeEventListener('resize', listener);
+        };
+    }, [isOpen, setMenuPositions]);
+
+    React.useEffect(() => {
+        if (props.autoCompleteRef) {
+            props.autoCompleteRef({refresh: setMenuPositions});
+        }
+    }, [props, setMenuPositions]);
+    const inputProps = getInputProps({
+        ...(props.inputProps || {}),
+        qeid: props.qeid,
+        value: inputValue,
+        autoComplete: 'off',
+        ref: (node: HTMLInputElement | null) => {
+            inputRef.current = node;
+        },
+        onFocus: (event: React.FocusEvent<HTMLInputElement>) => {
+            openMenu();
+            if (props.inputProps?.onFocus) {
+                props.inputProps.onFocus(event);
+            }
+        },
+        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (props.onChange) {
+                props.onChange(event, event.target.value);
+            }
+            if (props.inputProps?.onChange) {
+                props.inputProps.onChange(event);
+            }
+        },
+    });
+    const menuProps = getMenuProps({
+        className: 'autocomplete__menu',
+        ref: (node: HTMLDivElement | null) => {
+            menuRef.current = node;
+        },
+    });
+
     wrapperProps.className = classNames('select', wrapperProps.className);
+
     return (
-        <ReactAutocomplete
-            autoHighlight={props.autoHighlight}
-            ref={(el: any) => {
-                if (el) {
-                    if (el.refs.input) {
-                        // workaround for 'autofill for forms not deactivatable' https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
-                        (el.refs.input as HTMLInputElement).autocomplete = 'off';
-                    }
-                    if (!el.setMenuPositionsOverridden) {
-                        el.setMenuPositionsOverridden = true;
-                        el.setMenuPositions = () => {
-                            // Overridden setMenuPositions implementation: expands menu to the top if there is not enough space below the input but enough above it.
-                            if (el.refs.menu && el.refs.input) {
-                                const node = el.refs.input;
-                                const rect = node.getBoundingClientRect();
-                                const computedStyle = window.getComputedStyle(node);
-                                const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
-                                const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
-                                const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
-                                let menuTop = rect.bottom + marginBottom;
-                                if (window.innerHeight - (menuTop + el.refs.menu.offsetHeight) < 0) {
-                                    const correctedTop = menuTop - el.refs.menu.offsetHeight - el.refs.input.offsetHeight;
-                                    if (correctedTop > 0) {
-                                        menuTop = correctedTop;
-                                    }
-                                }
-                                el.setState({
-                                    menuTop,
-                                    menuLeft: rect.left + marginLeft,
-                                    menuWidth: rect.width + marginLeft + marginRight,
-                                });
-                            }
-                        };
-                    }
-                }
-                setAutocompleteEl(el);
-                if (props.autoCompleteRef) {
-                    props.autoCompleteRef({
-                        refresh: () => {
-                            if (el && el.refs.input) {
-                                el.setMenuPositions();
-                            }
-                        },
-                    });
-                }
-            }}
-            inputProps={props.inputProps}
-            wrapperProps={wrapperProps}
-            shouldItemRender={(item: AutocompleteOption, val: string) => {
-                return !props.filterSuggestions || item.label.toLowerCase().includes(val.toLowerCase());
-            }}
-            renderMenu={function(menuItems: ReactNode[], _: string, style: CSSProperties) {
-                if (menuItems.length === 0) {
-                    return <div style={{display: 'none'}} />;
-                }
-                return <div style={{...style, ...this.menuStyle, background: 'white', zIndex: 20, maxHeight: '20em'}}>{menuItems}</div>;
-            }}
-            getItemValue={(item: any) => item.label}
-            items={items}
-            value={props.value}
-            renderItem={(item: any, isSelected: boolean) => (
-                <div className={classNames('select__option', {selected: isSelected})} key={item.label}>
-                    {(props.renderItem && props.renderItem(item)) || item.label}
+        <div {...wrapperProps}>
+            {props.renderInput ? (
+                props.renderInput(inputProps as React.HTMLProps<HTMLInputElement>)
+            ) : (
+                <input {...inputProps} />
+            )}
+            {isOpen && filteredItems.length > 0 && (
+                <div {...menuProps} style={{position: 'absolute', top: menuTop, left: menuLeft, width: menuWidth, background: 'white', zIndex: 20, maxHeight: '20em'}}>
+                    {filteredItems.map((item, index) => (
+                        <div
+                            {...getItemProps({item, index})}
+                            className={classNames('select__option', {selected: highlightedIndex === index})}
+                            key={item.label}
+                            onMouseDown={(event) => event.preventDefault()}>
+                            {(props.renderItem && props.renderItem(item)) || item.label}
+                        </div>
+                    ))}
                 </div>
             )}
-            onChange={props.onChange}
-            onSelect={props.onSelect}
-            renderInput={props.renderInput}
-        />
+        </div>
     );
 };
