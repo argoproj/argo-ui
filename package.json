@@ -27,7 +27,7 @@
         "downshift": "^9.3.2",
         "foundation-sites": "^6.4.3",
         "history": "^4.10.1",
-        "minimatch": "^9.0.0",
+        "minimatch": "^9.0.7",
         "prop-types": "^15.8.1",
         "react-toastify": "9.0.3",
         "rxjs": "^7.8.1",
