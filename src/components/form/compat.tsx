@@ -34,8 +34,6 @@ export interface FormApi {
     setValue(field: string, value: any): void;
 }
 
-export type FormFunctionProps = FormApi;
-
 export interface FieldProps {
     field: string;
     formApi?: FormApi;
@@ -50,12 +48,6 @@ interface FormProps {
     getApi?: (api: FormApi) => void;
     formDidUpdate?: (state: FormState) => any;
     children: (api: FormApi) => RenderReturn;
-}
-
-function setNestedField(obj: any, path: string, value: any): any {
-    const [head, ...rest] = path.split('.');
-    if (rest.length === 0) return {...obj, [head]: value};
-    return {...obj, [head]: setNestedField(obj[head] ?? {}, rest.join('.'), value)};
 }
 
 const FormContext = React.createContext<FormApi | null>(null);
@@ -275,7 +267,6 @@ export function Form(props: FormProps) {
             props.getApi(proxiedApi);
         }
     // Only re-run when proxiedApi changes (stable after mount)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [proxiedApi]);
 
     React.useEffect(() => {
@@ -285,32 +276,4 @@ export function Form(props: FormProps) {
     }, [values, touched, errors]);
 
     return <FormContext.Provider value={proxiedApi}>{props.children(proxiedApi)}</FormContext.Provider>;
-}
-
-export const TextArea = FormField((props: React.TextareaHTMLAttributes<HTMLTextAreaElement> & FieldProps & {fieldApi: FieldApi}) => {
-    const {fieldApi, onBlur, onChange, ...rest} = props;
-    const value = fieldApi.getValue() ?? '';
-
-    return (
-        <textarea
-            {...rest}
-            value={value}
-            onChange={(event) => {
-                fieldApi.setValue(event.currentTarget.value);
-                if (onChange) {
-                    onChange(event);
-                }
-            }}
-            onBlur={(event) => {
-                fieldApi.setTouched(true);
-                if (onBlur) {
-                    onBlur(event);
-                }
-            }}
-        />
-    );
-});
-
-export function NestedForm(props: {children: React.ReactNode}) {
-    return <div>{props.children}</div>;
 }
