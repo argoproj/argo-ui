@@ -2,8 +2,17 @@
 import * as React from 'react';
 
 export type FormValues = Record<string, any>;
+export type FormErrors = Record<string, any>;
+export type FormValue = any;
 export type RenderReturn = React.ReactNode;
 export type ValidateValuesFunction = (values: FormValues) => Record<string, any>;
+export type Nested<T> = T;
+
+export type FormState = {
+    values: FormValues;
+    errors: FormErrors;
+    touched: Record<string, boolean>;
+};
 
 export interface FieldApi {
     getValue(): any;
@@ -17,7 +26,14 @@ export interface FormApi {
     errors: Record<string, any>;
     submitForm(e?: React.SyntheticEvent): void;
     setError(field: string, error: any): void;
+    setValue(field: string, value: any): void;
+    getFormState(): FormState;
+    setAllValues(values: FormValues): void;
+    setTouched(field: string, touched: boolean): void;
+    setFormState(state: Partial<FormState>): void;
 }
+
+export type FormFunctionProps = FormApi;
 
 export interface FieldProps {
     field: string;
@@ -31,6 +47,12 @@ interface FormProps {
     onSubmit?: (vals: FormValues) => any;
     getApi?: (api: FormApi) => void;
     children: (api: FormApi) => RenderReturn;
+}
+
+function setNestedField(obj: any, path: string, value: any): any {
+    const [head, ...rest] = path.split('.');
+    if (rest.length === 0) return {...obj, [head]: value};
+    return {...obj, [head]: setNestedField(obj[head] ?? {}, rest.join('.'), value)};
 }
 
 const FormContext = React.createContext<FormApi | null>(null);
@@ -143,6 +165,22 @@ export function Form(props: FormProps) {
         setError: (field: string, error: any) => {
             setErrors((current) => ({...current, [field]: error}));
         },
+        setValue: (field: string, value: any) => {
+            setValues((current) => setNestedField(current, field, value));
+            setTouched((current) => ({...current, [field]: true}));
+        },
+        getFormState: (): FormState => ({values, errors, touched}),
+        setAllValues: (nextValues: FormValues) => {
+            setValues(nextValues);
+        },
+        setTouched: (field: string, isTouched: boolean) => {
+            setTouched((current) => ({...current, [field]: isTouched}));
+        },
+        setFormState: (state: Partial<FormState>) => {
+            if (state.values !== undefined) setValues(state.values);
+            if (state.errors !== undefined) setErrors(state.errors);
+            if (state.touched !== undefined) setTouched(state.touched);
+        },
     }), [errors, props, touched, values]);
 
     const proxiedApi = React.useMemo<FormApi>(() => ({
@@ -165,6 +203,7 @@ export function Form(props: FormProps) {
         set errors(nextErrors: Record<string, any>) {
             setErrors(nextErrors);
         },
+        getFormState: (): FormState => ({values, errors, touched}),
     }), [api, errors, touched, values]);
 
     React.useEffect(() => {
@@ -174,4 +213,32 @@ export function Form(props: FormProps) {
     }, [props, proxiedApi]);
 
     return <FormContext.Provider value={proxiedApi}>{props.children(proxiedApi)}</FormContext.Provider>;
+}
+
+export const TextArea = FormField((props: React.TextareaHTMLAttributes<HTMLTextAreaElement> & FieldProps & {fieldApi: FieldApi}) => {
+    const {fieldApi, onBlur, onChange, ...rest} = props;
+    const value = fieldApi.getValue() ?? '';
+
+    return (
+        <textarea
+            {...rest}
+            value={value}
+            onChange={(event) => {
+                fieldApi.setValue(event.currentTarget.value);
+                if (onChange) {
+                    onChange(event);
+                }
+            }}
+            onBlur={(event) => {
+                fieldApi.setTouched(true);
+                if (onBlur) {
+                    onBlur(event);
+                }
+            }}
+        />
+    );
+});
+
+export function NestedForm(props: {children: React.ReactNode}) {
+    return <div>{props.children}</div>;
 }
