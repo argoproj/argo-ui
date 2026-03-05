@@ -74,18 +74,22 @@ function withFieldApi(
             throw new Error('FormField components must be used inside <Form> or be passed formApi');
         }
 
-        const fieldApi: FieldApi = {
-            getValue: () => formApi.values[field],
+        // Keep latest formApi in a ref so fieldApi callbacks are always fresh
+        const formApiRef = React.useRef(formApi);
+        formApiRef.current = formApi;
+
+        const fieldApi = React.useMemo<FieldApi>(() => ({
+            getValue: () => formApiRef.current.values[field],
             setValue: (value) => {
-                formApi.values = {...formApi.values, [field]: value};
-                formApi.touched = {...formApi.touched, [field]: true};
-                formApi.errors = {...formApi.errors, [field]: undefined};
-                formApi.setError(field, undefined);
+                formApiRef.current.values = {...formApiRef.current.values, [field]: value};
+                formApiRef.current.touched = {...formApiRef.current.touched, [field]: true};
+                formApiRef.current.errors = {...formApiRef.current.errors, [field]: undefined};
+                formApiRef.current.setError(field, undefined);
             },
             setTouched: (touched) => {
-                formApi.touched = {...formApi.touched, [field]: touched};
+                formApiRef.current.touched = {...formApiRef.current.touched, [field]: touched};
             },
-        };
+        }), [field]); // stable unless the field name changes
 
         return <Component {...props} fieldApi={fieldApi} />;
     };
@@ -154,6 +158,23 @@ export function Form(props: FormProps) {
     const defaultValuesRef = React.useRef<FormValues>(props.defaultValues || {});
     const apiRef = React.useRef<FormApi | null>(null);
 
+    // Callback refs — always current without triggering re-memoization
+    const onSubmitRef = React.useRef(props.onSubmit);
+    const onSubmitFailureRef = React.useRef(props.onSubmitFailure);
+    const validateErrorRef = React.useRef(props.validateError);
+    const preSubmitRef = React.useRef(props.preSubmit);
+    const getApiRef = React.useRef(props.getApi);
+    const formDidUpdateRef = React.useRef(props.formDidUpdate);
+
+    React.useLayoutEffect(() => {
+        onSubmitRef.current = props.onSubmit;
+        onSubmitFailureRef.current = props.onSubmitFailure;
+        validateErrorRef.current = props.validateError;
+        preSubmitRef.current = props.preSubmit;
+        getApiRef.current = props.getApi;
+        formDidUpdateRef.current = props.formDidUpdate;
+    });
+
     const api = React.useMemo<FormApi>(() => ({
         values,
         touched,
@@ -162,16 +183,16 @@ export function Form(props: FormProps) {
             if (e) {
                 e.preventDefault();
             }
-            const nextErrors = props.validateError ? props.validateError(values) || {} : {};
+            const nextErrors = validateErrorRef.current ? validateErrorRef.current(values) || {} : {};
             setErrors(nextErrors);
             const hasError = Object.values(nextErrors).some(Boolean);
             if (hasError) {
-                if (props.onSubmitFailure) {
-                    props.onSubmitFailure(nextErrors);
+                if (onSubmitFailureRef.current) {
+                    onSubmitFailureRef.current(nextErrors);
                 }
-            } else if (props.onSubmit) {
-                const submitValues = props.preSubmit ? props.preSubmit(values) : values;
-                props.onSubmit(submitValues, e, apiRef.current ?? undefined);
+            } else if (onSubmitRef.current) {
+                const submitValues = preSubmitRef.current ? preSubmitRef.current(values) : values;
+                onSubmitRef.current(submitValues, e, apiRef.current ?? undefined);
             }
         },
         resetAll: () => {
@@ -198,7 +219,7 @@ export function Form(props: FormProps) {
             if (state.errors !== undefined) setErrors(state.errors);
             if (state.touched !== undefined) setTouched(state.touched);
         },
-    }), [errors, props, touched, values]);
+    }), [errors, touched, values]); // props removed — callbacks accessed via refs
 
     const proxiedApi = React.useMemo<FormApi>(() => ({
         ...api,
@@ -226,14 +247,14 @@ export function Form(props: FormProps) {
     apiRef.current = proxiedApi;
 
     React.useEffect(() => {
-        if (props.getApi) {
-            props.getApi(proxiedApi);
+        if (getApiRef.current) {
+            getApiRef.current(proxiedApi);
         }
-    }, [props, proxiedApi]);
+    }, [proxiedApi]); // props removed — use ref instead
 
     React.useEffect(() => {
-        if (props.formDidUpdate) {
-            props.formDidUpdate({values, errors, touched});
+        if (formDidUpdateRef.current) {
+            formDidUpdateRef.current({values, errors, touched});
         }
     }, [values, errors, touched]);
 
