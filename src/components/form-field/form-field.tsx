@@ -23,7 +23,7 @@ export const FormField: <E, T extends ReactForm.FieldProps & { className?: strin
         field: string,
         formApi: ReactForm.FormApi,
         component: React.ComponentType<T>,
-        componentProps?: T,
+        componentProps?: Omit<T, keyof ReactForm.FieldProps>,
         qeId?: string;
     },
 ) => React.ReactElement<E> = (props) => {
