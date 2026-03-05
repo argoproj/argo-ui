@@ -1,8 +1,7 @@
 import {default as classNames} from 'classnames';
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { AppContext } from '../../context';
+import { AppContextReact } from '../../context';
 import {Tooltip} from '../tooltip/tooltip';
 
 require('./nav-bar.scss');
@@ -21,7 +20,11 @@ export function isActiveRoute(locationPath: string, path: string) {
     return locationPath === path || locationPath.startsWith(`${path}/`);
 }
 
-export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps, context: AppContext) => {
+export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps) => {
+    const context = React.useContext(AppContextReact);
+    if (!context) {
+        return null;
+    }
     const locationPath = context.router.route.location.pathname;
     const navBarStyle = {
         ...(props.style?.backgroundColor && {background: `linear-gradient(to bottom, ${props.style?.backgroundColor}, #999`}),
@@ -44,8 +47,4 @@ export const NavBar: React.FunctionComponent<NavBarProps> = (props: NavBarProps,
             </div>
         </div>
     );
-};
-
-NavBar.contextTypes = {
-    router: PropTypes.object,
 };

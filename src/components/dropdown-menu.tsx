@@ -19,7 +19,11 @@ export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
 
     public render() {
         return (
-            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => this.dropdown = dropdown} qeId={this.props.qeId}>
+            <DropDown anchor={this.props.anchor} isMenu={true} ref={(dropdown: any) => {
+                if (dropdown) {
+                    this.dropdown = dropdown;
+                }
+            }} qeId={this.props.qeId}>
                 <ul>
                     {this.props.items.map((item, i) => <li qe-id={this.props.qeId + `-` + item.title}
                         onClick={(event) => this.onItemClick(item, event)} key={i}>
