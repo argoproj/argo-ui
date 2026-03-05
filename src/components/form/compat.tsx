@@ -31,6 +31,7 @@ export interface FormApi {
     setAllValues(values: FormValues): void;
     setTouched(field: string, touched: boolean): void;
     setFormState(state: Partial<FormState>): void;
+    resetAll(): void;
 }
 
 export type FormFunctionProps = FormApi;
@@ -44,7 +45,10 @@ export interface FieldProps {
 interface FormProps {
     defaultValues?: FormValues;
     validateError?: ValidateValuesFunction;
-    onSubmit?: (vals: FormValues) => any;
+    onSubmit?: (vals: FormValues, event?: React.SyntheticEvent, api?: FormApi) => any;
+    onSubmitFailure?: (errors: FormErrors) => void;
+    preSubmit?: (vals: FormValues) => FormValues;
+    formDidUpdate?: (state: FormState) => void;
     getApi?: (api: FormApi) => void;
     children: (api: FormApi) => RenderReturn;
 }
@@ -147,6 +151,9 @@ export function Form(props: FormProps) {
     const [touched, setTouched] = React.useState<Record<string, boolean>>({});
     const [errors, setErrors] = React.useState<Record<string, any>>({});
 
+    const defaultValuesRef = React.useRef<FormValues>(props.defaultValues || {});
+    const apiRef = React.useRef<FormApi | null>(null);
+
     const api = React.useMemo<FormApi>(() => ({
         values,
         touched,
@@ -158,9 +165,19 @@ export function Form(props: FormProps) {
             const nextErrors = props.validateError ? props.validateError(values) || {} : {};
             setErrors(nextErrors);
             const hasError = Object.values(nextErrors).some(Boolean);
-            if (!hasError && props.onSubmit) {
-                props.onSubmit(values);
+            if (hasError) {
+                if (props.onSubmitFailure) {
+                    props.onSubmitFailure(nextErrors);
+                }
+            } else if (props.onSubmit) {
+                const submitValues = props.preSubmit ? props.preSubmit(values) : values;
+                props.onSubmit(submitValues, e, apiRef.current ?? undefined);
             }
+        },
+        resetAll: () => {
+            setValues(defaultValuesRef.current);
+            setErrors({});
+            setTouched({});
         },
         setError: (field: string, error: any) => {
             setErrors((current) => ({...current, [field]: error}));
@@ -206,11 +223,19 @@ export function Form(props: FormProps) {
         getFormState: (): FormState => ({values, errors, touched}),
     }), [api, errors, touched, values]);
 
+    apiRef.current = proxiedApi;
+
     React.useEffect(() => {
         if (props.getApi) {
             props.getApi(proxiedApi);
         }
     }, [props, proxiedApi]);
+
+    React.useEffect(() => {
+        if (props.formDidUpdate) {
+            props.formDidUpdate({values, errors, touched});
+        }
+    }, [values, errors, touched]);
 
     return <FormContext.Provider value={proxiedApi}>{props.children(proxiedApi)}</FormContext.Provider>;
 }
@@ -239,6 +264,6 @@ export const TextArea = FormField((props: React.TextareaHTMLAttributes<HTMLTextA
     );
 });
 
-export function NestedForm(props: {children: React.ReactNode}) {
+export function NestedForm(props: {children: React.ReactNode; field?: string}) {
     return <div>{props.children}</div>;
 }
