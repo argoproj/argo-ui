@@ -1,6 +1,6 @@
 import {default as classNames} from 'classnames';
 import * as React from 'react';
-import {useCombobox} from 'downshift';
+import {useCombobox, UseComboboxState, UseComboboxStateChangeOptions} from 'downshift';
 
 require('./autocomplete.scss');
 export interface AutocompleteApi {
@@ -44,8 +44,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const [menuWidth, setMenuWidth] = React.useState(0);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     const menuRef = React.useRef<HTMLDivElement | null>(null);
-    // Use local state to track the input value so typing feels immediate in React 19.
-    // We sync from props.value when it changes externally (e.g. parent navigation update).
     const [localInputValue, setLocalInputValue] = React.useState(props.value || '');
     React.useEffect(() => {
         setLocalInputValue(props.value || '');
@@ -59,6 +57,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         getMenuProps,
         getInputProps,
         getItemProps,
+        openMenu,
     } = useCombobox({
         items: filteredItems,
         itemToString: (item) => item?.label || '',
@@ -72,6 +71,12 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onInputValueChange: ({inputValue: newValue}) => {
             setLocalInputValue(newValue || '');
         },
+        stateReducer: (_state: UseComboboxState<{value: string; label: string}>, {type, changes}: UseComboboxStateChangeOptions<{value: string; label: string}>) => {
+            if (type === useCombobox.stateChangeTypes.InputClick) {
+                return {...changes, isOpen: true};
+            }
+            return changes;
+        },
     });
 
     const setMenuPositions = React.useCallback(() => {
@@ -83,7 +88,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
         const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
         const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
         const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
-        // Use viewport-relative coords since the menu uses position:fixed
         let top = rect.bottom + marginBottom;
         if (menuRef.current) {
             const overflow = window.innerHeight - (rect.bottom + marginBottom + menuRef.current.offsetHeight);
@@ -132,6 +136,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
             inputRef.current = node;
         },
         onFocus: (event: React.FocusEvent<HTMLInputElement>) => {
+            openMenu();
             if (props.inputProps?.onFocus) {
                 props.inputProps.onFocus(event);
             }
