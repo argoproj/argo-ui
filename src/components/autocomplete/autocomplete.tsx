@@ -59,7 +59,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
         getMenuProps,
         getInputProps,
         getItemProps,
-        openMenu,
     } = useCombobox({
         items: filteredItems,
         itemToString: (item) => item?.label || '',
@@ -133,7 +132,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
             inputRef.current = node;
         },
         onFocus: (event: React.FocusEvent<HTMLInputElement>) => {
-            openMenu();
             if (props.inputProps?.onFocus) {
                 props.inputProps.onFocus(event);
             }
