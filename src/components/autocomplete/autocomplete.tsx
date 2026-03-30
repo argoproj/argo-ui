@@ -44,7 +44,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const [menuWidth, setMenuWidth] = React.useState(0);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     const menuRef = React.useRef<HTMLDivElement | null>(null);
-    const inputValue = props.value || '';
+    // Use local state to track the input value so typing feels immediate in React 19.
+    // We sync from props.value when it changes externally (e.g. parent navigation update).
+    const [localInputValue, setLocalInputValue] = React.useState(props.value || '');
+    React.useEffect(() => {
+        setLocalInputValue(props.value || '');
+    }, [props.value]);
+    const inputValue = localInputValue;
     const filteredItems = items.filter((item) => !props.filterSuggestions || item.label.toLowerCase().includes(inputValue.toLowerCase()));
 
     const {
@@ -64,6 +70,9 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 props.onSelect(selectedItem.label, selectedItem);
             }
         },
+        onInputValueChange: ({inputValue: newValue}) => {
+            setLocalInputValue(newValue || '');
+        },
     });
 
     const setMenuPositions = React.useCallback(() => {
@@ -75,18 +84,19 @@ export const Autocomplete = (props: AutocompleteProps) => {
         const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
         const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
         const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
-        let top = rect.bottom + marginBottom + window.scrollY;
+        // Use viewport-relative coords since the menu uses position:fixed
+        let top = rect.bottom + marginBottom;
         if (menuRef.current) {
             const overflow = window.innerHeight - (rect.bottom + marginBottom + menuRef.current.offsetHeight);
             if (overflow < 0) {
-                const correctedTop = rect.top + window.scrollY - menuRef.current.offsetHeight - inputRef.current.offsetHeight;
+                const correctedTop = rect.top - menuRef.current.offsetHeight - inputRef.current.offsetHeight;
                 if (correctedTop > 0) {
                     top = correctedTop;
                 }
             }
         }
         setMenuTop(top);
-        setMenuLeft(rect.left + marginLeft + window.scrollX);
+        setMenuLeft(rect.left + marginLeft);
         setMenuWidth(rect.width + marginLeft + marginRight);
     }, []);
 
@@ -129,6 +139,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
             }
         },
         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+            setLocalInputValue(event.target.value);
             if (props.onChange) {
                 props.onChange(event, event.target.value);
             }
@@ -139,9 +150,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
     });
     const menuProps = getMenuProps({
         className: 'autocomplete__menu',
-        ref: (node: HTMLDivElement | null) => {
-            menuRef.current = node;
-        },
     });
 
     wrapperProps.className = classNames('select', wrapperProps.className);
@@ -154,7 +162,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 <input {...inputProps} />
             )}
             {isOpen && filteredItems.length > 0 && (
-                <div {...menuProps} style={{position: 'absolute', top: menuTop, left: menuLeft, width: menuWidth, background: 'white', zIndex: 20, maxHeight: '20em'}}>
+                <div {...menuProps} ref={(node) => { menuRef.current = node; if (typeof menuProps.ref === 'function') { menuProps.ref(node); } else if (menuProps.ref) { (menuProps.ref as React.MutableRefObject<HTMLDivElement | null>).current = node; } }} style={{position: 'fixed', top: menuTop, left: menuLeft, width: menuWidth, background: 'white', zIndex: 20, maxHeight: '20em', overflowY: 'auto'}}>
                     {filteredItems.map((item, index) => (
                         <div
                             {...getItemProps({item, index})}
