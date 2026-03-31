@@ -44,11 +44,12 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const [menuWidth, setMenuWidth] = React.useState(0);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     const menuRef = React.useRef<HTMLDivElement | null>(null);
-    const [localInputValue, setLocalInputValue] = React.useState(props.value || '');
-    React.useEffect(() => {
-        setLocalInputValue(props.value || '');
-    }, [props.value]);
-    const inputValue = localInputValue;
+    const [inputValue, setInputValue] = React.useState(props.value || '');
+    const [prevPropsValue, setPrevPropsValue] = React.useState(props.value);
+    if (prevPropsValue !== props.value) {
+        setPrevPropsValue(props.value);
+        setInputValue(props.value || '');
+    }
     const filteredItems = items.filter((item) => !props.filterSuggestions || item.label.toLowerCase().includes(inputValue.toLowerCase()));
 
     const {
@@ -69,7 +70,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
             }
         },
         onInputValueChange: ({inputValue: newValue}) => {
-            setLocalInputValue(newValue || '');
+            setInputValue(newValue || '');
         },
         stateReducer: (_state: UseComboboxState<{value: string; label: string}>, {type, changes}: UseComboboxStateChangeOptions<{value: string; label: string}>) => {
             if (type === useCombobox.stateChangeTypes.InputClick) {
@@ -142,7 +143,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
             }
         },
         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-            setLocalInputValue(event.target.value);
             if (props.onChange) {
                 props.onChange(event, event.target.value);
             }
