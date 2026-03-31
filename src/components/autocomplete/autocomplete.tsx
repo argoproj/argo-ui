@@ -154,7 +154,19 @@ export const Autocomplete = (props: AutocompleteProps) => {
     });
     const menuProps = getMenuProps({
         className: 'autocomplete__menu',
+        ref: (node: HTMLDivElement | null) => { menuRef.current = node; },
     });
+
+    const menuStyle: React.CSSProperties = {
+        position: 'fixed',
+        top: menuTop,
+        left: menuLeft,
+        width: menuWidth,
+        background: 'white',
+        zIndex: 20,
+        maxHeight: '20em',
+        overflowY: 'auto',
+    };
 
     wrapperProps.className = classNames('select', wrapperProps.className);
 
@@ -166,7 +178,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 <input {...inputProps} />
             )}
             {isOpen && filteredItems.length > 0 && (
-                <div {...menuProps} ref={(node) => { menuRef.current = node; if (typeof menuProps.ref === 'function') { menuProps.ref(node); } else if (menuProps.ref) { (menuProps.ref as React.MutableRefObject<HTMLDivElement | null>).current = node; } }} style={{position: 'fixed', top: menuTop, left: menuLeft, width: menuWidth, background: 'white', zIndex: 20, maxHeight: '20em', overflowY: 'auto'}}>
+                <div {...menuProps} style={menuStyle}>
                     {filteredItems.map((item, index) => (
                         <div
                             {...getItemProps({item, index})}
