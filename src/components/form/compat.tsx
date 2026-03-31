@@ -32,6 +32,8 @@ export interface FormApi {
     setFormState(state: Partial<FormState>): void;
     setAllValues(values: FormValues): void;
     setValue(field: string, value: any): void;
+    setTouched(field: string, touched: boolean): void;
+    resetAll(): void;
 }
 
 export interface FieldProps {
@@ -96,7 +98,7 @@ function withFieldApi(
                 formApi.setValue(field, value);
             },
             setTouched: (touched) => {
-                formApi.touched = {...formApi.touched, [field]: touched};
+                formApi.setTouched(field, touched);
             },
         };
 
@@ -195,6 +197,8 @@ export function Form(props: FormProps) {
     const [touched, setTouched] = React.useState<Record<string, boolean>>({});
     const [errors, setErrors] = React.useState<FormErrors>({});
 
+    const defaultValuesRef = React.useRef<FormValues>(props.defaultValues || {});
+
     // Refs so callbacks always read the latest state without stale closures
     const valuesRef = React.useRef(values);
     const touchedRef = React.useRef(touched);
@@ -259,6 +263,14 @@ export function Form(props: FormProps) {
         setValue(field: string, value: any) {
             setValues((prev) => deepSet(prev, field, value));
             setTouched((prev) => ({...prev, [field]: true}));
+        },
+        setTouched(field: string, isTouched: boolean) {
+            setTouched((prev) => ({...prev, [field]: isTouched}));
+        },
+        resetAll() {
+            setValues(defaultValuesRef.current);
+            setErrors({});
+            setTouched({});
         },
     }), [submitForm]);
 
