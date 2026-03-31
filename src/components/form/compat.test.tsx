@@ -214,7 +214,7 @@ describe('Form', () => {
     test('19: FormField outside Form without formApi prop throws', () => {
         const Probe = FormField((_props: FieldProps & {fieldApi?: FieldApi}) => null);
         // Suppress React's error boundary console output in test
-        const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        const spy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
         expect(() => render(<Probe field='x' />)).toThrow('FormField components must be used inside <Form> or be passed formApi');
         spy.mockRestore();
     });
