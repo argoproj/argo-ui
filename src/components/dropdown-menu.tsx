@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropDown, DropDownHandle } from './dropdown/dropdown';
+import { AnchoredDropdown, AnchoredDropdownHandle } from './dropdown/anchored-dropdown';
 
 export interface MenuItem {
     title: string | React.ReactElement;
@@ -15,7 +15,7 @@ export interface DropDownMenuProps {
 
 export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
 
-    private dropdown: DropDownHandle | null = null;
+    private dropdown: AnchoredDropdownHandle | null = null;
     private anchorRef = React.createRef<HTMLDivElement>();
 
     public render() {
@@ -31,14 +31,14 @@ export class DropDownMenu extends React.PureComponent<DropDownMenuProps> {
                 >
                     <Anchor />
                 </div>
-                <DropDown anchor={this.anchorRef} isMenu={true} ref={(dropdown) => this.dropdown = dropdown}>
+                <AnchoredDropdown anchor={this.anchorRef} isMenu={true} ref={(dropdown) => { this.dropdown = dropdown; }}>
                     <ul>
                         {this.props.items.map((item, i) => <li qe-id={this.props.qeId + `-` + item.title}
                             onClick={(event) => this.onItemClick(item, event)} key={i}>
                             {item.iconClassName && <i className={item.iconClassName}/>} {item.title}
                             </li>)}
                     </ul>
-                </DropDown>
+                </AnchoredDropdown>
             </>
         );
     }
