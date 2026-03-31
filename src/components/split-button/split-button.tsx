@@ -31,12 +31,12 @@ export interface SplitButtonProps {
 export const SplitButton = (props: SplitButtonProps) => {
     const {action, title, iconClassName, subActions, disabled, qeId} = props;
     const dropdownRef = React.useRef<AnchoredDropdownHandle>(null);
-    const anchorRef = React.useRef<HTMLButtonElement>(null);
+    const anchorRef = React.useRef<HTMLDivElement>(null);
+    const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
     return (
-        <div className={`argo-split-button ${disabled ? 'argo-split-button--disabled' : ''}`}>
+        <div ref={anchorRef} className={`argo-split-button ${disabled ? 'argo-split-button--disabled' : ''}`}>
             <button
-                ref={anchorRef}
                 disabled={disabled}
                 qe-id={qeId}
                 className='argo-split-button__primary'
@@ -56,7 +56,11 @@ export const SplitButton = (props: SplitButtonProps) => {
                 className='argo-split-button__toggle'
                 qe-id={qeId ? `${qeId}-toggle` : undefined}
                 onClick={() => {
-                    dropdownRef.current?.open()
+                    if (dropdownOpen) {
+                        dropdownRef.current?.close();
+                    } else {
+                        dropdownRef.current?.open();
+                    }
                 }}
             >
                 <i className='fa fa-caret-down' />
@@ -66,6 +70,7 @@ export const SplitButton = (props: SplitButtonProps) => {
                     isMenu={true}
                     anchor={anchorRef}
                     qeId={qeId ? `${qeId}-dropdown` : undefined}
+                    onOpenStateChange={setDropdownOpen}
                 >
                 <ul>
                     {(subActions || []).map((subAction, i) => (

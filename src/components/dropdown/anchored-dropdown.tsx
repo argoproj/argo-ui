@@ -27,7 +27,7 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
         const anchor = props.anchor.current;
         const content = contentRef.current;
         if (!anchor || !content) {
-            return position;
+            return { left: 0, top: 0 };
         }
 
         const { top, left } = anchor.getBoundingClientRect();
@@ -51,7 +51,7 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
         }
 
         return { left: newLeft, top: newTop };
-    }, [props.anchor, position]);
+    }, [props.anchor]);
 
     const close = React.useCallback(() => {
         setOpened(false);
