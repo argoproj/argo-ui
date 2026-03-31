@@ -1,5 +1,6 @@
 import {default as classNames} from 'classnames';
 import * as React from 'react';
+import {useState, useRef, useCallback, useEffect} from 'react';
 import {useCombobox, UseComboboxState, UseComboboxStateChangeOptions} from 'downshift';
 
 require('./autocomplete.scss');
@@ -39,13 +40,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
         }
     });
     const wrapperProps = props.wrapperProps || {};
-    const [menuTop, setMenuTop] = React.useState(0);
-    const [menuLeft, setMenuLeft] = React.useState(0);
-    const [menuWidth, setMenuWidth] = React.useState(0);
-    const inputRef = React.useRef<HTMLInputElement | null>(null);
-    const menuRef = React.useRef<HTMLDivElement | null>(null);
-    const [inputValue, setInputValue] = React.useState(props.value || '');
-    const [prevPropsValue, setPrevPropsValue] = React.useState(props.value);
+    const [menuTop, setMenuTop] = useState(0);
+    const [menuLeft, setMenuLeft] = useState(0);
+    const [menuWidth, setMenuWidth] = useState(0);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+    const [inputValue, setInputValue] = useState(props.value || '');
+    const [prevPropsValue, setPrevPropsValue] = useState(props.value);
     if (prevPropsValue !== props.value) {
         setPrevPropsValue(props.value);
         setInputValue(props.value || '');
@@ -80,7 +81,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         },
     });
 
-    const setMenuPositions = React.useCallback(() => {
+    const setMenuPositions = useCallback(() => {
         if (!inputRef.current) {
             return;
         }
@@ -104,7 +105,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         setMenuWidth(rect.width + marginLeft + marginRight);
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!isOpen) {
             return;
         }
@@ -123,7 +124,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         };
     }, [isOpen, setMenuPositions]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (props.autoCompleteRef) {
             props.autoCompleteRef({refresh: setMenuPositions});
         }
