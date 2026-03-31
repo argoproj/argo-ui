@@ -45,8 +45,9 @@ export interface FieldProps {
 interface FormProps {
     defaultValues?: FormValues;
     validateError?: ValidateValuesFunction;
-    onSubmit?: (vals: FormValues) => any;
+    onSubmit?: (vals: FormValues, event?: React.SyntheticEvent | any, api?: FormApi) => any;
     onSubmitFailure?: (errors: FormErrors) => any;
+    preSubmit?: (vals: FormValues) => FormValues;
     getApi?: (api: FormApi) => void;
     formDidUpdate?: (state: FormState) => any;
     children: (api: FormApi) => RenderReturn;
@@ -209,6 +210,8 @@ export function Form(props: FormProps) {
     errorsRef.current = errors;
     propsRef.current = props;
 
+    const proxiedApiRef = React.useRef<FormApi | null>(null);
+
     const submitForm = React.useCallback((e?: React.SyntheticEvent | any) => {
         if (e && typeof e.preventDefault === 'function') {
             e.preventDefault();
@@ -222,7 +225,8 @@ export function Form(props: FormProps) {
                 propsRef.current.onSubmitFailure(nextErrors);
             }
         } else if (propsRef.current.onSubmit) {
-            propsRef.current.onSubmit(currentValues);
+            const submitValues = propsRef.current.preSubmit ? propsRef.current.preSubmit(currentValues) : currentValues;
+            propsRef.current.onSubmit(submitValues, e, proxiedApiRef.current ?? undefined);
         }
     }, []);
 
@@ -273,6 +277,8 @@ export function Form(props: FormProps) {
             setTouched({});
         },
     }), [submitForm]);
+
+    proxiedApiRef.current = proxiedApi;
 
     React.useEffect(() => {
         if (props.getApi) {
