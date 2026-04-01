@@ -8,11 +8,12 @@ import { Utils } from '../utils';
 
 require('./page.scss');
 
-interface PageProps extends React.Props<any> {
+interface PageProps {
     title: string;
     toolbar?: Toolbar | Observable<Toolbar>;
     topBarTitle?: string;
     useTitleOnly?: boolean;
+    children?: React.ReactNode;
 }
 
 export interface PageContextProps {

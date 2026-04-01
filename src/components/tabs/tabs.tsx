@@ -14,7 +14,7 @@ export interface Tab {
     extraHorizontalScrollPadding?: number;
 }
 
-export interface TabsProps extends React.Props<any> {
+export interface TabsProps {
     navCenter?: boolean;
     fixed?: boolean;
     navTransparent?: boolean;
