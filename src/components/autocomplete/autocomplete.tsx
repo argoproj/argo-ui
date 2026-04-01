@@ -155,7 +155,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const menuProps = getMenuProps({
         className: 'autocomplete__menu',
         ref: (node: HTMLDivElement | null) => { menuRef.current = node; },
-    });
+    }, {suppressRefError: true});
 
     const menuStyle: React.CSSProperties = {
         position: 'fixed',
