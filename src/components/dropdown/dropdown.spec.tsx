@@ -28,7 +28,7 @@ describe('DropDown', () => {
         wrapper = renderDropdown(onSelect);
 
         await act(async () => {
-            wrapper!.find('.argo-dropdown__anchor').simulate('click', {stopPropagation: () => {}});
+            wrapper!.find('.argo-dropdown__anchor').simulate('click', {stopPropagation: jest.fn()});
             await Promise.resolve();
         });
         wrapper.update();
@@ -53,7 +53,7 @@ describe('DropDown', () => {
         expect(onSelect).not.toHaveBeenCalled();
 
         await act(async () => {
-            wrapper!.find('.argo-dropdown__anchor').simulate('click', {stopPropagation: () => {}});
+            wrapper!.find('.argo-dropdown__anchor').simulate('click', {stopPropagation: jest.fn()});
             await Promise.resolve();
         });
         wrapper.update();
