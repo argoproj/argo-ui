@@ -9,6 +9,7 @@ export interface AnchoredDropdownProps {
     children: React.ReactNode | (() => React.ReactNode);
     qeId?: string;
     onOpenStateChange?: (open: boolean) => void;
+    ref?: React.Ref<AnchoredDropdownHandle>;
 }
 
 export interface AnchoredDropdownHandle {
@@ -18,7 +19,7 @@ export interface AnchoredDropdownHandle {
 
 require('./dropdown.scss');
 
-export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, AnchoredDropdownProps>((props, ref) => {
+export const AnchoredDropdown = ({ ref, ...props }: AnchoredDropdownProps) => {
     const [opened, setOpened] = React.useState(false);
     const [position, setPosition] = React.useState({ left: 0, top: 0 });
     const contentRef = React.useRef<HTMLDivElement>(null);
@@ -27,7 +28,7 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
         const anchor = props.anchor.current;
         const content = contentRef.current;
         if (!anchor || !content) {
-            return position;
+            return { left: 0, top: 0 };
         }
 
         const { top, left } = anchor.getBoundingClientRect();
@@ -51,7 +52,7 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
         }
 
         return { left: newLeft, top: newTop };
-    }, [props.anchor, position]);
+    }, [props.anchor]);
 
     const close = React.useCallback(() => {
         setOpened(false);
@@ -59,6 +60,7 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
     }, [props.onOpenStateChange]);
 
     const open = React.useCallback(() => {
+
         if (!contentRef.current || !props.anchor.current) {
             return;
         }
@@ -68,7 +70,6 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
         props.onOpenStateChange?.(true);
     }, [props.anchor, props.onOpenStateChange, calculatePosition]);
 
-    // Expose open/close methods via ref
     React.useImperativeHandle(ref, () => ({ open, close }), [open, close]);
 
     // Click outside handler
@@ -127,6 +128,4 @@ export const AnchoredDropdown = React.forwardRef<AnchoredDropdownHandle, Anchore
         </div>,
         document.body
     );
-});
-
-AnchoredDropdown.displayName = 'AnchoredDropdown';
+};

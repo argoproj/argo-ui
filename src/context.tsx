@@ -1,5 +1,6 @@
 import * as H from 'history';
 import { match } from 'react-router';
+import * as React from 'react';
 
 import { NotificationsApi } from './components/notifications/notification-manager';
 import { PopupApi } from './components/popup/popup-manager';
@@ -18,3 +19,5 @@ export interface AppContext {
     };
     history: H.History;
 }
+
+export const AppContextReact = React.createContext<AppContext | undefined>(undefined);
