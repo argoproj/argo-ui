@@ -15,6 +15,7 @@ $themes: (
         layout-loader-bg: rgba($argo-color-gray-7, 0.4),
         overlay: rgba(222, 222, 222, 0.62),
         shadow: $argo-color-gray-5,
+        shadow-gray-8: $argo-color-gray-8,
         border: $argo-color-gray-3
     ),
     dark: (
@@ -31,6 +32,7 @@ $themes: (
         layout-loader-bg: rgba($argo-color-gray-3, 0.4),
         overlay: rgba(70, 70, 70, 0.62),
         shadow: $dark-theme-background-1,
+        shadow-gray-8: $argo-color-gray-9,
         border: $argo-color-gray-7
     )
 );
