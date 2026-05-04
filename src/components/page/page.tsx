@@ -1,6 +1,5 @@
 import {default as classNames} from 'classnames';
 import * as React from 'react';
-import { Helmet } from 'react-helmet';
 import { Observable } from 'rxjs';
 
 import { DataLoader } from '../data-loader';
@@ -9,11 +8,12 @@ import { Utils } from '../utils';
 
 require('./page.scss');
 
-interface PageProps extends React.Props<any> {
+interface PageProps {
     title: string;
     toolbar?: Toolbar | Observable<Toolbar>;
     topBarTitle?: string;
     useTitleOnly?: boolean;
+    children?: React.ReactNode;
 }
 
 export interface PageContextProps {
@@ -24,6 +24,11 @@ export const PageContext = React.createContext<PageContextProps>({ title: 'Argo'
 
 export const Page = (props: PageProps) => {
     const toolbarObservable = props.toolbar && Utils.toObservable(props.toolbar);
+    const [documentTitle, setDocumentTitle] = React.useState('Argo');
+
+    React.useEffect(() => {
+        document.title = documentTitle;
+    }, [documentTitle]);
 
     return (
         <div className={classNames('page', { 'page--has-toolbar': !!props.toolbar })}>
@@ -39,11 +44,11 @@ export const Page = (props: PageProps) => {
                                 } else if (props.title) {
                                     titleParts = [props.title].concat(titleParts);
                                 }
-                                return (
-                                    <Helmet>
-                                        <title>{titleParts.join(' - ')}</title>
-                                    </Helmet>
-                                );
+                                const nextTitle = titleParts.join(' - ');
+                                if (documentTitle !== nextTitle) {
+                                    setDocumentTitle(nextTitle);
+                                }
+                                return null;
                             }}
                         </PageContext.Consumer>
                         <div className='page__top-bar'>

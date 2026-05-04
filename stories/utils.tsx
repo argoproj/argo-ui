@@ -1,23 +1,20 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
+import { createMemoryHistory } from 'history';
 
 import { Notifications } from '../src/components/notifications/notifications';
 import { NotificationsApi, NotificationsManager } from '../src/components/notifications/notification-manager';
 import { Popup, PopupProps } from '../src/components/popup/popup';
 import { PopupApi, PopupManager } from '../src/components/popup/popup-manager';
+import { AppContext, AppContextReact } from '../src/context';
 
 export class App extends React.Component<{ children: (apis: {
     notifications: NotificationsApi,
     popup: PopupApi,
 }) => React.ReactNode }, { popupProps: PopupProps }> {
 
-    public static childContextTypes = {
-        history: PropTypes.object,
-        apis: PropTypes.object,
-    };
-
     private popupManager: PopupManager;
     private notificationsManager: NotificationsManager;
+    private history = createMemoryHistory();
 
     constructor(props: { children: (apis: { notifications: NotificationsApi, popup: PopupApi }) => React.ReactNode }) {
         super(props);
@@ -31,16 +28,29 @@ export class App extends React.Component<{ children: (apis: {
     }
 
     public render() {
-        return (
-            <div>
-                <Notifications notifications={this.notificationsManager.notifications}/>
-                {this.state.popupProps && <Popup {...this.state.popupProps}/>}
-                {this.props.children({ notifications: this.notificationsManager, popup: this.popupManager })}
-            </div>
-        );
-    }
+        const contextValue: AppContext = {
+            history: this.history,
+            router: {
+                history: this.history,
+                route: {
+                    location: this.history.location,
+                    match: {} as any,
+                },
+            },
+            apis: {
+                popup: this.popupManager,
+                notifications: this.notificationsManager,
+            },
+        };
 
-    public getChildContext() {
-        return { history, apis: { popup: this.popupManager, notifications: this.notificationsManager } };
+        return (
+            <AppContextReact.Provider value={contextValue}>
+                <div>
+                    <Notifications notifications={this.notificationsManager.notifications}/>
+                    {this.state.popupProps && <Popup {...this.state.popupProps}/>}
+                    {this.props.children({ notifications: this.notificationsManager, popup: this.popupManager })}
+                </div>
+            </AppContextReact.Provider>
+        );
     }
 }
