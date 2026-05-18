@@ -18,13 +18,13 @@ export interface FieldApi {
 
 export interface FormState {
     values: FormValues;
-    touched: Record<string, boolean>;
+    touched: Record<string, any>;
     errors: FormErrors;
 }
 
 export interface FormApi {
     values: FormValues;
-    touched: Record<string, boolean>;
+    touched: Record<string, any>;
     errors: FormErrors;
     submitForm(e?: React.SyntheticEvent | any): void;
     setError(field: string, error: any): void;
@@ -195,7 +195,7 @@ export function NestedForm({children}: {field: string; children: React.ReactNode
 
 export function Form(props: FormProps) {
     const [values, setValues] = React.useState<FormValues>(props.defaultValues || {});
-    const [touched, setTouched] = React.useState<Record<string, boolean>>({});
+    const [touched, setTouched] = React.useState<Record<string, any>>({});
     const [errors, setErrors] = React.useState<FormErrors>({});
 
     const defaultValuesRef = React.useRef<FormValues>(props.defaultValues || {});
@@ -246,7 +246,7 @@ export function Form(props: FormProps) {
         get touched() {
             return touchedRef.current;
         },
-        set touched(nextTouched: Record<string, boolean>) {
+        set touched(nextTouched: Record<string, any>) {
             setTouched(nextTouched);
         },
         get errors() {
