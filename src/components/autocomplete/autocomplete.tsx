@@ -124,11 +124,11 @@ export const Autocomplete = (props: AutocompleteProps) => {
         };
     }, [isOpen, setMenuPositions]);
 
+    const apiRef = useRef<AutocompleteApi>({refresh: () => setMenuPositions()});
+
     useEffect(() => {
-        if (props.autoCompleteRef) {
-            props.autoCompleteRef({refresh: setMenuPositions});
-        }
-    }, [props, setMenuPositions]);
+        props.autoCompleteRef?.(apiRef.current);
+    }, [props.autoCompleteRef]);
     const inputProps = getInputProps({
         ...(props.inputProps || {}),
         qeid: props.qeid,
