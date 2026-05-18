@@ -3,6 +3,7 @@ import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {Form, Text, TextArea, Checkbox, FormField, NestedForm, FormApi, FieldApi, FieldProps} from './compat';
+import {FormField as RealFormField} from '../form-field/form-field';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -240,5 +241,71 @@ describe('NestedForm', () => {
     test('21: renders children unchanged', () => {
         render(<NestedForm field='ignored'><span data-testid='nested-child'>ok</span></NestedForm>);
         expect(screen.getByTestId('nested-child')).toBeInTheDocument();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Touched state for nested fields and Submit-without-blur. form-field.tsx reads
+// touched via getNestedField, so it must be stored as a nested tree.
+// ---------------------------------------------------------------------------
+
+describe('touched state', () => {
+    test('22: blurring a nested field stores touched as a nested tree', async () => {
+        let capturedApi!: FormApi;
+        render(
+            <Form getApi={(api) => { capturedApi = api; }}>
+                {() => <Text field='spec.source.repoURL' data-testid='repo-input' />}
+            </Form>
+        );
+        await userEvent.click(screen.getByTestId('repo-input'));
+        await userEvent.tab();
+        expect(capturedApi.touched.spec.source.repoURL).toBe(true);
+    });
+
+    test('23: submitForm marks validated flat field as touched', async () => {
+        let capturedApi!: FormApi;
+        render(
+            <Form
+                getApi={(api) => { capturedApi = api; }}
+                validateError={(vals) => ({name: vals.name ? null : 'required'})}>
+                {(api) => <button onClick={() => api.submitForm()}>Submit</button>}
+            </Form>
+        );
+        await userEvent.click(screen.getByText('Submit'));
+        expect(capturedApi.touched.name).toBe(true);
+    });
+
+    test('24: submitForm marks validated nested field as touched', async () => {
+        let capturedApi!: FormApi;
+        render(
+            <Form
+                getApi={(api) => { capturedApi = api; }}
+                validateError={() => ({'spec.source.repoURL': 'required'})}>
+                {(api) => <button onClick={() => api.submitForm()}>Submit</button>}
+            </Form>
+        );
+        await userEvent.click(screen.getByText('Submit'));
+        expect(capturedApi.touched.spec.source.repoURL).toBe(true);
+    });
+
+    test('25: inline error renders for a nested field after submit (form-field integration)', async () => {
+        render(
+            <Form
+                validateError={(vals) => ({'spec.source.repoURL': vals?.spec?.source?.repoURL ? null : 'required'})}>
+                {(api) => (
+                    <>
+                        <RealFormField
+                            formApi={api}
+                            field='spec.source.repoURL'
+                            component={Text as any}
+                            componentProps={{'data-testid': 'repo-input'} as any}
+                        />
+                        <button onClick={() => api.submitForm()}>Submit</button>
+                    </>
+                )}
+            </Form>
+        );
+        await userEvent.click(screen.getByText('Submit'));
+        expect(await screen.findByText('required')).toBeInTheDocument();
     });
 });

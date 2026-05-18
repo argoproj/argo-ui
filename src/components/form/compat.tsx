@@ -219,6 +219,12 @@ export function Form(props: FormProps) {
         const currentValues = valuesRef.current;
         const nextErrors = propsRef.current.validateError ? propsRef.current.validateError(currentValues) || {} : {};
         setErrors(nextErrors);
+
+        const fields = Object.keys(nextErrors);
+        if (fields.length > 0) {
+            setTouched((prev) => fields.reduce((acc, f) => deepSet(acc, f, true), prev));
+        }
+
         const hasError = Object.values(nextErrors).some(Boolean);
         if (hasError) {
             if (propsRef.current.onSubmitFailure) {
@@ -266,10 +272,10 @@ export function Form(props: FormProps) {
         },
         setValue(field: string, value: any) {
             setValues((prev) => deepSet(prev, field, value));
-            setTouched((prev) => ({...prev, [field]: true}));
+            setTouched((prev) => deepSet(prev, field, true));
         },
         setTouched(field: string, isTouched: boolean) {
-            setTouched((prev) => ({...prev, [field]: isTouched}));
+            setTouched((prev) => deepSet(prev, field, isTouched));
         },
         resetAll() {
             setValues(defaultValuesRef.current);
