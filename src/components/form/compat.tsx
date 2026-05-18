@@ -27,17 +27,17 @@ export interface FormApi {
     touched: Record<string, any>;
     errors: FormErrors;
     submitForm(e?: React.SyntheticEvent | any): void;
-    setError(field: string, error: any): void;
+    setError(field: Path, error: any): void;
     getFormState(): FormState;
     setFormState(state: Partial<FormState>): void;
     setAllValues(values: FormValues): void;
-    setValue(field: string, value: any): void;
-    setTouched(field: string, touched: boolean): void;
+    setValue(field: Path, value: any): void;
+    setTouched(field: Path, touched: boolean): void;
     resetAll(): void;
 }
 
 export interface FieldProps {
-    field: string;
+    field: Path;
     formApi?: FormApi;
     qeid?: string;
 }
@@ -55,23 +55,79 @@ interface FormProps {
 
 const FormContext = React.createContext<FormApi | null>(null);
 
-// Deep-set a dotted path like 'spec.source.repoURL' into an object
-function deepSet(obj: Record<string, any>, path: string, value: any): Record<string, any> {
-    const result = {...obj};
-    const keys = path.split('.');
-    let cursor: Record<string, any> = result;
+// Field paths accept the same forms as react-form:
+//   - dotted strings:           'spec.source.repoURL'
+//   - bracket-indexed strings:  'resources[0]', 'spec.destinations[0].server'
+//   - array of keys:            ['window.applications', 0]  (dotted entries are still split)
+export type Path = string | Array<string | number>;
+
+function parsePath(path: Path): Array<string | number> {
+    const segments = Array.isArray(path) ? path : [path];
+    const keys: Array<string | number> = [];
+    for (const segment of segments) {
+        if (typeof segment === 'number') {
+            keys.push(segment);
+            continue;
+        }
+        // Split 'a.b[0].c' / 'a.b' / 'a[0][1]' into individual keys.
+        let buf = '';
+        for (let i = 0; i < segment.length; i++) {
+            const ch = segment[i];
+            if (ch === '.') {
+                if (buf) {
+                    keys.push(buf);
+                    buf = '';
+                }
+            } else if (ch === '[') {
+                if (buf) {
+                    keys.push(buf);
+                    buf = '';
+                }
+                const end = segment.indexOf(']', i + 1);
+                const idx = segment.slice(i + 1, end === -1 ? segment.length : end);
+                const n = Number(idx);
+                keys.push(Number.isFinite(n) && /^\d+$/.test(idx) ? n : idx);
+                i = end === -1 ? segment.length : end;
+            } else {
+                buf += ch;
+            }
+        }
+        if (buf) {
+            keys.push(buf);
+        }
+    }
+    return keys;
+}
+
+function cloneContainer(value: any, nextKey: string | number): any {
+    const wantsArray = typeof nextKey === 'number';
+    if (Array.isArray(value)) {
+        return value.slice();
+    }
+    if (value != null && typeof value === 'object') {
+        return {...value};
+    }
+    return wantsArray ? [] : {};
+}
+
+function deepSet(obj: Record<string, any>, path: Path, value: any): Record<string, any> {
+    const keys = parsePath(path);
+    if (keys.length === 0) return obj;
+    const rootIsArray = Array.isArray(obj);
+    const result: any = rootIsArray ? (obj as any).slice() : {...obj};
+    let cursor: any = result;
     for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i];
-        cursor[key] = cursor[key] != null && typeof cursor[key] === 'object' ? {...cursor[key]} : {};
+        const nextKey = keys[i + 1];
+        cursor[key] = cloneContainer(cursor[key], nextKey);
         cursor = cursor[key];
     }
     cursor[keys[keys.length - 1]] = value;
     return result;
 }
 
-// Deep-get a dotted path like 'spec.source.repoURL' from an object
-function deepGet(obj: Record<string, any>, path: string): any {
-    const keys = path.split('.');
+function deepGet(obj: Record<string, any>, path: Path): any {
+    const keys = parsePath(path);
     let cursor: any = obj;
     for (const key of keys) {
         if (cursor == null) return undefined;
@@ -87,7 +143,7 @@ function withFieldApi(
         const contextApi = React.useContext(FormContext);
         const propApi = (props as {formApi?: FormApi}).formApi;
         const formApi = propApi || contextApi;
-        const field = (props as {field: string}).field;
+        const field = (props as {field: Path}).field;
 
         if (!formApi) {
             throw new Error('FormField components must be used inside <Form> or be passed formApi');
@@ -256,8 +312,8 @@ export function Form(props: FormProps) {
             setErrors(nextErrors);
         },
         submitForm,
-        setError(field: string, error: any) {
-            setErrors((current) => ({...current, [field]: error}));
+        setError(field: Path, error: any) {
+            setErrors((current) => deepSet(current, field, error));
         },
         getFormState(): FormState {
             return {values: valuesRef.current, touched: touchedRef.current, errors: errorsRef.current};
@@ -270,11 +326,11 @@ export function Form(props: FormProps) {
         setAllValues(nextValues: FormValues) {
             setValues(nextValues);
         },
-        setValue(field: string, value: any) {
+        setValue(field: Path, value: any) {
             setValues((prev) => deepSet(prev, field, value));
             setTouched((prev) => deepSet(prev, field, true));
         },
-        setTouched(field: string, isTouched: boolean) {
+        setTouched(field: Path, isTouched: boolean) {
             setTouched((prev) => deepSet(prev, field, isTouched));
         },
         resetAll() {
