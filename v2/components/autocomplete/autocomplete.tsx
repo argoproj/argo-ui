@@ -5,7 +5,7 @@ import {Input, InputProps, SetInputFxn, useDebounce, useInput} from '../input/in
 import ThemeDiv from '../theme-div/theme-div';
 
 import './autocomplete.scss';
-import {Minimatch, IOptions} from 'minimatch';
+import {Minimatch, MinimatchOptions} from 'minimatch';
 
 interface AutocompleteProps extends InputProps {
     inputref?: React.MutableRefObject<HTMLInputElement>;
@@ -54,7 +54,7 @@ export const RenderAutocomplete = (
         onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
         className?: string;
         style?: React.CSSProperties;
-        glob?: boolean | IOptions;
+        glob?: boolean | MinimatchOptions;
     }
 ) => {
     const [curItems, setCurItems] = React.useState(props.items || []);

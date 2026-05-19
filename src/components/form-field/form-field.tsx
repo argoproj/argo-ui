@@ -1,6 +1,6 @@
 import {default as classNames} from 'classnames';
 import * as React from 'react';
-import * as ReactForm from 'react-form';
+import * as ReactForm from '../form/compat';
 
 import { Select as ArgoSelect, SelectOption, SelectProps } from '../select/select';
 
@@ -17,12 +17,12 @@ export function getNestedField(src: any, path: string): any {
 }
 
 export const FormField: <E, T extends ReactForm.FieldProps & { className?: string}>(
-    props: React.Props<E> & {
+    props: {
         label?: string,
         field: string,
         formApi: ReactForm.FormApi,
         component: React.ComponentType<T>,
-        componentProps?: T,
+        componentProps?: Omit<T, keyof ReactForm.FieldProps>,
         qeId?: string;
     },
 ) => React.ReactElement<E> = (props) => {

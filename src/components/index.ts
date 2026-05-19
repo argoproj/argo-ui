@@ -29,3 +29,24 @@ export * from './form-field';
 export * from './slide-contents/slide-contents';
 export * from './autocomplete/autocomplete';
 export * from './autocomplete/autocomplete-field';
+
+// react-form compatibility layer (React 19 hooks-based replacement)
+export * as ReactForm from './form/compat';
+export {
+    Form,
+    FormApi,
+    FormValues,
+    FormErrors,
+    FormValue,
+    FormState,
+    FormFunctionProps,
+    Nested,
+    Text,
+    TextArea,
+    NestedForm,
+    FieldApi,
+    FieldProps,
+    ValidateValuesFunction,
+    RenderReturn,
+    FormField as FormFieldHOC,
+} from './form/compat';

@@ -79,7 +79,11 @@ export class Select extends React.Component<SelectProps, State> {
             options = options.filter((item) => item.title.toLocaleLowerCase().includes(this.state.search.toLocaleLowerCase()));
         }
         return (
-            <div className='select' ref={(el) => this.el = el}>
+            <div className='select' ref={(el) => {
+                if (el) {
+                    this.el = el;
+                }
+            }}>
                 {!this.state.opened && <input id={this.props.id} className='select__focus-receiver' type='text' onFocus={() => this.openDropdown()}/>}
                 <div className='select__value' onClick={() => this.openDropdown()}>
                     {selectedOptions.length > 0 ? selectedOptions.map((item) => item.title).join(', ') : this.props.placeholder || ''}
@@ -87,7 +91,11 @@ export class Select extends React.Component<SelectProps, State> {
                 </div>
                 <div className={classNames('select__options', { 'opened': this.state.opened, 'to-top': this.state.toTop })}>
                     <input className='select__search' type='text' placeholder='Search' value={this.state.search}
-                        onChange={(event) => this.onSearchChange(event)} ref={(el) => this.searchEl = el} />
+                        onChange={(event) => this.onSearchChange(event)} ref={(el) => {
+                            if (el) {
+                                this.searchEl = el;
+                            }
+                        }} />
                     {options.map((option) => (
                         <div key={option.value}
                                 className={classNames('select__option', { selected: this.isSelected(option) })}

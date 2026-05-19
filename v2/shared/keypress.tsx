@@ -116,7 +116,7 @@ const handlePress = (e: KeyboardEvent, state: GroupMap) => {
     const {groups, groupForKey} = state;
     const g = groupForKey[e.keyCode];
 
-    if (groups[g]) {
+    if (groups[g] && groups[g][e.keyCode]) {
         let allPressed = true;
         groups[g][e.keyCode].pressed = true;
 
@@ -157,7 +157,7 @@ const checkTarget = (allPressed: boolean, curTarget: any, e: KeyboardEvent, grou
 const handleKeyUp = (e: KeyboardEvent, state: GroupMap) => {
     const {groups, groupForKey} = state;
     const g = groupForKey[e.keyCode];
-    if (groups[g]) {
+    if (groups[g] && groups[g][e.keyCode]) {
         groups[g][e.keyCode].pressed = false;
     }
 };

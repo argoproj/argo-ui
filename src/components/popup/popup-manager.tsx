@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, FormApi, FormValues, RenderReturn, ValidateValuesFunction } from 'react-form';
+import { Form, FormApi, FormValues, RenderReturn, ValidateValuesFunction } from '../form/compat';
 import { BehaviorSubject } from 'rxjs';
 
 import { PopupProps } from './popup';
