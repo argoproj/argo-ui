@@ -355,5 +355,15 @@ export function Form(props: FormProps) {
         }
     }, [values, touched, errors]);
 
+    // react-form ran validateError on every value change so inline errors could
+    // surface as soon as a field was touched. Mirror that here.
+    React.useEffect(() => {
+        if (!propsRef.current.validateError) {
+            return;
+        }
+        const nextErrors = propsRef.current.validateError(values) || {};
+        setErrors(nextErrors);
+    }, [values]);
+
     return <FormContext.Provider value={proxiedApi}>{props.children(proxiedApi)}</FormContext.Provider>;
 }
