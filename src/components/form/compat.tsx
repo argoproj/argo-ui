@@ -292,48 +292,72 @@ export function Form(props: FormProps) {
         }
     }, []);
 
+    // Writes update refs synchronously in addition to scheduling React state updates,
+    // so callers that read `api.values` immediately after `api.setValue(...)` within
+    // the same event handler see the new value. This matches the original react-form,
+    // which used a synchronous reducer.
     const proxiedApi = React.useMemo<FormApi>(() => ({
         get values() {
             return valuesRef.current;
         },
         set values(nextValues: FormValues) {
+            valuesRef.current = nextValues;
             setValues(nextValues);
         },
         get touched() {
             return touchedRef.current;
         },
         set touched(nextTouched: Record<string, any>) {
+            touchedRef.current = nextTouched;
             setTouched(nextTouched);
         },
         get errors() {
             return errorsRef.current;
         },
         set errors(nextErrors: FormErrors) {
+            errorsRef.current = nextErrors;
             setErrors(nextErrors);
         },
         submitForm,
         setError(field: Path, error: any) {
-            setErrors((current) => deepSet(current, field, error));
+            errorsRef.current = deepSet(errorsRef.current, field, error);
+            setErrors(errorsRef.current);
         },
         getFormState(): FormState {
             return {values: valuesRef.current, touched: touchedRef.current, errors: errorsRef.current};
         },
         setFormState(state: Partial<FormState>) {
-            if (state.values !== undefined) setValues(state.values);
-            if (state.touched !== undefined) setTouched(state.touched);
-            if (state.errors !== undefined) setErrors(state.errors);
+            if (state.values !== undefined) {
+                valuesRef.current = state.values;
+                setValues(state.values);
+            }
+            if (state.touched !== undefined) {
+                touchedRef.current = state.touched;
+                setTouched(state.touched);
+            }
+            if (state.errors !== undefined) {
+                errorsRef.current = state.errors;
+                setErrors(state.errors);
+            }
         },
         setAllValues(nextValues: FormValues) {
+            valuesRef.current = nextValues;
             setValues(nextValues);
         },
         setValue(field: Path, value: any) {
-            setValues((prev) => deepSet(prev, field, value));
-            setTouched((prev) => deepSet(prev, field, true));
+            valuesRef.current = deepSet(valuesRef.current, field, value);
+            touchedRef.current = deepSet(touchedRef.current, field, true);
+            setValues(valuesRef.current);
+            setTouched(touchedRef.current);
         },
         setTouched(field: Path, isTouched: boolean) {
-            setTouched((prev) => deepSet(prev, field, isTouched));
+            touchedRef.current = deepSet(touchedRef.current, field, isTouched);
+            setTouched(touchedRef.current);
         },
         resetAll() {
+            valuesRef.current = defaultValuesRef.current;
+            touchedRef.current = {};
+            errorsRef.current = {};
             setValues(defaultValuesRef.current);
             setErrors({});
             setTouched({});

@@ -308,4 +308,25 @@ describe('touched state', () => {
         await userEvent.click(screen.getByText('Submit'));
         expect(await screen.findByText('required')).toBeInTheDocument();
     });
+
+    test('26: setValue followed by submitForm in the same handler sees the updated value', async () => {
+        const onSubmit = jest.fn();
+        let capturedApi!: FormApi;
+        render(
+            <Form
+                defaultValues={{id: undefined as number | undefined}}
+                onSubmit={onSubmit}
+                getApi={(api) => { capturedApi = api; }}>
+                {() => <span>form</span>}
+            </Form>
+        );
+        // Repro for the sync-window-edit regression: the panel sets `id` then
+        // submits synchronously. The submit handler must see the new id, not
+        // the stale (undefined) one from the previous render.
+        act(() => {
+            capturedApi.setValue('id', 42);
+            capturedApi.submitForm(null);
+        });
+        expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({id: 42}), null, expect.any(Object));
+    });
 });
