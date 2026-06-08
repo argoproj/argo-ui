@@ -132,6 +132,20 @@
     color: $argo-color-teal-6;
 }
 
+// Checkbox: render label inline beside the checkbox instead of using the
+// floating-label grid, which would otherwise overlap the checkbox.
+.argo-field-container:has(> .argo-checkbox) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    > label.argo-label-placeholder {
+        transform: none;
+        cursor: pointer;
+        pointer-events: auto;
+    }
+}
+
 .argo-field {
     // Hide autofill background
     &:-webkit-autofill {
