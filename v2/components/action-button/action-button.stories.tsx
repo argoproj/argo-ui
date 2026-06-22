@@ -57,15 +57,16 @@ const Template = (args: any) => {
         'Say hello': () => tempSetMessage('Hello!'),
         'Surprise': () => tempSetMessage('Boo!'),
     };
-    args.action = SampleActions[args.sampleAction];
-    if (args.tooltip && args.tooltip !== '') {
-        args.tooltip = <Text>{args.tooltip}</Text>;
-    }
+    const buttonArgs = {
+        ...args,
+        action: SampleActions[args.sampleAction],
+        tooltip: args.tooltip && args.tooltip !== '' ? <Text>{args.tooltip}</Text> : args.tooltip,
+    };
 
     return (
         <React.Fragment>
             <div style={{display: 'flex'}}>
-                <ActionButton {...args} />
+                <ActionButton {...buttonArgs} />
             </div>
             {message !== '' && (
                 <div style={{marginTop: '1em'}}>

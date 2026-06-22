@@ -27,14 +27,14 @@ export const Page = (props: PageProps) => {
         [props.toolbar],
     );
     const ctx = React.useContext(PageContext);
-    const [toolbar, setToolbar] = React.useState<Toolbar | undefined>(undefined);
+    const [subscribedToolbar, setSubscribedToolbar] = React.useState<Toolbar | undefined>(undefined);
+    const toolbar = toolbarObservable ? subscribedToolbar : undefined;
 
     React.useEffect(() => {
         if (!toolbarObservable) {
-            setToolbar(undefined);
             return undefined;
         }
-        const subscription = toolbarObservable.subscribe(setToolbar);
+        const subscription = toolbarObservable.subscribe(setSubscribedToolbar);
         return () => subscription.unsubscribe();
     }, [toolbarObservable]);
 

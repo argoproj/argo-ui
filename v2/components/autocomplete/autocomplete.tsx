@@ -13,10 +13,10 @@ interface AutocompleteProps extends InputProps {
 
 export const useAutocomplete = (init: string): [string, SetInputFxn, AutocompleteProps] => {
     const [state, setState, input] = useInput(init);
-    const autocomplete = input as AutocompleteProps;
-    if (autocomplete.ref) {
-        autocomplete.inputref = input.ref;
-        delete autocomplete.ref;
+    let autocomplete = input as AutocompleteProps;
+    if (input.ref) {
+        const {ref, ...rest} = input;
+        autocomplete = {...rest, inputref: ref} as AutocompleteProps;
     }
     return [state, setState, autocomplete];
 };
@@ -57,7 +57,6 @@ export const RenderAutocomplete = (
         glob?: boolean | MinimatchOptions;
     }
 ) => {
-    const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
     const inputRef = props.inputref || nullInputRef;
     const autocompleteRef = React.useRef(null);
@@ -79,7 +78,7 @@ export const RenderAutocomplete = (
 
     const debouncedVal = useDebounce(props.value as string, 350);
 
-    React.useEffect(() => {
+    const curItems = React.useMemo(() => {
         const filtered = (props.items || []).filter((i) => {
             if (i) {
                 const searchValue = debouncedVal?.toLowerCase() || '';
@@ -99,14 +98,16 @@ export const RenderAutocomplete = (
             }
             return false;
         });
-        setCurItems(filtered.length > 0 ? filtered : props.items);
-    }, [debouncedVal, props.items]);
+        return filtered.length > 0 ? filtered : props.items;
+    }, [debouncedVal, props.items, props.glob, props.abbreviations]);
 
-    React.useEffect(() => {
+    const [prevValue, setPrevValue] = React.useState(props.value);
+    if (props.value !== prevValue) {
+        setPrevValue(props.value);
         if (props.value !== null && props.value !== '') {
             setShowSuggestions(true);
         }
-    }, [props.value]);
+    }
 
     const {useKeybinding} = React.useContext(KeybindingContext);
 

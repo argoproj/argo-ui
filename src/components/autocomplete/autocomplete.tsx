@@ -129,14 +129,17 @@ export const Autocomplete = (props: AutocompleteProps) => {
     useEffect(() => {
         props.autoCompleteRef?.(apiRef.current);
     }, [props.autoCompleteRef]);
-    const inputProps = getInputProps({
+    const setInputRef = useCallback((node: HTMLInputElement | null) => {
+        inputRef.current = node;
+    }, []);
+    const setMenuRef = useCallback((node: HTMLDivElement | null) => {
+        menuRef.current = node;
+    }, []);
+    const {ref: downshiftInputRef, ...inputProps} = getInputProps({
         ...(props.inputProps || {}),
         qeid: props.qeid,
         value: inputValue,
         autoComplete: 'off',
-        ref: (node: HTMLInputElement | null) => {
-            inputRef.current = node;
-        },
         onFocus: (event: React.FocusEvent<HTMLInputElement>) => {
             openMenu();
             if (props.inputProps?.onFocus) {
@@ -152,10 +155,25 @@ export const Autocomplete = (props: AutocompleteProps) => {
             }
         },
     });
-    const menuProps = getMenuProps({
+    const {ref: downshiftMenuRef, ...menuProps} = getMenuProps({
         className: 'autocomplete__menu',
-        ref: (node: HTMLDivElement | null) => { menuRef.current = node; },
     }, {suppressRefError: true});
+
+    const assignRef = <T,>(ref: React.Ref<T> | undefined, node: T | null) => {
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            (ref as React.MutableRefObject<T | null>).current = node;
+        }
+    };
+    const inputRefCallback = (node: HTMLInputElement | null) => {
+        setInputRef(node);
+        assignRef(downshiftInputRef as React.Ref<HTMLInputElement>, node);
+    };
+    const menuRefCallback = (node: HTMLDivElement | null) => {
+        setMenuRef(node);
+        assignRef(downshiftMenuRef as React.Ref<HTMLDivElement>, node);
+    };
 
     const menuStyle: React.CSSProperties = {
         position: 'fixed',
@@ -168,17 +186,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
         overflowY: 'auto',
     };
 
-    wrapperProps.className = classNames('select', wrapperProps.className);
-
     return (
-        <div {...wrapperProps}>
+        <div {...wrapperProps} className={classNames('select', wrapperProps.className)}>
             {props.renderInput ? (
-                props.renderInput(inputProps as React.HTMLProps<HTMLInputElement>)
+                props.renderInput({...inputProps, ref: inputRefCallback} as React.HTMLProps<HTMLInputElement>)
             ) : (
-                <input {...inputProps} />
+                <input {...inputProps} ref={inputRefCallback} />
             )}
             {isOpen && filteredItems.length > 0 && (
-                <div {...menuProps} style={menuStyle}>
+                <div {...menuProps} ref={menuRefCallback} style={menuStyle}>
                     {filteredItems.map((item, index) => (
                         <div
                             {...getItemProps({item, index})}

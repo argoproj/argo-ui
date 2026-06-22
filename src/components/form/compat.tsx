@@ -249,6 +249,13 @@ export function NestedForm({children}: {field: string; children: React.ReactNode
     return <>{children}</>;
 }
 
+// Invokes the render-prop with the form api. Kept as its own component (and hoisted
+// to module scope) so the api object, whose methods read refs, is consumed via a prop
+// rather than read during Form's own render.
+function FormChildren({render, api}: {render: (api: FormApi) => RenderReturn; api: FormApi}) {
+    return <>{render(api)}</>;
+}
+
 export function Form(props: FormProps) {
     const [values, setValues] = React.useState<FormValues>(props.defaultValues || {});
     const [touched, setTouched] = React.useState<Record<string, any>>({});
@@ -256,15 +263,23 @@ export function Form(props: FormProps) {
 
     const defaultValuesRef = React.useRef<FormValues>(props.defaultValues || {});
 
-    // Refs so callbacks always read the latest state without stale closures
+    // Refs so callbacks always read the latest state without stale closures.
+    // Every mutator below (and the submitForm/validateError paths) also writes these
+    // refs synchronously at the call site, so a caller reading `api.values` right
+    // after `api.setValue(...)` inside the same event handler still sees the new
+    // value. This layout effect is the backstop that re-syncs the refs to committed
+    // state (and tracks the latest props) after every commit, running before any
+    // subsequently fired handler observes them.
     const valuesRef = React.useRef(values);
     const touchedRef = React.useRef(touched);
     const errorsRef = React.useRef(errors);
     const propsRef = React.useRef(props);
-    valuesRef.current = values;
-    touchedRef.current = touched;
-    errorsRef.current = errors;
-    propsRef.current = props;
+    React.useLayoutEffect(() => {
+        valuesRef.current = values;
+        touchedRef.current = touched;
+        errorsRef.current = errors;
+        propsRef.current = props;
+    });
 
     const proxiedApiRef = React.useRef<FormApi | null>(null);
 
@@ -274,11 +289,13 @@ export function Form(props: FormProps) {
         }
         const currentValues = valuesRef.current;
         const nextErrors = propsRef.current.validateError ? propsRef.current.validateError(currentValues) || {} : {};
+        errorsRef.current = nextErrors;
         setErrors(nextErrors);
 
         const fields = Object.keys(nextErrors);
         if (fields.length > 0) {
-            setTouched((prev) => fields.reduce((acc, f) => deepSet(acc, f, true), prev));
+            touchedRef.current = fields.reduce((acc, f) => deepSet(acc, f, true), touchedRef.current);
+            setTouched(touchedRef.current);
         }
 
         const hasError = Object.values(nextErrors).some(Boolean);
@@ -292,79 +309,98 @@ export function Form(props: FormProps) {
         }
     }, []);
 
-    // Writes update refs synchronously in addition to scheduling React state updates,
-    // so callers that read `api.values` immediately after `api.setValue(...)` within
-    // the same event handler see the new value. This matches the original react-form,
-    // which used a synchronous reducer.
+    // Stable mutators. Each writes the relevant ref synchronously in addition to
+    // scheduling React state, so callers that read `api.values` immediately after
+    // `api.setValue(...)` within the same event handler see the new value. This
+    // matches the original react-form, which used a synchronous reducer.
+    const setAllValues = React.useCallback((nextValues: FormValues) => {
+        valuesRef.current = nextValues;
+        setValues(nextValues);
+    }, []);
+    const setValuesProp = React.useCallback((nextValues: FormValues) => {
+        valuesRef.current = nextValues;
+        setValues(nextValues);
+    }, []);
+    const setTouchedProp = React.useCallback((nextTouched: Record<string, any>) => {
+        touchedRef.current = nextTouched;
+        setTouched(nextTouched);
+    }, []);
+    const setErrorsProp = React.useCallback((nextErrors: FormErrors) => {
+        errorsRef.current = nextErrors;
+        setErrors(nextErrors);
+    }, []);
+    const setError = React.useCallback((field: Path, error: any) => {
+        errorsRef.current = deepSet(errorsRef.current, field, error);
+        setErrors(errorsRef.current);
+    }, []);
+    const getFormState = React.useCallback((): FormState => ({values: valuesRef.current, touched: touchedRef.current, errors: errorsRef.current}), []);
+    const setFormState = React.useCallback((state: Partial<FormState>) => {
+        if (state.values !== undefined) {
+            valuesRef.current = state.values;
+            setValues(state.values);
+        }
+        if (state.touched !== undefined) {
+            touchedRef.current = state.touched;
+            setTouched(state.touched);
+        }
+        if (state.errors !== undefined) {
+            errorsRef.current = state.errors;
+            setErrors(state.errors);
+        }
+    }, []);
+    const setValueField = React.useCallback((field: Path, value: any) => {
+        valuesRef.current = deepSet(valuesRef.current, field, value);
+        touchedRef.current = deepSet(touchedRef.current, field, true);
+        setValues(valuesRef.current);
+        setTouched(touchedRef.current);
+    }, []);
+    const setTouchedField = React.useCallback((field: Path, isTouched: boolean) => {
+        touchedRef.current = deepSet(touchedRef.current, field, isTouched);
+        setTouched(touchedRef.current);
+    }, []);
+    const resetAll = React.useCallback(() => {
+        valuesRef.current = defaultValuesRef.current;
+        touchedRef.current = {};
+        errorsRef.current = {};
+        setValues(defaultValuesRef.current);
+        setErrors({});
+        setTouched({});
+    }, []);
+
+    // The ref-backed api handed to context, getApi and onSubmit. Its value getters
+    // read the latest refs so handlers that captured it observe synchronous writes.
     const proxiedApi = React.useMemo<FormApi>(() => ({
         get values() {
             return valuesRef.current;
         },
         set values(nextValues: FormValues) {
-            valuesRef.current = nextValues;
-            setValues(nextValues);
+            setValuesProp(nextValues);
         },
         get touched() {
             return touchedRef.current;
         },
         set touched(nextTouched: Record<string, any>) {
-            touchedRef.current = nextTouched;
-            setTouched(nextTouched);
+            setTouchedProp(nextTouched);
         },
         get errors() {
             return errorsRef.current;
         },
         set errors(nextErrors: FormErrors) {
-            errorsRef.current = nextErrors;
-            setErrors(nextErrors);
+            setErrorsProp(nextErrors);
         },
         submitForm,
-        setError(field: Path, error: any) {
-            errorsRef.current = deepSet(errorsRef.current, field, error);
-            setErrors(errorsRef.current);
-        },
-        getFormState(): FormState {
-            return {values: valuesRef.current, touched: touchedRef.current, errors: errorsRef.current};
-        },
-        setFormState(state: Partial<FormState>) {
-            if (state.values !== undefined) {
-                valuesRef.current = state.values;
-                setValues(state.values);
-            }
-            if (state.touched !== undefined) {
-                touchedRef.current = state.touched;
-                setTouched(state.touched);
-            }
-            if (state.errors !== undefined) {
-                errorsRef.current = state.errors;
-                setErrors(state.errors);
-            }
-        },
-        setAllValues(nextValues: FormValues) {
-            valuesRef.current = nextValues;
-            setValues(nextValues);
-        },
-        setValue(field: Path, value: any) {
-            valuesRef.current = deepSet(valuesRef.current, field, value);
-            touchedRef.current = deepSet(touchedRef.current, field, true);
-            setValues(valuesRef.current);
-            setTouched(touchedRef.current);
-        },
-        setTouched(field: Path, isTouched: boolean) {
-            touchedRef.current = deepSet(touchedRef.current, field, isTouched);
-            setTouched(touchedRef.current);
-        },
-        resetAll() {
-            valuesRef.current = defaultValuesRef.current;
-            touchedRef.current = {};
-            errorsRef.current = {};
-            setValues(defaultValuesRef.current);
-            setErrors({});
-            setTouched({});
-        },
-    }), [submitForm]);
+        setError,
+        getFormState,
+        setFormState,
+        setAllValues,
+        setValue: setValueField,
+        setTouched: setTouchedField,
+        resetAll,
+    }), [submitForm, setError, getFormState, setFormState, setAllValues, setValueField, setTouchedField, resetAll, setValuesProp, setTouchedProp, setErrorsProp]);
 
-    proxiedApiRef.current = proxiedApi;
+    React.useLayoutEffect(() => {
+        proxiedApiRef.current = proxiedApi;
+    }, [proxiedApi]);
 
     React.useEffect(() => {
         if (props.getApi) {
@@ -386,8 +422,49 @@ export function Form(props: FormProps) {
             return;
         }
         const nextErrors = propsRef.current.validateError(values) || {};
+        errorsRef.current = nextErrors;
         setErrors(nextErrors);
     }, [values]);
 
-    return <FormContext.Provider value={proxiedApi}>{props.children(proxiedApi)}</FormContext.Provider>;
+    // The render function reads `api.values`/`api.touched`/`api.errors` while
+    // rendering. Hand it a view whose value getters read the live render state rather
+    // than the ref-backed getters of `proxiedApi`, so no ref is read during render.
+    // Methods are the same stable callbacks used by `proxiedApi`, and the exposed
+    // values are identical (the refs mirror this same state). Consumers that capture
+    // the api in handlers still get the ref-backed `proxiedApi` via context and
+    // getApi, so synchronous read-after-write inside handlers is unchanged.
+    const renderApi: FormApi = {
+        get values() {
+            return values;
+        },
+        set values(nextValues: FormValues) {
+            setValuesProp(nextValues);
+        },
+        get touched() {
+            return touched;
+        },
+        set touched(nextTouched: Record<string, any>) {
+            setTouchedProp(nextTouched);
+        },
+        get errors() {
+            return errors;
+        },
+        set errors(nextErrors: FormErrors) {
+            setErrorsProp(nextErrors);
+        },
+        submitForm,
+        setError,
+        getFormState,
+        setFormState,
+        setAllValues,
+        setValue: setValueField,
+        setTouched: setTouchedField,
+        resetAll,
+    };
+
+    return (
+        <FormContext.Provider value={proxiedApi}>
+            <FormChildren render={props.children} api={renderApi} />
+        </FormContext.Provider>
+    );
 }

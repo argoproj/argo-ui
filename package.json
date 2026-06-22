@@ -71,6 +71,7 @@
         "css-loader": "^3.6.0",
         "eslint": "^8.23.0",
         "eslint-plugin-react": "^7.31.1",
+        "eslint-plugin-react-hooks": "^7.1.1",
         "glob": "^8.0.3",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^26.6.3",

@@ -15,9 +15,14 @@ interface BrandProps {
  */
 export const Brand = (props: BrandProps) => {
     const [loading, setLoading] = React.useState(true);
-    React.useEffect(() => {
+    const [prevWelcomeText, setPrevWelcomeText] = React.useState(props.welcomeText);
+    if (prevWelcomeText !== props.welcomeText) {
+        setPrevWelcomeText(props.welcomeText);
         setLoading(true);
-        setTimeout(() => setLoading(false), 500);
+    }
+    React.useEffect(() => {
+        const timeout = setTimeout(() => setLoading(false), 500);
+        return () => clearTimeout(timeout);
     }, [props.welcomeText]);
 
     const showWelcome = loading && !props.path;
