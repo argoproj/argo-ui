@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { match } from 'react-router';
+import { match } from 'react-router-dom';
 import * as React from 'react';
 
 import { NotificationsApi } from './components/notifications/notification-manager';
