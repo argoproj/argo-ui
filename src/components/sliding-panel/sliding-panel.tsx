@@ -40,17 +40,19 @@ const RenderSlidingPanel = (props: SlidingPanelProps) => {
         }
     }, []);
 
-    registerKeybinding({
-        keys: Key.ESCAPE,
-        action: () => {
-            if (props.isShown && props.onClose) {
-                props.onClose();
-                return true;
-            }
-            return false;
-        },
-        combo: false,
-        target: [closeButtonRef, bodyDivRef, panelHeaderDivRef, panelFooterDivRef],
+    React.useEffect(() => {
+        registerKeybinding({
+            keys: Key.ESCAPE,
+            action: () => {
+                if (props.isShown && props.onClose) {
+                    props.onClose();
+                    return true;
+                }
+                return false;
+            },
+            combo: false,
+            target: [closeButtonRef, bodyDivRef, panelHeaderDivRef, panelFooterDivRef],
+        });
     });
 
     return (

@@ -189,6 +189,10 @@ export const Autocomplete = (props: AutocompleteProps) => {
     return (
         <div {...wrapperProps} className={classNames('select', wrapperProps.className)}>
             {props.renderInput ? (
+                // inputRefCallback is a callback ref, not a ref read: it's invoked by React when
+                // attaching the DOM node, identical to `ref={inputRefCallback}` below. The lint
+                // can't tell a forwarded callback ref from a `.current` read during render.
+                // eslint-disable-next-line react-hooks/refs
                 props.renderInput({...inputProps, ref: inputRefCallback} as React.HTMLProps<HTMLInputElement>)
             ) : (
                 <input {...inputProps} ref={inputRefCallback} />
