@@ -259,18 +259,21 @@ export const NumKeyToNumber = (key: AnyNumKey): number => {
 
 export const KeybindingContext = React.createContext<{
     keybindingState: GroupMap;
-    useKeybinding: KeyFxn;
+    registerKeybinding: KeyFxn;
 }>({
     keybindingState: NewGroupMap(),
-    useKeybinding: () => null,
+    registerKeybinding: () => null,
 });
 
 export const KeybindingProvider = (props: {children: React.ReactNode}) => {
     const keybindingState: GroupMap = useSharedKeyListener();
 
-    const useKeybinding = (aProps: KeyFxnProps) => {
+    // Not a hook (calls no hooks) — it mutates the shared keybinding state.
+    // Named without a `use` prefix so the React Compiler doesn't treat a
+    // context-provided value as a dynamically-resolved hook.
+    const registerKeybinding = (aProps: KeyFxnProps) => {
         addKeybinding(keybindingState, aProps);
     };
 
-    return <KeybindingContext.Provider value={{keybindingState, useKeybinding}}>{props.children}</KeybindingContext.Provider>;
+    return <KeybindingContext.Provider value={{keybindingState, registerKeybinding}}>{props.children}</KeybindingContext.Provider>;
 };

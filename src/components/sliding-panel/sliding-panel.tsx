@@ -27,7 +27,7 @@ export const SlidingPanel = (props: SlidingPanelProps) => {
 
 const RenderSlidingPanel = (props: SlidingPanelProps) => {
 
-    const {useKeybinding} = React.useContext(KeybindingContext);
+    const {registerKeybinding} = React.useContext(KeybindingContext);
 
     const closeButtonRef = React.useRef(null);
     const bodyDivRef = React.useRef(null);
@@ -40,7 +40,7 @@ const RenderSlidingPanel = (props: SlidingPanelProps) => {
         }
     }, []);
 
-    useKeybinding({
+    registerKeybinding({
         keys: Key.ESCAPE,
         action: () => {
             if (props.isShown && props.onClose) {

@@ -109,14 +109,14 @@ export const RenderAutocomplete = (
         }
     }
 
-    const {useKeybinding} = React.useContext(KeybindingContext);
+    const {registerKeybinding} = React.useContext(KeybindingContext);
 
     const target = {
         combo: false,
         target: inputRef,
     };
 
-    useKeybinding({
+    registerKeybinding({
         keys: Key.TAB,
         action: () => {
             if (showSuggestions) {
@@ -131,7 +131,7 @@ export const RenderAutocomplete = (
         ...target,
     });
 
-    useKeybinding({
+    registerKeybinding({
         keys: Key.ESCAPE,
         action: () => {
             if (showSuggestions) {
@@ -147,7 +147,7 @@ export const RenderAutocomplete = (
         ...target,
     });
 
-    useKeybinding({
+    registerKeybinding({
         keys: Key.ENTER,
         action: () => {
             if (showSuggestions && props.onItemClick) {
@@ -160,7 +160,7 @@ export const RenderAutocomplete = (
         ...target,
     });
 
-    useKeybinding({
+    registerKeybinding({
         keys: Key.UP,
         action: () => {
             if (showSuggestions) {
@@ -172,7 +172,7 @@ export const RenderAutocomplete = (
         ...target,
     });
 
-    useKeybinding({
+    registerKeybinding({
         keys: Key.DOWN,
         action: () => {
             if (showSuggestions) {
