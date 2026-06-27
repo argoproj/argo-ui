@@ -26,6 +26,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private el: HTMLDivElement;
     private content: HTMLDivElement;
     private subscriptions: Subscription[];
+    private isFirstOpen = true;
 
     constructor(props: DropDownProps) {
         super(props);
@@ -44,14 +45,14 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         }
 
         return (
-            <div className='argo-dropdown' ref={(el) => this.el = el}>
+            <div className='argo-dropdown' ref={(el) => { this.el = el; }}>
                 <div qe-id={this.props.qeId} className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
                     <this.props.anchor/>
                 </div>
                 {ReactDOM.createPortal((
                     <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
                         style={{top: this.state.top, left: this.state.left}}
-                        ref={(el) => this.content = el}>
+                        ref={(el) => { this.content = el; }}>
                         {children}
                     </div>
                 ), document.body)}
@@ -72,6 +73,8 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
             if (this.state.opened && this.content && this.el) {
                 this.setState(this.refreshState());
             }
+        }), fromEvent<KeyboardEvent>(document, 'keydown').pipe(filter((event) => event.key === 'Enter' || event.keyCode === 13)).subscribe((event) => {
+            this.selectTopResult(event);
         })];
     }
 
@@ -84,6 +87,21 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         this.setState({ opened: false });
         if (this.props.onOpenStateChange) {
             this.props.onOpenStateChange(false);
+        }
+    }
+
+    private selectTopResult(event: KeyboardEvent) {
+        if (!this.state.opened || !this.content || !this.el) {
+            return;
+        }
+        const target = event.target as Node;
+        if (target && !this.el.contains(target) && !this.content.contains(target)) {
+            return;
+        }
+        const firstItem = this.content.querySelector('li') as HTMLElement;
+        if (firstItem) {
+            event.preventDefault();
+            firstItem.click();
         }
     }
 
@@ -107,6 +125,38 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
             newState.left = left;
         }
         return newState;
+    }
+
+    public componentDidUpdate(_prevProps: DropDownProps, prevState: DropDownState) {
+        // When menu changes from closed to open state
+        if (!prevState.opened && this.state.opened) {
+            // Mark as first open
+            this.isFirstOpen = true;
+            // Use setTimeout to ensure content has been rendered
+            setTimeout(() => {
+                if (this.state.opened && this.content && this.el) {
+                    const newState = this.refreshState();
+                    // Only update state if calculated position differs from current position
+                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                        this.setState(newState);
+                    }
+                    this.isFirstOpen = false;
+                }
+            }, 0);
+        }
+        
+        // If content changes and it's not the first open, recalculate position
+        if (this.state.opened && !this.isFirstOpen && this.content && this.el) {
+            // Use setTimeout to ensure calculation happens after DOM updates
+            setTimeout(() => {
+                if (this.state.opened) {
+                    const newState = this.refreshState();
+                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                        this.setState(newState);
+                    }
+                }
+            }, 0);
+        }
     }
 
     private open() {

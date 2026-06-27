@@ -1,7 +1,6 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Observable, Subscription } from 'rxjs';
-import { AppContext } from '../context';
+import { AppContext, AppContextReact } from '../context';
 import { ErrorNotification } from './error-notification';
 import { NotificationType } from './notifications/notifications';
 import { isPromise } from './utils';
@@ -32,10 +31,7 @@ interface LoaderState<TInput, TResult> {
 }
 
 export class DataLoader<D = any, I = undefined> extends React.Component<LoaderProps<I, D> | LoaderPropsNoInput<D>, LoaderState<I, D>> {
-    public static contextTypes = {
-        router: PropTypes.object,
-        apis: PropTypes.object,
-    };
+    public static contextType = AppContextReact;
 
     public static getDerivedStateFromProps(nextProps: LoaderProps<any, any>, prevState: { input: any }) {
         if (JSON.stringify(nextProps.input) !== JSON.stringify(prevState.input)) {

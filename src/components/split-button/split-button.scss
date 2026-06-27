@@ -1,0 +1,67 @@
+@import '../../styles/config';
+
+.argo-split-button {
+    display: inline-flex;
+    align-items: stretch;
+
+    &__primary,
+    &__toggle {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.4;
+        text-align: center;
+        color: $argo-color-gray-1;
+        background-color: $argo-color-gray-6;
+        border: none;
+        text-transform: uppercase;
+        transition: background-color 0.2s, color 0.2s;
+
+        &:not([disabled]):hover {
+            background-color: $argo-color-gray-5;
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    }
+
+    &__primary {
+        padding: 8px 14px;
+        border-radius: 24px 0 0 24px;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    &__toggle {
+        border-radius: 0 24px 24px 0;
+        padding: 8px 10px;
+
+        i {
+            margin: 0;
+        }
+    }
+
+    &__label {
+        white-space: nowrap;
+    }
+
+    &--disabled {
+        .argo-split-button__primary,
+        .argo-split-button__toggle {
+            cursor: not-allowed;
+            opacity: 0.6;
+
+            &:hover {
+                background-color: $argo-color-gray-6;
+            }
+        }
+    }
+}

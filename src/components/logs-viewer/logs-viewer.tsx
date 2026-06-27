@@ -24,12 +24,6 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
         super(props);
     }
 
-    public UNSAFE_componentWillReceiveProps(nextProps: LogsViewerProps) {
-        if (this.props.source.key !== nextProps.source.key) {
-            this.refresh(nextProps.source);
-        }
-    }
-
     public initTerminal(container: HTMLElement) {
         this.fitAddon = new FitAddon();
         this.terminal = new Terminal({
@@ -57,6 +51,12 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
 
     public componentDidMount() {
         this.refresh(this.props.source);
+    }
+
+    public componentDidUpdate(prevProps: LogsViewerProps) {
+        if (prevProps.source.key !== this.props.source.key) {
+            this.refresh(this.props.source);
+        }
     }
 
     public componentWillUnmount() {
