@@ -16,7 +16,8 @@ export const LoadingBar = (props: {loadms?: string | number}) => {
     const loadms = props.loadms || 400;
 
     React.useEffect(() => {
-        setLoading(false);
+        const frame = requestAnimationFrame(() => setLoading(false));
+        return () => cancelAnimationFrame(frame);
     }, []);
     return (
         <ThemeDiv className={`loading-bar ${!loading ? 'loading-bar--loaded' : ''}`} style={{transition: `opacity 200ms ease ${loadms}ms`}} onClick={() => setLoading(false)}>

@@ -16,14 +16,14 @@ export default {
 export const Primary = (args: any) => {
     const [field, , fieldProps] = useInput('');
     const origOnChange = fieldProps.onChange;
-    fieldProps.onChange = (val) => {
+    const onChange = (val: React.ChangeEvent<HTMLInputElement>) => {
         origOnChange(val);
         args.onChange(val);
     };
     return (
         <React.Fragment>
             <div style={{width: '50%', marginBottom: '1em'}}>
-                <Input {...args} {...fieldProps} />
+                <Input {...args} {...fieldProps} onChange={onChange} />
             </div>
             {field && field !== '' && <Text>Your input: {field}</Text>}
         </React.Fragment>

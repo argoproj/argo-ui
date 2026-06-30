@@ -18,7 +18,9 @@ export const ThemeDiv = (
         className?: string;
     } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>,
 ) => {
-    const theme = props.theme || useTheme();
+    const contextTheme = useTheme();
+    const theme = props.theme || contextTheme;
+    const {innerref, children, ...rest} = props;
     let clString = props.className;
 
     if (theme === Theme.Dark && !props.disabled) {
@@ -33,8 +35,8 @@ export const ThemeDiv = (
     }
 
     return (
-        <div {...(props as any)} className={clString} ref={props.innerref}>
-            {props.children}
+        <div {...(rest as any)} className={clString} ref={innerref}>
+            {children}
         </div>
     );
 };

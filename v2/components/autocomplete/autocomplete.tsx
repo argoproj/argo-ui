@@ -13,10 +13,10 @@ interface AutocompleteProps extends InputProps {
 
 export const useAutocomplete = (init: string): [string, SetInputFxn, AutocompleteProps] => {
     const [state, setState, input] = useInput(init);
-    const autocomplete = input as AutocompleteProps;
-    if (autocomplete.ref) {
-        autocomplete.inputref = input.ref;
-        delete autocomplete.ref;
+    let autocomplete = input as AutocompleteProps;
+    if (input.ref) {
+        const {ref, ...rest} = input;
+        autocomplete = {...rest, inputref: ref} as AutocompleteProps;
     }
     return [state, setState, autocomplete];
 };
@@ -57,7 +57,6 @@ export const RenderAutocomplete = (
         glob?: boolean | MinimatchOptions;
     }
 ) => {
-    const [curItems, setCurItems] = React.useState(props.items || []);
     const nullInputRef = React.useRef<HTMLInputElement>(null);
     const inputRef = props.inputref || nullInputRef;
     const autocompleteRef = React.useRef(null);
@@ -79,7 +78,7 @@ export const RenderAutocomplete = (
 
     const debouncedVal = useDebounce(props.value as string, 350);
 
-    React.useEffect(() => {
+    const curItems = React.useMemo(() => {
         const filtered = (props.items || []).filter((i) => {
             if (i) {
                 const searchValue = debouncedVal?.toLowerCase() || '';
@@ -99,88 +98,92 @@ export const RenderAutocomplete = (
             }
             return false;
         });
-        setCurItems(filtered.length > 0 ? filtered : props.items);
-    }, [debouncedVal, props.items]);
+        return filtered.length > 0 ? filtered : props.items;
+    }, [debouncedVal, props.items, props.glob, props.abbreviations]);
 
-    React.useEffect(() => {
+    const [prevValue, setPrevValue] = React.useState(props.value);
+    if (props.value !== prevValue) {
+        setPrevValue(props.value);
         if (props.value !== null && props.value !== '') {
             setShowSuggestions(true);
         }
-    }, [props.value]);
+    }
 
-    const {useKeybinding} = React.useContext(KeybindingContext);
+    const {registerKeybinding} = React.useContext(KeybindingContext);
 
-    const target = {
-        combo: false,
-        target: inputRef,
-    };
+    React.useEffect(() => {
+        const target = {
+            combo: false,
+            target: inputRef,
+        };
 
-    useKeybinding({
-        keys: Key.TAB,
-        action: () => {
-            if (showSuggestions) {
-                if (pos === curItems.length - 1) {
+        registerKeybinding({
+            keys: Key.TAB,
+            action: () => {
+                if (showSuggestions) {
+                    if (pos === curItems.length - 1) {
+                        reset();
+                    }
+                    nav(1);
+                    return true;
+                }
+                return false;
+            },
+            ...target,
+        });
+
+        registerKeybinding({
+            keys: Key.ESCAPE,
+            action: () => {
+                if (showSuggestions) {
                     reset();
+                    setShowSuggestions(false);
+                    if (inputRef && inputRef.current) {
+                        inputRef.current.blur();
+                    }
+                    return true;
                 }
-                nav(1);
-                return true;
-            }
-            return false;
-        },
-        ...target,
-    });
+                return false;
+            },
+            ...target,
+        });
 
-    useKeybinding({
-        keys: Key.ESCAPE,
-        action: () => {
-            if (showSuggestions) {
-                reset();
-                setShowSuggestions(false);
-                if (inputRef && inputRef.current) {
-                    inputRef.current.blur();
+        registerKeybinding({
+            keys: Key.ENTER,
+            action: () => {
+                if (showSuggestions && props.onItemClick) {
+                    props.onItemClick(curItems[pos]);
+                    setShowSuggestions(false);
+                    return true;
+                }
+                return false;
+            },
+            ...target,
+        });
+
+        registerKeybinding({
+            keys: Key.UP,
+            action: () => {
+                if (showSuggestions) {
+                    nav(-1);
+                    return false;
                 }
                 return true;
-            }
-            return false;
-        },
-        ...target,
-    });
+            },
+            ...target,
+        });
 
-    useKeybinding({
-        keys: Key.ENTER,
-        action: () => {
-            if (showSuggestions && props.onItemClick) {
-                props.onItemClick(curItems[pos]);
-                setShowSuggestions(false);
+        registerKeybinding({
+            keys: Key.DOWN,
+            action: () => {
+                if (showSuggestions) {
+                    nav(1);
+                    return false;
+                }
                 return true;
-            }
-            return false;
-        },
-        ...target,
-    });
-
-    useKeybinding({
-        keys: Key.UP,
-        action: () => {
-            if (showSuggestions) {
-                nav(-1);
-                return false;
-            }
-            return true;
-        },
-        ...target,
-    });
-
-    useKeybinding({
-        keys: Key.DOWN,
-        action: () => {
-            if (showSuggestions) {
-                nav(1);
-                return false;
-            }
-            return true;
-        },
-        ...target,
+            },
+            ...target,
+        });
     });
 
     const style = props.style;

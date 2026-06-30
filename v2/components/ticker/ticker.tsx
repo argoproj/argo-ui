@@ -14,10 +14,10 @@ export const Ticker = (props: TickerProps) => {
     const [cur, setCur] = React.useState(props.value);
     const [delta, setDelta] = React.useState(0);
 
-    React.useEffect(() => {
+    if (cur !== props.value) {
         setDelta(cur - props.value);
         setCur(props.value);
-    }, [props.value]);
+    }
     return (
         <ThemeDiv>
             <Flexy>
