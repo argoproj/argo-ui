@@ -13,10 +13,12 @@ export default {
 };
 
 export const Primary = (args: any) => {
-    const [theme, setTheme] = React.useState(Theme.Light);
-    React.useEffect(() => {
+    const [theme, setTheme] = React.useState(args.theme as Theme);
+    const [prevArgsTheme, setPrevArgsTheme] = React.useState(args.theme as Theme);
+    if (args.theme !== prevArgsTheme) {
+        setPrevArgsTheme(args.theme as Theme);
         setTheme(args.theme as Theme);
-    }, [args.theme]);
+    }
     const toggleTheme = () => setTheme(theme === Theme.Dark ? Theme.Light : Theme.Dark);
     const style = {background: theme === Theme.Dark ? 'black' : 'white', padding: '1em'};
     return (

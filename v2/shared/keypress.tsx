@@ -177,10 +177,10 @@ const useKeyListen = (state: GroupMap) => {
 };
 
 export const useKeyListener = () => {
-    let state = NewGroupMap();
+    const state = NewGroupMap();
     useKeyListen(state);
     return (keys: AnyKeys, action: KeyAction, combo?: boolean) => {
-        state = addKeybinding(state, {keys, action, combo});
+        addKeybinding(state, {keys, action, combo});
     };
 };
 
@@ -244,7 +244,8 @@ export const addKeybinding = (state: GroupMap, props: KeyFxnProps): GroupMap => 
         index = index + 1;
     }
 
-    return {groups, groupForKey, index};
+    state.index = index;
+    return state;
 };
 
 export const NumKeyToNumber = (key: AnyNumKey): number => {
@@ -258,18 +259,21 @@ export const NumKeyToNumber = (key: AnyNumKey): number => {
 
 export const KeybindingContext = React.createContext<{
     keybindingState: GroupMap;
-    useKeybinding: KeyFxn;
+    registerKeybinding: KeyFxn;
 }>({
     keybindingState: NewGroupMap(),
-    useKeybinding: () => null,
+    registerKeybinding: () => null,
 });
 
 export const KeybindingProvider = (props: {children: React.ReactNode}) => {
-    let keybindingState: GroupMap = useSharedKeyListener();
+    const keybindingState: GroupMap = useSharedKeyListener();
 
-    const useKeybinding = (aProps: KeyFxnProps) => {
-        keybindingState = addKeybinding(keybindingState, aProps);
+    // Not a hook (calls no hooks) — it mutates the shared keybinding state.
+    // Named without a `use` prefix so the React Compiler doesn't treat a
+    // context-provided value as a dynamically-resolved hook.
+    const registerKeybinding = (aProps: KeyFxnProps) => {
+        addKeybinding(keybindingState, aProps);
     };
 
-    return <KeybindingContext.Provider value={{keybindingState, useKeybinding}}>{props.children}</KeybindingContext.Provider>;
+    return <KeybindingContext.Provider value={{keybindingState, registerKeybinding}}>{props.children}</KeybindingContext.Provider>;
 };

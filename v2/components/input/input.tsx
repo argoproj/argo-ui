@@ -51,8 +51,11 @@ export const useDebounce = (value: string, debouncems: number): string => {
  * A formatted field, accompanied by the `useInput` hook. `useInput` returns a `[data, setData, props]` thruple, where `data` and `setData` are analagous to `React.useState`,
  * and `props` are designed to be included in the Input component with a spread operator: `<Input YOUR_PROPS_HERE {...props} />`
  */
-export const Input = (props: React.InputHTMLAttributes<HTMLInputElement> & {innerref?: React.MutableRefObject<any>, className?: string}) => (
-    <ThemeDiv className='input-container'>
-        <input {...(props as any)} className={props.className ? `${props.className} input` : 'input'} ref={props.innerref} />
-    </ThemeDiv>
-);
+export const Input = (props: React.InputHTMLAttributes<HTMLInputElement> & {innerref?: React.MutableRefObject<any>, className?: string}) => {
+    const {innerref, className, ...rest} = props;
+    return (
+        <ThemeDiv className='input-container'>
+            <input {...(rest as any)} className={className ? `${className} input` : 'input'} ref={innerref} />
+        </ThemeDiv>
+    );
+};

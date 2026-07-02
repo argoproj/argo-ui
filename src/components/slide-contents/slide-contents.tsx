@@ -4,7 +4,7 @@ require('./slide-contents.scss');
 
 export interface SlideContentsProps {
     title: string;
-    contents: JSX.Element;
+    contents: React.ReactElement;
     className: string;
 }
 
@@ -35,7 +35,7 @@ export class SlideContents extends React.Component<SlideContentsProps, SlideCont
     public render() {
         const { title, contents, className } = this.props;
         const { hidden } = this.state;
-        let toggleSwitch: JSX.Element | undefined;
+        let toggleSwitch: React.ReactElement | undefined;
         let clickAction: () => void;
         if (hidden) {
             toggleSwitch = <i className='fa fa-angle-down' aria-hidden='true' />;

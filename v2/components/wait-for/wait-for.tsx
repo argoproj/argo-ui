@@ -2,6 +2,7 @@ import * as React from 'react';
 import {ThemeDiv} from '../theme-div/theme-div';
 import './loading-bar.scss';
 import './spinner.scss';
+import { PropsWithChildren } from 'react';
 
 export const Spinner = () => (
     <ThemeDiv className='spinner'>
@@ -15,7 +16,8 @@ export const LoadingBar = (props: {loadms?: string | number}) => {
     const loadms = props.loadms || 400;
 
     React.useEffect(() => {
-        setLoading(false);
+        const frame = requestAnimationFrame(() => setLoading(false));
+        return () => cancelAnimationFrame(frame);
     }, []);
     return (
         <ThemeDiv className={`loading-bar ${!loading ? 'loading-bar--loaded' : ''}`} style={{transition: `opacity 200ms ease ${loadms}ms`}} onClick={() => setLoading(false)}>
@@ -24,6 +26,7 @@ export const LoadingBar = (props: {loadms?: string | number}) => {
     );
 };
 
-export const WaitFor = (props: {loading: boolean; loader?: React.ReactNode; loadms?: string | number} & React.ComponentProps<React.FunctionComponent>): JSX.Element => (
+type WaitForProps = { loading: boolean; loader?: React.ReactNode; loadms?: string | number }
+export const WaitFor: React.FC<PropsWithChildren<WaitForProps>> = (props) => (
     <React.Fragment>{props.loading ? props.loader || <LoadingBar loadms={props.loadms} /> : props.children}</React.Fragment>
 );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, FormApi, FormValues, RenderReturn, ValidateValuesFunction } from 'react-form';
+import { Form, FormApi, FormValues, RenderReturn, ValidateValuesFunction } from '../form/compat';
 import { BehaviorSubject } from 'rxjs';
 
 import { PopupProps } from './popup';
@@ -91,7 +91,7 @@ export class PopupManager implements PopupApi {
             this.popupPropsSubject.next({
                 children: undefined,
                 title: (
-                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
                 ),
                 titleColor: titleColor ? titleColor : 'normal',
                 icon: customIcon ? { name: customIcon?.name, color: customIcon?.color} : undefined,

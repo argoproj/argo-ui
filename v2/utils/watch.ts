@@ -16,14 +16,14 @@ export interface ListState<T> {
 
 export const useLoading = (list: any[], minLength?: number) => {
     const [loading, setLoading] = React.useState(true);
-    React.useEffect(() => {
-        if (!list) {
-            return;
-        }
-        if (list.length > (minLength || 0)) {
-            setLoading(false);
-        }
-    }, [list, minLength]);
+    // Once enough items have arrived we are no longer loading. This is sticky:
+    // loading only ever transitions from true -> false, mirroring the original
+    // effect which never set loading back to true. Adjusting state during render
+    // (rather than in an effect) avoids the cascading-render that setState-in-effect
+    // would cause.
+    if (loading && list && list.length > (minLength || 0)) {
+        setLoading(false);
+    }
     return loading;
 };
 
@@ -97,8 +97,20 @@ interface WatchEvent {
 export function useWatchList<T, E extends WatchEvent>(url: string, findItem: (item: T, change: E) => boolean, getItem: (change: E) => T, init?: T[]): T[] {
     const [items, setItems] = React.useState(init as T[]);
 
-    React.useEffect(() => {
+    // Reset items to `init` whenever the watch inputs change, before the new
+    // subscription starts delivering data. The original code did this with a
+    // synchronous setItems(init) at the top of the effect; storing the previous
+    // inputs in state and resetting during render (React's "adjust state on a
+    // changed key" pattern) preserves that reset behavior while avoiding a
+    // cascading render from setState-in-effect. The async setItems([...l]) from
+    // the subscription remains in its callback below.
+    const [prevKey, setPrevKey] = React.useState<{init?: T[]; url: string; findItem: typeof findItem; getItem: typeof getItem}>({init, url, findItem, getItem});
+    if (prevKey.init !== init || prevKey.url !== url || prevKey.findItem !== findItem || prevKey.getItem !== getItem) {
+        setPrevKey({init, url, findItem, getItem});
         setItems(init);
+    }
+
+    React.useEffect(() => {
         const stream = fromEventSource(url).pipe(map((res) => JSON.parse(res).result as E));
         let watch = stream.pipe(
             repeat(),

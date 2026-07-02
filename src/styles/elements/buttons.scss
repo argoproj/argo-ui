@@ -240,10 +240,12 @@
         &:not(.disabled) {
             &:hover {
                 color: #fff;
+                background: $argo-color-teal-6 !important;
             }
 
             &:focus {
                 color: #fff;
+                background: $argo-color-teal-6 !important;
             }
         }
     }

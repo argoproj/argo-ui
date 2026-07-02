@@ -35,12 +35,18 @@ export const ActionButton = (props: ActionButtonProps) => {
     const [confirmed, confirm] = React.useState(false);
     const [displayLabel, setDisplayLabel] = React.useState(label);
     const [displayIcon, setDisplayIcon] = React.useState(icon);
+    const [prevLabel, setPrevLabel] = React.useState(label);
+    const [prevIcon, setPrevIcon] = React.useState(icon);
     const ref = React.useRef(null);
 
-    React.useEffect(() => {
-        setDisplayIcon(props.icon);
+    // Sync display state to the latest props during render (instead of in an effect)
+    // so prop changes take effect immediately without an extra render pass.
+    if (props.label !== prevLabel || props.icon !== prevIcon) {
+        setPrevLabel(props.label);
+        setPrevIcon(props.icon);
         setDisplayLabel(props.label);
-    }, [props.icon, props.label]);
+        setDisplayIcon(props.icon);
+    }
 
     const unconfirm = React.useCallback(() => {
         if (props.shouldConfirm) {

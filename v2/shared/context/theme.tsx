@@ -7,7 +7,19 @@ export enum Theme {
     Light = 'light',
 }
 
-const init = (JSON.parse(window.localStorage.getItem(THEME_KEY)) as Theme) || Theme.Light;
+const parseTheme = (): Theme => {
+    try {
+        const stored = JSON.parse(window.localStorage.getItem(THEME_KEY));
+        if (stored === Theme.Dark || stored === Theme.Light) {
+            return stored;
+        }
+    } catch {
+        // ignore invalid JSON or missing key
+    }
+    return Theme.Light;
+};
+
+const init = parseTheme();
 
 interface ThemeContextProps {
     theme: Theme;

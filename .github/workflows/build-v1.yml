@@ -14,9 +14,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-      - run: yarn install
-      - run: yarn deduplicate
-      - run: yarn build
-      - run: yarn lint
-      - run: yarn tsc -p tsconfig.json
-      - run: yarn test --ci --runInBand
+      - name: Install pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          package_json_file: package.json
+      - run: pnpm install
+      - run: pnpm deduplicate
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm tsc -p tsconfig.json
+      - run: pnpm test --ci --runInBand

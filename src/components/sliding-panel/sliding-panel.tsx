@@ -2,7 +2,7 @@ import {default as classNames} from 'classnames';
 import * as React from 'react';
 import { Key, KeybindingContext, KeybindingProvider } from '../../../v2';
 
-export interface SlidingPanelProps extends React.Props<any> {
+export interface SlidingPanelProps {
     isShown?: boolean;
     isNarrow?: boolean;
     isMiddle?: boolean;
@@ -12,6 +12,7 @@ export interface SlidingPanelProps extends React.Props<any> {
     header?: React.ReactNode;
     footer?: React.ReactNode;
     onClose?: () => any;
+    children?: React.ReactNode;
 }
 
 require('./sliding-panel.scss');
@@ -26,7 +27,7 @@ export const SlidingPanel = (props: SlidingPanelProps) => {
 
 const RenderSlidingPanel = (props: SlidingPanelProps) => {
 
-    const {useKeybinding} = React.useContext(KeybindingContext);
+    const {registerKeybinding} = React.useContext(KeybindingContext);
 
     const closeButtonRef = React.useRef(null);
     const bodyDivRef = React.useRef(null);
@@ -39,17 +40,19 @@ const RenderSlidingPanel = (props: SlidingPanelProps) => {
         }
     }, []);
 
-    useKeybinding({
-        keys: Key.ESCAPE,
-        action: () => {
-            if (props.isShown && props.onClose) {
-                props.onClose();
-                return true;
-            }
-            return false;
-        },
-        combo: false,
-        target: [closeButtonRef, bodyDivRef, panelHeaderDivRef, panelFooterDivRef],
+    React.useEffect(() => {
+        registerKeybinding({
+            keys: Key.ESCAPE,
+            action: () => {
+                if (props.isShown && props.onClose) {
+                    props.onClose();
+                    return true;
+                }
+                return false;
+            },
+            combo: false,
+            target: [closeButtonRef, bodyDivRef, panelHeaderDivRef, panelFooterDivRef],
+        });
     });
 
     return (

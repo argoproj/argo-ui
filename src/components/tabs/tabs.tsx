@@ -14,7 +14,7 @@ export interface Tab {
     extraHorizontalScrollPadding?: number;
 }
 
-export interface TabsProps extends React.Props<any> {
+export interface TabsProps {
     navCenter?: boolean;
     fixed?: boolean;
     navTransparent?: boolean;
@@ -49,7 +49,11 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
     public render() {
         const selectedTab = this.props.tabs.find((tab) => this.isTabSelected(tab));
         return (
-            <div className='tabs' ref={(container) => this.container = container}>
+            <div className='tabs' ref={(container) => {
+                if (container) {
+                    this.container = container;
+                }
+            }}>
                 <div className={classNames('tabs__nav', { center: this.props.navCenter, transparent: this.props.navTransparent })}>
                     <div className={classNames({'fixed-width': this.props.fixed})}>
                         <div className={classNames('tabs__nav-wrapper')}>
