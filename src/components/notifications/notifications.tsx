@@ -55,7 +55,7 @@ export class Notifications extends React.Component<NotificationsProps> {
                     {next.content}
                 </div>
             ), {
-                position: toast.POSITION.BOTTOM_RIGHT,
+                position: 'bottom-right',
                 closeOnClick: false,
                 pauseOnHover: true,
                 pauseOnFocusLoss: true,
