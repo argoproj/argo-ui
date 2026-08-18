@@ -10,6 +10,7 @@
         "experimentalDecorators": true,
         "noUnusedLocals": true,
         "declaration": true,
+        "isolatedModules": true,
         "skipLibCheck": true,
         "lib": [
             "es2017",
