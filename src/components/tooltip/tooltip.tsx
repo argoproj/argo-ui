@@ -30,6 +30,7 @@ export interface TooltipProps {
     className?: string;
     hideOnClick?: boolean;
     children: React.ReactElement;
+    maxWidth?: number | string;
 }
 
 export const Tooltip = ({
@@ -48,7 +49,8 @@ export const Tooltip = ({
     allowHTML,
     className,
     hideOnClick,
-    children
+    children,
+    maxWidth,
 }: TooltipProps) => {
     const child = React.Children.only(children) as React.ReactElement<{ref?: React.Ref<Element>}>;
     const [target, setTarget] = React.useState<Element | null>(null);
@@ -80,6 +82,7 @@ export const Tooltip = ({
             appendTo,
             animation,
             interactive,
+            ...(maxWidth !== undefined ? {maxWidth} : {}),
             ...(placement !== undefined ? {placement} : {}),
             ...(zIndex !== undefined ? {zIndex} : {}),
             ...(popperOptions !== undefined ? {popperOptions} : {}),
