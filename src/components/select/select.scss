@@ -60,12 +60,15 @@
     }
     
     &__search {
+        position: sticky;
+        top: 0;
+        z-index: 1;
         width: 100%;
         padding: 10px 12px;
         color: $argo-color-gray-5;
+        background-color: $white-color;
         border: 0;
-        background: transparent;
-    
+
         &::placeholder {
             color: $argo-color-gray-4;
         }
