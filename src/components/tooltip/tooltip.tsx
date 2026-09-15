@@ -129,7 +129,7 @@ export const Tooltip = ({
             ...(duration !== undefined ? {duration} : {}),
             ...(hideOnClick !== undefined ? {hideOnClick} : {})
         });
-    }, [target, placement, interactive, zIndex, popperOptions, theme, appendTo, animation, arrow, allowHTML, duration, hideOnClick]);
+    }, [target, placement, interactive, zIndex, popperOptions, theme, appendTo, animation, arrow, allowHTML, duration, hideOnClick, maxWidth]);
 
     React.useEffect(() => {
         const instance = instanceRef.current;
