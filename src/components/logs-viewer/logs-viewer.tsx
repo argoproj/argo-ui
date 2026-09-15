@@ -15,6 +15,17 @@ export interface LogsViewerProps {
     source: LogsSource;
 }
 
+export interface LogsViewerElement extends HTMLDivElement {
+    /**
+     * Return the rendered text, including retained scrollback, one line per row
+     * with trailing whitespace removed. Pending asynchronous writes are not
+     * included until the viewer has processed them.
+     * This is mainly for test automation (e.g. Playwright) to
+     * quickly get the log text without having to parse the DOM.
+     */
+    getText(): string;
+}
+
 export class LogsViewer extends React.Component<LogsViewerProps> {
     private terminal: Terminal;
     private fitAddon: FitAddon;
@@ -65,7 +76,11 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
 
     public render() {
         return (
-            <div className='logs-viewer'>
+            <div className='logs-viewer' ref={(element: LogsViewerElement | null) => {
+                if (element) {
+                    element.getText = () => this.getText();
+                }
+            }}>
                 <div className='logs-viewer__container' ref={(container) => container && this.initTerminal(container)}/>
             </div>
         );
@@ -73,6 +88,15 @@ export class LogsViewer extends React.Component<LogsViewerProps> {
 
     public shouldComponentUpdate() {
         return false;
+    }
+
+    private getText(): string {
+        const buffer = this.terminal.buffer.active;
+        const lines: string[] = [];
+        for (let y = 0; y < buffer.length; y++) {
+            lines.push(buffer.getLine(y)?.translateToString(true) ?? '');
+        }
+        return lines.join('\n').trimEnd();
     }
 
     private refresh(source: LogsSource) {
