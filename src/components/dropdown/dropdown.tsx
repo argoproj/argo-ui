@@ -27,6 +27,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private content: HTMLDivElement;
     private subscriptions: Subscription[];
     private isFirstOpen = true;
+    private openedOnMouseDown: boolean = null;
 
     constructor(props: DropDownProps) {
         super(props);
@@ -46,7 +47,9 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
 
         return (
             <div className='argo-dropdown' ref={(el) => { this.el = el; }}>
-                <div qe-id={this.props.qeId} className='argo-dropdown__anchor' onClick={(event) => { this.open(); event.stopPropagation(); }}>
+                <div qe-id={this.props.qeId} className='argo-dropdown__anchor'
+                    onMouseDownCapture={() => { this.openedOnMouseDown = this.state.opened; }}
+                    onClick={(event) => { this.toggle(); event.stopPropagation(); }}>
                     <this.props.anchor/>
                 </div>
                 {ReactDOM.createPortal((
@@ -156,6 +159,18 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
                     }
                 }
             }, 0);
+        }
+    }
+
+    private toggle() {
+        // Use the state captured on mousedown: anchors may close open dropdowns on mousedown
+        // (e.g. by calling document.body.click()) before the click event arrives.
+        const wasOpened = this.openedOnMouseDown ?? this.state.opened;
+        this.openedOnMouseDown = null;
+        if (!wasOpened) {
+            this.open();
+        } else if (this.state.opened) {
+            this.close();
         }
     }
 
