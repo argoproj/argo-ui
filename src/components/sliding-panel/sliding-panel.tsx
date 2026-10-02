@@ -67,7 +67,7 @@ const RenderSlidingPanel = (props: SlidingPanelProps) => {
         })}>
             <div className='sliding-panel__wrapper'>
                 {props.isShown && (
-                    <button autoFocus={true} className='sliding-panel__close' aria-hidden='true' onClick={() => props.onClose && props.onClose()} ref={closeButtonRef}>
+                    <button autoFocus={true} className='sliding-panel__close' aria-label='Close' onClick={() => props.onClose && props.onClose()} ref={closeButtonRef}>
                         <span>
                             <i className='argo-icon-close' aria-hidden='true'/>
                         </span>
