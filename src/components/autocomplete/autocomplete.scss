@@ -5,3 +5,27 @@
     }
   }
 }
+
+.autocomplete__option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1em;
+  min-width: 0;
+
+  &-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  &-description {
+    flex-shrink: 0;
+    max-width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0.6;
+  }
+}

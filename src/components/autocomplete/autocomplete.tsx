@@ -11,7 +11,10 @@ export interface AutocompleteApi {
 export interface AutocompleteOption {
     value: string;
     label?: string;
+    description?: string;
 }
+
+type NormalizedOption = {value: string; label: string; description?: string};
 
 export interface AutocompleteProps {
     items: (AutocompleteOption | string)[];
@@ -36,6 +39,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
             return {
                 value: item.value,
                 label: item.label || item.value,
+                description: item.description,
             };
         }
     });
@@ -51,7 +55,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
         setPrevPropsValue(props.value);
         setInputValue(props.value || '');
     }
-    const filteredItems = items.filter((item) => !props.filterSuggestions || item.label.toLowerCase().includes(inputValue.toLowerCase()));
+    const filteredItems = items.filter((item) => {
+        if (!props.filterSuggestions) {
+            return true;
+        }
+        const query = inputValue.toLowerCase();
+        return item.label.toLowerCase().includes(query) || (item.description || '').toLowerCase().includes(query);
+    });
 
     const {
         isOpen,
@@ -73,7 +83,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         onInputValueChange: ({inputValue: newValue}) => {
             setInputValue(newValue || '');
         },
-        stateReducer: (_state: UseComboboxState<{value: string; label: string}>, {type, changes}: UseComboboxStateChangeOptions<{value: string; label: string}>) => {
+        stateReducer: (_state: UseComboboxState<NormalizedOption>, {type, changes}: UseComboboxStateChangeOptions<NormalizedOption>) => {
             if (type === useCombobox.stateChangeTypes.InputClick) {
                 return {...changes, isOpen: true};
             }
@@ -205,7 +215,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
                             className={classNames('select__option', {selected: highlightedIndex === index})}
                             key={item.label}
                             onMouseDown={(event) => event.preventDefault()}>
-                            {(props.renderItem && props.renderItem(item)) || item.label}
+                            {(props.renderItem && props.renderItem(item)) ||
+                                (item.description ? (
+                                    <div className='autocomplete__option'>
+                                        <span className='autocomplete__option-label'>{item.label}</span>
+                                        <span className='autocomplete__option-description'>{item.description}</span>
+                                    </div>
+                                ) : (
+                                    item.label
+                                ))}
                         </div>
                     ))}
                 </div>

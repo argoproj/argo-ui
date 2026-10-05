@@ -131,4 +131,46 @@ describe('Autocomplete', () => {
         await userEvent.click(screen.getByRole('combobox'));
         expect(screen.getByRole('option')).toHaveTextContent('only-value');
     });
+
+    describe('description', () => {
+        const REPOS = [
+            {value: 'https://github.com/org/frontend.git', description: 'web-app'},
+            {value: 'https://github.com/org/backend.git', description: 'api-server'},
+            {value: 'https://github.com/org/infra.git'},
+        ];
+
+        test('16: renders description alongside label', async () => {
+            render(<Autocomplete items={REPOS} />);
+            await userEvent.click(screen.getByRole('combobox'));
+            const options = screen.getAllByRole('option');
+            expect(options[0]).toHaveTextContent('https://github.com/org/frontend.git');
+            expect(options[0]).toHaveTextContent('web-app');
+            expect(options[2]).toHaveTextContent('https://github.com/org/infra.git');
+        });
+
+        test('17: filterSuggestions matches description', async () => {
+            render(<Autocomplete items={REPOS} filterSuggestions={true} />);
+            const input = screen.getByRole('combobox');
+            await userEvent.click(input);
+            await userEvent.type(input, 'api');
+            const options = screen.getAllByRole('option');
+            expect(options).toHaveLength(1);
+            expect(options[0]).toHaveTextContent('https://github.com/org/backend.git');
+        });
+
+        test('18: selecting an item never writes description into the input', async () => {
+            const onSelect = jest.fn();
+            render(<Autocomplete items={REPOS} onSelect={onSelect} />);
+            const input = screen.getByRole('combobox');
+            await userEvent.click(input);
+            await userEvent.click(screen.getAllByRole('option')[0]);
+            expect(input).toHaveValue('https://github.com/org/frontend.git');
+            expect(onSelect).toHaveBeenCalledWith('https://github.com/org/frontend.git', expect.objectContaining({value: 'https://github.com/org/frontend.git'}));
+
+            // selecting the same item again must not leak the description either
+            await userEvent.click(input);
+            await userEvent.click(screen.getAllByRole('option')[0]);
+            expect(input).toHaveValue('https://github.com/org/frontend.git');
+        });
+    });
 });
