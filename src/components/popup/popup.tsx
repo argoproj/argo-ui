@@ -6,6 +6,7 @@ export interface BasePopupProps {
     titleColor?: string;
     title: string | React.ReactNode;
     footer?: React.ReactNode;
+    theme?: string;
 }
 
 export type PopupPropsWithContent = BasePopupProps & { content: React.ComponentType };
@@ -19,7 +20,7 @@ function isPopupWithChildren(value: PopupProps): value is PopupPropsWithChildren
 require('./popup.scss');
 
 export const Popup = (props: PopupProps) => (
-    <div className='popup-overlay'>
+    <div className={`popup-overlay ${props.theme ? 'theme-' + props.theme : 'theme-light'}`}>
         <div className='popup-container'>
             <div className={`row popup-container__header ${props.titleColor !== undefined ? 'popup-container__header__' + props.titleColor : 'popup-container__header__normal'}`}>
                 {props.title}
