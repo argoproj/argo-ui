@@ -42,6 +42,8 @@ export class DataLoader<D = any, I = undefined> extends React.Component<LoaderPr
 
     private subscription: Subscription | null = null;
     private unmounted = false;
+    private resubscribeOnRemount = false;
+    private reloadOnRemount = false;
 
     constructor(props: LoaderProps<I, D>) {
         super(props);
@@ -57,7 +59,11 @@ export class DataLoader<D = any, I = undefined> extends React.Component<LoaderPr
     }
 
     public componentDidMount() {
-        this.loadData();
+        this.unmounted = false;
+        const force = this.resubscribeOnRemount || this.reloadOnRemount;
+        this.resubscribeOnRemount = false;
+        this.reloadOnRemount = false;
+        this.loadData(force);
     }
 
     public componentDidUpdate() {
@@ -65,6 +71,7 @@ export class DataLoader<D = any, I = undefined> extends React.Component<LoaderPr
     }
 
     public componentWillUnmount() {
+        this.resubscribeOnRemount = this.subscription != null && !this.subscription.closed;
         this.ensureUnsubscribed();
         this.unmounted = true;
     }
@@ -88,9 +95,9 @@ export class DataLoader<D = any, I = undefined> extends React.Component<LoaderPr
         this.setState({ dataWrapper: null, error: false, inputChanged: true });
     }
 
-    private async loadData() {
-        if (!this.state.error && !this.state.loading && this.state.dataWrapper == null || this.state.inputChanged) {
-            this.setState({ error: false, loading: true, inputChanged: false, dataWrapper: this.props.noLoaderOnInputChange ? this.state.dataWrapper : null });
+    private async loadData(force = false) {
+        if (!this.state.error && !this.state.loading && this.state.dataWrapper == null || this.state.inputChanged || force) {
+            this.setState({ error: false, loading: true, inputChanged: false, dataWrapper: this.props.noLoaderOnInputChange || force ? this.state.dataWrapper : null });
             try {
                 const res = 'input' in this.props ? this.props.load(this.props.input) : this.props.load();
 
@@ -98,6 +105,8 @@ export class DataLoader<D = any, I = undefined> extends React.Component<LoaderPr
                     const data = await res;
                     if (!this.unmounted) {
                         this.setState({ dataWrapper: { data }, loading: false });
+                    } else {
+                        this.reloadOnRemount = true;
                     }
                 } else {
                     this.ensureUnsubscribed();
