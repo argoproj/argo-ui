@@ -124,6 +124,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
         };
     }, [isOpen, setMenuPositions]);
 
+    // The menu's height depends on how many items match. When filtering changes the item count while the
+    // menu is open, re-measure so an upward-opening menu stays attached to the input.
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+        setMenuPositions();
+    }, [isOpen, filteredItems.length, setMenuPositions]);
+
     const apiRef = useRef<AutocompleteApi>({refresh: () => setMenuPositions()});
 
     useEffect(() => {
