@@ -16,6 +16,7 @@ export interface DropDownState {
     opened: boolean;
     left: number;
     top: number;
+    maxHeight?: number;
 }
 
 require('./dropdown.scss');
@@ -27,6 +28,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     private content: HTMLDivElement;
     private subscriptions: Subscription[];
     private isFirstOpen = true;
+    private resizeObserver: ResizeObserver | null = null;
 
     constructor(props: DropDownProps) {
         super(props);
@@ -51,7 +53,12 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
                 </div>
                 {ReactDOM.createPortal((
                     <div className={classNames('argo-dropdown__content', { 'opened': this.state.opened, 'is-menu': this.props.isMenu })}
-                        style={{top: this.state.top, left: this.state.left}}
+                        style={{
+                            top: this.state.top,
+                            left: this.state.left,
+                            maxHeight: this.state.maxHeight,
+                            overflowY: this.state.maxHeight === undefined ? undefined : 'auto',
+                        }}
                         ref={(el) => { this.content = el; }}>
                         {children}
                     </div>
@@ -81,6 +88,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
     public componentWillUnmount() {
         (this.subscriptions || []).forEach((s) => s.unsubscribe());
         this.subscriptions = [];
+        this.stopObservingContentSize();
     }
 
     public close() {
@@ -110,12 +118,24 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         const {top, left} = anchor.getBoundingClientRect();
         const anchorHeight = anchor.offsetHeight + 2;
 
-        const newState = { left: this.state.left, top: this.state.top, opened: this.state.opened };
+        const newState: DropDownState = { left: this.state.left, top: this.state.top, opened: this.state.opened, maxHeight: undefined };
+        // While the height is limited by maxHeight, scrollHeight is the height the content needs.
+        const contentHeight = this.state.maxHeight === undefined ? this.content.offsetHeight : this.content.scrollHeight;
+        const spaceBelow = window.innerHeight - top - anchorHeight;
+        const spaceAbove = top - 2;
         // Set top position
-        if (this.content.offsetHeight + top + anchorHeight > window.innerHeight) {
-            newState.top = top - this.content.offsetHeight - 2;
-        } else {
+        if (contentHeight <= spaceBelow) {
             newState.top = top + anchorHeight;
+        } else if (contentHeight <= spaceAbove) {
+            newState.top = top - contentHeight - 2;
+        } else if (spaceBelow >= spaceAbove) {
+            // Fits neither below nor above: use the side with more space and let the content scroll,
+            // so that the items that don't fit are still reachable.
+            newState.top = top + anchorHeight;
+            newState.maxHeight = spaceBelow;
+        } else {
+            newState.top = top - spaceAbove - 2;
+            newState.maxHeight = spaceAbove;
         }
 
         // Set left position
@@ -127,9 +147,42 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         return newState;
     }
 
+    private positionChanged(newState: DropDownState) {
+        return newState.left !== this.state.left || newState.top !== this.state.top || newState.maxHeight !== this.state.maxHeight;
+    }
+
+    // Content rendered by children can change size after the menu is positioned (e.g. items loaded
+    // asynchronously) without re-rendering this component, so reposition when its size changes.
+    private observeContentSize() {
+        if (this.resizeObserver || !this.content || typeof ResizeObserver === 'undefined') {
+            return;
+        }
+        this.resizeObserver = new ResizeObserver(() => {
+            if (this.state.opened && this.content && this.el) {
+                const newState = this.refreshState();
+                if (this.positionChanged(newState)) {
+                    this.setState(newState);
+                }
+            }
+        });
+        this.resizeObserver.observe(this.content);
+    }
+
+    private stopObservingContentSize() {
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+            this.resizeObserver = null;
+        }
+    }
+
     public componentDidUpdate(_prevProps: DropDownProps, prevState: DropDownState) {
+        if (prevState.opened && !this.state.opened) {
+            this.stopObservingContentSize();
+        }
+
         // When menu changes from closed to open state
         if (!prevState.opened && this.state.opened) {
+            this.observeContentSize();
             // Mark as first open
             this.isFirstOpen = true;
             // Use setTimeout to ensure content has been rendered
@@ -137,7 +190,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
                 if (this.state.opened && this.content && this.el) {
                     const newState = this.refreshState();
                     // Only update state if calculated position differs from current position
-                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                    if (this.positionChanged(newState)) {
                         this.setState(newState);
                     }
                     this.isFirstOpen = false;
@@ -149,9 +202,9 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         if (this.state.opened && !this.isFirstOpen && this.content && this.el) {
             // Use setTimeout to ensure calculation happens after DOM updates
             setTimeout(() => {
-                if (this.state.opened) {
+                if (this.state.opened && this.content && this.el) {
                     const newState = this.refreshState();
-                    if (newState.left !== this.state.left || newState.top !== this.state.top) {
+                    if (this.positionChanged(newState)) {
                         this.setState(newState);
                     }
                 }
