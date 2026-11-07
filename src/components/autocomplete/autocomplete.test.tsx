@@ -180,4 +180,20 @@ describe('Autocomplete menu position when the list height changes', () => {
         expect(screen.getAllByRole('option')).toHaveLength(8);
         expect(screen.getByRole('listbox').style.top).toBe('230px');
     });
+
+    test('17: falls back to a no-gap upward position on a short viewport', async () => {
+        // usual-gap: 100 - 90 - 30 = -20 (rejected); no-gap: 100 - 90 = 10 (used)
+        // menu does not fit below: 130 + 90 > 200
+        Object.defineProperty(window, 'innerHeight', {configurable: true, value: 200});
+        const shortInputRect = {...INPUT_RECT, top: 100, bottom: 130, y: 100} as DOMRect;
+        (Element.prototype.getBoundingClientRect as jest.Mock).mockImplementation(function (this: Element) {
+            return this.tagName === 'INPUT' ? shortInputRect : EMPTY_RECT;
+        });
+
+        render(<Autocomplete items={['secret', 'service', 'serviceaccount']} />);
+        await userEvent.click(screen.getByRole('combobox'));
+
+        expect(screen.getAllByRole('option')).toHaveLength(3);
+        expect(screen.getByRole('listbox').style.top).toBe('10px');
+    });
 });

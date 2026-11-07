@@ -95,8 +95,11 @@ export const Autocomplete = (props: AutocompleteProps) => {
             const overflow = window.innerHeight - (rect.bottom + marginBottom + menuRef.current.offsetHeight);
             if (overflow < 0) {
                 const correctedTop = rect.top - menuRef.current.offsetHeight - inputRef.current.offsetHeight;
+                const noGapTop = rect.top - menuRef.current.offsetHeight;
                 if (correctedTop > 0) {
                     top = correctedTop;
+                } else if (noGapTop > 0) {
+                    top = noGapTop;
                 }
             }
         }
