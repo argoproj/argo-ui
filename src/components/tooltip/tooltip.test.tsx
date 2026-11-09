@@ -75,7 +75,8 @@ jest.mock('tippy.js', () => {
                     document.body.removeChild(contentNode);
                 }
             }),
-            popperChildren: {tooltip: tooltipBox}
+            popperChildren: {tooltip: tooltipBox},
+            popperInstance: {scheduleUpdate: jest.fn(() => contentNode.textContent)}
         };
 
         if (typeof options.onCreate === 'function') {
@@ -154,6 +155,38 @@ describe('Tooltip', () => {
 
         await userEvent.hover(screen.getByText('hover me'));
         await waitFor(() => expect(screen.getByText('bold')).toBeInTheDocument());
+    });
+
+    test('repositions after updated content is committed without recreating the visible tooltip', async () => {
+        const {rerender} = render(
+            <Tooltip content='First tooltip message' hideOnClick={false}>
+                <button>target</button>
+            </Tooltip>
+        );
+
+        await userEvent.hover(screen.getByRole('button', {name: 'target'}));
+        await screen.findByText('First tooltip message');
+
+        const tippyMock = jest.requireMock('tippy.js').default;
+        const instance = tippyMock.mock.results[tippyMock.mock.results.length - 1].value;
+        const scheduleUpdate = instance.popperInstance.scheduleUpdate;
+
+        for (const content of ['Message', 'A longer tooltip message after switching back']) {
+            scheduleUpdate.mockClear();
+            rerender(
+                <Tooltip content={content} hideOnClick={false}>
+                    <button>target</button>
+                </Tooltip>
+            );
+
+            await waitFor(() => {
+                expect(scheduleUpdate).toHaveBeenCalled();
+                // Measure the committed DOM, rather than the previous content's dimensions.
+                expect(scheduleUpdate.mock.results[scheduleUpdate.mock.results.length - 1].value).toBe(content);
+            });
+            expect(screen.getByText(content)).toBeVisible();
+            expect(instance.destroy).not.toHaveBeenCalled();
+        }
     });
 
     test('passes placement, zIndex, and popperOptions straight through to tippy()', () => {

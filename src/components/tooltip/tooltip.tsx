@@ -12,6 +12,14 @@ const assignRef = <T,>(ref: React.Ref<T> | null | undefined, node: T | null) => 
     }
 };
 
+const TooltipContent = ({children, onRender}: {children: React.ReactNode; onRender: () => void}) => {
+    React.useLayoutEffect(() => {
+        onRender();
+    });
+
+    return <>{children}</>;
+};
+
 export interface TooltipProps {
     content: React.ReactNode;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,6 +66,10 @@ export const Tooltip = ({
     const reactRootRef = React.useRef<ReactDOM.Root | null>(null);
     const appliedClassNamesRef = React.useRef<string[]>([]);
 
+    const updatePosition = React.useCallback(() => {
+        instanceRef.current?.popperInstance?.scheduleUpdate();
+    }, []);
+
     const setRef = React.useCallback(
         (node: Element | null) => {
             assignRef(child.props.ref, node);
@@ -74,7 +86,7 @@ export const Tooltip = ({
         const container = document.createElement('div');
         const reactRoot = ReactDOM.createRoot(container);
         reactRootRef.current = reactRoot;
-        reactRoot.render(content);
+        reactRoot.render(<TooltipContent onRender={updatePosition}>{content}</TooltipContent>);
 
         const instance = tippy(target, {
             content: container,
@@ -153,9 +165,10 @@ export const Tooltip = ({
 
     React.useEffect(() => {
         if (reactRootRef.current) {
-            reactRootRef.current.render(content);
+            // Reposition after the separate React root commits the new content dimensions.
+            reactRootRef.current.render(<TooltipContent onRender={updatePosition}>{content}</TooltipContent>);
         }
-    }, [content]);
+    }, [content, updatePosition]);
 
     React.useEffect(() => {
         if (!instanceRef.current) {
