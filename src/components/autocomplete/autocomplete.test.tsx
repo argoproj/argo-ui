@@ -174,3 +174,68 @@ describe('Autocomplete', () => {
         });
     });
 });
+
+describe('Autocomplete menu position when the list height changes', () => {
+    const ROW_HEIGHT = 30;
+    const INPUT_RECT = {top: 500, bottom: 530, left: 10, right: 210, width: 200, height: ROW_HEIGHT, x: 10, y: 500, toJSON: () => ({})} as DOMRect;
+    const EMPTY_RECT = {top: 0, bottom: 0, left: 0, right: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({})} as DOMRect;
+    const KINDS = ['secret', 'service', 'serviceaccount', 'statefulset', 'storageclass', 'replicaset', 'daemonset', 'node'];
+    const originalInnerHeight = window.innerHeight;
+
+    beforeEach(() => {
+        // The input sits near the bottom of a short viewport, so the menu has to open upward.
+        // jsdom does not do layout, so fake the geometry that Autocomplete reads.
+        Object.defineProperty(window, 'innerHeight', {configurable: true, value: 540});
+        jest.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+            return this.tagName === 'INPUT' ? INPUT_RECT : EMPTY_RECT;
+        });
+        jest.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(function (this: HTMLElement) {
+            if (this.tagName === 'INPUT') {
+                return ROW_HEIGHT;
+            }
+            if (this.getAttribute('role') === 'listbox') {
+                return this.querySelectorAll('[role="option"]').length * ROW_HEIGHT;
+            }
+            return 0;
+        });
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+        Object.defineProperty(window, 'innerHeight', {configurable: true, value: originalInnerHeight});
+    });
+
+    // Upward position is: input top - menu height - input height
+    test('16: an upward-opening menu stays anchored to the input when filtering shrinks and grows the list', async () => {
+        render(<Autocomplete items={KINDS} filterSuggestions={true} />);
+        const input = screen.getByRole('combobox');
+
+        await userEvent.click(input);
+        expect(screen.getAllByRole('option')).toHaveLength(8);
+        expect(screen.getByRole('listbox').style.top).toBe('230px'); // 500 - 8*30 - 30
+
+        await userEvent.type(input, 'sec'); // only "secret" matches
+        expect(screen.getAllByRole('option')).toHaveLength(1);
+        expect(screen.getByRole('listbox').style.top).toBe('440px'); // 500 - 1*30 - 30
+
+        await userEvent.clear(input);
+        expect(screen.getAllByRole('option')).toHaveLength(8);
+        expect(screen.getByRole('listbox').style.top).toBe('230px');
+    });
+
+    test('17: falls back to a no-gap upward position on a short viewport', async () => {
+        // usual-gap: 100 - 90 - 30 = -20 (rejected); no-gap: 100 - 90 = 10 (used)
+        // menu does not fit below: 130 + 90 > 200
+        Object.defineProperty(window, 'innerHeight', {configurable: true, value: 200});
+        const shortInputRect = {...INPUT_RECT, top: 100, bottom: 130, y: 100} as DOMRect;
+        (Element.prototype.getBoundingClientRect as jest.Mock).mockImplementation(function (this: Element) {
+            return this.tagName === 'INPUT' ? shortInputRect : EMPTY_RECT;
+        });
+
+        render(<Autocomplete items={['secret', 'service', 'serviceaccount']} />);
+        await userEvent.click(screen.getByRole('combobox'));
+
+        expect(screen.getAllByRole('option')).toHaveLength(3);
+        expect(screen.getByRole('listbox').style.top).toBe('10px');
+    });
+});
