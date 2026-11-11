@@ -52,4 +52,25 @@ describe('DropDown', () => {
             outside.remove();
         }
     });
+
+    test('closes an already open dropdown when a sibling dropdown is opened', async () => {
+        render(
+            <React.Fragment>
+                <DropDown anchor={() => <button>first anchor</button>} isMenu={true}>
+                    <ul><li>first menu</li></ul>
+                </DropDown>
+                <DropDown anchor={() => <button>second anchor</button>} isMenu={true}>
+                    <ul><li>second menu</li></ul>
+                </DropDown>
+            </React.Fragment>
+        );
+        const contentOf = (item: string) => screen.getByText(item).closest('.argo-dropdown__content');
+
+        await userEvent.click(screen.getByText('first anchor'));
+        expect(contentOf('first menu')).toHaveClass('opened');
+
+        await userEvent.click(screen.getByText('second anchor'));
+        expect(contentOf('second menu')).toHaveClass('opened');
+        expect(contentOf('first menu')).not.toHaveClass('opened');
+    });
 });

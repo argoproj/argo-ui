@@ -167,6 +167,7 @@ export class DropDown extends React.Component<DropDownProps, DropDownState> {
         const newState = this.refreshState();
         newState.opened = true;
         this.setState(newState);
+        dropDownOpened.next(this);
         if (this.props.onOpenStateChange) {
             this.props.onOpenStateChange(true);
         }
