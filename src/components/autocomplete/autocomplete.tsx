@@ -32,7 +32,7 @@ export interface AutocompleteProps {
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
-    const items = (props.items || []).map((item) => {
+    const items = (props.items || []).map((item): NormalizedOption => {
         if (typeof item === 'string') {
             return {value: item, label: item};
         } else {
