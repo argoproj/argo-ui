@@ -113,6 +113,10 @@ export interface GroupMap {
 }
 
 const handlePress = (e: KeyboardEvent, state: GroupMap) => {
+    // Holding Escape must not dismiss another layer after focus is restored.
+    if (e.keyCode === Key.ESCAPE && e.repeat) {
+        return;
+    }
     const {groups, groupForKey} = state;
     const g = groupForKey[e.keyCode];
 

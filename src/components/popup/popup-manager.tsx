@@ -45,6 +45,7 @@ export class PopupManager implements PopupApi {
             };
 
             this.popupPropsSubject.next({
+                onClose: () => closeAndResolve(false),
                 title: (
                     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(false)}/></span>
                 ),
@@ -89,6 +90,7 @@ export class PopupManager implements PopupApi {
             }
 
             this.popupPropsSubject.next({
+                onClose: () => closeAndResolve(null),
                 children: undefined,
                 title: (
                     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}><div>{title}</div> <i className='argo-icon-close' onClick={() => closeAndResolve(null)}/></span>
