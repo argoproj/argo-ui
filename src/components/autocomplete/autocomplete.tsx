@@ -105,8 +105,11 @@ export const Autocomplete = (props: AutocompleteProps) => {
             const overflow = window.innerHeight - (rect.bottom + marginBottom + menuRef.current.offsetHeight);
             if (overflow < 0) {
                 const correctedTop = rect.top - menuRef.current.offsetHeight - inputRef.current.offsetHeight;
+                const noGapTop = rect.top - menuRef.current.offsetHeight;
                 if (correctedTop > 0) {
                     top = correctedTop;
+                } else if (noGapTop > 0) {
+                    top = noGapTop;
                 }
             }
         }
@@ -133,6 +136,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
             window.removeEventListener('resize', listener);
         };
     }, [isOpen, setMenuPositions]);
+
+    // The menu's height depends on how many items match. When filtering changes the item count while the
+    // menu is open, re-measure so an upward-opening menu stays attached to the input.
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+        setMenuPositions();
+    }, [isOpen, filteredItems.length, setMenuPositions]);
 
     const apiRef = useRef<AutocompleteApi>({refresh: () => setMenuPositions()});
 
